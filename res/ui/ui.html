@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <title>挂机吧麦芬</title>
+    <style>
+        #shouye:checked ~ ul li.richang_content {
+            display: none;
+        }
+        #shouye:checked ~ ul li.yingdi_content {
+            display: none;
+        }
+        #shouye:checked ~ ul li.maoxian_content {
+            display: none;
+        }
+        #shouye:checked ~ ul li.lvtuan_content {
+            display: none;
+        }
+        #shouye:checked ~ ul li.qita_content {
+            display: none;
+        }
+
+        #richang:checked ~ ul li.shouye_content {
+            display: none;
+        }
+        #richang:checked ~ ul li.yingdi_content {
+            display: none;
+        }
+        #richang:checked ~ ul li.maoxian_content {
+            display: none;
+        }
+        #richang:checked ~ ul li.lvtuan_content {
+            display: none;
+        }
+        #richang:checked ~ ul li.qita_content {
+            display: none;
+        }
+
+        #maoxian:checked ~ ul li.shouye_content {
+            display: none;
+        }
+        #maoxian:checked ~ ul li.richang_content {
+            display: none;
+        }
+        #maoxian:checked ~ ul li.yingdi_content {
+            display: none;
+        }
+        #maoxian:checked ~ ul li.lvtuan_content {
+            display: none;
+        }
+        #maoxian:checked ~ ul li.qita_content {
+            display: none;
+        }
+
+
+        #yingdi:checked ~ ul li.shouye_content {
+            display: none;
+        }
+        #yingdi:checked ~ ul li.richang_content {
+            display: none;
+        }
+        #yingdi:checked ~ ul li.maoxian_content {
+            display: none;
+        }
+        #yingdi:checked ~ ul li.lvtuan_content {
+            display: none;
+        }
+        #yingdi:checked ~ ul li.qita_content {
+            display: none;
+        }
+
+        #lvtuan:checked ~ ul li.shouye_content {
+            display: none;
+        }
+        #lvtuan:checked ~ ul li.richang_content {
+            display: none;
+        }
+        #lvtuan:checked ~ ul li.yingdi_content {
+            display: none;
+        }
+        #lvtuan:checked ~ ul li.maoxian_content {
+            display: none;
+        }
+        #lvtuan:checked ~ ul li.qita_content {
+            display: none;
+        }
+
+        #qita:checked ~ ul li.shouye_content {
+            display: none;
+        }
+        #qita:checked ~ ul li.richang_content {
+            display: none;
+        }
+        #qita:checked ~ ul li.yingdi_content {
+            display: none;
+        }
+        #qita:checked ~ ul li.maoxian_content {
+            display: none;
+        }
+        #qita:checked ~ ul li.lvtuan_content {
+            display: none;
+        }
+
+        form input {
+            margin-top: 6px;
+            margin-bottom: 6px;
+            height: 16px;
+            width: 16px;
+            position: relative;
+            top: 2px;
+        }
+
+        label:hover {
+            background-color: cyan;
+            color: dodgerblue;
+        }
+
+        h3 {
+            color: rgb(0,150,255);
+        }
+
+        legend {
+            color: rgb(0,150,255);
+        }
+
+         .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px; /* 添加间距以分隔复选框 */
+    }
+    .checkbox-item {
+        display: flex;
+        align-items: center;
+    }
+
+    .flex-container {
+        display: flex;
+        align-items: center; /* 垂直居中 */
+    }
+    label {
+        margin-right: 10px; /* 为输入框留出一点空间 */
+    }
+
+    .shouye_container {
+    display: flex;
+    align-items: center; /* 水平居中 */
+    }
+
+    .shouye_item {
+        flex: 1; /* 均分宽度 */
+        text-align: center; /* 文本居中 */
+        margin: 0 10px; /* 添加一些间距 */
+    }
+
+    </style>
+</head>
+<body style="margin: 0;padding: 0;list-style: none;text-decoration: none;">
+<div style=" align-items: center;justify-content: center;  background-color: #1E9FFF; height: 54px; width: 100%;text-align: center;position: fixed; top: 0px; left: 0px;z-index:8;">
+    <h3 style="margin: 0;margin-top: 15px;  color: white;">
+        挂机吧麦芬
+    </h3>
+</div>
+<div style="height: 55px; width: 100%;">
+</div>
+<div>
+    <input checked id="shouye" name="sexx" style="display: none;z-index:8;" type="radio">
+    <input id="richang" name="sexx" style="display: none;z-index:8;" type="radio">
+    <input id="maoxian" name="sexx" style="display: none;z-index:8;" type="radio">
+    <input id="yingdi" name="sexx" style="display: none;z-index:8;" type="radio">
+    <input id="lvtuan" name="sexx" style="display: none;z-index:8;" type="radio">
+    <input id="qita" name="sexx" style="display: none;z-index:8;" type="radio">
+    <label for="shouye"
+           style="position: fixed; left: 0%; width: 16.6%;height: 30px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px;text-align: center;cursor: pointer;font-size: 17px;z-index:8;"
+    >
+        首页
+    </label>
+    <label for="richang"
+           style="position: fixed; left: 16.6%; width: 16.6%;height: 30px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px;text-align: center;cursor: pointer;font-size: 17px;z-index:8;"
+    >
+        日常
+    </label>
+    <label for="maoxian"
+           style="position: fixed; left: 33.2%; width: 16.6%;height: 30px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px ;text-align: center;cursor: pointer;font-size: 17px;z-index:8;"
+    >
+        冒险
+    </label>
+    <label for="yingdi"
+           style="position: fixed; left: 49.8%; width: 16.6%;height: 30px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px ;text-align: center;cursor: pointer;font-size: 17px;z-index:8;"
+    >
+        营地
+    </label>
+    <label for="lvtuan"
+           style="position: fixed; left: 66.4%; width: 16.6%;height: 30px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px ;text-align: center;cursor: pointer;font-size: 17px;z-index:8;"
+    >
+        旅团
+    </label>
+    <label for="qita"
+           style="position: fixed; left: 83%; width: 16.6%;height: 30px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px ;text-align: center;cursor: pointer;font-size: 17px;z-index:8;"
+    >
+        其他
+    </label>
+    <ul style="margin:0px;padding: 0px;width:100%;">
+        <div style="height: 35px; width: 100%;background-color: white;"></div>
+        <li class="shouye_content">
+            <h3>公告：Have Fun ！</h3>
+            <div class="flex-container">
+                <fieldset>
+                <legend>激活码</legend>
+                <input type="text" id="激活码" name="激活码" lay-verify="title"
+                       autocomplete="off"
+                       placeholder="激活码" class="layui-input">
+                </fieldset>
+            </div>
+            <form action="">
+                <fieldset>
+                    <legend>配置选择（首次使用必须先保存配置）</legend>
+                    功能迁移中，敬请期待~
+                </fieldset>
+            </form>
+            <form action="">
+                <fieldset>
+                    <legend>多账号配置</legend>
+                    功能迁移中，敬请期待~
+                </fieldset>
+            </form>
+            <form action="">
+                <fieldset>
+                    <legend>定时配置</legend>
+                    功能迁移中，敬请期待~
+                    <div class="shouye_container">
+                        <div class="item">
+                            <label for="定时运行">运行</label>
+                        </div>
+                        <div class="item" style="width: 50px" >
+                            <input type="text" id="定时运行" name="定时运行" lay-verify="title" autocomplete="off"
+                                   placeholder="分钟" class="layui-input" >
+                        </div>
+                        <div class="item">
+                            <label for="定时休息">分钟后休息</label>
+                        </div>
+                        <div class="item" style="width: 50px">
+                            <input type="text" id="定时休息" name="定时休息" lay-verify="title" autocomplete="off"
+                                   placeholder="分钟" class="layui-input">
+                        </div>
+                        <div class="item">
+                            <label for="定时休息">分钟</label>
+                        </div>
+                    </div>
+                    <br><br>
+                </fieldset>
+            </form>
+        </li>
+
+        <li class="richang_content">
+            <form action="">
+                <fieldset>
+                    <legend>日常功能</legend>
+                    <input id="日常总开关" name="vehicle" type="checkbox" value="Bike">日常总开关<br>
+                    <legend>旅人相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="自动强化装备" name="vehicle" type="checkbox" value="Bike">自动强化装备<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="自动更换装备" name="vehicle" type="checkbox" value="Bike">自动更换装备<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="满包裹分解装备" name="vehicle" type="checkbox" value="Bike">满包裹分解装备<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="自动升级技能" name="vehicle" type="checkbox" value="Bike">自动升级技能<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="领取猫猫包果木" name="vehicle" type="checkbox" value="Bike">领取猫猫包果木<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="猫猫包自动升温" name="vehicle" type="checkbox" value="Bike">猫猫包自动升温<br>
+                        </div>
+                    </div>
+
+                    <div class="flex-container">
+                        <label for="钻石兑换果木次数">钻石兑换果木次数:</label>
+                        <input type="text" id="钻石兑换果木次数" name="钻石兑换果木次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="钻石兑换果木次数" class="layui-input">
+                    </div>
+
+                    <div class="flex-container">
+                        <label for="高级配置">高级配置:</label>
+                        <input id="优先升级同一技能至下一阶段" name="vehicle" type="checkbox" value="Bike">优先升级同一技能至下一阶段<br>
+                    </div>
+
+                    <legend>战斗相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="自动挑战首领" name="vehicle" type="checkbox" value="Bike">自动挑战首领<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="自动换图" name="vehicle" type="checkbox" value="Bike">自动换图<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="队员不满足单飞" name="vehicle" type="checkbox" value="Bike">队员不满足单飞<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="单飞后寻找结伴" name="vehicle" type="checkbox" value="Bike">单飞后寻找结伴<br>
+                        </div>
+                    </div>
+                    <legend>领取相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="冒险手册领取" name="vehicle" type="checkbox" value="Bike">冒险手册领取<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="邮件领取" name="vehicle" type="checkbox" value="Bike">邮件领取<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="招式创造" name="vehicle" type="checkbox" value="Bike">招式创造<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="骑兽乐园" name="vehicle" type="checkbox" value="Bike">骑兽乐园<br>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="钻石兑换卢恩次数">钻石兑换卢恩次数:</label>
+                        <input type="text" id="钻石兑换卢恩次数" name="钻石兑换卢恩次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="钻石兑换卢恩次数" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="讲述故事次数">讲述故事次数:</label>
+                        <input type="text" id="讲述故事次数" name="讲述故事次数" lay-verify="title" autocomplete="off"
+                               placeholder="讲述故事次数" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="钻石兑换门票次数">钻石兑换门票次数:</label>
+                        <input type="text" id="钻石兑换门票次数" name="钻石兑换门票次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="钻石兑换门票次数" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="骑兽探索次数">骑兽探索次数:</label>
+                        <input type="text" id="骑兽探索次数" name="骑兽探索次数" lay-verify="title" autocomplete="off"
+                               placeholder="骑兽探索次数" class="layui-input">
+                    </div>
+                    <legend>活动相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="摸鱼时间到" name="vehicle" type="checkbox" value="Bike">摸鱼时间到<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="火力全开" name="vehicle" type="checkbox" value="Bike">火力全开<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="宝藏湖" name="vehicle" type="checkbox" value="Bike">宝藏湖<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="登录好礼" name="vehicle" type="checkbox" value="Bike">登录好礼<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="BBQ派对" name="vehicle" type="checkbox" value="Bike">BBQ派对<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="限时特惠" name="vehicle" type="checkbox" value="Bike">限时特惠<br>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        </li>
+
+        <li class="yingdi_content">
+            <form action="">
+                <fieldset>
+                    <legend>营地功能</legend>
+                    <input id="营地总开关" name="vehicle" type="checkbox" value="Bike">营地总开关<br>
+                    <legend>营地相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="仓鼠百货" name="vehicle" type="checkbox" value="Bike">仓鼠百货<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="月签到" name="vehicle" type="checkbox" value="Bike">月签到<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="日礼包" name="vehicle" type="checkbox" value="Bike">日礼包<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="月卡" name="vehicle" type="checkbox" value="Bike">月卡<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="星辰同行" name="vehicle" type="checkbox" value="Bike">星辰同行<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="纸飞机" name="vehicle" type="checkbox" value="Bike">纸飞机<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="秘宝收集" name="vehicle" type="checkbox" value="Bike">秘宝收集<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="露营打卡点" name="vehicle" type="checkbox" value="Bike">露营打卡点<br>
+                        </div>
+                    </div>
+                    <br>
+                    <legend>仓鼠百货付费购买</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="星星经验" name="vehicle" type="checkbox" value="Bike">星星经验<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="全价兽粮" name="vehicle" type="checkbox" value="Bike">全价兽粮<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="超级成长零食三折" name="vehicle" type="checkbox"
+                                   value="Bike">超级成长零食三折<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="黑烬突破石五折" name="vehicle" type="checkbox"
+                                   value="Bike">黑烬突破石五折<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="经验补剂五折" name="vehicle" type="checkbox" value="Bike">经验补剂五折<br>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="秘宝地图">秘宝地图：</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="秘宝地图" id="秘宝地图" lay-filter="category">
+                                    <option value=""></option>
+                                    <option value="暗月深林">暗月深林</option>
+                                    <option value="艾特拉火山">艾特拉火山</option>
+                                    <option value="鲁尔绿洲">鲁尔绿洲</option>
+                                    <option value="燃烧塔">燃烧塔</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="秘宝钻石兑换次数">秘宝钻石兑换次数：</label>
+                        <input type="text" id="秘宝钻石兑换次数" name="秘宝钻石兑换次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="秘宝钻石兑换次数" class="layui-input">
+                    </div>
+                </fieldset>
+            </form>
+        </li>
+
+        <li class="maoxian_content">
+            <form action="">
+                <fieldset>
+                    <legend>冒险功能</legend>
+                    <input id="冒险总开关" name="vehicle" type="checkbox" value="Bike">冒险总开关<br>
+                    <legend>秘境之间</legend>
+                    <input id="秘境开关" name="vehicle" type="checkbox" value="Bike">秘境开关<br>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="不开宝箱" name="vehicle" type="checkbox" value="Bike">不开宝箱<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="点赞队友" name="vehicle" type="checkbox" value="Bike">点赞队友<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="秘境添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="无体力继续" name="vehicle" type="checkbox" value="Bike">无体力继续<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="创建房间" name="vehicle" type="checkbox" value="Bike">创建房间<br>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="建房重复挑战次数">建房次数：</label>
+                        <input type="text" id="建房重复挑战次数" name="建房重复挑战次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="建房重复挑战次数" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="秘境关卡">秘境关卡:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="秘境地图" id="秘境地图" lay-filter="mijing1-filter">
+                                    <option value="">秘境地图</option>
+                                    <option value="原野">原野</option>
+                                    <option value="森林">森林</option>
+                                    <option value="沙漠">沙漠</option>
+                                    <option value="海湾">海湾</option>
+                                    <option value="深林">深林</option>
+                                    <option value="冰原">冰原</option>
+                                    <option value="火山">火山</option>
+                                    <option value="高原">高原</option>
+                                    <option value="绿洲">绿洲</option>
+                                    <option value="火原">火原</option>
+                                    <option value="下城">下城</option>
+                                </select>
+                            </div>
+                            <div class="layui-input-inline">
+                                <select name="秘境关卡" id="秘境关卡" lay-filter="mijing2-filter"
+                                        lay-depend="mijing1-filter">
+                                    <option value="">秘境关卡</option>
+                                    <!-- 根据level1的选择动态加载的选项 -->
+                                </select>
+                            </div>
+                            <!-- 更多的联动层级（如果需要） -->
+                        </div>
+                    </div>
+
+                    <div class="flex-container">
+                        <label for="补充体力次数">补充体力次数:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="补充体力次数" id="补充体力次数" lay-filter="mijing1-filter">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-container">
+                        <label for="队伍喊话">队伍喊话:</label>
+                        <input type="text" id="队伍喊话" name="队伍喊话" lay-verify="title" autocomplete="off"
+                               placeholder="队伍喊话" class="layui-input">
+                    </div>
+                    <legend>恶龙大通缉</legend>
+                    <input id="恶龙开关" name="vehicle" type="checkbox" value="Bike">恶龙开关<br>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="恶龙添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="恶龙重复挑战" name="vehicle" type="checkbox" value="Bike">重复挑战<br>
+                        </div>
+                    </div>
+                    <legend>职能相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="职能优先输出" name="vehicle" type="checkbox" value="Bike">职能优先输出<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="职能优先坦克" name="vehicle" type="checkbox" value="Bike">职能优先坦克<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="职能优先治疗" name="vehicle" type="checkbox" value="Bike">职能优先治疗<br>
+                        </div>
+                    </div>
+                    <legend>通用配置</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="主动释放技能" name="vehicle" type="checkbox" value="Bike">主动释放技能(自动点击技能释放)<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="三技能自动释放" name="vehicle" type="checkbox" value="Bike">三技能自动开盾/打断(需先开启主动释放仅)<br>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </li>
+        <li class="lvtuan_content">
+            <form action="">
+                <fieldset>
+                    <legend>旅团功能</legend>
+                    <input id="旅团总开关" name="vehicle" type="checkbox" value="Bike">旅团总开关<br>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="旅团浇树" name="vehicle" type="checkbox" value="Bike">旅团浇树<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团任务" name="vehicle" type="checkbox" value="Bike">旅团任务<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团调查队" name="vehicle" type="checkbox" value="Bike">旅团调查队<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团许愿墙" name="vehicle" type="checkbox" value="Bike">旅团许愿墙<br>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="付费浇灌次数">付费浇灌次数：</label>
+                        <input type="text" id="付费浇灌次数" name="付费浇灌次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="付费浇灌次数" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="调查队挑战次数">调查队挑战次数:</label>
+                        <input type="text" id="调查队挑战次数" name="调查队挑战次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="调查队挑战次数" class="layui-input">
+                    </div>
+                    <legend>旅团商店</legend>
+                    <input id="旅团商店开关" name="vehicle" type="checkbox"
+                           value="Bike">旅团商店开关(默认最大次数兑换)<br>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="旅团唤兽琴弦" name="vehicle" type="checkbox" value="Bike">唤兽琴弦<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团全价兽粮" name="vehicle" type="checkbox" value="Bike">全价兽粮<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团超级成长零食" name="vehicle" type="checkbox" value="Bike">超级成长零食<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团原材料" name="vehicle" type="checkbox" value="Bike">原材料<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团史诗经验" name="vehicle" type="checkbox" value="Bike">史诗经验<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团优秀经验" name="vehicle" type="checkbox" value="Bike">优秀经验<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团普通经验" name="vehicle" type="checkbox" value="Bike">普通经验<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团金币" name="vehicle" type="checkbox" value="Bike">金币<br>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </li>
+
+    </ul>
+</div>
+<div style="  display: flex; margin-bottom: 7px; align-items: center;justify-content: center; width: 100%; height: 25px; position: sticky;">
+    <button id="guanbi" onclick="wclose()"
+            style="width: 50%;height: 45px;color: #1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px;font-size: 16px;"
+            type="button"
+            value="关闭">
+        退出
+    </button>
+    <button id="queding" onclick="submit()"
+            style="width: 50%;height: 45px;color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 3px;font-size: 16px;"
+            type="button"
+            value="确定">
+        运行
+    </button>
+</div>
+<!-- 引入 layui.js 的 <script> 标签最好放置在 html 末尾 -->
+<script src="layui/layui.js"></script>
+<script src="layui/jquery-3.6.1.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        console.log("窗口加载成功了");
+        airscript.call("加载", "成功");
+
+        var 激活码 = localStorage.getItem("激活码");
+        document.getElementById("激活码").value = 激活码;
+
+        var 定时运行 = localStorage.getItem("定时运行");
+        document.getElementById("定时运行").value = 定时运行;
+
+        var 定时休息 = localStorage.getItem("定时休息");
+        document.getElementById("定时休息").value = 定时休息;
+
+        <!--日常-->
+        setSwitchStatus("日常总开关");
+        setSwitchStatus("自动强化装备");
+        setSwitchStatus("自动升级技能");
+        setSwitchStatus("领取猫猫包果木");
+        setSwitchStatus("猫猫包自动升温");
+
+        var 钻石兑换果木次数 = localStorage.getItem("钻石兑换果木次数");
+        document.getElementById("钻石兑换果木次数").value = 钻石兑换果木次数;
+
+        setSwitchStatus("优先升级同一技能至下一阶段");
+
+
+        setSwitchStatus("自动挑战首领");
+        setSwitchStatus("自动换图");
+        setSwitchStatus("队员不满足单飞");
+        setSwitchStatus("单飞后寻找结伴");
+
+        setSwitchStatus("冒险手册领取");
+        setSwitchStatus("邮件领取");
+        setSwitchStatus("招式创造");
+        setSwitchStatus("骑兽乐园");
+
+        <!--营地-->
+        // 使用函数来设置不同的开关状态
+        setSwitchStatus("营地总开关");
+        setSwitchStatus("仓鼠百货");
+        setSwitchStatus("月签到");
+        setSwitchStatus("日礼包");
+        setSwitchStatus("月卡");
+        setSwitchStatus("星辰同行");
+        setSwitchStatus("纸飞机");
+        setSwitchStatus("秘宝收集");
+        setSwitchStatus("露营打卡点");
+        setSwitchStatus("星星经验");
+        setSwitchStatus("全价兽粮");
+        setSwitchStatus("超级成长零食三折");
+        setSwitchStatus("黑烬突破石五折");
+        setSwitchStatus("经验补剂五折");
+
+        var 钻石兑换卢恩次数 = localStorage.getItem("钻石兑换卢恩次数");
+        document.getElementById("钻石兑换卢恩次数").value = 钻石兑换卢恩次数;
+        var 讲述故事次数 = localStorage.getItem("讲述故事次数");
+        document.getElementById("讲述故事次数").value = 讲述故事次数;
+        var 钻石兑换门票次数 = localStorage.getItem("钻石兑换门票次数");
+        document.getElementById("钻石兑换门票次数").value = 钻石兑换门票次数;
+        var 骑兽探索次数 = localStorage.getItem("骑兽探索次数");
+        document.getElementById("骑兽探索次数").value = 骑兽探索次数;
+
+        setSwitchStatus("摸鱼时间到");
+        setSwitchStatus("火力全开");
+        setSwitchStatus("宝藏湖");
+        setSwitchStatus("登录好礼");
+        setSwitchStatus("BBQ派对");
+        setSwitchStatus("限时特惠");
+
+        var defaultValue = localStorage.getItem('秘宝地图');
+        var selectElement = document.getElementById('秘宝地图');
+        // 遍历所有 option 并设置默认选中值
+        var $mjgqSelect = $('#秘宝地图');
+        $mjgqSelect.val(defaultValue);
+        // 重新渲染 select 元素
+        layui.form.render('select');
+
+        var 秘宝钻石兑换次数 = localStorage.getItem("秘宝钻石兑换次数");
+        document.getElementById("秘宝钻石兑换次数").value = 秘宝钻石兑换次数;
+
+        <!--冒险-->
+        setSwitchStatus("冒险总开关");
+        setSwitchStatus("秘境开关");
+        setSwitchStatus("不开宝箱");
+        setSwitchStatus("点赞队友");
+        setSwitchStatus("秘境添加佣兵");
+        setSwitchStatus("无体力继续");
+        setSwitchStatus("创建房间");
+        var 建房重复挑战次数 = localStorage.getItem("建房重复挑战次数");
+        document.getElementById("建房重复挑战次数").value = 建房重复挑战次数;
+
+        var defaultValue = localStorage.getItem('秘境地图');
+        var selectElement = document.getElementById('秘境地图');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+        var defaultValue = localStorage.getItem('秘境关卡');
+        var $mjgqSelect = $('#秘境关卡');
+        $mjgqSelect.append(`<option value="${defaultValue}">${defaultValue}</option>`);
+        // 设置默认选中值
+        $mjgqSelect.val(defaultValue);
+
+        var defaultValue = localStorage.getItem('补充体力次数');
+        var selectElement = document.getElementById('补充体力次数');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        // 重新渲染 select 元素
+        layui.form.render('select');
+
+        var 队伍喊话 = localStorage.getItem("队伍喊话");
+        document.getElementById("队伍喊话").value = 队伍喊话;
+
+        setSwitchStatus("恶龙开关");
+        setSwitchStatus("恶龙添加佣兵");
+        setSwitchStatus("恶龙重复挑战");
+        setSwitchStatus("职能优先输出");
+        setSwitchStatus("职能优先坦克");
+        setSwitchStatus("职能优先治疗");
+        setSwitchStatus("主动释放技能");
+        setSwitchStatus("三技能自动释放");
+
+        <!--旅团-->
+        setSwitchStatus("旅团总开关");
+        setSwitchStatus("旅团浇树");
+        setSwitchStatus("旅团任务");
+        setSwitchStatus("旅团调查队");
+        setSwitchStatus("旅团许愿墙");
+
+        var 付费浇灌次数 = localStorage.getItem("付费浇灌次数");
+        document.getElementById("付费浇灌次数").value = 付费浇灌次数;
+
+        var 调查队挑战次数 = localStorage.getItem("调查队挑战次数");
+        document.getElementById("调查队挑战次数").value = 调查队挑战次数;
+
+        setSwitchStatus("旅团商店开关");
+        setSwitchStatus("旅团唤兽琴弦");
+        setSwitchStatus("旅团全价兽粮");
+        setSwitchStatus("旅团超级成长零食");
+        setSwitchStatus("旅团原材料");
+        setSwitchStatus("旅团史诗经验");
+        setSwitchStatus("旅团优秀经验");
+        setSwitchStatus("旅团普通经验");
+        setSwitchStatus("旅团金币");
+    };
+
+    layui.use(['form'], function(){
+      var form = layui.form;
+
+      // 监听秘境选择框的选择事件
+      form.on('select(mijing1-filter)', function(data){
+        var mjId = data.value;
+        console.log(mjId);
+        var $mjgqSelect = $('#秘境关卡');
+<!--        var $mjgqSelect = document.getElementById(秘境关卡);-->
+
+        if(mjId === '原野') {
+          $mjgqSelect.html('<option value="古遗迹上的幽影">古遗迹上的幽影</option>');
+        }
+
+        if(mjId === '森林') {
+          $mjgqSelect.html('<option value="旧国之王的野心">旧国之王的野心</option>');
+        }
+
+        if(mjId === '沙漠') {
+          $mjgqSelect.html('<option value="三宝齐聚黄金船">三宝齐聚黄金船</option>');
+        }
+
+        if(mjId === '海湾') {
+          $mjgqSelect.html('<option value="海洋征服计划">海洋征服计划</option>');
+        }
+
+        if(mjId === '深林') {
+          $mjgqSelect.html('<option value="噩兆降临之谷">噩兆降临之谷</option>');
+        }
+
+        if(mjId === '冰原') {
+          $mjgqSelect.html('<option value="永冻禁区矿场">永冻禁区矿场</option><option value="尤弥尔深渊">尤弥尔深渊</option>');
+        }
+
+        if(mjId === '火山') {
+          $mjgqSelect.html('<option value="蒸汽炎池浴场">蒸汽炎池浴场</option><option value="艾特拉之心">艾特拉之心</option>');
+        }
+
+        if(mjId === '高原') {
+          $mjgqSelect.html('<option value="雷电焦土深处">雷电焦土深处</option><option value="九王角斗场">九王角斗场</option>');
+        }
+
+        if(mjId === '绿洲') {
+          $mjgqSelect.html('<option value="溪谷大暴走">溪谷大暴走</option><option value="躁动绿洲之丘">躁动绿洲之丘</option><option value="白沙渊下的鼓动">白沙渊下的鼓动</option>');
+        }
+
+        if(mjId === '火原') {
+          $mjgqSelect.html('<option value="浴火燃墟伐木场">浴火燃墟伐木场</option><option value="激战构造体工厂">激战构造体工厂</option><option value="无始无终燃烧塔">无始无终燃烧塔</option>');
+        }
+
+        if(mjId === '下城') {
+          $mjgqSelect.html('<option value="魔偶师赌局">魔偶师赌局</option>');
+        }
+
+        form.render('select'); // 更新城市选择框的UI
+      });
+    });
+
+    // 定义一个函数用于处理开关的状态设置
+    function setSwitchStatus(id) {
+        var itemValue = localStorage.getItem(id);
+        document.getElementById(id).checked = itemValue === "true";
+    }
+
+    function xgip(xip) {
+        document.getElementById("bjip").innerHTML = xip;
+    }
+
+    function submit() {
+        console.log("点击了确定");
+
+        var 激活码 = document.getElementById("激活码").value;
+        localStorage.setItem("激活码", 激活码);
+
+        var 定时运行 = document.getElementById("定时运行").value;
+        localStorage.setItem("定时运行", 定时运行);
+
+        var 定时休息 = document.getElementById("定时休息").value;
+        localStorage.setItem("定时休息", 定时休息);
+
+        <!--日常-->
+        日常总开关 = saveSwitchStatus("日常总开关");
+        自动强化装备 = saveSwitchStatus("自动强化装备");
+        自动升级技能 = saveSwitchStatus("自动升级技能");
+        领取猫猫包果木 = saveSwitchStatus("领取猫猫包果木");
+        猫猫包自动升温 = saveSwitchStatus("猫猫包自动升温");
+
+        var 钻石兑换果木次数 = document.getElementById("钻石兑换果木次数").value;
+        localStorage.setItem("钻石兑换果木次数", 钻石兑换果木次数);
+
+        优先升级同一技能至下一阶段 = saveSwitchStatus("优先升级同一技能至下一阶段");
+
+        自动挑战首领 = saveSwitchStatus("自动挑战首领");
+        自动换图 = saveSwitchStatus("自动换图");
+        队员不满足单飞 = saveSwitchStatus("队员不满足单飞");
+        单飞后寻找结伴 = saveSwitchStatus("单飞后寻找结伴");
+
+        冒险手册领取 = saveSwitchStatus("冒险手册领取");
+        邮件领取 = saveSwitchStatus("邮件领取");
+        招式创造 = saveSwitchStatus("招式创造");
+        骑兽乐园 = saveSwitchStatus("骑兽乐园");
+
+        摸鱼时间到 = saveSwitchStatus("摸鱼时间到");
+        火力全开 = saveSwitchStatus("火力全开");
+        宝藏湖 = saveSwitchStatus("宝藏湖");
+        登录好礼 = saveSwitchStatus("登录好礼");
+        BBQ派对 = saveSwitchStatus("BBQ派对");
+        限时特惠 = saveSwitchStatus("限时特惠");
+
+        <!--营地-->
+        营地总开关 = saveSwitchStatus("营地总开关");
+        仓鼠百货 = saveSwitchStatus("仓鼠百货");
+        月签到 = saveSwitchStatus("月签到");
+        日礼包 = saveSwitchStatus("日礼包");
+        月卡 = saveSwitchStatus("月卡");
+        星辰同行 = saveSwitchStatus("星辰同行");
+        纸飞机 = saveSwitchStatus("纸飞机");
+        秘宝收集 = saveSwitchStatus("秘宝收集");
+        露营打卡点 = saveSwitchStatus("露营打卡点");
+        星星经验 = saveSwitchStatus("星星经验");
+        全价兽粮 = saveSwitchStatus("全价兽粮");
+        超级成长零食三折 = saveSwitchStatus("超级成长零食三折");
+        黑烬突破石五折 = saveSwitchStatus("黑烬突破石五折");
+        经验补剂五折 = saveSwitchStatus("经验补剂五折");
+
+        var 钻石兑换卢恩次数 = document.getElementById("钻石兑换卢恩次数").value;
+        localStorage.setItem("钻石兑换卢恩次数", 钻石兑换卢恩次数);
+        var 讲述故事次数 = document.getElementById("讲述故事次数").value;
+        localStorage.setItem("讲述故事次数", 讲述故事次数);
+        var 钻石兑换门票次数 = document.getElementById("钻石兑换门票次数").value;
+        localStorage.setItem("钻石兑换门票次数", 钻石兑换门票次数);
+        var 骑兽探索次数 = document.getElementById("骑兽探索次数").value;
+        localStorage.setItem("骑兽探索次数", 骑兽探索次数);
+
+        var 秘宝地图 = document.getElementById("秘宝地图").value;
+        localStorage.setItem("秘宝地图", 秘宝地图);
+
+        var 秘宝钻石兑换次数 = document.getElementById("秘宝钻石兑换次数").value;
+        localStorage.setItem("秘宝钻石兑换次数", 秘宝钻石兑换次数);
+
+        <!--冒险-->
+        冒险总开关 = saveSwitchStatus("冒险总开关");
+        秘境开关 = saveSwitchStatus("秘境开关");
+        不开宝箱 = saveSwitchStatus("不开宝箱");
+        点赞队友 = saveSwitchStatus("点赞队友");
+        秘境添加佣兵 = saveSwitchStatus("秘境添加佣兵");
+        无体力继续 = saveSwitchStatus("无体力继续");
+        创建房间 = saveSwitchStatus("创建房间");
+        var 建房重复挑战次数 = document.getElementById("建房重复挑战次数").value;
+        localStorage.setItem("建房重复挑战次数", 建房重复挑战次数);
+
+        var 秘境地图 = document.getElementById("秘境地图").value;
+        localStorage.setItem("秘境地图", 秘境地图);
+
+        var 秘境关卡 = document.getElementById("秘境关卡").value;
+        localStorage.setItem("秘境关卡", 秘境关卡);
+
+        var 补充体力次数 = document.getElementById("补充体力次数").value;
+        localStorage.setItem("补充体力次数", 补充体力次数);
+
+        var 队伍喊话 = document.getElementById("队伍喊话").value;
+        localStorage.setItem("队伍喊话", 队伍喊话);
+
+        恶龙开关 = saveSwitchStatus("恶龙开关");
+        恶龙添加佣兵 = saveSwitchStatus("恶龙添加佣兵");
+        恶龙重复挑战 = saveSwitchStatus("恶龙重复挑战");
+        职能优先输出 = saveSwitchStatus("职能优先输出");
+        职能优先坦克 = saveSwitchStatus("职能优先坦克");
+        职能优先治疗 = saveSwitchStatus("职能优先治疗");
+        主动释放技能 = saveSwitchStatus("主动释放技能");
+        三技能自动释放 = saveSwitchStatus("三技能自动释放");
+
+        <!--旅团-->
+        旅团总开关 = saveSwitchStatus("旅团总开关");
+        旅团浇树 = saveSwitchStatus("旅团浇树");
+        旅团任务 = saveSwitchStatus("旅团任务");
+        旅团调查队 = saveSwitchStatus("旅团调查队");
+        旅团许愿墙 = saveSwitchStatus("旅团许愿墙");
+
+        var 付费浇灌次数 = document.getElementById("付费浇灌次数").value;
+        localStorage.setItem("付费浇灌次数", 付费浇灌次数);
+
+        var 调查队挑战次数 = document.getElementById("调查队挑战次数").value;
+        localStorage.setItem("调查队挑战次数", 调查队挑战次数);
+
+        旅团商店开关 = saveSwitchStatus("旅团商店开关");
+        旅团唤兽琴弦 = saveSwitchStatus("旅团唤兽琴弦");
+        旅团全价兽粮 = saveSwitchStatus("旅团全价兽粮");
+        旅团超级成长零食 = saveSwitchStatus("旅团超级成长零食");
+        旅团原材料 = saveSwitchStatus("旅团原材料");
+        旅团史诗经验 = saveSwitchStatus("旅团史诗经验");
+        旅团优秀经验 = saveSwitchStatus("旅团优秀经验");
+        旅团普通经验 = saveSwitchStatus("旅团普通经验");
+        旅团金币 = saveSwitchStatus("旅团金币");
+
+
+        var data = {
+            激活码: 激活码,
+            定时运行: 定时运行,
+            定时休息: 定时休息,
+
+            <!--日常-->
+            日常总开关: 日常总开关,
+            自动强化装备: 自动强化装备,
+            自动升级技能: 自动升级技能,
+            领取猫猫包果木: 领取猫猫包果木,
+            猫猫包自动升温: 猫猫包自动升温,
+            钻石兑换果木次数: 钻石兑换果木次数,
+
+            优先升级同一技能: 优先升级同一技能至下一阶段,
+            自动挑战首领: 自动挑战首领,
+            自动换图: 自动换图,
+            队员不满足单飞: 队员不满足单飞,
+            单飞后寻找结伴: 单飞后寻找结伴,
+
+            冒险手册领取: 冒险手册领取,
+            邮件领取: 邮件领取,
+            招式创造: 招式创造,
+            骑兽乐园: 骑兽乐园,
+
+            摸鱼时间到: 摸鱼时间到,
+            火力全开: 火力全开,
+            宝藏湖: 宝藏湖,
+            登录好礼: 登录好礼,
+            BBQ派对: BBQ派对,
+            限时特惠: 限时特惠,
+
+            <!--营地-->
+            营地总开关: 营地总开关,
+            仓鼠百货: 仓鼠百货,
+            月签到: 月签到,
+            日礼包: 日礼包,
+            月卡: 月卡,
+            星辰同行: 星辰同行,
+            纸飞机: 纸飞机,
+            秘宝收集: 秘宝收集,
+            露营打卡点: 露营打卡点,
+            商店星星经验: 星星经验,
+            商店全价兽粮: 全价兽粮,
+            商店超级成长零食三折: 超级成长零食三折,
+            商店黑烬突破石五折: 黑烬突破石五折,
+            商店经验补剂五折: 经验补剂五折,
+
+            钻石兑换卢恩次数: 钻石兑换卢恩次数,
+            讲述故事次数: 讲述故事次数,
+            钻石兑换门票次数: 钻石兑换门票次数,
+            骑兽探索次数: 骑兽探索次数,
+
+            秘宝地图: 秘宝地图,
+            秘宝钻石兑换次数: 秘宝钻石兑换次数,
+
+            冒险总开关: 冒险总开关,
+            秘境开关: 秘境开关,
+            秘境不开宝箱: 不开宝箱,
+            秘境点赞队友: 点赞队友,
+            秘境添加佣兵: 秘境添加佣兵,
+            秘境无体力继续: 无体力继续,
+            秘境创建房间: 创建房间,
+            秘境建房重复挑战次数: 建房重复挑战次数,
+            秘境地图: 秘境地图,
+            秘境关卡: 秘境关卡,
+            补充体力次数: 补充体力次数,
+            喊话内容: 队伍喊话,
+
+            恶龙开关: 恶龙开关,
+            恶龙添加佣兵: 恶龙添加佣兵,
+            恶龙重复挑战: 恶龙重复挑战,
+            职能优先输出: 职能优先输出,
+            职能优先坦克: 职能优先坦克,
+            职能优先治疗: 职能优先治疗,
+            主动释放技能: 主动释放技能,
+            三技能自动释放: 三技能自动释放,
+
+            旅团总开关: 旅团总开关,
+            旅团浇树: 旅团浇树,
+            旅团任务: 旅团任务,
+            旅团调查队: 旅团调查队,
+            旅团许愿墙: 旅团许愿墙,
+            付费浇灌次数: 付费浇灌次数,
+            调查队挑战次数: 调查队挑战次数,
+            旅团商店开关: 旅团商店开关,
+            旅团唤兽琴弦: 旅团唤兽琴弦,
+            旅团全价兽粮: 旅团全价兽粮,
+            旅团超级成长零食: 旅团超级成长零食,
+            旅团原材料: 旅团原材料,
+            旅团史诗经验: 旅团史诗经验,
+            旅团优秀经验: 旅团优秀经验,
+            旅团普通经验: 旅团普通经验,
+            旅团金币: 旅团金币,
+        };
+
+    // 定义一个函数用于保存开关的状态到 localStorage
+    function saveSwitchStatus(id) {
+        var isChecked = document.getElementById(id).checked;
+        localStorage.setItem(id, isChecked);
+        return isChecked
+    }
+
+<!--        console.log(data);-->
+        // 将data 转为JSON文件传递给PY
+        airscript.call("submit", JSON.stringify(data));
+        airscript.close();
+    }
+
+    function wclose() {
+        var guan = document.getElementById("guanbi").value;
+        airscript.call("guan", guan);
+        console.log("退出程序" + guan);
+        airscript.close();
+    }
+</script>
+
+</body>
+
+</html>
