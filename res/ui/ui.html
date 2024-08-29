@@ -535,6 +535,19 @@
                             <input id="恶龙重复挑战" name="vehicle" type="checkbox" value="Bike">重复挑战<br>
                         </div>
                     </div>
+                    <legend>史莱姆大暴走</legend>
+                    <input id="大暴走开关" name="vehicle" type="checkbox" value="Bike">大暴走开关<br>
+                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<br>
+                    <div class="flex-container">
+                        <label for="史莱姆选择">史莱姆选择:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="史莱姆选择" id="史莱姆选择" lay-filter="mijing1-filter">
+                                    <option value="暴走烈焰大王">暴走烈焰大王</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <legend>职能相关</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
@@ -625,7 +638,7 @@
 
     </ul>
 </div>
-<div style="  display: flex; margin-bottom: 7px; align-items: center;justify-content: center; width: 100%; height: 25px; position: sticky;">
+<div style="  display: flex; margin-bottom: 10px; align-items: center;justify-content: center; width: 100%; height: 20px; position: sticky;">
     <button id="guanbi" onclick="wclose()"
             style="width: 50%;height: 45px;color: #1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 3px;font-size: 16px;"
             type="button"
@@ -757,6 +770,17 @@
             }
         }
 
+        setSwitchStatus("大暴走开关");
+        setSwitchStatus("暴走进入战斗后启动");
+        var defaultValue = localStorage.getItem('史莱姆选择');
+        var selectElement = document.getElementById('史莱姆选择');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
         // 重新渲染 select 元素
         layui.form.render('select');
 
@@ -847,7 +871,7 @@
         }
 
         if(mjId === '下城') {
-          $mjgqSelect.html('<option value="魔偶师赌局">魔偶师赌局</option>');
+          $mjgqSelect.html('<option value="魔偶师赌局">魔偶师赌局</option><option value="下城危险警报">下城危险警报</option><option value="无夜大王驾到">无夜大王驾到</option>');
         }
 
         form.render('select'); // 更新城市选择框的UI
@@ -956,6 +980,11 @@
         var 补充体力次数 = document.getElementById("补充体力次数").value;
         localStorage.setItem("补充体力次数", 补充体力次数);
 
+        大暴走开关 = saveSwitchStatus("大暴走开关");
+        暴走进入战斗后启动 = saveSwitchStatus("暴走进入战斗后启动");
+        var 史莱姆选择 = document.getElementById("史莱姆选择").value;
+        localStorage.setItem("史莱姆选择", 史莱姆选择);
+
         var 队伍喊话 = document.getElementById("队伍喊话").value;
         localStorage.setItem("队伍喊话", 队伍喊话);
 
@@ -996,6 +1025,12 @@
             激活码: 激活码,
             定时运行: 定时运行,
             定时休息: 定时休息,
+
+            选择启动账号: 1,
+            选择启动角色: 1,
+
+            needHome: 0,
+            fighting: 0,
 
             <!--日常-->
             日常总开关: 日常总开关,
@@ -1058,6 +1093,9 @@
             秘境地图: 秘境地图,
             秘境关卡: 秘境关卡,
             补充体力次数: 补充体力次数,
+            大暴走开关: 大暴走开关,
+            暴走进入战斗后启动: 暴走进入战斗后启动,
+            史莱姆选择: 史莱姆选择,
             喊话内容: 队伍喊话,
 
             恶龙开关: 恶龙开关,

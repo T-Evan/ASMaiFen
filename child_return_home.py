@@ -12,7 +12,7 @@ from threading import Lock
 # 实例方法
 def main():
     while True:
-        if 功能开关["needHome"] == 1:
+        if 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
             returnHome()
             ldE.sleep(1)  # 等待 1 秒
         else:

@@ -57,6 +57,7 @@ for row in results:
 
 if kami == '':
     activeInfo = '卡密不存在，请重新输入'
+    Dialog.confirm(activeInfo, "激活码失效")
     Toast(activeInfo, 3000)
     sys.exit()
 if kami != '':
@@ -79,6 +80,7 @@ if kami != '':
         # 判断卡密是否过期
         if int(time.time()) > expire_time:
             activeInfo = '卡密已过期，过期时间：' + formatted_date
+            Dialog.confirm(activeInfo, "激活码失效")
             Toast(activeInfo, 3000)
             ldE.sleep(2)
             sys.exit()
@@ -93,6 +95,7 @@ if kami != '':
             # 判断已激活设备数
             if len(device_ids) >= device_available_num:
                 activeInfo = '已超过可激活设备数量'
+                Dialog.confirm(activeInfo, "激活码失效")
                 Toast(activeInfo, 3000)
                 ldE.sleep(2)
                 sys.exit()
@@ -114,6 +117,10 @@ cursor.close()
 # 执行完毕后记得关闭db,不然会并发连接失败哦
 db.close()
 
+display = Device.display()
+# 屏幕宽度
+if display.widthPixels != 720 or display.heightPixels != 1280:
+    Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
 
 # debug
 # res = Ocr.mlkitocr_v2()
@@ -174,6 +181,9 @@ def main():
 
             if not thread2.is_alive():
                 runThread2()
+
+            if not threadBaoZouBoss.is_alive():
+                runThreadBaoZouBoss()
 
             # 启动app
             start_up.start_app()

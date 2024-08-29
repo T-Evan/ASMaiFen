@@ -17,7 +17,7 @@ class DailyTask:
     def homePage(self):
         while True:
             # todo 区分是否进入的摸鱼活动
-            res6 = self.shilianTask.waitFight()
+            res6 = self.shilianTask.WaitFight()
 
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
             return3 = ldE.element_exist('返回-3')
