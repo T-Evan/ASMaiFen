@@ -15,15 +15,15 @@ from ascript.android.system import R
 # 实例方法
 def main():
     while True:
+        功能开关['bossColor'] = ''
+        功能开关['bossLastColor'] = ''
+        功能开关['bossNumber0'] = ''
+        功能开关['bossNumber1'] = ''
+        功能开关['bossNumber2'] = ''
+        功能开关['bossLastNumber0'] = ''
+        功能开关['bossLastNumber1'] = ''
+        功能开关['bossLastNumber2'] = ''
         if 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走烈焰大王":
-            功能开关['bossColor'] = ''
-            功能开关['bossLastColor'] = ''
-            功能开关['bossNumber0'] = ''
-            功能开关['bossNumber1'] = ''
-            功能开关['bossNumber2'] = ''
-            功能开关['bossLastNumber0'] = ''
-            功能开关['bossLastNumber1'] = ''
-            功能开关['bossLastNumber2'] = ''
             elapsed = 0
             while 1:
                 if 功能开关["fighting"] == 1:

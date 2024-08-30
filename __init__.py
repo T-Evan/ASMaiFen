@@ -63,7 +63,10 @@ if kami == '':
 if kami != '':
     # 判断首次激活
     if expire_time == 0:
-        expire_time = int(time.time()) + 86400 * 30  # 月卡
+        if 'test' in kami:
+            expire_time = int(time.time()) + 86400 * 1  # 日卡
+        else:
+            expire_time = int(time.time()) + 86400 * 30  # 月卡
         dt_object = datetime.fromtimestamp(expire_time)
         formatted_date = dt_object.strftime('%Y-%m-%d %H:%M:%S')
         now_device_id = Device.id()
@@ -134,7 +137,7 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # print(return1)
 # if return1:
 #     return1.click(rx=5, ry=5).execute(sleep=1)
-# res, buyCount = TomatoOcrText(496,815,510,835, "已购买次数")  # 1 / 9
+# res, buyCount = CustomOcrText(0,0,720,1280, "已购买次数")  # 1 / 9
 # re = ldE.find_element('结伴-当前地图').target
 # sys.exit()
 
@@ -187,6 +190,8 @@ def main():
 
             # 启动app
             start_up.start_app()
+            if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and 功能开关['冒险总开关'] == 0:
+                Toast('未开启功能，请检查功能配置')
             # 营地活动（优先领取）
             yingdiTask.yingdiTask()
             # 日常（优先领取）

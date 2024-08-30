@@ -51,15 +51,15 @@ class YingDiTask:
             return
         Toast('营地任务 - 星辰同行 - 开始')
         # 判断是否在营地页面
-        res1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        res2 = OCRTapV2(500, 1201, 545, 1228, "同行")
+        res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res2 = TomatoOcrTap(500, 1201, 545, 1228, "同行")
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
-            res = OCRTapV2(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-            hd2 = OCRTapV2(11, 1111, 92, 1134, "旅行活动", 40, -20)
+            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
         res = OCRTapV2(500, 1201, 545, 1228, "同行")
@@ -86,30 +86,32 @@ class YingDiTask:
         Toast('营地任务 - 纸飞机 - 开始')
 
         # 判断是否在营地页面
-        res = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
         if not res:
             # 返回首页
             self.dailyTask.homePage()
-            res = OCRTapV2(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-            hd2 = OCRTapV2(11, 1111, 92, 1134, "旅行活动", 40, -20)
+            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
 
         isFind = ldE.element_exist('营地-纸飞机')
         if not isFind:
-            # -- 返回活动第一屏
-            ldE.swipe([680, 451], [680, 804])
+            # -- 返回活动最后一屏
+            ldE.swipe([680, 804], [680, 251])
             ldE.sleep(2)
-            ldE.swipe([680, 451], [680, 804])
+            ldE.swipe([680, 804], [680, 251])
             ldE.sleep(2)
-            ldE.swipe([680, 451], [680, 804])
+            ldE.swipe([680, 804], [680, 251])
+            ldE.sleep(2)
+            ldE.swipe([680, 804], [680, 251])
             ldE.sleep(2)
 
             for i in range(1, 5):
-                # 下翻第二屏，继续识别
-                ldE.swipe([680, 804], [680, 451])
+                # 上翻第二屏，继续识别
+                ldE.swipe([680, 451],[680, 804])
                 ldE.sleep(3)
                 isFind = ldE.element_exist('营地-纸飞机')
                 if isFind:
@@ -134,21 +136,21 @@ class YingDiTask:
         Toast('营地任务 - 月卡 - 开始')
 
         # 判断是否在营地页面
-        res1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        res2 = OCRTapV2(393, 1202, 439, 1229, "月卡")
+        res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res2 = TomatoOcrTap(393, 1202, 439, 1229, "月卡")
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
 
-            res = OCRTapV2(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-            hd2 = OCRTapV2(11, 1111, 92, 1134, "旅行活动", 40, -20)
+            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
-        res = OCRTapV2(393, 1202, 439, 1229, "月卡")
+        res = TomatoOcrTap(393, 1202, 439, 1229, "月卡")
         if res:
-            res = OCRTapV2(333, 1054, 385, 1086, "领取")
+            res = TomatoOcrTap(333, 1054, 385, 1086, "领取")
             if res:
                 任务记录["月卡-完成"] = 1
                 tapSleep(60, 1135)  # 点击空白处关闭
@@ -165,24 +167,24 @@ class YingDiTask:
             return
         Toast('营地任务 - 日礼包 - 开始')
         # 判断是否在营地页面
-        res1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        res2 = OCRTapV2(286, 1202, 340, 1229, "礼包")
+        res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res2 = TomatoOcrTap(286, 1202, 340, 1229, "礼包")
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
 
-        res = OCRTapV2(125, 1202, 187, 1234, "营地")
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
         # 判断是否在营地页面
-        hd1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        hd2 = OCRTapV2(11, 1111, 92, 1134, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         if not hd1 and not hd2:
             return
 
-        res = OCRTapV2(286, 1202, 340, 1229, "礼包")
+        res = TomatoOcrTap(286, 1202, 340, 1229, "礼包")
         if res:
-            res = OCRTapV2(148, 671, 198, 700, "免费")
+            res = TomatoOcrTap(148, 671, 198, 700, "免费")
             if res:
-                res = OCRTapV2(339, 743, 379, 764, "免费")
+                res = TomatoOcrTap(339, 743, 379, 764, "免费")
                 if res:
                     任务记录["日礼包-完成"] = 1
                     tapSleep(345, 1058)  # 点击空白处关闭
@@ -199,26 +201,28 @@ class YingDiTask:
         # 返回首页
         self.dailyTask.homePage()
 
-        res = OCRTap(125, 1202, 187, 1234, "营地")
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
         # 判断是否在营地页面
-        hd1 = OCRTapV2(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        hd2 = OCRTapV2(11, 1111, 92, 1134, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         if hd1 == False and hd2 == False:
             return
 
         isFind = ldE.element_exist('营地-月签到')
         if not isFind:
-            # -- 返回活动第一屏
-            ldE.swipe([680, 451], [680, 804, 120])
+            # -- 返回活动最后一屏
+            ldE.swipe([680, 804], [680, 251])
             ldE.sleep(2)
-            ldE.swipe([680, 451], [680, 804, 120])
+            ldE.swipe([680, 804], [680, 251])
             ldE.sleep(2)
-            ldE.swipe([680, 451], [680, 804, 120])
+            ldE.swipe([680, 804], [680, 251])
+            ldE.sleep(2)
+            ldE.swipe([680, 804], [680, 251])
             ldE.sleep(2)
 
             for i in range(1, 5):
-                # 下翻第二屏，继续识别
-                ldE.swipe([680, 804], [680, 451])
+                # 上翻第二屏，继续识别
+                ldE.swipe([680, 451],[680, 804])
                 ldE.sleep(3)
                 isFind = ldE.element_exist('营地-月签到')
                 if isFind:
@@ -226,6 +230,9 @@ class YingDiTask:
         if isFind:
             isFind.click().execute(sleep=1)
             OCRTapV2(310, 977, 408, 1009, "点击签到")
+            re = ldE.element_exist('营地-月签到-累计奖励')
+            if re:
+                re.click().execute(sleep=1)
             任务记录["月签到-完成"] = 1
             tapSleep(36, 1123)  # 点击空白处关闭
         return
@@ -242,10 +249,10 @@ class YingDiTask:
         # 返回首页
         self.dailyTask.homePage()
 
-        res = OCRTap(125, 1202, 187, 1234, "营地")
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
         # 判断是否在营地页面
-        hd1 = OCRTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        hd2 = OCRTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         if hd1 == False and hd2 == False:
             return
 
@@ -309,6 +316,9 @@ class YingDiTask:
             if re:
                 re.click().execute(sleep=1)
                 tapSleep(360, 1100)  # 点击空白处关闭
+                # 返回左侧
+                ldE.swipe([180, 1070], [525, 1070], 0.3)
+                ldE.sleep(3)
             else:
                 # 再找左侧
                 ldE.swipe([180, 1070], [525, 1070], 0.3)
@@ -351,29 +361,29 @@ class YingDiTask:
 
                 if availableNengLiang != '' and availableNengLiang >= 100:
                     tapSleep(580, 880)  # 拉满10次
-                res1 = OCRTapV2(420, 1117, 470, 1145, "寻宝")  # 能力足够多次10连时，右侧寻宝多次按钮
-                res2 = OCRTapV2(228, 1118, 280, 1145, "寻宝")  # 能力足够多次10连时，左侧单次寻宝按钮
-                res3 = OCRTapV2(331, 1119, 386, 1147, "寻宝")  # 能量不足10次时，只展示单次寻宝按钮
+                res1 = TomatoOcrTap(420, 1117, 470, 1145, "寻宝")  # 能力足够多次10连时，右侧寻宝多次按钮
+                res2 = TomatoOcrTap(228, 1118, 280, 1145, "寻宝")  # 能力足够多次10连时，左侧单次寻宝按钮
+                res3 = TomatoOcrTap(331, 1119, 386, 1147, "寻宝")  # 能量不足10次时，只展示单次寻宝按钮
                 if res1 or res2 or res3:
                     # 判断能源是否用尽
-                    res, _ = OCRTextV2(316, 343, 404, 370, "补充能源")
+                    res, _ = TomatoOcrText(316, 343, 404, 370, "补充能源")
                     if res:
                         return
 
                     while True:
-                        res, _ = OCRTextV2(93, 1184, 127, 1220, "回")  # 寻宝页，返回按钮
+                        res, _ = TomatoOcrText(93, 1184, 127, 1220, "回")  # 寻宝页，返回按钮
                         if res:  # 识别到返回按钮，确认寻宝结束，退出
                             tapSleep(65, 1120, 1)  # 点击空白处关闭
                             tapSleep(65, 1120, 1)  # 点击空白处关闭
                             break
-                        OCRTapV2(587, 78, 631, 105, "跳过")
-                        OCRTapV2(586, 77, 631, 105, "跳过")
+                        TomatoOcrTap(587, 78, 631, 105, "跳过")
+                        TomatoOcrTap(586, 77, 631, 105, "跳过")
                         tapSleep(65, 1120, 1)  # 点击空白处关闭
                         tapSleep(65, 1120, 1)  # 点击空白处关闭
         # 返回营地
-        OCRTapV2(94, 1183, 125, 1220, "回")
+        TomatoOcrTap(94, 1183, 125, 1220, "回")
         ldE.sleep(2)
-        OCRTapV2(94, 1183, 125, 1220, "回")
+        TomatoOcrTap(94, 1183, 125, 1220, "回")
         ldE.sleep(3)
 
     def miBaoChangeMap(self, left, right):
@@ -462,7 +472,7 @@ class YingDiTask:
 
         # 开始购买
         # 返回第一屏
-        ldE.swipe([360,805], [360,965])
+        ldE.swipe([360, 805], [360, 965])
         ldE.sleep(2)
 
         # 免费金币箱

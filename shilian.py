@@ -658,9 +658,12 @@ class ShiLianTask:
             if isTreasure == 1:
                 if 功能开关['秘境点赞队友'] == 1:
                     Toast('点赞队友')
-                    for i in range(1, 3):
-                        ldE.element('战斗结束-点赞队友1').click().execute(sleep=0.7)
-                        ldE.element('战斗结束-点赞队友2').click().execute(sleep=0.7)
+                    for i in range(1, 2):
+                        # ldE.element('战斗结束-点赞队友1').click().execute(sleep=0.7)
+                        # ldE.element('战斗结束-点赞队友2').click().execute(sleep=0.7)
+                        tapSleep(300, 520, 0.7)
+                        tapSleep(413, 541, 0.7)
+                        tapSleep(538, 522, 0.7)
                 Toast('返回房间')
                 tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
                 res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 战斗结束页确认退出
@@ -679,12 +682,15 @@ class ShiLianTask:
         if 功能开关['秘境点赞队友'] == 1:
             if isTreasure == 1:
                 Toast('点赞队友')
-                for i in range(1, 4):
-                    ldE.element('战斗结束-点赞队友1').click().execute(sleep=0.7)
-                    ldE.element('战斗结束-点赞队友2').click().execute(sleep=0.7)
+                for i in range(1, 2):
+                    # ldE.element('战斗结束-点赞队友1').click().execute(sleep=0.7)
+                    # ldE.element('战斗结束-点赞队友2').click().execute(sleep=0.7)
+                    tapSleep(300, 520, 0.7)
+                    tapSleep(413, 541, 0.7)
+                    tapSleep(538, 522, 0.7)
 
         attempts = 0  # 初始化尝试次数
-        maxAttempts = 2  # 设置最大尝试次数
+        maxAttempts = 3  # 设置最大尝试次数
 
         openStatus = 0
         if isTreasure == 1:
@@ -694,43 +700,56 @@ class ShiLianTask:
                     res = TomatoOcrTap(99, 1199, 128, 1234, "回")  # 关闭确认弹窗，返回待领取页
 
                 attempts = attempts + 1
-                # 战斗结束页
-                res = TomatoOcrTap(219, 1103, 254, 1120, "开启")  # 战斗页，宝箱1
+                # # 战斗结束页
+                # res = TomatoOcrTap(202, 1041, 258, 1068, "开启")  # 战斗页，宝箱1
+                # if res:
+                #     ldE.sleep(3.5)
+                #     tapSleep(340, 930)
+                #     openStatus = 1
+                # res = TomatoOcrTap(459, 1040, 524, 1068, "开启")  # 战斗页，宝箱2
+                # if res:
+                #     ldE.sleep(3.5)
+                #     tapSleep(340, 930)
+                #     openStatus = 1
+                # # 结算页
+                # # 结算页，单宝箱
+                # res = TomatoOcrTap(340, 756, 380, 777, "开启")
+                # if res:
+                #     ldE.sleep(3.5)
+                #     tapSleep(340, 930)
+                #     openStatus = 1
+                # res = TomatoOcrTap(335, 755, 380, 777, "开启")
+                # if res:
+                #     ldE.sleep(3.5)
+                #     tapSleep(340, 930)
+                #     openStatus = 1
+                #
+                # # 领取宝箱1
+                # res = TomatoOcrTap(214, 748, 257, 767, "开启")
+                # if res:
+                #     ldE.sleep(3.5)
+                #     tapSleep(340, 930)
+                #     openStatus = 1
+                # # 领取宝箱2
+                # res = TomatoOcrTap(460, 747, 503, 767, "开启")
+                # if res:
+                #     ldE.sleep(3.5)
+                #     tapSleep(340, 930)
+                #     openStatus = 1
+                # 图色识别兜底
+                res = ldE.element_exist('战斗结束-开启宝箱')
                 if res:
-                    ldE.sleep(3.5)
-                    tapSleep(340, 930)
-                    openStatus = 1
-                res = TomatoOcrTap(462, 1102, 502, 1122, "开启")  # 战斗页，宝箱2
-                if res:
-                    ldE.sleep(3.5)
-                    tapSleep(340, 930)
-                    openStatus = 1
-                # 结算页
-                # 结算页，单宝箱
-                res = TomatoOcrTap(340, 756, 380, 777, "开启")
-                if res:
-                    ldE.sleep(3.5)
-                    tapSleep(340, 930)
-                    openStatus = 1
-                res = TomatoOcrTap(335, 755, 380, 777, "开启")
-                if res:
-                    ldE.sleep(3.5)
+                    res.click().execute(sleep=0.7)
+                    ldE.sleep(2.5)
                     tapSleep(340, 930)
                     openStatus = 1
 
-                # 领取宝箱1
-                res = TomatoOcrTap(214, 748, 257, 767, "开启")
+                res = ldE.element_exist('战斗结束-开启宝箱2')
                 if res:
-                    ldE.sleep(3.5)
+                    res.click().execute(sleep=0.7)
+                    ldE.sleep(2.5)
                     tapSleep(340, 930)
                     openStatus = 1
-                # 领取宝箱2
-                res = TomatoOcrTap(460, 747, 503, 767, "开启")
-                if res:
-                    ldE.sleep(3.5)
-                    tapSleep(340, 930)
-                    openStatus = 1
-                # todo：图色识别兜底
 
         if openStatus == 1:
             Toast('开启宝箱 - 成功')
@@ -946,12 +965,15 @@ class ShiLianTask:
                 tapSleep(148, 675, 4)
 
             if 功能开关['bossNumber1'] != '' and 功能开关['bossNumber2'] != '':
-                if 功能开关['bossLastNumber1'] != '' and 功能开关['bossLastNumber2'] != '' and (功能开关['bossLastNumber1'] == 功能开关['bossNumber1'] and 功能开关['bossNumber2'] == 功能开关['bossLastNumber2']):
+                if 功能开关['bossLastNumber1'] != '' and 功能开关['bossLastNumber2'] != '' and (
+                        功能开关['bossLastNumber1'] == 功能开关['bossNumber1'] and 功能开关['bossNumber2'] == 功能开关[
+                    'bossLastNumber2']):
                     Toast('战斗中')
                 else:
                     功能开关['bossLastNumber1'] = 功能开关['bossNumber1']
                     功能开关['bossLastNumber2'] = 功能开关['bossNumber2']
-                    if 功能开关['bossNumber1'] != '' and 功能开关['bossNumber2'] != '' and 功能开关['bossNumber1'] > 功能开关['bossNumber2']:
+                    if 功能开关['bossNumber1'] != '' and 功能开关['bossNumber2'] != '' and 功能开关['bossNumber1'] > \
+                            功能开关['bossNumber2']:
                         diffNum = 功能开关['bossNumber1'] - 功能开关['bossNumber2']
                         if diffNum in [1, 4, 7]:
                             Toast('往左一格')
@@ -962,7 +984,8 @@ class ShiLianTask:
                         if diffNum in [0, 3, 6, 9]:
                             Toast('原地不动')
 
-                    if 功能开关['bossNumber1'] != '' and 功能开关['bossNumber2'] != '' and 功能开关['bossNumber1'] < 功能开关['bossNumber2']:
+                    if 功能开关['bossNumber1'] != '' and 功能开关['bossNumber2'] != '' and 功能开关['bossNumber1'] < \
+                            功能开关['bossNumber2']:
                         diffNum = 功能开关['bossNumber2'] - 功能开关['bossNumber1']
                         if diffNum in [1, 4, 7]:
                             Toast('往右一格')
@@ -975,7 +998,9 @@ class ShiLianTask:
 
             if 功能开关['bossColor'] == "橙":
                 if 功能开关['bossNumber0'] != 0:
-                    if 功能开关['bossLastColor'] != '' and 功能开关['bossLastNumber0'] != '' and (功能开关['bossLastColor'] == 功能开关['bossColor'] and 功能开关['bossLastNumber0'] == 功能开关['bossNumber0']):
+                    if 功能开关['bossLastColor'] != '' and 功能开关['bossLastNumber0'] != '' and (
+                            功能开关['bossLastColor'] == 功能开关['bossColor'] and 功能开关['bossLastNumber0'] ==
+                            功能开关['bossNumber0']):
                         Toast('战斗中')
                     else:
                         功能开关['bossLastColor'] = 功能开关['bossColor']
@@ -991,7 +1016,9 @@ class ShiLianTask:
 
             if 功能开关['bossColor'] == "紫":
                 if 功能开关['bossNumber0'] != 0:
-                    if 功能开关['bossLastColor'] != '' and 功能开关['bossLastNumber0'] != '' and 功能开关['bossLastColor'] == 功能开关['bossColor'] and 功能开关['bossLastNumber0'] == 功能开关['bossNumber0']:
+                    if 功能开关['bossLastColor'] != '' and 功能开关['bossLastNumber0'] != '' and 功能开关[
+                        'bossLastColor'] == 功能开关['bossColor'] and 功能开关['bossLastNumber0'] == 功能开关[
+                        'bossNumber0']:
                         Toast('战斗中')
                     else:
                         功能开关['bossLastColor'] = 功能开关['bossColor']
@@ -1018,7 +1045,6 @@ class ShiLianTask:
             #         else:
             #             Toast('已返回水地块')
             #             break
-
 
     def teamShout(self):
         if 功能开关['喊话内容'] == "":

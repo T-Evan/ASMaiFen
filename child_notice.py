@@ -19,7 +19,7 @@ def main():
 
 
 def noticeCancel():
-    for i in range(1, 3):
+    for i in range(1, 2):
         toast1 = ldE.element_exist('点击空白处-1')
         if toast1:
             tapSleep(45, 1245)

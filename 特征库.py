@@ -22,6 +22,7 @@ except Exception as e:
     '首页-营地': OcrQuery().paddleocr_v3().rect_half_left().rect_half_bottom().pattern('^营地$'),
     '首页-挑战首领': ImageQuery().find_template().rect_half_right().img('挑战首领.png'),
     '首页-新关卡已解锁': OcrQuery().paddleocr_v3().rect_half_top().rect_half_right().pattern('已解锁'),
+    '首页-前往新关卡': ImageQuery().find_template().rect_half_right().img('首页-前往新关卡.png'),
     # '首页-营地': ImageQuery().find_template().rect_half_bottom().img('首页-营地.png'),
 
     '营地-旅行活动': OcrQuery().mlkitocr_v2().rect_half_left().rect_half_bottom().pattern('旅行活动'),
@@ -40,13 +41,15 @@ except Exception as e:
     '仓鼠百货-经验补剂五折': ImageQuery().find_template().img('经验补剂五折.png'),
     '营地-秘宝': ImageQuery().find_template().rect_half_top().img('营地秘宝.png'),
     '招式创造-能量': ImageQuery().find_template().rect_half_top().img('招式创造能量.png'),
+    '招式创造-能量2': ImageQuery().find_template().rect_half_top().img('招式创造能量2.png'),
     '营地-月签到': ImageQuery().find_template().img('月签到.png'),
+    '营地-月签到-累计奖励': ImageQuery().find_template().img('月签到-累计奖励.png'),
     '营地-纸飞机': ImageQuery().find_template().img('纸飞机.png'),
     '活动-登录好礼': ImageQuery().find_template().img('登录好礼.png'),
     '活动-登录好礼-领取': ImageQuery().find_template().img('活动-登录好礼-领取.png'),
     '活动-摸鱼': OcrQuery().paddleocr_v3().rect_half_right().pattern('摸鱼'),
     '活动-摸鱼中': ImageQuery().find_template().img('摸鱼中.png'),
-    '秘宝-能量': ImageQuery().find_template().img('秘宝能量.png'),
+    '秘宝-能量': ImageQuery().find_template().img('秘宝能量.png').confidence(0.8),
     # '秘宝-能量': OcrQuery().paddleocr_v3().pattern('x100'),
     # '秘宝-加号': ImageQuery().find_template().rect_half_top().rect_half_right().img('秘宝加号.png'),
     '秘宝-补充能源': OcrQuery().paddleocr_v3().rect_half_top().rect_half_right().pattern('补充能源'),
@@ -57,7 +60,7 @@ except Exception as e:
     '结伴-当前地图': ImageQuery().find_template().img('当前地图.png'),
     '结伴-当前地图2': ImageQuery().find_template().img('当前地图2.png'),
     '结伴-组队增益': ImageQuery().find_template().img('组队增益.png'),
-    '结伴-加入': OcrQuery().paddleocr_v3().pattern('加入'),
+    '结伴-加入': ImageQuery().find_template().img('结伴-加入.png'),
     '手册-领取': ImageQuery().find_template().img('手册-领取.png'),
 
     '旅人-一键强化': ImageQuery().find_template().img('一键强化.png'),
@@ -126,6 +129,7 @@ except Exception as e:
     '战斗结束-是否开启': OcrQuery().mlkitocr_v2().pattern('是否开启'),  # 结算页，宝箱提示
     '战斗结束-点赞': ImageQuery().find_template().rect_half_top().img('dianzan.png'),
     '战斗结束-开启宝箱': ImageQuery().find_template().rect_half_bottom().img('宝箱-开启.png'),
+    '战斗结束-开启宝箱2': ImageQuery().find_template().img('宝箱-开启2.png'),
     '战斗结束-自动准备': OcrQuery().mlkitocr_v2().rect_half_bottom().pattern('自动准备'),  # 战斗结束页，自动准备提示 -- 快速返回房间
     '战斗结束-点赞队友1': ImageQuery().find_template().rect_half_top().img('点赞1.png'),
     '战斗结束-点赞队友2': ImageQuery().find_template().rect_half_top().img('点赞2.png'),

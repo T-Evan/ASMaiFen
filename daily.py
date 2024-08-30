@@ -185,62 +185,73 @@ class DailyTask:
         if 功能开关["自动换图"] == 1:
             Toast("日常 - 前往新地图 - 开始")
             self.homePage()
-            res1, _ = TomatoOcrText(573, 200, 694, 238, "新关卡已解锁")
-            res2 = False
-            res3 = False
-            if not res1:
-                res2, _ = TomatoOcrText(573, 200, 694, 238, "新地图已解锁")
-                if not res2:
-                    res3 = ldE.element_exist('首页-新关卡已解锁')
-            if res1 or res2 or res3:
-                # 结伴入口切换
-                res = TomatoOcrTap(647, 450, 689, 474, "结伴")
-                res = TomatoOcrTap(373, 1106, 471, 1141, "关卡大厅")
-                for i in range(1, 5):
-                    re = ldE.find_element('结伴-当前地图')
-                    x = 0
-                    if re is not None:
-                        re = re.target
-                        x = re['center_x']
-                        y = re['center_y']
-                    if x == 0:
-                        re = ldE.find_element('结伴-当前地图2')
+            # 直接点击图标切换
+            newMapOK = ldE.element_exist('首页-前往新关卡')
+            if newMapOK:
+                newMapOK.click().execute(sleep=1)
+                res = TomatoOcrTap(422, 622, 494, 646, "单人前往")
+                if res:
+                    if 功能开关["队员不满足单飞"] == 1:
+                        res = TomatoOcrTap(187, 727, 284, 757, "离队前往")
+                    else:
+                        res = TomatoOcrTap(435, 727, 529, 759, "留在队伍")
+            if not newMapOK:
+                res1, _ = TomatoOcrText(573, 200, 694, 238, "新关卡已解锁")
+                res2 = False
+                res3 = False
+                if not res1:
+                    res2, _ = TomatoOcrText(573, 200, 694, 238, "新地图已解锁")
+                    if not res2:
+                        res3 = ldE.element_exist('首页-新关卡已解锁')
+                if res1 or res2 or res3:
+                    # 结伴入口切换
+                    res = TomatoOcrTap(647, 450, 689, 474, "结伴")
+                    res = TomatoOcrTap(373, 1106, 471, 1141, "关卡大厅")
+                    for i in range(1, 5):
+                        re = ldE.find_element('结伴-当前地图')
+                        x = 0
                         if re is not None:
                             re = re.target
                             x = re['center_x']
                             y = re['center_y']
-                    if x > 0:
-                        # 当前地图（不在下方第1个，就是右边紧挨着；只需判断两次）
-                        if x > 400:
-                            tapSleep(x - 305, y + 147)  # 下行第1个
-                        else:
-                            tapSleep(x + 230, y + 0)  # 右侧第1个
-                            TomatoOcrText(321, 1022, 394, 1044, "前往地图")
-
-                        # 切换地图
-                        res, _ = TomatoOcrText(321, 1022, 394, 1044, "前往地图")
-                        if not res:
-                            tapSleep(x + 0, y + 165)  # 切换下一地图
-                            if x < 280:
-                                tapSleep(x + 50, y + 250)  # 最后一关在第一个位置，换地图后下方第1图）
-                            if 280 < x < 400:
-                                tapSleep(x - 100, y + 250)  # 下行第1个（最后一关在第二个位置，换地图后下方第1图）
+                        if x == 0:
+                            re = ldE.find_element('结伴-当前地图2')
+                            if re is not None:
+                                re = re.target
+                                x = re['center_x']
+                                y = re['center_y']
+                        if x > 0:
+                            # 当前地图（不在下方第1个，就是右边紧挨着；只需判断两次）
                             if x > 400:
-                                tapSleep(x - 250, y + 220)  # 最后一关在第三个位置，换地图后下行第1个
-
-                        res = TomatoOcrTap(321, 1022, 394, 1044, "前往地图")
-                        res = TomatoOcrTap(330, 1027, 389, 1058, "前往")
-
-                        res = TomatoOcrTap(422, 622, 494, 646, "单人前往")
-                        if res:
-                            if 功能开关["队员不满足单飞"] == 1:
-                                res = TomatoOcrTap(187, 727, 284, 757, "离队前往")
+                                tapSleep(x - 305, y + 147)  # 下行第1个
                             else:
-                                res = TomatoOcrTap(435, 727, 529, 759, "留在队伍")
-                            break
-                    else:
-                        ldE.swipe([500, 800], [500, 300])
-                        ldE.sleep(4)
+                                tapSleep(x + 230, y + 0)  # 右侧第1个
+                                TomatoOcrText(321, 1022, 394, 1044, "前往地图")
+
+                            # 切换地图
+                            res, _ = TomatoOcrText(321, 1022, 394, 1044, "前往地图")
+                            if not res:
+                                tapSleep(x + 0, y + 165)  # 切换下一地图
+                                if x < 280:
+                                    tapSleep(x + 50, y + 250)  # 最后一关在第一个位置，换地图后下方第1图）
+                                if 280 < x < 400:
+                                    tapSleep(x - 100, y + 250)  # 下行第1个（最后一关在第二个位置，换地图后下方第1图）
+                                if x > 400:
+                                    tapSleep(x - 250, y + 220)  # 最后一关在第三个位置，换地图后下行第1个
+
+                            res = TomatoOcrTap(321, 1022, 394, 1044, "前往地图")
+                            res = TomatoOcrTap(330, 1027, 389, 1058, "前往")
+
+                            res = TomatoOcrTap(422, 622, 494, 646, "单人前往")
+                            if res:
+                                if 功能开关["队员不满足单飞"] == 1:
+                                    res = TomatoOcrTap(187, 727, 284, 757, "离队前往")
+                                else:
+                                    res = TomatoOcrTap(435, 727, 529, 759, "留在队伍")
+                                break
+                        else:
+                            ldE.swipe([500, 800], [500, 300])
+                            ldE.sleep(4)
 
         if 功能开关["单飞后寻找结伴"] == 1:
             Toast("日常 - 寻找结伴 - 开始")
@@ -502,15 +513,15 @@ class DailyTask:
         Toast('日常 - 骑兽乐园 - 开始')
 
         # 判断是否在营地页面
-        res1, _ = OCRTextV2(12, 1110, 91, 1135, "旅行活动")
+        res1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
         res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
         if not res1 and not res2:
             # 返回首页
             self.homePage()
-            res = OCRTapV2(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1, _ = OCRTextV2(12, 1110, 91, 1135, "旅行活动")
-            hd2, _ = OCRTextV2(11, 1111, 92, 1134, "旅行活动")
+            hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
             if not hd1 and not hd2:
                 return
             tapSleep(200, 545, 3)  # 芙芙小铺
@@ -564,25 +575,31 @@ class DailyTask:
         Toast('日常 - 招式创造 - 开始')
 
         # 判断是否在营地页面
-        res, _ = OCRTextV2(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
         if not res:
             # 返回首页
             self.homePage()
-            res = OCRTapV2(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1, _ = OCRTextV2(12, 1110, 91, 1135, "旅行活动")
-            hd2, _ = OCRTextV2(11, 1111, 92, 1134, "旅行活动")
+            hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
             if not hd1 and not hd2:
                 return
 
         tapSleep(200, 545, 4)  # 芙芙小铺
-        res = OCRTapV2(389, 1133, 489, 1163, "招式创造")
+        res = TomatoOcrTap(389, 1133, 489, 1163, "招式创造")
         if res:
             re = ldE.element_exist('招式创造-能量')
             if re:
-                re.click().execute(sleep=4)
+                re.click().execute(sleep=3)
                 tapSleep(185, 1024)  # 点击空白处关闭
                 任务记录["日常-招式创造-完成"] = 1
+            else:
+                re = ldE.element_exist('招式创造-能量2')
+                if re:
+                    re.click().execute(sleep=3)
+                    tapSleep(185, 1024)  # 点击空白处关闭
+                    任务记录["日常-招式创造-完成"] = 1
 
         # 兑换卢恩
         needCount = safe_int(功能开关["钻石兑换卢恩次数"])
@@ -590,13 +607,13 @@ class DailyTask:
             needCount = 0
         if needCount > 0:
             for i in range(1, 5):
-                res = OCRTapV2(568, 260, 645, 285, "兑换卢恩")
+                res = TomatoOcrTap(568, 260, 645, 285, "兑换卢恩")
                 res, buyCount = TomatoOcrText(375, 944, 387, 960, "已购买次数")  # 1/9
                 buyCount = safe_int(buyCount)
                 if buyCount != "" and buyCount >= needCount:
-                    res = OCRTapV2(70, 1202, 122, 1232, "返回")  # 返回芙芙小铺，继续
+                    res = TomatoOcrTap(70, 1202, 122, 1232, "返回")  # 返回芙芙小铺，继续
                     break
-                res = OCRTapV2(318, 876, 398, 898, "购买道具")
+                res = TomatoOcrTap(318, 876, 398, 898, "购买道具")
                 if res:
                     tapSleep(185, 1024)  # 点击空白处关闭
                     任务记录["日常-招式创造-完成"] = 1
@@ -612,9 +629,9 @@ class DailyTask:
                 tapSleep(516, 1087)
                 ldE.sleep(1)
             while attempt < needCount:
-                res = OCRTapV2(319, 1062, 398, 1083, "讲述故事")
+                res = TomatoOcrTap(319, 1062, 398, 1083, "讲述故事")
                 ldE.sleep(2)
-                res = OCRTapV2(359, 969, 399, 992, "收取")  # 一键收取
+                res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
                 tapSleep(170, 1090)  # 点击空白处
                 attempt = attempt + 1
 
@@ -629,14 +646,14 @@ class DailyTask:
         Toast('日常 - 邮件领取 - 开始')
 
         # 判断是否在营地页面
-        res, _ = OCRTextV2(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
         if not res:
             # 返回首页
             self.homePage()
-            res = OCRTapV2(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1, _ = OCRTextV2(12, 1110, 91, 1135, "旅行活动")
-            hd2, _ = OCRTextV2(11, 1111, 92, 1134, "旅行活动")
+            hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
             if not hd1 and not hd2:
                 return
 
