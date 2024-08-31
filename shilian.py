@@ -123,13 +123,13 @@ class ShiLianTask:
                     功能开关["needHome"] = 0
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-                fightStatus = ldE.element_exist('战斗中-喊话')
+                fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
                 fightStatu2, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
                 if teamName1 != '' or teamName2 != '' or fightStatus or fightStatu2:
                     Toast("进入战斗成功 - 开始战斗")
                     self.fightingBaoZou()
                     return True
-                ldE.sleep(5)
+                sleep(5)
                 elapsed = elapsed + 5 * 1000
             return False
 
@@ -137,16 +137,16 @@ class ShiLianTask:
         self.quitTeam()
         # 开始暴走
         res = TomatoOcrTap(556, 380, 618, 404, "大暴走", 30, -10)
-        ldE.sleep(2)
+        sleep(2)
         if res == False:
             res = TomatoOcrTap(554, 464, 622, 487, "大暴走", 30, -10)  # 适配新手试炼 - 下方大暴走入口
-        ldE.sleep(2)
+        sleep(2)
 
         # 结算前一次的宝箱（兜底）
         res = TomatoOcrTap(333, 715, 384, 745, "开启")  # 领取宝箱
         if res:
             Toast("开启宝箱")
-            ldE.sleep(2)
+            sleep(2)
             tapSleep(125, 1050)  # 领取后，点击空白
             tapSleep(125, 1050)  # 领取后，点击空白
 
@@ -214,7 +214,7 @@ class ShiLianTask:
                         res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
                 break
 
-            ldE.sleep(5)
+            sleep(5)
             elapsed = elapsed + 5 * 1000
 
     # 恶龙大通缉
@@ -224,28 +224,25 @@ class ShiLianTask:
         self.quitTeam()
         res = TomatoOcrTap(650, 522, 688, 544, "试炼")
         if res:
-            re = ldE.element_exist('试炼-恶龙大通缉')
-            if re:
-                re.click().execute(sleep=1)
-            else:
+            re = imageFindClick('恶龙大通缉')
+            if not re:
                 Toast("秘境任务 - 未找到恶龙入口 - 重新尝试")
                 res = TomatoOcrTap(233, 1205, 281, 1234, "行李")  # 尝试点击旅人切换页面，解决长时间停留首页，试炼按钮异常消失的情况（反作弊策略？）
                 return self.shilian()
 
         # 判断是否重复挑战（已开启过宝箱）
-        re = ldE.element_exist('恶龙-宝箱已开启')
+        re = imageFindClick('恶龙-宝箱已开启')
         if re:
             if 功能开关["恶龙重复挑战"] == 0:
                 Toast("恶龙任务 - 已领取宝箱 - 退出挑战")
-                ldE.sleep(1.5)
+                sleep(1.5)
                 return
 
         # 判断是否添加佣兵
         if 功能开关["恶龙添加佣兵"] == 1:
             Toast("恶龙任务 - 添加佣兵")
-            re = ldE.element_exist('秘境-创建队伍')
+            re = imageFindClick('秘境-创建队伍')
             if re:
-                re.click().execute(sleep=1)
                 tapSleep(365, 820)  # 点击 创建队伍 - 添加佣兵
                 res = TomatoOcrTap(313, 876, 407, 907, "创建队伍")  # 创建队伍 - 创建队伍
                 res = TomatoOcrTap(333, 974, 383, 1006, "开始")
@@ -253,13 +250,8 @@ class ShiLianTask:
                 return self.fighting()
 
         # 开始匹配
-        re1 = ldE.element_exist('恶龙-开始匹配')
-        re2 = ldE.element_exist('恶龙-开始匹配2')
-        if re1 or re2:
-            if re1:
-                re1.click().execute(sleep=1)
-            if re2:
-                re2.click().execute(sleep=1)
+        re1 = ocrFindRangeClick('开始匹配')
+        if re1:
             res, _ = TomatoOcrText(321, 491, 397, 514, "选择职业")
             if res:
                 Toast("恶龙任务 - 选择职业")
@@ -277,13 +269,10 @@ class ShiLianTask:
         while 1:
             if elapsed > totalWait:
                 Toast("恶龙任务 - 匹配超时")
-                teamStatus1 = ldE.element_exist('队伍-匹配中')
-                teamStatus2 = ldE.element_exist('队伍-匹配中2')
+
+                teamStatus1 = ocrFindRangeClick('匹配中')
+                teamStatus2 = imageFindClick('队伍-匹配中')
                 if teamStatus1 or teamStatus2:
-                    if teamStatus1:
-                        teamStatus1.click().execute(sleep=1)
-                    if teamStatus2:
-                        teamStatus2.click().execute(sleep=1)
                     Toast('恶龙任务 - 匹配超时 - 取消匹配')
                 break
 
@@ -295,15 +284,15 @@ class ShiLianTask:
                     Toast("恶龙任务 - 匹配超时 - 无队伍")
                     elapsed = 0
 
-            waitStatus1 = ldE.element_exist('队伍-匹配中')
-            waitStatus2 = ldE.element_exist('队伍-匹配中2')
+            waitStatus1 = ocrFindRange('匹配中')
+            waitStatus2, x, y = imageFind('队伍-匹配中')
             res1 = self.WaitFight()
             if res1:
                 任务记录["试炼-恶龙-完成次数"] = 任务记录["试炼-恶龙-完成次数"] + 1
             if res1 == True or (not waitStatus1 and not waitStatus2):  # 成功准备战斗 或 未匹配到
                 break
 
-            ldE.sleep(5)
+            sleep(5)
             elapsed = elapsed + 5 * 1000
 
     def mijing(self):
@@ -316,10 +305,8 @@ class ShiLianTask:
         selectStage = 功能开关['秘境关卡']
         res = TomatoOcrTap(650, 522, 688, 544, "试炼")
         if res:
-            re = ldE.element_exist('试炼-秘境之间')
-            if re:
-                re.click().execute(sleep=1)
-            else:
+            re = imageFindClick('秘境之间')
+            if not re:
                 Toast("秘境任务 - 未找到试炼入口 - 重新尝试")
                 res = TomatoOcrTap(233, 1205, 281, 1234, "行李")  # 尝试点击旅人切换页面，解决长时间停留首页，试炼按钮异常消失的情况（反作弊策略？）
                 return self.shilian()
@@ -347,16 +334,14 @@ class ShiLianTask:
             任务记录["试炼-秘境-体力消耗完成"] = 1
             if 功能开关["秘境无体力继续"] == 0:
                 Toast("秘境任务 - 体力不足 - 退出挑战")
-                ldE.sleep(2)
+                sleep(2)
                 return
 
         # 判断是否添加佣兵
         if 功能开关["秘境添加佣兵"] == 1:
             Toast("秘境任务 - 添加佣兵")
-            re = ldE.element_exist('秘境-创建队伍')
+            re = imageFindClick('秘境-创建队伍')
             if re:
-                re.click().execute(sleep=1)
-
                 # 判断体力用尽提示
                 res1, _ = TomatoOcrText(242, 598, 314, 616, "体力不足")
                 if res1:
@@ -365,7 +350,7 @@ class ShiLianTask:
                         res = TomatoOcrTap(334, 743, 385, 771, "确定")
                     else:
                         Toast("秘境任务 - 体力不足")
-                        res = TomatoOcrTap(64, 1200, 128, 1234, "返回")
+                        res = TomatoOcrTap(64, 1200, 128, 1234, "返回", 10, 10)
                         self.tili()
 
                 tapSleep(365, 820)  # 点击 创建队伍 - 添加佣兵
@@ -380,22 +365,18 @@ class ShiLianTask:
                         res = TomatoOcrTap(334, 743, 385, 771, "确定")
                     else:
                         Toast("秘境任务 - 体力不足")
-                        res = TomatoOcrTap(64, 1200, 128, 1234, "返回")
+                        res = TomatoOcrTap(64, 1200, 128, 1234, "返回", 10, 10)
                         self.tili()
                 return self.fighting()
 
         # 判断是否创建房间
         if 功能开关["秘境创建房间"] == 1:
             Toast("秘境任务 - 创建房间")
-            re1 = ldE.element_exist('秘境-创建队伍')
+            re1 = imageFindClick('秘境-创建队伍')
             re2 = False
             if not re1:
-                re2 = ldE.element_exist('秘境-创建队伍2')
+                re2 = ocrFindRangeClick('创建队伍')
             if re1 or re2:
-                if re1:
-                    re1.click().execute(sleep=1)
-                if re2:
-                    re2.click().execute(sleep=1)
                 # 判断体力用尽提示
                 res1, _ = TomatoOcrText(242, 598, 314, 616, "体力不足")
                 if res1:
@@ -404,7 +385,7 @@ class ShiLianTask:
                         res = TomatoOcrTap(334, 743, 385, 771, "确定")
                     else:
                         Toast("秘境任务 - 体力不足")
-                        res = TomatoOcrTap(64, 1200, 128, 1234, "返回")
+                        res = TomatoOcrTap(64, 1200, 128, 1234, "返回", 10, 10)
                         self.tili()
 
                 res = TomatoOcrTap(313, 876, 407, 907, "创建队伍")  # 创建队伍 - 创建队伍
@@ -452,7 +433,7 @@ class ShiLianTask:
                                 res = TomatoOcrTap(334, 743, 385, 771, "确定")
                             else:
                                 Toast("秘境任务 - 体力不足")
-                                res = TomatoOcrTap(64, 1200, 128, 1234, "返回")
+                                res = TomatoOcrTap(64, 1200, 128, 1234, "返回", 10, 10)
                                 self.tili()
 
                         # 等待进入战斗
@@ -472,7 +453,7 @@ class ShiLianTask:
                             res = TomatoOcrTap(333, 974, 383, 1006, "开始")
                             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-                            fightStatus = ldE.element_exist('战斗中-喊话')
+                            fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
                             fightStatu2, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
                             if teamName1 != '' or teamName2 != '' or fightStatus or fightStatu2:
                                 Toast("秘境任务 - 匹配成功 - 进入战斗")
@@ -482,9 +463,9 @@ class ShiLianTask:
                                 fightDone = 1
                                 break
                             # 进入战斗失败，重新匹配
-                            ldE.sleep(5)
+                            sleep(5)
                     # 等待队员
-                    ldE.sleep(4)
+                    sleep(4)
                     elapsed = elapsed + 4 * 1000
             return
 
@@ -507,7 +488,7 @@ class ShiLianTask:
                 res = TomatoOcrTap(334, 743, 385, 771, "确定")
             else:
                 Toast("秘境任务 - 体力不足")
-                res = TomatoOcrTap(64, 1200, 128, 1234, "返回")
+                res = TomatoOcrTap(64, 1200, 128, 1234, "返回", 10, 10)
                 self.tili()
 
         # 判断职业选择
@@ -553,13 +534,13 @@ class ShiLianTask:
                 if not res3:
                     res4, _ = TomatoOcrText(324, 1080, 392, 1103, "匹配中")  # 图3
                     if not res4:
-                        res5 = ldE.element_exist('秘境-匹配中')
+                        res5 = ocrFindRange('匹配中')
 
             res1 = self.WaitFight()
             if res1 == True or (res2 == False and res3 == False and res4 == False and res5 == False):  # 成功准备战斗 或 未匹配到
                 break
 
-            ldE.sleep(5)
+            sleep(5)
             elapsed = elapsed + 5 * 1000
 
     def tili(self):
@@ -586,19 +567,18 @@ class ShiLianTask:
         mapPoi = self.mapPoi[selectMap]
         maps_to_check = ('原野', '森林', '沙漠', '海湾', '深林', '冰原', '火山', '高原', '绿洲')
         if selectMap not in maps_to_check:
-            ldE.swipe([150, 1000], [150, 300], 0.5)
-            ldE.sleep(2)
+            swipe(150, 1000, 150, 300)
+            sleep(2)
         else:
             # 判断是否已在第一屏
             res, _ = TomatoOcrText(110, 235, 175, 267, "原野")
             if res:
-                ldE.sleep(0.5)
+                sleep(0.5)
             else:
                 # 向上滚动第一屏
-                ldE.swipe([150, 300], [150, 700], 1.2, False, 0.01)
-                ldE.sleep(2)
-        selectMapName = '秘境-地图-' + selectMap
-        res = ldE.element(selectMapName).click().execute(sleep=1)
+                swipe(150, 300, 150, 700)
+                sleep(2)
+        res = ocrFindRangeClick(selectMap, 1, 0.8, 12, 160, 282, 1171)
         # res = TomatoOcrTap(mapPoi[0], mapPoi[1], mapPoi[2], mapPoi[3], selectMap, 3, 3)
 
         stagePoi = self.stagePoi[selectStage]
@@ -703,51 +683,49 @@ class ShiLianTask:
                 # # 战斗结束页
                 # res = TomatoOcrTap(202, 1041, 258, 1068, "开启")  # 战斗页，宝箱1
                 # if res:
-                #     ldE.sleep(3.5)
+                #     sleep(3.5)
                 #     tapSleep(340, 930)
                 #     openStatus = 1
                 # res = TomatoOcrTap(459, 1040, 524, 1068, "开启")  # 战斗页，宝箱2
                 # if res:
-                #     ldE.sleep(3.5)
+                #     sleep(3.5)
                 #     tapSleep(340, 930)
                 #     openStatus = 1
                 # # 结算页
                 # # 结算页，单宝箱
                 # res = TomatoOcrTap(340, 756, 380, 777, "开启")
                 # if res:
-                #     ldE.sleep(3.5)
+                #     sleep(3.5)
                 #     tapSleep(340, 930)
                 #     openStatus = 1
                 # res = TomatoOcrTap(335, 755, 380, 777, "开启")
                 # if res:
-                #     ldE.sleep(3.5)
+                #     sleep(3.5)
                 #     tapSleep(340, 930)
                 #     openStatus = 1
                 #
                 # # 领取宝箱1
                 # res = TomatoOcrTap(214, 748, 257, 767, "开启")
                 # if res:
-                #     ldE.sleep(3.5)
+                #     sleep(3.5)
                 #     tapSleep(340, 930)
                 #     openStatus = 1
                 # # 领取宝箱2
                 # res = TomatoOcrTap(460, 747, 503, 767, "开启")
                 # if res:
-                #     ldE.sleep(3.5)
+                #     sleep(3.5)
                 #     tapSleep(340, 930)
                 #     openStatus = 1
                 # 图色识别兜底
-                res = ldE.element_exist('战斗结束-开启宝箱')
+                res = imageFindClick('宝箱-开启')
                 if res:
-                    res.click().execute(sleep=0.7)
-                    ldE.sleep(2.5)
+                    sleep(2.5)
                     tapSleep(340, 930)
                     openStatus = 1
 
-                res = ldE.element_exist('战斗结束-开启宝箱2')
+                res = imageFindClick('宝箱-开启2')
                 if res:
-                    res.click().execute(sleep=0.7)
-                    ldE.sleep(2.5)
+                    sleep(2.5)
                     tapSleep(340, 930)
                     openStatus = 1
 
@@ -814,7 +792,7 @@ class ShiLianTask:
                     if fightType == "暴走":
                         self.fightingBaoZou()
                     return True
-                ldE.sleep(5)
+                sleep(5)
                 elapsed = elapsed + 5 * 1000
         return False
 
@@ -832,7 +810,7 @@ class ShiLianTask:
             # 识别战斗中状态
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-            fightStatus = ldE.element_exist('战斗中-喊话')
+            fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
             if teamName1 != "" or teamName2 != "" or fightStatus:
                 if teamShoutDone == 0:
                     teamShoutDone = self.teamShout()
@@ -890,12 +868,12 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-            fightStatus = ldE.element_exist('战斗中-喊话')
+            fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
             if elapsed > 240 * 1000 or (teamName1 == "" and teamName2 == "" and not fightStatus):
                 failStatus = self.fight_fail()
                 if failStatus:
                     break
-            ldE.sleep(3)
+            sleep(3)
             elapsed = elapsed + 3 * 1000
 
     def fightingBaoZou(self):
@@ -931,7 +909,7 @@ class ShiLianTask:
                     tapSleep(55, 1140)  # 领取后，点击空白
                     tapSleep(55, 1140)  # 领取后，点击空白
                     break
-                ldE.sleep(1)
+                sleep(1)
 
             # 判断是否战斗失败（战斗5分钟后）
             if res1 or (teamName1 != "" or teamName2 != ""):
@@ -942,7 +920,7 @@ class ShiLianTask:
                 res3 = TomatoOcrTap(332, 1067, 387, 1096, "开启")  # 领取宝箱
                 if res1 or res2 or res3:
                     Toast("战斗结束 - 战斗胜利")
-                    ldE.sleep(2)
+                    sleep(2)
                     tapSleep(55, 1140)  # 领取后，点击空白
                     break
                 res3, _ = TomatoOcrText(499, 191, 581, 215, "离开队伍")  # 已返回队伍
@@ -1052,14 +1030,14 @@ class ShiLianTask:
 
         Toast("队伍发言")
 
-        res1 = TomatoOcrTap(19, 1104, 94, 1128, "点击输入")
+        res1 = TomatoOcrTap(19, 1104, 94, 1128, "点击输入", 10, 10)
         res2 = False
         if not res1:
-            res2 = TomatoOcrTap(19, 1102, 90, 1127, "点击输入")
-        ldE.sleep(2.5)  # 等待输入法弹窗
+            res2 = TomatoOcrTap(19, 1102, 90, 1127, "点击输入", 10, 10)
+        sleep(2.5)  # 等待输入法弹窗
         if res1 or res2:
             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-            ldE.sleep(1)
+            sleep(1)
             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
             action.input(功能开关["喊话内容"])
             tapSleep(360, 104)  # 点击空白处确认输入
@@ -1093,9 +1071,8 @@ class ShiLianTask:
             res6 = self.WaitFight()
 
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
-            return3 = ldE.element_exist('返回-3')
+            return3 = TomatoOcrTap(91,1185,127,1221, '回', 10, 10)
             if return3:
-                return3.click(rx=5, ry=5).execute(sleep=1)
                 Toast('返回首页')
 
             # 判断是否已在首页
@@ -1103,15 +1080,15 @@ class ShiLianTask:
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
-                shou_ye1 = ldE.element_exist('首页-冒险手册')
+                shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280)
                 if not shou_ye1:
-                    shou_ye2 = ldE.element_exist('首页-新手试炼')
+                    shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280)
             if res2 or shou_ye1 or shou_ye2:
                 with switch_lock:
                     功能开关["needHome"] = 0
                 功能开关["fighting"] = 0
                 Toast('已返回首页')
-                ldE.sleep(0.5)
+                sleep(0.5)
                 return True
 
             # 开始异步处理返回首页
@@ -1121,7 +1098,8 @@ class ShiLianTask:
                 功能开关["needHome"] = 1
 
             # 点击首页-冒险
-            ldE.element('首页-冒险').click().execute(sleep=1)
+            re = TomatoOcrTap(330,1201,389,1238, '冒险')
+            # ldE.element('首页-冒险').click().execute(sleep=1)
 
             quitTeamRe = self.quitTeamFighting()
             if not quitTeamRe:
@@ -1130,7 +1108,7 @@ class ShiLianTask:
 
             # 判断宝箱开启
             self.openTreasure()
-            ldE.sleep(0.5)
+            sleep(0.5)
 
     def quitTeam(self):
         res1 = False
@@ -1146,9 +1124,8 @@ class ShiLianTask:
                     res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
         if res1 or res2 or res3 or res4:
             功能开关["needHome"] = 0
-            teamStatus = ldE.element_exist('队伍-匹配中')
+            teamStatus = ocrFindRangeClick('匹配中')
             if teamStatus:
-                teamStatus.click().execute(sleep=1)
                 Toast('取消匹配')
 
             res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
@@ -1165,3 +1142,4 @@ class ShiLianTask:
                 Toast("退出组队")
                 return True
         return False
+

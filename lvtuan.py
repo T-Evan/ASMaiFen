@@ -81,9 +81,9 @@ class LvTuanTask:
             tapSleep(531, 674, 1)  # 添加队友3
             tapSleep(532, 794, 1)  # 添加队友4
             tapSleep(530, 910, 1)  # 添加队友5
-            res = TomatoOcrTap(70, 1200, 123, 1231, "返回")
+            res = TomatoOcrTap(70, 1200, 123, 1231, "返回", 10, 10)
             res = TomatoOcrTap(331, 976, 386, 1005, "开始")
-            ldE.sleep(5)
+            sleep(5)
             # 战斗中
             self.fighting()
         任务记录['旅团-调查队-完成'] = 1
@@ -102,7 +102,7 @@ class LvTuanTask:
             else:
                 break  # 识别失败，退出循环
             attempts = attempts + 1
-            ldE.sleep(5)
+            sleep(5)
 
         # 战斗结束
         self.openTreasure()
@@ -119,13 +119,13 @@ class LvTuanTask:
             # 战斗结束页
             res = TomatoOcrTap(330, 1024, 390, 1051, "开启", 10, 20)
             if res:
-                ldE.sleep(2)
-                tapSleep(56,1237)
-                tapSleep(56,1237)
+                sleep(2)
+                tapSleep(56, 1237)
+                tapSleep(56, 1237)
             # 结算页
             res = TomatoOcrTap(333, 752, 388, 781, "开启")
             if res:
-                ldE.sleep(1)
+                sleep(1)
                 tapSleep(340, 930)
 
             # -- 钥匙不足退出
@@ -156,64 +156,51 @@ class LvTuanTask:
         res = TomatoOcrTap(635, 697, 700, 724, "服务区", 20)
         if not res:
             return
-        ldE.sleep(4)  # 等待跳转动画
+        sleep(4)  # 等待跳转动画
 
         # 翻页（先返回上面）
-        ldE.swipe([360, 750], [360, 850])
-        ldE.sleep(2.5)
+        swipe(360, 750, 360, 850)
+        sleep(2.5)
         for i in range(1, 5):
             if 功能开关['旅团唤兽琴弦']:
-                re = ldE.element_exist('旅团-唤兽琴弦')
+                re = imageFindClick('旅团-唤兽琴弦')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             if 功能开关['旅团全价兽粮']:
-                re = ldE.element_exist('旅团-全价兽粮')
+                re = imageFindClick('旅团-全价兽粮')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
-                    self.shopBuy()
-            if 功能开关['旅团全价兽粮']:
-                re = ldE.element_exist('旅团-全价兽粮')
-                if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             if 功能开关['旅团超级成长零食']:
-                re = ldE.element_exist('旅团-超级成长零食')
+                re = imageFindClick('旅团-超级成长零食')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             if 功能开关['旅团原材料']:
-                re = ldE.element_exist('旅团-原材料')
+                re = imageFindClick('旅团-原材料')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             if 功能开关['旅团史诗经验']:
-                re = ldE.element_exist('旅团-史诗经验')
+                re = imageFindClick('旅团-史诗经验')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             if 功能开关['旅团优秀经验']:
-                re = ldE.element_exist('旅团-优秀经验')
+                re = imageFindClick('旅团-优秀经验')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             if 功能开关['旅团普通经验']:
-                re = ldE.element_exist('旅团-普通经验')
+                re = imageFindClick('旅团-普通经验')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             if 功能开关['旅团金币']:
-                re = ldE.element_exist('旅团-金币')
+                re = imageFindClick('旅团-金币')
                 if re:
-                    re.click().execute(sleep=1)  # 点击道具
                     self.shopBuy()
             # 翻页
-            ldE.swipe([360, 850], [360, 750])
-            ldE.sleep(3.5)
+            swipe(360, 850, 360, 750)
+            sleep(3.5)
         任务记录['旅团-商店-完成'] = 1
 
     def shopBuy(self):
-        ldE.element('旅团-最大').click().execute(sleep=1)
+        ocrFindRangeClick('最大')
         # ldE.element('旅团-购买').click().execute(sleep=1)
         tapSleep(362, 866)  # 点击购买
         tapSleep(360, 1210)  # 点击空白处
@@ -228,15 +215,14 @@ class LvTuanTask:
         Toast("旅团 - 旅团任务领取 - 开始")
         self.dailyTask.homePage()
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
-        ldE.sleep(1)
+        sleep(1)
         res = TomatoOcrTap(624, 742, 708, 767, "旅团任务")
         if not res:
             return
 
         while 1:
-            re = ldE.element_exist('旅团-领取')
+            re = ocrFindRangeClick('领取')
             if re:
-                re.click().execute(sleep=1)
                 tapSleep(360, 1100)  # 点击空白处关闭
                 # 点击宝箱（从右到左）
                 tapSleep(570, 390)
@@ -264,9 +250,8 @@ class LvTuanTask:
             return
 
         for i in range(1, 15):
-            re = ldE.element_exist('旅团-捐献')
+            re = ocrFindRangeClick('捐献')
             if re:
-                re.click().execute(sleep=1)
                 # 点击最大
                 tapSleep(504, 659)
                 tapSleep(504, 718)
@@ -311,7 +296,7 @@ class LvTuanTask:
                     # 免费浇灌
                     tapSleep(360, 1100)
                     tapSleep(360, 1100)  # 点击空白处关闭
-                    ldE.sleep(3)
+                    sleep(3)
 
                 # 付费浇灌
                 if buyCount - 1 < needCount:

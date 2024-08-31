@@ -23,7 +23,7 @@ from datetime import datetime
 
 # ldE.set_log_level(10)  # Debug
 # ldE.set_log_level(20)  # Info
-ldE.set_log_level(30)  # Warn
+# ldE.set_log_level(30)  # Warn
 # ldE.set_log_level(40)  # ERROR
 
 初始化任务记录()
@@ -85,7 +85,7 @@ if kami != '':
             activeInfo = '卡密已过期，过期时间：' + formatted_date
             Dialog.confirm(activeInfo, "激活码失效")
             Toast(activeInfo, 3000)
-            ldE.sleep(2)
+            sleep(2)
             sys.exit()
     # 判断登录设备数
         now_device_id = Device.id()
@@ -93,14 +93,14 @@ if kami != '':
         if now_device_id in device_id:
             activeInfo = '当前设备已激活，' + '过期时间：' + formatted_date
             Toast(activeInfo, 3000)
-            ldE.sleep(2)
+            sleep(2)
         else:
             # 判断已激活设备数
             if len(device_ids) >= device_available_num:
                 activeInfo = '已超过可激活设备数量'
                 Dialog.confirm(activeInfo, "激活码失效")
                 Toast(activeInfo, 3000)
-                ldE.sleep(2)
+                sleep(2)
                 sys.exit()
             else:
                 # 激活当前设备
@@ -113,7 +113,7 @@ if kami != '':
                 db.commit()  # 不要忘了提交,不然数据上不去哦
                 activeInfo = '激活新设备成功，' + '过期时间：' + formatted_date
                 Toast(activeInfo, 3000)
-                ldE.sleep(2)
+                sleep(2)
 
 # 执行完之后要记得关闭游标和数据库连接
 cursor.close()
@@ -136,11 +136,8 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # return1 = ldE.element_exist('返回-1')
 # print(return1)
 # if return1:
-#     return1.click(rx=5, ry=5).execute(sleep=1)
-# res, buyCount = CustomOcrText(0,0,720,1280, "已购买次数")  # 1 / 9
-# re = ldE.find_element('结伴-当前地图').target
+# res = ocrFindRangeClick("高原", 1, 0.8, 12, 160, 282, 1171)
 # sys.exit()
-
 
 def main():
     try:
@@ -192,6 +189,7 @@ def main():
             start_up.start_app()
             if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and 功能开关['冒险总开关'] == 0:
                 Toast('未开启功能，请检查功能配置')
+                sleep(3)
             # 营地活动（优先领取）
             yingdiTask.yingdiTask()
             # 日常（优先领取）
@@ -221,7 +219,7 @@ def main():
                 功能开关["needHome"] = 0
                 action.Key.home()
                 初始化任务记录()
-                ldE.sleep(need_wait_minute * 60)
+                sleep(need_wait_minute * 60)
                 start_time = int(time.time())
     except Exception as e:
         # 处理异常

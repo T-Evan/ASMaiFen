@@ -27,25 +27,32 @@ class StartUp:
         Toast('启动游戏，等待加载中')
 
         # 识别是否进入登录页
-        login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
-        login2 = TomatoOcrTap(302, 1199, 414, 1231, "开始冒险")
+        login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
+        login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
         if login1 or login2:
             Toast('准备进入游戏')
             return self.login()
         else:
-            # 不在登录页，尝试开始返回首页
-            with switch_lock:
-                功能开关["needHome"] = 1
+            re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
+            if not re:
+                # 不在登录页，尝试开始返回首页
+                with switch_lock:
+                    功能开关["needHome"] = 1
 
         # 识别是否进入首页
         res2, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
         shou_ye1 = False
         shou_ye2 = False
         if not res2:
-            shou_ye1 = ldE.element_exist('首页-冒险手册')
+            shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280)
             if not shou_ye1:
-                shou_ye2 = ldE.element_exist('首页-新手试炼')
+                shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280)
         if res2 or shou_ye1 or shou_ye2:
+            # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
+            return3 = TomatoOcrTap(91,1185,127,1221, '回', 10, 10)
+            if return3:
+                Toast('返回首页')
+
             with switch_lock:
                 功能开关["needHome"] = 0
             Toast('已进入游戏')
@@ -62,14 +69,14 @@ class StartUp:
                 self.shilianTask.fightingBaoZou()
                 return
 
-        ldE.sleep(3)  # 等待游戏启动
+        sleep(3)  # 等待游戏启动
 
         return self.start_app()
 
     def login(self):
         with switch_lock:
             功能开关["needHome"] = 0
-        ldE.sleep(1.5)
+        sleep(1.5)
         # 开始冒险之旅
         login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
         # login1 = ldE.element_exist('登录页-开始冒险之旅')
@@ -90,19 +97,19 @@ class StartUp:
             tapSleep(340, 930, 1)
             tapSleep(340, 930, 1)
             tapSleep(340, 930)
-            ldE.sleep(5)
+            sleep(5)
         else:
             return self.start_app()
 
         shou_ye = False
         for loopCount in range(1, 4):  # 循环3次，从1到3
-            shou_ye1 = ldE.element_exist('首页-冒险手册')
-            shou_ye2 = ldE.element_exist('首页-新手试炼')
+            shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280)
+            shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280)
             if shou_ye1 or shou_ye2:
                 Toast('已进入游戏')
                 shou_ye = True
                 break
-            ldE.sleep(3)  # 等待 3 秒
+            sleep(3)  # 等待 3 秒
 
         if not shou_ye:
             return self.start_app()
@@ -140,8 +147,8 @@ class StartUp:
         res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
         # dialog(下一角色)
         if 下一角色 <= 3:
-            ldE.swipe([190, 1090], [555, 1090])  # 翻到最左
-            ldE.sleep(3)
+            swipe(190, 1090, 555, 1090)  # 翻到最左
+            sleep(3)
             x = 190 + (下一角色 - 1) * 165  # 从第一个角色 190，依次往右加 165 至下一角色
             y = 1090
             tapSleep(x, y)
@@ -153,8 +160,8 @@ class StartUp:
                 return self.switchRole(2)
 
         if 下一角色 > 3:
-            ldE.swipe([555, 1090], [190, 1090])  # 翻到最右
-            ldE.sleep(3)
+            swipe(555, 1090, 190, 1090)  # 翻到最右
+            sleep(3)
             x = 540 - (5 - 下一角色) * 165  # 从第五个角色 540，依次往左减 165 至下一角色
             y = 1090
             tapSleep(x, y)

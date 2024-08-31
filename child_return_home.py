@@ -14,9 +14,9 @@ def main():
     while True:
         if 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
             returnHome()
-            ldE.sleep(1)  # 等待 1 秒
+            sleep(1)  # 等待 1 秒
         else:
-            ldE.sleep(3)  # 等待 5 秒
+            sleep(3)  # 等待 5 秒
 
 
 def returnHome():
@@ -24,35 +24,31 @@ def returnHome():
     return2 = False
     return3 = False
     return4 = False
-    return1 = ldE.element_exist('返回-1')
+    return1 = TomatoOcrTap(67,1182,121,1221, '返回', 10,10)
     if return1 and 功能开关["needHome"] == 1:
-        return1.click(rx=5, ry=5).execute(sleep=1)
         Toast('返回首页')
-    return3 = ldE.element_exist('返回-3')
+    return3 = TomatoOcrTap(91,1185,127,1221, '回', 10, 10)
     if return3 and 功能开关["needHome"] == 1:
-        return3.click(rx=5, ry=5).execute(sleep=1)
         Toast('返回首页')
 
     if not return1 and not return3:
-        return2 = ldE.element_exist('返回-2')
+        return2 = imageFindClick('返回_1')
         if return2 and 功能开关["needHome"] == 1:
-            return2.click(rx=5, ry=5).execute(sleep=1)
             Toast('返回首页')
 
-        return4 = ldE.element_exist('返回-4')
+        return4 = imageFindClick('返回_2')
         if return4 and 功能开关["needHome"] == 1:
-            return4.click(rx=5, ry=5).execute(sleep=1)
             Toast('返回首页')
 
     if not return1 and not return2 and not return3 and not return4:
         # 点击冒险
-        ldE.element('首页-冒险').click().execute(sleep=1)
+        re = TomatoOcrTap(330,1201,389,1238, '冒险')
 
         # 识别是否进入首页
-        shou_ye1 = ldE.element_exist('首页-冒险手册')
+        shou_ye1 = ocrFindRange('冒险手册',  0.9, 360, 0, 720, 1280)
         shou_ye2 = False
         if not shou_ye1:
-            shou_ye2 = ldE.element_exist('首页-新手试炼')
+            shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280)
         if shou_ye1 or shou_ye2:
             with switch_lock:
                 功能开关["needHome"] = 0

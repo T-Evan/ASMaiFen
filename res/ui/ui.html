@@ -364,7 +364,11 @@
                             <input id="限时特惠" name="vehicle" type="checkbox" value="Bike">限时特惠<br>
                         </div>
                     </div>
-
+                    <div class="flex-container">
+                        <label for="世界喊话">世界喊话:</label>
+                        <input type="text" id="世界喊话" name="世界喊话" lay-verify="title" autocomplete="off"
+                               placeholder="世界喊话" class="layui-input">
+                    </div>
                 </fieldset>
             </form>
         </li>
@@ -405,6 +409,9 @@
                     <legend>仓鼠百货付费购买</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
+                            <input id="原材料" name="vehicle" type="checkbox" value="Bike">原材料<br>
+                        </div>
+                        <div class="checkbox-item">
                             <input id="星星经验" name="vehicle" type="checkbox" value="Bike">星星经验<br>
                         </div>
                         <div class="checkbox-item">
@@ -432,6 +439,7 @@
                                     <option value="艾特拉火山">艾特拉火山</option>
                                     <option value="鲁尔绿洲">鲁尔绿洲</option>
                                     <option value="燃烧塔">燃烧塔</option>
+                                    <option value="无夜城">无夜城</option>
                                 </select>
                             </div>
                         </div>
@@ -704,6 +712,7 @@
         setSwitchStatus("秘宝收集");
         setSwitchStatus("露营打卡点");
         setSwitchStatus("星星经验");
+        setSwitchStatus("原材料");
         setSwitchStatus("全价兽粮");
         setSwitchStatus("超级成长零食三折");
         setSwitchStatus("黑烬突破石五折");
@@ -724,6 +733,9 @@
         setSwitchStatus("登录好礼");
         setSwitchStatus("BBQ派对");
         setSwitchStatus("限时特惠");
+
+        var 世界喊话 = localStorage.getItem("世界喊话");
+        document.getElementById("世界喊话").value = 世界喊话;
 
         var defaultValue = localStorage.getItem('秘宝地图');
         var selectElement = document.getElementById('秘宝地图');
@@ -929,6 +941,9 @@
         BBQ派对 = saveSwitchStatus("BBQ派对");
         限时特惠 = saveSwitchStatus("限时特惠");
 
+        var 世界喊话 = document.getElementById("世界喊话").value;
+        localStorage.setItem("世界喊话", 世界喊话);
+
         <!--营地-->
         营地总开关 = saveSwitchStatus("营地总开关");
         仓鼠百货 = saveSwitchStatus("仓鼠百货");
@@ -940,6 +955,7 @@
         秘宝收集 = saveSwitchStatus("秘宝收集");
         露营打卡点 = saveSwitchStatus("露营打卡点");
         星星经验 = saveSwitchStatus("星星经验");
+        原材料 = saveSwitchStatus("原材料");
         全价兽粮 = saveSwitchStatus("全价兽粮");
         超级成长零食三折 = saveSwitchStatus("超级成长零食三折");
         黑烬突破石五折 = saveSwitchStatus("黑烬突破石五折");
@@ -1058,6 +1074,8 @@
             BBQ派对: BBQ派对,
             限时特惠: 限时特惠,
 
+            世界喊话: 世界喊话,
+
             <!--营地-->
             营地总开关: 营地总开关,
             仓鼠百货: 仓鼠百货,
@@ -1069,6 +1087,7 @@
             秘宝收集: 秘宝收集,
             露营打卡点: 露营打卡点,
             商店星星经验: 星星经验,
+            商店原材料: 原材料,
             商店全价兽粮: 全价兽粮,
             商店超级成长零食三折: 超级成长零食三折,
             商店黑烬突破石五折: 黑烬突破石五折,

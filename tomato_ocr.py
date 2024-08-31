@@ -1,8 +1,12 @@
 # 导包
 from ascript.android import plug
+from ascript.android.ui import Dialog
 
-plug.load("TomatoOcr:1.0.1")
-from TomatoOcr import TomatoOcr
+plug.load("TomatoOcr:1.0.3")
+try:
+    from TomatoOcr import TomatoOcr
+except Exception as e:
+    Dialog.confirm("初始化完成，请重新启动脚本", "初始化完成")
 
 global tomatoOcr
 def init_tomatoOcr():

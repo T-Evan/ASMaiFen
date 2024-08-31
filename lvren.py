@@ -44,16 +44,15 @@ class LvRenTask:
         self.dailyTask.homePage()
         res = TomatoOcrTap(434, 1205, 484, 1234, "旅人")
         res = TomatoOcrTap(564, 238, 630, 263, "猫猫包")
-        ldE.sleep(1)
+        sleep(1)
         res = TomatoOcrTap(615, 1030, 696, 1055, "猫猫烤箱")
         if not res:
             return
 
         if 功能开关['领取猫猫包果木']:
             # 点击果木
-            re = ldE.element_exist('旅人-猫猫果木')
+            re = imageFindClick('猫猫果木')
             if re:
-                re.click().execute(sleep=1)
                 res = TomatoOcrTap(265, 863, 452, 893, "点击空白处可领取奖励", 30, 100)
 
             # 快捷兑换
@@ -94,7 +93,7 @@ class LvRenTask:
                             tapSleep(136, 1051)  # 点击空白处
                             tapSleep(136, 1051)  # 点击空白处
                             break
-                        ldE.sleep(3)
+                        sleep(3)
         任务记录['旅人-猫猫果木-完成'] = 1
 
     # 自动升级技能
@@ -109,10 +108,9 @@ class LvRenTask:
             return
 
         if 功能开关['优先升级同一技能'] == 0:
-            re = ldE.element_exist('旅人-技能升级')
+            re = imageFindClick('技能升级')
             if re:
-                re.click().execute(sleep=1)
-                ldE.element('旅人-最大').click().execute(sleep=1)
+                ocrFindRangeClick('最大')
                 tapSleep(365, 985)  # 点击升级按钮
 
         if 功能开关['优先升级同一技能'] == 1:
@@ -139,7 +137,7 @@ class LvRenTask:
                     skill_level = 0
                 skill_levels.append(skill_level)
                 skill_level_map[skill_level] = skill
-                res = TomatoOcrTap(85, 1188, 141, 1219, "返回")  # 返回继续查找
+                res = TomatoOcrTap(85, 1188, 141, 1219, "返回", 10, 10)  # 返回继续查找
 
             cloest_level = self.closestToNextMultipleOf30(skill_levels)
             tapSleep(skill_level_map[cloest_level]['x'], skill_level_map[cloest_level]['y'])
@@ -174,6 +172,4 @@ class LvRenTask:
         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
         if not res:
             return
-        re = ldE.element_exist('旅人-一键强化')
-        if re:
-            re.click().execute(sleep=1)
+        re = imageFindClick('一键强化')
