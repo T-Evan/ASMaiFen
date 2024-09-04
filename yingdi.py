@@ -149,6 +149,7 @@ class YingDiTask:
             if not hd1 and not hd2:
                 return
         res = TomatoOcrTap(393, 1202, 439, 1229, "月卡")
+        sleep(1)
         if res:
             res = TomatoOcrTap(315, 1044, 410, 1090, "领取", 10, 10)
             if res:
@@ -181,13 +182,14 @@ class YingDiTask:
             return
 
         res = TomatoOcrTap(286, 1202, 340, 1229, "礼包")
+        sleep(1)
         if res:
-            res = TomatoOcrTap(148, 671, 198, 700, "免费")
-            if res:
-                res = TomatoOcrTap(339, 743, 379, 764, "免费")
+                res = TomatoOcrTap(148, 671, 198, 700, "免费")
                 if res:
-                    任务记录["日礼包-完成"] = 1
-                    tapSleep(345, 1058)  # 点击空白处关闭
+                    res = TomatoOcrTap(339, 743, 379, 764, "免费")
+                    if res:
+                        任务记录["日礼包-完成"] = 1
+                        tapSleep(345, 1058)  # 点击空白处关闭
 
     # 月签到
     def yueqiandao(self):
@@ -311,31 +313,48 @@ class YingDiTask:
                 tapSleep(282, 178, 4)  # 秘宝
 
         # 领取秘宝能量
-        re, x, y = imageFind('秘宝能量', 0.8)
-        if re:
-            tapSleep(x, y, 1)
-            tapSleep(360, 1100)  # 点击空白处关闭
-        else:
-            # 先找右侧
-            swipe(525, 1070, 180, 1070)
-            sleep(3)
-            # 领取秘宝能量
+        findNL = False
+        findNum = 0
+        for i in range(1, 3):
             re, x, y = imageFind('秘宝能量', 0.8)
             if re:
+                findNL = True
                 tapSleep(x, y, 1)
                 tapSleep(360, 1100)  # 点击空白处关闭
-                # 返回左侧
-                swipe(180, 1070, 525, 1070)
-                sleep(3)
             else:
-                # 再找左侧
-                swipe(180, 1070, 525, 1070)
+                # 先找右侧
+                swipe(525, 1070, 180, 1070)
                 sleep(3)
                 # 领取秘宝能量
                 re, x, y = imageFind('秘宝能量', 0.8)
                 if re:
+                    findNL = True
                     tapSleep(x, y, 1)
                     tapSleep(360, 1100)  # 点击空白处关闭
+            if findNL:
+                break
+            findNum = i
+
+        # 返回左侧
+        for j in range(1, findNum):
+            swipe(180, 1070, 525, 1070)
+            sleep(3)
+
+        if not findNL:
+            for i in range(1, 3):
+                re, x, y = imageFind('秘宝能量', 0.8)
+                if re:
+                    tapSleep(x, y, 1)
+                    tapSleep(360, 1100)  # 点击空白处关闭
+                else:
+                    # 再找左侧
+                    swipe(180, 1070, 525, 1070)
+                    sleep(3)
+                    # 领取秘宝能量
+                    re, x, y = imageFind('秘宝能量', 0.8)
+                    if re:
+                        tapSleep(x, y, 1)
+                        tapSleep(360, 1100)  # 点击空白处关闭
 
         # 购买秘宝能量
         needNengLiang = False
@@ -399,7 +418,7 @@ class YingDiTask:
         selectMap = 功能开关["秘宝地图"]
         findMap = False
         # 先找右侧
-        if left == 0 and right < 4:
+        if left == 0 and  0 < right < 4:
             swipe(420, 200, 420, 600)
             sleep(2)
             swipe(600, 1070, 100, 1070)

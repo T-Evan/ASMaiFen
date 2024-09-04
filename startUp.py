@@ -8,7 +8,6 @@ from .res.ui.ui import switch_lock
 from .baseUtils import *
 from .shilian import ShiLianTask
 
-
 class StartUp:
     # 构造器
     def __init__(self, app_name):
@@ -18,13 +17,6 @@ class StartUp:
     # 实例方法
     def start_app(self):
         global 功能开关
-
-        system.open(self.app_name)
-        # re = ldE.element_exist('启动应用')
-        # if re:
-        #     ldE.element('启动应用-允许').click_element().execute()
-        # else:
-        Toast('启动游戏，等待加载中')
 
         # 识别是否进入登录页
         login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
@@ -44,9 +36,9 @@ class StartUp:
         shou_ye1 = False
         shou_ye2 = False
         if not res2:
-            shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280)
+            shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
             if not shou_ye1:
-                shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280)
+                shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
         if res2 or shou_ye1 or shou_ye2:
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
             return3 = TomatoOcrTap(91,1185,127,1221, '回', 10, 10)
@@ -57,6 +49,11 @@ class StartUp:
                 功能开关["needHome"] = 0
             Toast('已进入游戏')
             return True
+        else:
+            # 不在首页，尝试开始返回首页
+            # 开始异步处理返回首页
+            with switch_lock:
+                功能开关["needHome"] = 1
 
         # 识别是否战斗中
         res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
@@ -64,10 +61,13 @@ class StartUp:
         res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
         if res1 or (teamName1 != "" or teamName2 != ""):  # 战斗中
             # 大暴走战斗中
-            if 功能开关["暴走进入战斗后启动"] == 1:
+            if 功能开关["大暴走开关"] == 1 and 功能开关["暴走进入战斗后启动"] == 1:
                 Toast("进入暴走战斗成功 - 开始战斗")
                 self.shilianTask.fightingBaoZou()
                 return
+
+        system.open(self.app_name)
+        Toast('启动游戏，等待加载中')
 
         sleep(3)  # 等待游戏启动
 
@@ -103,8 +103,12 @@ class StartUp:
 
         shou_ye = False
         for loopCount in range(1, 4):  # 循环3次，从1到3
-            shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280)
-            shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280)
+            shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
+            shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
+            # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
+            return3 = TomatoOcrTap(91,1185,127,1221, '回', 10, 10)
+            if return3:
+                Toast('返回首页')
             if shou_ye1 or shou_ye2:
                 Toast('已进入游戏')
                 shou_ye = True
@@ -117,8 +121,9 @@ class StartUp:
         return shou_ye
 
     def switchRole(self, selectRole, ifRestart=1):
-        功能开关['fighting'] = 0
-        功能开关['needHome'] = 0
+        with switch_lock:
+            功能开关['fighting'] = 0
+            功能开关['needHome'] = 0
         Toast('开始切换角色')
 
         if ifRestart == 1:

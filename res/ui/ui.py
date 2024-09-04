@@ -41,9 +41,31 @@ while True:
         Dialog.toast('资源加载中 - 请等待30s', 5, 3 | 48, 200, 0)
         break
 
+import time
+
+class TimeoutLock:
+    def __init__(self, lock, timeout):
+        self.lock = lock
+        self.timeout = timeout
+        self.start_time = None
+
+    def __enter__(self):
+        self.start_time = time.time()
+        while (time.time() - self.start_time) < self.timeout:
+            if self.lock.acquire(False):
+                return self
+            time.sleep(0.1)
+        raise TimeoutError(f"尝试获取锁超时，耗时: {time.time() - self.start_time} 秒")
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.lock.release()
+        return None  # 返回 None 或者空元组 ()
+
 # 初始化锁
 global switch_lock
 switch_lock = Lock()
+global switch_ocr_apk_lock # apk ocr 识别锁
+switch_ocr_apk_lock = Lock()
 global 功能开关
 功能开关 = config
 

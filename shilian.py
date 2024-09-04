@@ -396,6 +396,8 @@ class ShiLianTask:
                 needFightCt = safe_int(功能开关["秘境建房重复挑战次数"])
                 if needFightCt == '':
                     needFightCt = 1  # 默认挑战1次
+
+                failTeamStatus = 0
                 while 1:
                     self.openTreasure()
                     # 返回房间
@@ -405,10 +407,25 @@ class ShiLianTask:
                         if not res2:
                             res3 = TomatoOcrTap(632, 570, 684, 598, "匹配中")
                     # 返回房间 - 队伍满员，开始挑战提醒
-                    res, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
-                    if res:
-                        res = TomatoOcrTap(455, 726, 509, 760, "确定")  # 队伍已满员，准备开启挑战 - 确定
-                        res3 = TomatoOcrTap(333, 974, 383, 1006, "开始")
+                    wait1, _ = TomatoOcrText( 396, 622, 468, 650, "开启挑战") # 队伍已满员，准备开启挑战
+                    wait2, _ = TomatoOcrText(240,610,344,653, "队伍已满员")  # 队伍已满员，准备开启挑战
+                    if wait1 or wait2:
+                        res = TomatoOcrTap(453,727,511,760, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
+
+                    # 判断是否在队伍页面
+                    res, _ = TomatoOcrText(502, 192, 581, 215, "离开队伍")
+                    if not res:
+                        res = ocrFindRange('点击空白处', 0.9, 113, 831, 720, 1280, whiteList='点击空白处')
+                        if res:
+                            tapSleep(45, 1245)
+                            Toast('关闭弹窗')
+                        res, _ = TomatoOcrText(502, 192, 581, 215, "离开队伍")
+                        if not res:
+                            sleep(3)
+                            failTeamStatus = failTeamStatus + 1
+                            if failTeamStatus > 3:
+                                Toast("秘境任务 - 已离开队伍 - 结束")
+                                break
 
                     # 等待开始
                     if aleadyFightCt >= needFightCt or elapsed > totalWait:
@@ -420,8 +437,8 @@ class ShiLianTask:
                         res = TomatoOcrTap(330, 728, 385, 759, "确定")  # 确定离开队伍
                         self.quitTeamFighting()
                         break
-                    res = TomatoOcrTap(333, 974, 383, 1006, "开始")
                     Toast("秘境任务 - 创建房间 - 等待队友")
+                    res = TomatoOcrTap(333, 974, 383, 1006, "开始")
                     if res:
                         Toast(f"秘境任务 - 重复挑战第{aleadyFightCt + 1}/{needFightCt}次")
                         # 满员开始，退出循环
@@ -450,7 +467,10 @@ class ShiLianTask:
                                 res = TomatoOcrTap(455, 726, 509, 760, "确定")  # 队伍已满员，准备开启挑战 - 确定
                                 res3 = TomatoOcrTap(333, 974, 383, 1006, "开始")
 
+                            # 上面点击开始后队友退出，再次点击开始时增加超时等待；避免实际进入战斗前判断为不在战斗状态
                             res = TomatoOcrTap(333, 974, 383, 1006, "开始")
+                            if res:
+                                sleep(10)
                             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                             fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
@@ -1080,21 +1100,20 @@ class ShiLianTask:
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
-                shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280)
+                shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
                 if not shou_ye1:
-                    shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280)
+                    shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280, '试炼')
             if res2 or shou_ye1 or shou_ye2:
                 with switch_lock:
                     功能开关["needHome"] = 0
-                功能开关["fighting"] = 0
+                    功能开关["fighting"] = 0
                 Toast('已返回首页')
                 sleep(0.5)
                 return True
 
             # 开始异步处理返回首页
             with switch_lock:
-                if not thread2.is_alive():
-                    runThread2()
+                runThread2()
                 功能开关["needHome"] = 1
 
             # 点击首页-冒险
@@ -1123,7 +1142,8 @@ class ShiLianTask:
                 if not res3:
                     res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
         if res1 or res2 or res3 or res4:
-            功能开关["needHome"] = 0
+            with switch_lock:
+                功能开关["needHome"] = 0
             teamStatus = ocrFindRangeClick('匹配中')
             if teamStatus:
                 Toast('取消匹配')

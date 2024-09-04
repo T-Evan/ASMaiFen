@@ -6,7 +6,8 @@ from ascript.android.system import R
 from ascript.android import action
 from ascript.android.screen import CompareColors
 import time
-
+from .res.ui.ui import switch_lock
+from .res.ui.ui import TimeoutLock
 
 def swipe(x1, y1, x2, y2, dur=200):
     # print(x1, y1, x2, y2)
@@ -35,24 +36,44 @@ def compareColors(colorStr, diff=0.9):
 
 
 def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
-    path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
-    res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
-    if res:
-        x, y = res["center_x"], res["center_y"]
-        return True, x, y
-    else:
-        return False, 0, 0
+    try:
+        with TimeoutLock(switch_lock, 3):
+            path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
+            res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
+        if res:
+            # 检查 res 中是否有 center_x 和 center_y 键
+            if "center_x" in res and "center_y" in res:
+                x, y = res["center_x"], res["center_y"]
+                return True, x, y
+            else:
+                # 如果缺少键，返回默认值
+                return False, 0, 0
+        else:
+            return False, 0, 0
+    except Exception as e:
+        print(f"imageFind发生异常: {e}")
+        return False
 
 
 def imageFindClick(name, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
-    path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
-    res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
-    if res:
-        x, y = res["center_x"], res["center_y"]
-        click(x, y)
-        sleep(sleep1)
-        return True
-    else:
+    try:
+        with TimeoutLock(switch_lock, 3):
+            path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
+            res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
+        if res:
+            # 检查 res 中是否有 center_x 和 center_y 键
+            if "center_x" in res and "center_y" in res:
+                x, y = res["center_x"], res["center_y"]
+                click(x, y)
+                sleep(sleep1)
+                return True
+            else:
+                # 如果缺少键，返回默认值
+                return False, 0, 0
+        else:
+            return False
+    except Exception as e:
+        print(f"imageFindClick发生异常: {e}")
         return False
 
 # plug.load("ld")  # 这里是版本号

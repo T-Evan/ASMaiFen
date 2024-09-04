@@ -364,10 +364,14 @@
                             <input id="限时特惠" name="vehicle" type="checkbox" value="Bike">限时特惠<br>
                         </div>
                     </div>
+                    <legend>喊话相关</legend>
                     <div class="flex-container">
                         <label for="世界喊话">世界喊话:</label>
                         <input type="text" id="世界喊话" name="世界喊话" lay-verify="title" autocomplete="off"
                                placeholder="世界喊话" class="layui-input">
+                    </div>
+                    <div class="checkbox-item">
+                        <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换喊话频道<br>
                     </div>
                 </fieldset>
             </form>
@@ -733,6 +737,7 @@
         setSwitchStatus("登录好礼");
         setSwitchStatus("BBQ派对");
         setSwitchStatus("限时特惠");
+        setSwitchStatus("自动切换喊话频道");
 
         var 世界喊话 = localStorage.getItem("世界喊话");
         document.getElementById("世界喊话").value = 世界喊话;
@@ -940,6 +945,7 @@
         登录好礼 = saveSwitchStatus("登录好礼");
         BBQ派对 = saveSwitchStatus("BBQ派对");
         限时特惠 = saveSwitchStatus("限时特惠");
+        自动切换喊话频道 = saveSwitchStatus("自动切换喊话频道");
 
         var 世界喊话 = document.getElementById("世界喊话").value;
         localStorage.setItem("世界喊话", 世界喊话);
@@ -1074,6 +1080,7 @@
             BBQ派对: BBQ派对,
             限时特惠: 限时特惠,
 
+            自动切换喊话频道: 自动切换喊话频道,
             世界喊话: 世界喊话,
 
             <!--营地-->

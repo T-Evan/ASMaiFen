@@ -216,7 +216,7 @@ class LvTuanTask:
         self.dailyTask.homePage()
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
         sleep(1)
-        res = TomatoOcrTap(624, 742, 708, 767, "旅团任务")
+        res = TomatoOcrTap(624, 742, 708, 767, "旅团任务", 10, -10)
         if not res:
             return
 
@@ -278,6 +278,7 @@ class LvTuanTask:
         self.dailyTask.homePage()
 
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+        sleep(3)
         tapSleep(400, 250, 3)
 
         res, _ = TomatoOcrText(312, 627, 407, 655, "旅团之树")

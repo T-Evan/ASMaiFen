@@ -18,8 +18,8 @@ from .thread import *
 import time
 from ascript.android.ui import Dialog
 import pymysql
-from ascript.android.system import Device
 from datetime import datetime
+from ascript.android.system import Device
 
 # ldE.set_log_level(10)  # Debug
 # ldE.set_log_level(20)  # Info
@@ -38,7 +38,7 @@ db = pymysql.connect(
 )  # 连接数据库
 
 cursor = db.cursor()
-sql = "SELECT * FROM kami WHERE kami LIKE %s"
+sql = "SELECT * FROM kami WHERE kami != '' and kami LIKE %s"
 # 使用参数化查询
 cursor.execute(sql, (功能开关['激活码'],))
 results = cursor.fetchall()
@@ -56,10 +56,62 @@ for row in results:
     device_available_num = row[5]
 
 if kami == '':
-    activeInfo = '卡密不存在，请重新输入'
-    Dialog.confirm(activeInfo, "激活码失效")
-    Toast(activeInfo, 3000)
-    sys.exit()
+    now_device_id = '"' + Device.id() + '"'
+    # 判断设备是否激活过试用
+    sql = "SELECT * FROM kami WHERE device_id LIKE %s and kami = ''"
+    # 使用参数化查询
+    cursor.execute(sql, now_device_id)
+    results = cursor.fetchall()
+    for row in results:
+        device_id = row[1]
+        expire_time = row[3]
+    if device_id == '':
+        expire_time = int(time.time()) + 86400 * 0.5  # 日卡
+        dt_object = datetime.fromtimestamp(expire_time)
+        formatted_date = dt_object.strftime('%Y-%m-%d %H:%M:%S')
+        now_device_id = Device.id()
+        device_ids = json.dumps(now_device_id)
+        # 构造 SQL 语句
+        sql = "Insert into kami (device_id,expire_time,kami) Values (%s,%s,'')"
+        # 使用参数化查询
+        cursor.execute(sql, (device_ids, expire_time))
+        db.commit()  # 不要忘了提交,不然数据上不去哦
+        activeInfo = '试用卡密激活成功，过期时间：' + formatted_date
+        Toast(activeInfo, 3000)
+    if device_id != '':
+        # 判断首次激活
+        if expire_time == 0:
+            expire_time = int(time.time()) + 86400 * 0.5  # 日卡
+            dt_object = datetime.fromtimestamp(expire_time)
+            formatted_date = dt_object.strftime('%Y-%m-%d %H:%M:%S')
+            now_device_id = Device.id()
+            device_ids = json.dumps(now_device_id)
+            # 构造 SQL 语句
+            sql = "UPDATE kami SET device_id = %s, expire_time = %s WHERE device_id LIKE %s and kami == ''"
+            # 使用参数化查询
+            cursor.execute(sql, (device_ids, expire_time, kami))
+            db.commit()  # 不要忘了提交,不然数据上不去哦
+            activeInfo = '试用卡密激活成功，过期时间：' + formatted_date
+            Toast(activeInfo, 3000)
+        if expire_time != 0:
+            dt_object = datetime.fromtimestamp(expire_time)
+            formatted_date = dt_object.strftime('%Y-%m-%d %H:%M:%S')
+            # 判断卡密是否过期
+            if int(time.time()) > expire_time:
+                activeInfo = '卡密已过期，过期时间：' + formatted_date
+                Dialog.confirm(activeInfo, "激活码失效")
+                Toast(activeInfo, 3000)
+                sleep(2)
+                sys.exit()
+            else:
+                activeInfo = '试用已激活，' + '过期时间：' + formatted_date
+                Toast(activeInfo, 3000)
+                sleep(2)
+
+    # activeInfo = '卡密不存在，请重新输入'
+    # Dialog.confirm(activeInfo, "激活码失效")
+    # Toast(activeInfo, 3000)
+    # sys.exit()
 if kami != '':
     # 判断首次激活
     if expire_time == 0:
@@ -77,6 +129,7 @@ if kami != '':
         cursor.execute(sql, (device_ids, expire_time, kami))
         db.commit()  # 不要忘了提交,不然数据上不去哦
         activeInfo = '卡密激活成功，过期时间：' + formatted_date
+        Toast(activeInfo, 3000)
     if expire_time != 0:
         dt_object = datetime.fromtimestamp(expire_time)
         formatted_date = dt_object.strftime('%Y-%m-%d %H:%M:%S')
@@ -87,7 +140,7 @@ if kami != '':
             Toast(activeInfo, 3000)
             sleep(2)
             sys.exit()
-    # 判断登录设备数
+        # 判断登录设备数
         now_device_id = Device.id()
         device_ids = json.loads(device_id)
         if now_device_id in device_id:
@@ -175,52 +228,73 @@ def main():
 
         start_time = int(time.time())
 
+        runThread1()
+        runThread2()
+        runThreadBaoZouBoss()
+        counter = 0
         while True:
-            if not thread1.is_alive():
-                runThread1()
+            try:
+                # 获取当前设备运行的APP信息
+                info = Device.memory()
+                # 返回单位是字节
+                total_memory_mb = info[2] / (1024 ** 2)
+                used_memory_mb = info[1] / (1024 ** 2)
+                free_memory_mb = info[0] / (1024 ** 2)
+                print(f"剩余内存:{free_memory_mb},已用内存{used_memory_mb},总共内存{total_memory_mb}")
+                counter += 1
 
-            if not thread2.is_alive():
-                runThread2()
+                if counter % 3 == 0:
+                    runThread1()
+                    runThread2()
+                    runThreadBaoZouBoss()
+                    counter = 0  # 重置计数器
 
-            if not threadBaoZouBoss.is_alive():
-                runThreadBaoZouBoss()
+                # 启动app
+                start_up.start_app()
+                if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and 功能开关['冒险总开关'] == 0:
+                    Toast('未开启功能，请检查功能配置')
+                    sleep(3)
+                # 营地活动（优先领取）
+                yingdiTask.yingdiTask()
+                # 日常（优先领取）
+                dailyTask.dailyTask()
 
-            # 启动app
-            start_up.start_app()
-            if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and 功能开关['冒险总开关'] == 0:
-                Toast('未开启功能，请检查功能配置')
-                sleep(3)
-            # 营地活动（优先领取）
-            yingdiTask.yingdiTask()
-            # 日常（优先领取）
-            dailyTask.dailyTask()
+                # 旅人相关
+                lvrenTask.lvrenTask()
 
-            # 旅人相关
-            lvrenTask.lvrenTask()
+                # 旅团相关
+                lvtuanTask.lvtuanTask()
 
-            # 旅团相关
-            lvtuanTask.lvtuanTask()
+                # 营地活动（最后领取）
+                yingdiTask.yingdiTaskEnd()
 
-            # 营地活动（最后领取）
-            yingdiTask.yingdiTaskEnd()
+                # 试炼
+                shilianTask.shilian()
 
-            # 试炼
-            shilianTask.shilian()
+                # 日常（最后领取）
+                dailyTask.dailyTaskEnd()
 
-            # 日常（最后领取）
-            dailyTask.dailyTaskEnd()
+                # 定时休息
+                current_time = int(time.time())
 
-            # 定时休息
-            current_time = int(time.time())
-
-            if total_wait != 0 and current_time - start_time >= total_wait:
-                Toast(f"休息 {need_wait_minute} 分钟")
-                功能开关["fighting"] = 0
-                功能开关["needHome"] = 0
-                action.Key.home()
-                初始化任务记录()
-                sleep(need_wait_minute * 60)
-                start_time = int(time.time())
+                if total_wait != 0 and current_time - start_time >= total_wait:
+                    Toast(f"休息 {need_wait_minute} 分钟")
+                    功能开关["fighting"] = 0
+                    功能开关["needHome"] = 0
+                    action.Key.home()
+                    初始化任务记录()
+                    sleep(need_wait_minute * 60)
+                    start_time = int(time.time())
+            except Exception as e:
+                # 处理异常
+                # 获取异常信息
+                exc_type, exc_value, exc_traceback = sys.exc_info()
+                # 输出异常信息和行号
+                file_name, line_number, _, _ = traceback.extract_tb(exc_traceback)[-1]
+                error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
+                # 显示对话框
+                print(error_message)
+                Dialog.confirm(error_message)
     except Exception as e:
         # 处理异常
         # 获取异常信息
@@ -229,8 +303,8 @@ def main():
         file_name, line_number, _, _ = traceback.extract_tb(exc_traceback)[-1]
         error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
         # 显示对话框
+        print(error_message)
         Dialog.confirm(error_message)
     sys.exit()
-
 
 main()

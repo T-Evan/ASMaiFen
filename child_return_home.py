@@ -24,11 +24,14 @@ def returnHome():
     return2 = False
     return3 = False
     return4 = False
-    return1 = TomatoOcrTap(67,1182,121,1221, '返回', 10,10)
+    return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
     if return1 and 功能开关["needHome"] == 1:
+        # 返回上级页面时二次确认入口通用处理
+        TomatoOcrTap(320,726,399,760,'确定')
         Toast('返回首页')
-    return3 = TomatoOcrTap(91,1185,127,1221, '回', 10, 10)
+    return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
     if return3 and 功能开关["needHome"] == 1:
+        TomatoOcrTap(320,726,399,760,'确定')
         Toast('返回首页')
 
     if not return1 and not return3:
@@ -41,15 +44,15 @@ def returnHome():
             Toast('返回首页')
 
     if not return1 and not return2 and not return3 and not return4:
-        # 点击冒险
-        re = TomatoOcrTap(330,1201,389,1238, '冒险')
-
         # 识别是否进入首页
-        shou_ye1 = ocrFindRange('冒险手册',  0.9, 360, 0, 720, 1280)
+        res2, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
+        shou_ye1 = False
         shou_ye2 = False
-        if not shou_ye1:
-            shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280)
-        if shou_ye1 or shou_ye2:
+        if not res2:
+            shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
+            if not shou_ye1:
+                shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
+        if res2 or shou_ye1 or shou_ye2:
             with switch_lock:
                 功能开关["needHome"] = 0
             Toast('已返回首页')

@@ -8,6 +8,7 @@ from .baseUtils import *
 from ascript.android import action
 from .res.ui.ui import switch_lock
 from .thread import *
+import re as rePattern
 
 
 class DailyTask:
@@ -20,7 +21,7 @@ class DailyTask:
             res6 = self.shilianTask.WaitFight()
 
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
-            return3 = TomatoOcrTap(91,1185,127,1221, '回', 10, 10)
+            return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
             if return3:
                 Toast('返回首页')
 
@@ -29,25 +30,24 @@ class DailyTask:
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
-                shou_ye1 = ocrFindRange('冒险手册',  0.9, 360, 0, 720, 1280)
+                shou_ye1 = ocrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
                 if not shou_ye1:
-                    shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280)
+                    res3, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
+                    # shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
             if res2 or shou_ye1 or shou_ye2:
                 with switch_lock:
                     功能开关["needHome"] = 0
-                功能开关["fighting"] = 0
+                    功能开关["fighting"] = 0
                 Toast('已返回首页')
                 sleep(0.5)
                 return True
 
             # 开始异步处理返回首页
             with switch_lock:
-                if not thread2.is_alive():
-                    runThread2()
                 功能开关["needHome"] = 1
 
             # 点击首页-冒险
-            re = TomatoOcrTap(330,1201,389,1238, '冒险')
+            re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
             # ldE.element('首页-冒险').click().execute(sleep=1)
 
             quitTeamRe = self.quitTeam()
@@ -78,7 +78,6 @@ class DailyTask:
         # 世界喊话
         self.shijieShout()
 
-
     def shijieShout(self):
         if 功能开关['世界喊话'] == "":
             return 1
@@ -87,23 +86,10 @@ class DailyTask:
 
         self.homePage()
 
-        # 识别是否进入首页
-        shou_ye1 = ocrFindRange('冒险手册',  0.9, 360, 0, 720, 1280)
-        shou_ye2 = False
-        if not shou_ye1:
-            shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280)
-        if shou_ye1 or shou_ye2:
-            with switch_lock:
-                功能开关["needHome"] = 0
-            Toast('已返回首页')
-        else:
-            Toast('返回首页失败')
-            return
-
-        res1 = TomatoOcrTap(18,1098,97,1134, "点击输入", 10, 10)
+        res1 = TomatoOcrTap(18, 1098, 97, 1134, "点击输入", 10, 10)
         res2 = False
         if not res1:
-            res2 = TomatoOcrTap(17,1103,96,1134, "点击输入", 10, 10)
+            res2 = TomatoOcrTap(17, 1103, 96, 1134, "点击输入", 10, 10)
         sleep(2.5)  # 等待输入法弹窗
         if res1 or res2:
             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
@@ -111,12 +97,57 @@ class DailyTask:
             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
             action.input(功能开关["世界喊话"])
             tapSleep(360, 104)  # 点击空白处确认输入
-            res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
+            res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
             if res:
-                tapSleep(101,337)
-                return 1
+                tapSleep(101, 337)
+        # 关闭喊话窗口
+        tapSleep(101, 337)
 
-        tapSleep(101,337)
+        if 功能开关['自动切换喊话频道']:
+            for i in range(1, 10):
+                imageFindClick('喊话-收起')
+                self.homePage()
+
+                # print("切换喊话频道")
+                Toast("切换喊话频道")
+                # 点击左下角聊天框，弹出上拉按钮
+                tapSleep(123, 942, 1.5)
+                tapSleep(28, 776)
+                # 点击世界频道
+                TomatoOcrTap(205, 75, 281, 108, '世界', 10, 10)
+                res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10)
+                if not res:
+                    continue
+
+                res, 当前频道 = TomatoOcrText(148, 607, 266, 658, '当前频道')
+                # print(当前频道)
+                当前频道数字 = rePattern.findall(r'\d+', 当前频道)
+                # print(当前频道数字)
+                if 当前频道数字 == '':
+                    continue
+                当前频道数字 = safe_int(当前频道数字[0])
+                下一频道数字 = 当前频道数字 - 1
+                # print(下一频道数字)
+                下一频道 = '简体中文' + str(下一频道数字)
+                print(下一频道)
+                # 寻找下一频道
+                for i in range(1, 5):
+                    res = ocrFindRangeClick(下一频道)
+                    if not res:
+                        swipe(225, 814, 225, 714, 600)
+                    if res:
+                        shuru = TomatoOcrTap(80, 1196, 157, 1223, '点击输入')
+                        if shuru:
+                            # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
+                            sleep(1)
+                            # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
+                            action.input(功能开关["世界喊话"])
+                            tapSleep(360, 104)  # 点击空白处确认输入
+                            res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
+                            # 关闭喊话窗口
+                            imageFindClick('喊话-收起')
+                        break
+
         return 0
 
     def dailyTaskEnd(self):
@@ -162,7 +193,7 @@ class DailyTask:
             # 识别黄色领取按钮
             re, x, y = imageFind('手册-领取')
             if re:
-                tapSleep(x,y,1)
+                tapSleep(x, y, 1)
                 tapSleep(320, 1180)  # 点击空白处关闭
             else:
                 break
@@ -173,7 +204,7 @@ class DailyTask:
             # 识别黄色领取按钮
             re, x, y = imageFind('手册-领取')
             if re:
-                tapSleep(x,y,1)
+                tapSleep(x, y, 1)
                 tapSleep(357, 1224)  # 点击空白处关闭
                 # 点击宝箱（从右到左）
                 tapSleep(570, 390)
@@ -188,7 +219,7 @@ class DailyTask:
             # 识别黄色领取按钮
             re, x, y = imageFind('手册-领取')
             if re:
-                tapSleep(x,y,1)
+                tapSleep(x, y, 1)
                 tapSleep(357, 1224)  # 点击空白处关闭
                 # 点击宝箱（从右到左）
                 tapSleep(570, 390)
@@ -203,7 +234,7 @@ class DailyTask:
             # 识别黄色领取按钮
             re, x, y = imageFind('手册-领取')
             if re:
-                tapSleep(x,y,3)
+                tapSleep(x, y, 3)
                 tapSleep(360, 1070)  # 点击空白处关闭
                 tapSleep(360, 1070)  # 点击空白处关闭（再次点击，避免成就升级页）
             else:
@@ -220,9 +251,11 @@ class DailyTask:
             if not res1:
                 res2, x, y = imageFind('挑战首领')
                 if res2:
-                    tapSleep(x+25,y+25,1)
+                    tapSleep(x + 25, y + 25, 1)
             if res1 or res2:
-                sleep(10)  # 等待动画
+                功能开关["fighting"] = 1
+                sleep(5)  # 等待动画
+                功能开关["fighting"] = 0
 
         if 功能开关["自动换图"] == 1:
             Toast("日常 - 前往新地图 - 开始")
@@ -231,12 +264,6 @@ class DailyTask:
             newMapOK, x, y = imageFind('首页-前往新关卡')
             if newMapOK:
                 tapSleep(x, y, 1)
-                res = TomatoOcrTap(422, 622, 494, 646, "单人前往")
-                if res:
-                    if 功能开关["队员不满足单飞"] == 1:
-                        res = TomatoOcrTap(187, 727, 284, 757, "离队前往")
-                    else:
-                        res = TomatoOcrTap(435, 727, 529, 759, "留在队伍")
             if not newMapOK:
                 res1, _ = TomatoOcrText(573, 200, 694, 238, "新关卡已解锁")
                 res2 = False
@@ -289,17 +316,19 @@ class DailyTask:
             self.homePage()
             res = TomatoOcrTap(646, 451, 689, 474, "结伴", 10, -10)
             if res:
-                isTeam, x, y = imageFind('组队增益')
-                if isTeam:
+                isTeam = ocrFindRange('佣兵', 0.9, 143, 257, 568, 355)
+                if not isTeam:
                     Toast("日常 - 寻找结伴 - 已有结伴")
+                    sleep(1)
+                    TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
                 else:
-                    res = TomatoOcrTap(408, 1037, 509, 1068, "寻找队伍")
+                    res = TomatoOcrTap(407, 1036, 513, 1070, "寻找队伍", 25, 25)
                     re, x, y = imageFind('结伴-加入')
                     if re:
-                        tapSleep(x,y,1)
+                        tapSleep(x, y, 1)
                         Toast("日常 - 寻找结伴 - 加入队伍")
                         sleep(4)  # 等待动画
-                        res = TomatoOcrTap(359, 741, 391, 775, "确认跟随")
+                        res = TomatoOcrTap(359, 741, 391, 775, "确认跟随", 10, 10)
 
     # 限时特惠
     def XianShiTeHui(self):
@@ -691,7 +720,7 @@ class DailyTask:
         tapSleep(300, 740, 4)  # 邮件
         res = TomatoOcrTap(463, 1030, 510, 1061, "领取")
         if not res:
-            TomatoOcrTap(67,1182,121,1221, "返回", 10, 10)
+            TomatoOcrTap(67, 1182, 121, 1221, "返回", 10, 10)
             return
         else:
             任务记录["邮件领取-完成"] = 1
@@ -712,7 +741,8 @@ class DailyTask:
                 if not res3:
                     res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
         if res1 or res2 or res3 or res4:
-            功能开关["needHome"] = 0
+            with switch_lock:
+                功能开关["needHome"] = 0
             teamStatus = TomatoOcrTap(632, 570, 684, 598, "匹配中")
             if teamStatus:
                 Toast('取消匹配')
