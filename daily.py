@@ -20,6 +20,11 @@ class DailyTask:
             # todo 区分是否进入的摸鱼活动
             res6 = self.shilianTask.WaitFight()
 
+            quitTeamRe = self.quitTeam()
+            if not quitTeamRe:
+                # 判断战败页面
+                self.shilianTask.fight_fail()
+
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
             return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
             if return3:
@@ -35,25 +40,22 @@ class DailyTask:
                     res3, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
                     # shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
             if res2 or shou_ye1 or shou_ye2:
-                with switch_lock:
+                if TimeoutLock(switch_lock, 3).acquire_lock():
                     功能开关["needHome"] = 0
                     功能开关["fighting"] = 0
+                    TimeoutLock(switch_lock, 3).release_lock()
                 Toast('已返回首页')
                 sleep(0.5)
                 return True
 
             # 开始异步处理返回首页
-            with switch_lock:
+            if TimeoutLock(switch_lock, 3).acquire_lock():
                 功能开关["needHome"] = 1
+                TimeoutLock(switch_lock, 3).release_lock()
 
             # 点击首页-冒险
             re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
             # ldE.element('首页-冒险').click().execute(sleep=1)
-
-            quitTeamRe = self.quitTeam()
-            if not quitTeamRe:
-                # 判断战败页面
-                self.shilianTask.fight_fail()
 
             # 判断宝箱开启
             self.shilianTask.openTreasure()
@@ -741,8 +743,9 @@ class DailyTask:
                 if not res3:
                     res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
         if res1 or res2 or res3 or res4:
-            with switch_lock:
+            if TimeoutLock(switch_lock, 3).acquire_lock():
                 功能开关["needHome"] = 0
+                TimeoutLock(switch_lock, 3).release_lock()
             teamStatus = TomatoOcrTap(632, 570, 684, 598, "匹配中")
             if teamStatus:
                 Toast('取消匹配')

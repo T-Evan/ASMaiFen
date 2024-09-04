@@ -53,8 +53,7 @@ def returnHome():
             if not shou_ye1:
                 shou_ye2 = ocrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
         if res2 or shou_ye1 or shou_ye2:
-            with switch_lock:
-                功能开关["needHome"] = 0
+            功能开关["needHome"] = 0
             Toast('已返回首页')
             return True
 

@@ -28,8 +28,7 @@ class StartUp:
             re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
             if not re:
                 # 不在登录页，尝试开始返回首页
-                with switch_lock:
-                    功能开关["needHome"] = 1
+                功能开关["needHome"] = 1
 
         # 识别是否进入首页
         res2, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
@@ -45,15 +44,13 @@ class StartUp:
             if return3:
                 Toast('返回首页')
 
-            with switch_lock:
-                功能开关["needHome"] = 0
+            功能开关["needHome"] = 0
             Toast('已进入游戏')
             return True
         else:
             # 不在首页，尝试开始返回首页
             # 开始异步处理返回首页
-            with switch_lock:
-                功能开关["needHome"] = 1
+            功能开关["needHome"] = 1
 
         # 识别是否战斗中
         res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
@@ -74,8 +71,7 @@ class StartUp:
         return self.start_app()
 
     def login(self):
-        with switch_lock:
-            功能开关["needHome"] = 0
+        功能开关["needHome"] = 0
         sleep(1.5)
         # 开始冒险之旅
         login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
@@ -121,9 +117,8 @@ class StartUp:
         return shou_ye
 
     def switchRole(self, selectRole, ifRestart=1):
-        with switch_lock:
-            功能开关['fighting'] = 0
-            功能开关['needHome'] = 0
+        功能开关['fighting'] = 0
+        功能开关['needHome'] = 0
         Toast('开始切换角色')
 
         if ifRestart == 1:

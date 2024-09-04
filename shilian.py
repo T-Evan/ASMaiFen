@@ -119,8 +119,7 @@ class ShiLianTask:
                     return False
 
                 Toast("请操作进入战斗")
-                with switch_lock:
-                    功能开关["needHome"] = 0
+                功能开关["needHome"] = 0
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                 fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
@@ -661,12 +660,12 @@ class ShiLianTask:
                     for i in range(1, 2):
                         # ldE.element('战斗结束-点赞队友1').click().execute(sleep=0.7)
                         # ldE.element('战斗结束-点赞队友2').click().execute(sleep=0.7)
-                        tapSleep(300, 520, 0.7)
-                        tapSleep(413, 541, 0.7)
-                        tapSleep(538, 522, 0.7)
+                        imageFindClick('点赞1', sleep1=0.7)
+                        imageFindClick('点赞2', sleep1=0.7)
                 Toast('返回房间')
                 tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
-                res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 战斗结束页确认退出
+                # res = TomatoOcrTap(329, 728, 386, 759, "确定")
+                res = ocrFindRangeClick("确定") # 战斗结束页确认退出
                 if not res:
                     res = TomatoOcrTap(96, 1199, 130, 1232, "回")  # 返回
                     res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 确定
@@ -683,11 +682,8 @@ class ShiLianTask:
             if isTreasure == 1:
                 Toast('点赞队友')
                 for i in range(1, 2):
-                    # ldE.element('战斗结束-点赞队友1').click().execute(sleep=0.7)
-                    # ldE.element('战斗结束-点赞队友2').click().execute(sleep=0.7)
-                    tapSleep(300, 520, 0.7)
-                    tapSleep(413, 541, 0.7)
-                    tapSleep(538, 522, 0.7)
+                    imageFindClick('点赞1', sleep1=0.7)
+                    imageFindClick('点赞2', sleep1=0.7)
 
         attempts = 0  # 初始化尝试次数
         maxAttempts = 3  # 设置最大尝试次数
@@ -771,7 +767,8 @@ class ShiLianTask:
                     res3, _ = TomatoOcrText(309, 551, 406, 588, "通关奖励")  # 战斗结束页。宝箱提示
                 if res1 or res2 or res3:
                     tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
-                    res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 战斗结束页确认退出
+                    # res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 战斗结束页确认退出
+                    res = ocrFindRangeClick("确定") # 战斗结束页确认退出
                     if not res:
                         res = TomatoOcrTap(96, 1199, 130, 1232, "回")  # 返回
                         res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 确定
@@ -1104,17 +1101,15 @@ class ShiLianTask:
                 if not shou_ye1:
                     shou_ye2 = ocrFindRange('试炼',  0.9, 360, 0, 720, 1280, '试炼')
             if res2 or shou_ye1 or shou_ye2:
-                with switch_lock:
-                    功能开关["needHome"] = 0
-                    功能开关["fighting"] = 0
+                功能开关["needHome"] = 0
+                功能开关["fighting"] = 0
                 Toast('已返回首页')
                 sleep(0.5)
                 return True
 
             # 开始异步处理返回首页
-            with switch_lock:
-                runThread2()
-                功能开关["needHome"] = 1
+            runThread2()
+            功能开关["needHome"] = 1
 
             # 点击首页-冒险
             re = TomatoOcrTap(330,1201,389,1238, '冒险')
@@ -1142,8 +1137,7 @@ class ShiLianTask:
                 if not res3:
                     res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
         if res1 or res2 or res3 or res4:
-            with switch_lock:
-                功能开关["needHome"] = 0
+            功能开关["needHome"] = 0
             teamStatus = ocrFindRangeClick('匹配中')
             if teamStatus:
                 Toast('取消匹配')
@@ -1162,4 +1156,3 @@ class ShiLianTask:
                 Toast("退出组队")
                 return True
         return False
-

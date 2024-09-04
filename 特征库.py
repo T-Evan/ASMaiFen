@@ -6,7 +6,7 @@ from ascript.android.system import R
 from ascript.android import action
 from ascript.android.screen import CompareColors
 import time
-from .res.ui.ui import switch_lock
+from .res.ui.ui import switch_ocr_apk_lock
 from .res.ui.ui import TimeoutLock
 
 def swipe(x1, y1, x2, y2, dur=200):
@@ -37,9 +37,10 @@ def compareColors(colorStr, diff=0.9):
 
 def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
     try:
-        with TimeoutLock(switch_lock, 3):
+        if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
             path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
             res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
+            TimeoutLock(switch_ocr_apk_lock).release_lock()
         if res:
             # 检查 res 中是否有 center_x 和 center_y 键
             if "center_x" in res and "center_y" in res:
@@ -52,14 +53,15 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
             return False, 0, 0
     except Exception as e:
         print(f"imageFind发生异常: {e}")
-        return False
+        return False, 0, 0
 
 
 def imageFindClick(name, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
     try:
-        with TimeoutLock(switch_lock, 3):
+        if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
             path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
             res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
+            TimeoutLock(switch_ocr_apk_lock).release_lock()
         if res:
             # 检查 res 中是否有 center_x 和 center_y 键
             if "center_x" in res and "center_y" in res:
@@ -68,8 +70,7 @@ def imageFindClick(name, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280)
                 sleep(sleep1)
                 return True
             else:
-                # 如果缺少键，返回默认值
-                return False, 0, 0
+                return False
         else:
             return False
     except Exception as e:

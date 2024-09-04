@@ -184,12 +184,12 @@ class YingDiTask:
         res = TomatoOcrTap(286, 1202, 340, 1229, "礼包")
         sleep(1)
         if res:
-                res = TomatoOcrTap(148, 671, 198, 700, "免费")
+            res = TomatoOcrTap(148, 671, 198, 700, "免费")
+            if res:
+                res = TomatoOcrTap(339, 743, 379, 764, "免费")
                 if res:
-                    res = TomatoOcrTap(339, 743, 379, 764, "免费")
-                    if res:
-                        任务记录["日礼包-完成"] = 1
-                        tapSleep(345, 1058)  # 点击空白处关闭
+                    任务记录["日礼包-完成"] = 1
+                    tapSleep(345, 1058)  # 点击空白处关闭
 
     # 月签到
     def yueqiandao(self):
@@ -418,7 +418,7 @@ class YingDiTask:
         selectMap = 功能开关["秘宝地图"]
         findMap = False
         # 先找右侧
-        if left == 0 and  0 < right < 4:
+        if left == 0 and 0 < right < 4:
             swipe(420, 200, 420, 600)
             sleep(2)
             swipe(600, 1070, 100, 1070)
@@ -517,51 +517,51 @@ class YingDiTask:
 
         # 原材料
         if 功能开关['商店原材料'] == 1:
-            imageFindClick('仓鼠-原材料')
+            imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大')
-                ocrFindRangeClick('购买')
+                ocrFindRangeClick('最大', whiteList='最大')
+                ocrFindRangeClick('购买', whiteList='购买')
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         # 星星经验
         if 功能开关['商店星星经验'] == 1:
-            imageFindClick('星星经验')
+            imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大')
+                ocrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 825)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店全价兽粮'] == 1:
-            imageFindClick('全价兽粮')
+            imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大')
+                ocrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 855)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店超级成长零食三折'] == 1:
-            imageFindClick('超级成长零食三折')
+            imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大')
+                ocrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 820)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店黑烬突破石五折'] == 1:
-            imageFindClick('黑烬突破石五折')
+            imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大')
+                ocrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 820)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店经验补剂五折'] == 1:
-            imageFindClick('经验补剂五折')
+            imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大')
+                ocrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 855)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 

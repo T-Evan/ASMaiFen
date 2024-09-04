@@ -44,22 +44,21 @@ while True:
 import time
 
 class TimeoutLock:
-    def __init__(self, lock, timeout):
+    def __init__(self, lock, timeout = 5):
         self.lock = lock
         self.timeout = timeout
         self.start_time = None
 
-    def __enter__(self):
-        self.start_time = time.time()
-        while (time.time() - self.start_time) < self.timeout:
+    def acquire_lock(self):
+        start_time = time.time()
+        while (time.time() - start_time) < self.timeout:
             if self.lock.acquire(False):
-                return self
+                return True
             time.sleep(0.1)
-        raise TimeoutError(f"尝试获取锁超时，耗时: {time.time() - self.start_time} 秒")
+        raise TimeoutError(f"尝试获取锁超时，耗时: {time.time() - start_time} 秒")
 
-    def __exit__(self, exc_type, exc_value, traceback):
+    def release_lock(self):
         self.lock.release()
-        return None  # 返回 None 或者空元组 ()
 
 # 初始化锁
 global switch_lock
