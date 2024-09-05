@@ -44,7 +44,7 @@ while True:
 import time
 
 class TimeoutLock:
-    def __init__(self, lock, timeout = 5):
+    def __init__(self, lock, timeout = 10):
         self.lock = lock
         self.timeout = timeout
         self.start_time = None
@@ -55,7 +55,8 @@ class TimeoutLock:
             if self.lock.acquire(False):
                 return True
             time.sleep(0.1)
-        raise TimeoutError(f"尝试获取锁超时，耗时: {time.time() - start_time} 秒")
+        print(f"尝试获取锁超时，耗时: {time.time() - start_time} 秒")
+        return False
 
     def release_lock(self):
         self.lock.release()

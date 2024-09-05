@@ -137,7 +137,7 @@ class YingDiTask:
 
         # 判断是否在营地页面
         res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        res2 = TomatoOcrTap(393, 1202, 439, 1229, "月卡")
+        res2 = TomatoOcrTap(366,1196,442,1232, "月月卡")
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
@@ -148,7 +148,7 @@ class YingDiTask:
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
-        res = TomatoOcrTap(393, 1202, 439, 1229, "月卡")
+        res = TomatoOcrTap(366,1196,442,1232, "月月卡")
         sleep(1)
         if res:
             res = TomatoOcrTap(315, 1044, 410, 1090, "领取", 10, 10)
@@ -173,13 +173,12 @@ class YingDiTask:
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
-
-        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
-        # 判断是否在营地页面
-        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
-        if not hd1 and not hd2:
-            return
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+            # 判断是否在营地页面
+            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
+            if not hd1 and not hd2:
+                return
 
         res = TomatoOcrTap(286, 1202, 340, 1229, "礼包")
         sleep(1)

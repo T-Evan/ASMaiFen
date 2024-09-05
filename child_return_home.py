@@ -27,11 +27,11 @@ def returnHome():
     return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
     if return1 and 功能开关["needHome"] == 1:
         # 返回上级页面时二次确认入口通用处理
-        TomatoOcrTap(320,726,399,760,'确定')
+        re = ocrFindRangeClick('确定')
         Toast('返回首页')
     return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
     if return3 and 功能开关["needHome"] == 1:
-        TomatoOcrTap(320,726,399,760,'确定')
+        re = ocrFindRangeClick('确定')
         Toast('返回首页')
 
     if not return1 and not return3:

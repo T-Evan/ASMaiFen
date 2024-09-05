@@ -27,9 +27,12 @@ from BDS_OcrText import *
 ocr = BDS_OcrText('rcgd5ncvb5ywtge2mzqqzte6kcf9qbyt', R.res("/OcrText.apk"), 2)
 
 def ocrFind(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
-    if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
+    if TimeoutLock(switch_lock).acquire_lock():
         ocrRe = ocr.ocr_result([[x1, y1, x2, y2]])
-        TimeoutLock(switch_ocr_apk_lock).release_lock()
+        TimeoutLock(switch_lock).release_lock()
+    else:
+        print(f"ocrFind获取锁超时-{keyword}")
+        return False
     center_x = 0
     center_y = 0
     # 遍历 data['lines'] 列表
@@ -49,9 +52,12 @@ def ocrFind(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
 
 def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList=''):
     try:
-        if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
+        if TimeoutLock(switch_lock).acquire_lock():
             ocrRe = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
-            TimeoutLock(switch_ocr_apk_lock).release_lock()
+            TimeoutLock(switch_lock).release_lock()
+        else:
+            print(f"ocrFindRange获取锁超时-{keyword}")
+            return False
         center_x = 0
         center_y = 0
         # 遍历 data['lines'] 列表
@@ -74,9 +80,12 @@ def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteLis
 
 def ocrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList=''):
     try:
-        if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
+        if TimeoutLock(switch_lock).acquire_lock():
             ocrRe = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
-            TimeoutLock(switch_ocr_apk_lock).release_lock()
+            TimeoutLock(switch_lock).release_lock()
+        else:
+            print(f"ocrFindRangeClick获取锁超时-{keyword}")
+            return False
         center_x = 0
         center_y = 0
         # 遍历 data['lines'] 列表
@@ -101,9 +110,12 @@ def ocrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2
 
 def ocrFindClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
     try:
-        if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
+        if TimeoutLock(switch_lock).acquire_lock():
             ocrRe = ocr.ocr_result([[x1, y1, x2, y2]])
-            TimeoutLock(switch_ocr_apk_lock).release_lock()
+            TimeoutLock(switch_lock).release_lock()
+        else:
+            print(f"ocrFindClick获取锁超时-{keyword}")
+            return False
         # print(ocrRe)
         center_x = 0
         center_y = 0
@@ -128,9 +140,12 @@ def ocrFindClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280
         return False
 
 def CustomOcrText(x1, y1, x2, y2, keyword, whiteList=''):
-    if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
+    if TimeoutLock(switch_lock).acquire_lock():
         ocrRe = ocr.ocr_result([[x1, y1, x2, y2]], whiteList)
-        TimeoutLock(switch_ocr_apk_lock).release_lock()
+        TimeoutLock(switch_lock).release_lock()
+    else:
+        print(f"CustomOcrText获取锁超时-{keyword}")
+        return False, ''
     ocrRe2 = [line.get('text', '') for line in ocrRe['lines']]
     ocrText = ''
     if len(ocrRe2) > 0:
@@ -145,9 +160,12 @@ def CustomOcrText(x1, y1, x2, y2, keyword, whiteList=''):
 
 # 范围识别
 def CustomOcrTextRange(x1, y1, x2, y2, whiteList=''):
-    if TimeoutLock(switch_ocr_apk_lock).acquire_lock():
+    if TimeoutLock(switch_lock).acquire_lock():
         ocrText = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
-        TimeoutLock(switch_ocr_apk_lock).release_lock()
+        TimeoutLock(switch_lock).release_lock()
+    else:
+        print(f"CustomOcrTextRange获取锁超时")
+        return False, ''
     # print(ocrText)
     return True, ocrText
 
@@ -157,11 +175,13 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
     try:
         # 传入图片路径或者Bitmap
         # res = ocr.ocrFile(R.img("logo.png"))
-        if TimeoutLock(switch_lock, 3).acquire_lock():
+        if TimeoutLock(switch_lock).acquire_lock():
             bitmap = screen.capture(x1, y1, x2, y2)
             ocrText = tomatoOcr.ocrBitmap(bitmap, 3)
-            TimeoutLock(switch_lock, 3).release_lock()
-
+            TimeoutLock(switch_lock).release_lock()
+        else:
+            print(f"TomatoOcrText获取锁超时")
+            return False, ''
         if ocrText != "" and ocrText == keyword:
             print(f"o识别成功-{keyword}|{ocrText}")
             return True, ocrText
@@ -174,11 +194,13 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
 
 def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0):
     try:
-        if TimeoutLock(switch_lock, 3).acquire_lock():
+        if TimeoutLock(switch_lock).acquire_lock():
             bitmap = screen.capture(x1, y1, x2, y2)
             ocrText = tomatoOcr.ocrBitmap(bitmap, 3)
-            TimeoutLock(switch_lock, 3).release_lock()
-
+            TimeoutLock(switch_lock).release_lock()
+        else:
+            print(f"TomatoOcrTap获取锁超时")
+            return False
         # 所有识别运行完成后，可释放插件
         # tomatoOcr.end()
         if ocrText != "" and ocrText == keyword:

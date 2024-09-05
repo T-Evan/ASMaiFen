@@ -657,11 +657,9 @@ class ShiLianTask:
             if isTreasure == 1:
                 if 功能开关['秘境点赞队友'] == 1:
                     Toast('点赞队友')
-                    for i in range(1, 2):
-                        # ldE.element('战斗结束-点赞队友1').click().execute(sleep=0.7)
-                        # ldE.element('战斗结束-点赞队友2').click().execute(sleep=0.7)
-                        imageFindClick('点赞1', sleep1=0.7)
-                        imageFindClick('点赞2', sleep1=0.7)
+                    for i in range(1, 3):
+                        imageFindClick('点赞1', confidence1=0.8, sleep1=0.7)
+                        imageFindClick('点赞2', confidence1=0.8, sleep1=0.7)
                 Toast('返回房间')
                 tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
                 # res = TomatoOcrTap(329, 728, 386, 759, "确定")
@@ -681,9 +679,9 @@ class ShiLianTask:
         if 功能开关['秘境点赞队友'] == 1:
             if isTreasure == 1:
                 Toast('点赞队友')
-                for i in range(1, 2):
-                    imageFindClick('点赞1', sleep1=0.7)
-                    imageFindClick('点赞2', sleep1=0.7)
+                for i in range(1, 3):
+                    imageFindClick('点赞1', confidence1=0.8, sleep1=0.7)
+                    imageFindClick('点赞2', confidence1=0.8, sleep1=0.7)
 
         attempts = 0  # 初始化尝试次数
         maxAttempts = 3  # 设置最大尝试次数
