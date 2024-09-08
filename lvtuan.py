@@ -200,7 +200,7 @@ class LvTuanTask:
         任务记录['旅团-商店-完成'] = 1
 
     def shopBuy(self):
-        ocrFindRangeClick('最大')
+        TomatoOcrFindRangeClick('最大', whiteList='最大')
         # ldE.element('旅团-购买').click().execute(sleep=1)
         tapSleep(362, 866)  # 点击购买
         tapSleep(360, 1210)  # 点击空白处
@@ -216,22 +216,22 @@ class LvTuanTask:
         self.dailyTask.homePage()
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
         sleep(1)
-        res = TomatoOcrTap(624, 742, 708, 767, "旅团任务", 10, -10)
+        res = TomatoOcrTap(625, 769, 708, 797, "旅团任务", 20, -20)
         if not res:
             return
 
-        while 1:
-            re = ocrFindRangeClick('领取')
+        for i in range(1, 5):
+            re = TomatoOcrFindRangeClick('领取', whiteList='领取')
             if re:
                 tapSleep(360, 1100)  # 点击空白处关闭
-                # 点击宝箱（从右到左）
-                tapSleep(570, 390)
-                tapSleep(490, 390)
-                tapSleep(410, 390)
-                tapSleep(330, 390)
-                tapSleep(250, 390)
             else:
                 break
+        # 点击宝箱（从右到左）
+        tapSleep(570, 390)
+        tapSleep(490, 390)
+        tapSleep(410, 390)
+        tapSleep(330, 390)
+        tapSleep(250, 390)
         任务记录["旅团-任务-完成"] = 1
 
     # 旅团许愿墙
@@ -245,17 +245,17 @@ class LvTuanTask:
         Toast("旅团 - 许愿墙 - 开始")
         self.dailyTask.homePage()
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
-        res = TomatoOcrTap(637, 830, 699, 855, "许愿墙")
+        res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)
         if not res:
             return
 
-        for i in range(1, 15):
-            re = ocrFindRangeClick('捐献')
+        for i in range(1, 5):
+            re = TomatoOcrFindRangeClick('捐献', whiteList='捐献')
             if re:
-                # 点击最大
-                tapSleep(504, 659)
-                tapSleep(504, 718)
-                tapSleep(504, 781)
+                # # 点击最大
+                # tapSleep(504, 659)
+                # tapSleep(504, 718)
+                # tapSleep(504, 781)
                 # 点击捐赠
                 res = TomatoOcrTap(328, 822, 389, 854, "捐赠")
                 # res = TomatoOcrTap(97, 1200, 129, 1231, "回")  # 返回许愿墙首页
@@ -297,7 +297,7 @@ class LvTuanTask:
                     # 免费浇灌
                     tapSleep(360, 1100)
                     tapSleep(360, 1100)  # 点击空白处关闭
-                    sleep(3)
+                    sleep(2)
 
                 # 付费浇灌
                 if buyCount - 1 < needCount:

@@ -27,7 +27,7 @@ def main():
     while True:
         if 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走烈焰大王":
             global yolo
-            yolo = YoLov5("麦芬-火焰大暴走:0.3")
+            yolo = YoLov5("麦芬-火焰大暴走:0.4")
             # print(R.res("/yolo_baozou_lieyan/"))
             # yolo = YoLov5(path=R.res("/yolo_baozou_lieyan/"))
 

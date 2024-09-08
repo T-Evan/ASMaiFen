@@ -1,7 +1,10 @@
 # 导包
+import json
+
 from .特征库 import *
 from ascript.android.ui import Dialog
 from .tomato_ocr import tomatoOcr
+from .tomato_ocr import tomatoOcrJson
 from ascript.android import screen
 from .res.ui.ui import switch_lock
 from .res.ui.ui import switch_ocr_apk_lock
@@ -9,8 +12,8 @@ from ascript.android.system import R
 from ascript.android import plug
 from .res.ui.ui import TimeoutLock
 
-plug.load("BDS_OcrText")
-from BDS_OcrText import *
+# plug.load("BDS_OcrText")
+# from BDS_OcrText import *
 
 # # 导入http模块
 # import requests
@@ -24,150 +27,224 @@ from BDS_OcrText import *
 # with open (R.res("/OcrText.apk"), 'wb') as f:
 #     f.write(r.content)
 
-ocr = BDS_OcrText('rcgd5ncvb5ywtge2mzqqzte6kcf9qbyt', R.res("/OcrText.apk"), 2)
-
-def ocrFind(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
-    if TimeoutLock(switch_lock).acquire_lock():
-        ocrRe = ocr.ocr_result([[x1, y1, x2, y2]])
-        TimeoutLock(switch_lock).release_lock()
-    else:
-        print(f"ocrFind获取锁超时-{keyword}")
-        return False
-    center_x = 0
-    center_y = 0
-    # 遍历 data['lines'] 列表
-    for line in ocrRe['lines']:
-        # 检查每行的 text 是否等于 '4'
-        if line['text'] == keyword:
-            box = line['box']
-            x1, y1, x2, y2 = box
-            # 计算中心位置
-            center_x = (x1 + x2) / 2
-            center_y = (y1 + y2) / 2
-            print(f"ocrFind识别成功-{keyword}|{center_x}|{center_y}")
-            return True
-    print(f"ocrFind识别失败-{keyword}")
-    return False
+# ocr = BDS_OcrText('rcgd5ncvb5ywtge2mzqqzte6kcf9qbyt', R.res("/OcrText.apk"), 2)
 
 
-def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList=''):
+# def ocrFind(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
+#     if TimeoutLock(switch_lock).acquire_lock():
+#         ocrRe = ocr.ocr_result([[x1, y1, x2, y2]])
+#         TimeoutLock(switch_lock).release_lock()
+#     else:
+#         print(f"ocrFind获取锁超时-{keyword}")
+#         return False
+#     center_x = 0
+#     center_y = 0
+#     # 遍历 data['lines'] 列表
+#     for line in ocrRe['lines']:
+#         # 检查每行的 text 是否等于 '4'
+#         if line['text'] == keyword:
+#             box = line['box']
+#             x1, y1, x2, y2 = box
+#             # 计算中心位置
+#             center_x = (x1 + x2) / 2
+#             center_y = (y1 + y2) / 2
+#             print(f"ocrFind识别成功-{keyword}|{center_x}|{center_y}")
+#             return True
+#     print(f"ocrFind识别失败-{keyword}")
+#     return False
+#
+#
+# def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10):
+#     try:
+#         if whiteList == '':
+#             whiteList = keyword
+#         if TimeoutLock(switch_lock, timeLock).acquire_lock():
+#             # print(f"取锁成功-{keyword}")
+#             ocrRe = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
+#             TimeoutLock(switch_lock, timeLock).release_lock()
+#         else:
+#             print(f"ocrFindRange获取锁超时-{keyword}")
+#             return False
+#         center_x = 0
+#         center_y = 0
+#         # 遍历 data['lines'] 列表
+#         for line in ocrRe['lines']:
+#             # 检查每行的 text 是否等于 '4'
+#             if line['text'] == keyword:
+#                 box = line['box']
+#                 rx1, ry1, rx2, ry2 = box
+#                 # 计算中心位置
+#                 center_x = (rx1 + rx2) / 2
+#                 center_y = (ry1 + ry2) / 2
+#         if center_x > 0 and center_y > 0:
+#             print(f"ocrFindRange识别成功-{keyword}|{center_x}|{center_y}")
+#             return True
+#         print(f"ocrFindRange识别失败-{keyword}|{ocrRe}")
+#         return False
+#     except Exception as e:
+#         print(f"ocrFindRange发生异常: {e}")
+#         return False
+#
+#
+# def ocrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10):
+#     try:
+#         if whiteList == '':
+#             whiteList = keyword
+#         if TimeoutLock(switch_lock, timeLock).acquire_lock():
+#             ocrRe = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
+#             TimeoutLock(switch_lock, timeLock).release_lock()
+#         else:
+#             print(f"ocrFindRangeClick获取锁超时-{keyword}")
+#             return False
+#         center_x = 0
+#         center_y = 0
+#         # 遍历 data['lines'] 列表
+#         for line in ocrRe['lines']:
+#             # 检查每行的 text 是否等于 '4'
+#             if line['text'] == keyword:
+#                 box = line['box']
+#                 rx1, ry1, rx2, ry2 = box
+#                 # 计算中心位置
+#                 center_x = (rx1 + rx2) / 2
+#                 center_y = (ry1 + ry2) / 2
+#         if center_x > 0 and center_y > 0:
+#             tapSleep(center_x + x1, center_y + y1)
+#             sleep(sleep1)
+#             print(f"ocrFindRangeClick识别成功-{keyword}|{center_x}|{center_y}")
+#             return True
+#         print(f"ocrFindRangeClick识别失败-{keyword}|{ocrRe}")
+#         return False
+#     except Exception as e:
+#         print(f"ocrFindRangeClick发生异常: {e}")
+#         return False
+#
+#
+# def ocrFindClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
+#     try:
+#         if TimeoutLock(switch_lock).acquire_lock():
+#             ocrRe = ocr.ocr_result([[x1, y1, x2, y2]])
+#             TimeoutLock(switch_lock).release_lock()
+#         else:
+#             print(f"ocrFindClick获取锁超时-{keyword}")
+#             return False
+#         # print(ocrRe)
+#         center_x = 0
+#         center_y = 0
+#         # 遍历 data['lines'] 列表
+#         for line in ocrRe['lines']:
+#             # 检查每行的 text 是否等于 '4'
+#             if line['text'] == keyword:
+#                 box = line['box']
+#                 x1, y1, x2, y2 = box
+#                 # 计算中心位置
+#                 center_x = (x1 + x2) / 2
+#                 center_y = (y1 + y2) / 2
+#         if center_x > 0 and center_y > 0:
+#             tapSleep(center_x, center_y)
+#             sleep(sleep1)
+#             print(f"ocrFindClick识别成功-{keyword}|{center_x}|{center_y}")
+#             return True
+#         print(f"ocrFindClick识别失败-{keyword}|{ocrRe}")
+#         return False
+#     except Exception as e:
+#         print(f"ocrFindClick发生异常: {e}")
+#         return False
+#
+
+def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, match_mode='exact'):
     try:
-        if TimeoutLock(switch_lock).acquire_lock():
-            ocrRe = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
-            TimeoutLock(switch_lock).release_lock()
+        if whiteList == '':
+            whiteList = keyword
+        if TimeoutLock(switch_lock, timeLock).acquire_lock():
+            ocrRe = tomatoOcr.find_all(
+                license="gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==",
+                rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                capture=[x1, y1, x2, y2])
+            # print(ocrRe)
+            TimeoutLock(switch_lock, timeLock).release_lock()
         else:
-            print(f"ocrFindRange获取锁超时-{keyword}")
+            print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
             return False
         center_x = 0
         center_y = 0
-        # 遍历 data['lines'] 列表
-        for line in ocrRe['lines']:
-            # 检查每行的 text 是否等于 '4'
-            if line['text'] == keyword:
-                box = line['box']
-                rx1, ry1, rx2, ry2 = box
+        ocrReJson = json.loads(ocrRe)
+        for line in ocrReJson:
+            # print(line)
+            # print(line)
+            isFind = False
+            if match_mode == 'fuzzy':
+                if keyword in line.get('words', ''):
+                    isFind = True
+            elif match_mode == 'exact':
+                if line.get('words') == keyword:
+                    isFind = True
+            else:
+                raise ValueError(f"无效的匹配模式: {match_mode}")
+
+            if isFind:
+                box = line.get('location')
+                rx1, ry1 = box[0][0], box[0][1]
+                rx2, ry2 = box[3][0], box[3][1]
                 # 计算中心位置
                 center_x = (rx1 + rx2) / 2
                 center_y = (ry1 + ry2) / 2
         if center_x > 0 and center_y > 0:
-            print(f"ocrFindRange识别成功-{keyword}|{center_x}|{center_y}")
+            print(f"TomatoOcrFindRange识别成功-{keyword}|{center_x}|{center_y}")
             return True
-        print(f"ocrFindRange识别失败-{keyword}|{ocrRe}")
+        # print(f"TomatoOcrFindRange识别失败-{keyword}|{ocrRe}")
+        print(f"TomatoOcrFindRange识别失败-{keyword}")
         return False
     except Exception as e:
-        print(f"ocrFindRange发生异常: {e}")
+        print(f"TomatoOcrFindRange发生异常: {e}")
         return False
 
-def ocrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList=''):
+def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, match_mode='exact'):
     try:
-        if TimeoutLock(switch_lock).acquire_lock():
-            ocrRe = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
-            TimeoutLock(switch_lock).release_lock()
+        if whiteList == '':
+            whiteList = keyword
+        if TimeoutLock(switch_lock, timeLock).acquire_lock():
+            ocrRe = tomatoOcr.find_all(
+                license="gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==",
+                rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                capture=[x1, y1, x2, y2])
+            # print(ocrRe)
+            TimeoutLock(switch_lock, timeLock).release_lock()
         else:
-            print(f"ocrFindRangeClick获取锁超时-{keyword}")
+            print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
             return False
         center_x = 0
         center_y = 0
-        # 遍历 data['lines'] 列表
-        for line in ocrRe['lines']:
-            # 检查每行的 text 是否等于 '4'
-            if line['text'] == keyword:
-                box = line['box']
-                rx1, ry1, rx2, ry2 = box
+        ocrReJson = json.loads(ocrRe)
+        for line in ocrReJson:
+            # print(line)
+            isFind = False
+            if match_mode == 'fuzzy':
+                if keyword in line.get('words', ''):
+                    isFind = True
+            elif match_mode == 'exact':
+                if line.get('words') == keyword:
+                    isFind = True
+            else:
+                raise ValueError(f"无效的匹配模式: {match_mode}")
+
+            if isFind:
+                box = line.get('location')
+                rx1, ry1 = box[0][0], box[0][1]
+                rx2, ry2 = box[3][0], box[3][1]
                 # 计算中心位置
                 center_x = (rx1 + rx2) / 2
                 center_y = (ry1 + ry2) / 2
         if center_x > 0 and center_y > 0:
             tapSleep(center_x + x1, center_y + y1)
             sleep(sleep1)
-            print(f"ocrFindRangeClick识别成功-{keyword}|{center_x}|{center_y}")
+            print(f"TomatoOcrFindRangeClick识别成功-{keyword}|{center_x}|{center_y}")
             return True
-        print(f"ocrFindRangeClick识别失败-{keyword}|{ocrRe}")
+        # print(f"TomatoOcrFindRangeClick识别失败-{keyword}|{ocrRe}")
+        print(f"TomatoOcrFindRangeClick识别失败-{keyword}")
         return False
     except Exception as e:
-        print(f"ocrFindRangeClick发生异常: {e}")
+        print(f"TomatoOcrFindRangeClick发生异常: {e}")
         return False
-
-def ocrFindClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
-    try:
-        if TimeoutLock(switch_lock).acquire_lock():
-            ocrRe = ocr.ocr_result([[x1, y1, x2, y2]])
-            TimeoutLock(switch_lock).release_lock()
-        else:
-            print(f"ocrFindClick获取锁超时-{keyword}")
-            return False
-        # print(ocrRe)
-        center_x = 0
-        center_y = 0
-        # 遍历 data['lines'] 列表
-        for line in ocrRe['lines']:
-            # 检查每行的 text 是否等于 '4'
-            if line['text'] == keyword:
-                box = line['box']
-                x1, y1, x2, y2 = box
-                # 计算中心位置
-                center_x = (x1 + x2) / 2
-                center_y = (y1 + y2) / 2
-        if center_x > 0 and center_y > 0:
-            tapSleep(center_x, center_y)
-            sleep(sleep1)
-            print(f"ocrFindClick识别成功-{keyword}|{center_x}|{center_y}")
-            return True
-        print(f"ocrFindClick识别失败-{keyword}|{ocrRe}")
-        return False
-    except Exception as e:
-        print(f"ocrFindClick发生异常: {e}")
-        return False
-
-def CustomOcrText(x1, y1, x2, y2, keyword, whiteList=''):
-    if TimeoutLock(switch_lock).acquire_lock():
-        ocrRe = ocr.ocr_result([[x1, y1, x2, y2]], whiteList)
-        TimeoutLock(switch_lock).release_lock()
-    else:
-        print(f"CustomOcrText获取锁超时-{keyword}")
-        return False, ''
-    ocrRe2 = [line.get('text', '') for line in ocrRe['lines']]
-    ocrText = ''
-    if len(ocrRe2) > 0:
-        ocrText = ocrRe2[0]
-    if ocrText != "" and ocrText == keyword:
-        print(f"CustomOcrText-{keyword}")
-        return True, ocrText
-    else:
-        print(f"CustomOcrText-{keyword}|{ocrRe}")
-        return False, ocrText
-
-
-# 范围识别
-def CustomOcrTextRange(x1, y1, x2, y2, whiteList=''):
-    if TimeoutLock(switch_lock).acquire_lock():
-        ocrText = ocr.ocr_result([], whiteList, x1, y1, x2, y2)
-        TimeoutLock(switch_lock).release_lock()
-    else:
-        print(f"CustomOcrTextRange获取锁超时")
-        return False, ''
-    # print(ocrText)
-    return True, ocrText
 
 
 # 速度慢、精度高、适合极小区域（单个字/数字）识别精准匹配
@@ -186,7 +263,7 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
             print(f"o识别成功-{keyword}|{ocrText}")
             return True, ocrText
         else:
-            # print(f"o识别失败-不匹配-{keyword}|{ocrText}")
+            print(f"o识别失败-不匹配-{keyword}|{ocrText}")
             return False, ocrText
     except Exception as e:
         print(f"toOcr发生异常: {e}")
@@ -213,6 +290,7 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0):
     except Exception as e:
         print(f"toOcrTap发生异常: {e}")
         return False
+
 
 def Toast(content, tim=1000):
     print(f"提示-{content}")

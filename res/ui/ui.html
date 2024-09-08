@@ -214,20 +214,81 @@
             </div>
             <form action="">
                 <fieldset>
-                    <legend>配置选择（首次使用必须先保存配置）</legend>
+                    <legend>配置切换</legend>
                     功能迁移中，敬请期待~
                 </fieldset>
             </form>
             <form action="">
                 <fieldset>
-                    <legend>多账号配置</legend>
-                    功能迁移中，敬请期待~
+                    <legend>多账号配置（修复中，暂无法使用）</legend>
+                    <legend>登录页保存账号信息（勾选并启动）</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="账号1保存" name="vehicle" type="checkbox" value="Bike">账号1<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号2保存" name="vehicle" type="checkbox" value="Bike">账号2<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号3保存" name="vehicle" type="checkbox" value="Bike">账号3<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号4保存" name="vehicle" type="checkbox" value="Bike">账号4<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号5保存" name="vehicle" type="checkbox" value="Bike">账号5<br>
+                        </div>
+                    </div>
+                    <legend>保存账号后再配置切换</legend>
+                    <div class="shouye_container">
+                        <div class="item">
+                            <label for="定时切账号">运行</label>
+                        </div>
+                        <div class="item" style="width: 50px" >
+                            <input type="text" id="定时切账号" name="定时切账号" lay-verify="title" autocomplete="off"
+                                   placeholder="分钟" class="layui-input" >
+                        </div>
+                        <div class="item">
+                            <label for="定时休息">分钟后切换下一账号</label>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="选择启动账号">选择启动账号:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="选择启动账号" id="选择启动账号" lay-filter="mijing1-filter">
+                                    <option value="0">默认(不切换)</option>
+                                    <option value="1">账号1</option>
+                                    <option value="2">账号2</option>
+                                    <option value="3">账号3</option>
+                                    <option value="4">账号4</option>
+                                    <option value="5">账号5</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="账号1开关" name="vehicle" type="checkbox" value="Bike">账号1<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号2开关" name="vehicle" type="checkbox" value="Bike">账号2<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号3开关" name="vehicle" type="checkbox" value="Bike">账号3<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号4开关" name="vehicle" type="checkbox" value="Bike">账号4<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号5开关" name="vehicle" type="checkbox" value="Bike">账号5<br>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
             <form action="">
                 <fieldset>
                     <legend>定时配置</legend>
-                    功能迁移中，敬请期待~
                     <div class="shouye_container">
                         <div class="item">
                             <label for="定时运行">运行</label>
@@ -245,6 +306,50 @@
                         </div>
                         <div class="item">
                             <label for="定时休息">分钟</label>
+                        </div>
+                    </div>
+                    <div class="shouye_container">
+                        <div class="item">
+                            <label for="定时切角色">运行</label>
+                        </div>
+                        <div class="item" style="width: 50px" >
+                            <input type="text" id="定时切角色" name="定时切角色" lay-verify="title" autocomplete="off"
+                                   placeholder="分钟" class="layui-input" >
+                        </div>
+                        <div class="item">
+                            <label for="定时休息">分钟后切换下一角色</label>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="选择启动角色">选择启动角色:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="选择启动角色" id="选择启动角色" lay-filter="mijing1-filter">
+                                    <option value="0">默认(不切换)</option>
+                                    <option value="1">角色1</option>
+                                    <option value="2">角色2</option>
+                                    <option value="3">角色3</option>
+                                    <option value="4">角色4</option>
+                                    <option value="5">角色5</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="角色1开关" name="vehicle" type="checkbox" value="Bike">角色1<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="角色2开关" name="vehicle" type="checkbox" value="Bike">角色2<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="角色3开关" name="vehicle" type="checkbox" value="Bike">角色3<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="角色4开关" name="vehicle" type="checkbox" value="Bike">角色4<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="角色5开关" name="vehicle" type="checkbox" value="Bike">角色5<br>
                         </div>
                     </div>
                     <br><br>
@@ -681,6 +786,30 @@
         var 定时休息 = localStorage.getItem("定时休息");
         document.getElementById("定时休息").value = 定时休息;
 
+        var 定时切账号 = localStorage.getItem("定时切账号");
+        document.getElementById("定时切账号").value = 定时切账号;
+
+        setSwitchStatus("账号1保存");
+        setSwitchStatus("账号2保存");
+        setSwitchStatus("账号3保存");
+        setSwitchStatus("账号4保存");
+        setSwitchStatus("账号5保存");
+
+        setSwitchStatus("账号1开关");
+        setSwitchStatus("账号2开关");
+        setSwitchStatus("账号3开关");
+        setSwitchStatus("账号4开关");
+        setSwitchStatus("账号5开关");
+
+        var 定时切角色 = localStorage.getItem("定时切角色");
+        document.getElementById("定时切角色").value = 定时切角色;
+
+        setSwitchStatus("角色1开关");
+        setSwitchStatus("角色2开关");
+        setSwitchStatus("角色3开关");
+        setSwitchStatus("角色4开关");
+        setSwitchStatus("角色5开关");
+
         <!--日常-->
         setSwitchStatus("日常总开关");
         setSwitchStatus("自动强化装备");
@@ -791,6 +920,24 @@
         setSwitchStatus("暴走进入战斗后启动");
         var defaultValue = localStorage.getItem('史莱姆选择');
         var selectElement = document.getElementById('史莱姆选择');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        var defaultValue = localStorage.getItem('选择启动账号');
+        var selectElement = document.getElementById('选择启动账号');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        var defaultValue = localStorage.getItem('选择启动角色');
+        var selectElement = document.getElementById('选择启动角色');
         for (var i = 0; i < selectElement.options.length; i++) {
             if (selectElement.options[i].value === defaultValue) {
                 selectElement.options[i].selected = true;
@@ -916,6 +1063,36 @@
 
         var 定时休息 = document.getElementById("定时休息").value;
         localStorage.setItem("定时休息", 定时休息);
+
+        var 定时切账号 = document.getElementById("定时切账号").value;
+        localStorage.setItem("定时切账号", 定时切账号);
+
+        var 选择启动账号 = document.getElementById("选择启动账号").value;
+        localStorage.setItem("选择启动账号", 选择启动账号);
+
+        账号1保存 = saveSwitchStatus("账号1保存");
+        账号2保存 = saveSwitchStatus("账号2保存");
+        账号3保存 = saveSwitchStatus("账号3保存");
+        账号4保存 = saveSwitchStatus("账号4保存");
+        账号5保存 = saveSwitchStatus("账号5保存");
+
+        账号1开关 = saveSwitchStatus("账号1开关");
+        账号2开关 = saveSwitchStatus("账号2开关");
+        账号3开关 = saveSwitchStatus("账号3开关");
+        账号4开关 = saveSwitchStatus("账号4开关");
+        账号5开关 = saveSwitchStatus("账号5开关");
+
+        var 定时切角色 = document.getElementById("定时切角色").value;
+        localStorage.setItem("定时切角色", 定时切角色);
+
+        var 选择启动角色 = document.getElementById("选择启动角色").value;
+        localStorage.setItem("选择启动角色", 选择启动角色);
+
+        角色1开关 = saveSwitchStatus("角色1开关");
+        角色2开关 = saveSwitchStatus("角色2开关");
+        角色3开关 = saveSwitchStatus("角色3开关");
+        角色4开关 = saveSwitchStatus("角色4开关");
+        角色5开关 = saveSwitchStatus("角色5开关");
 
         <!--日常-->
         日常总开关 = saveSwitchStatus("日常总开关");
@@ -1047,9 +1224,28 @@
             激活码: 激活码,
             定时运行: 定时运行,
             定时休息: 定时休息,
+            定时切账号: 定时切账号,
+            定时切角色: 定时切角色,
 
-            选择启动账号: 1,
-            选择启动角色: 1,
+            选择启动账号: 选择启动账号,
+            账号1保存: 账号1保存,
+            账号2保存: 账号2保存,
+            账号3保存: 账号3保存,
+            账号4保存: 账号4保存,
+            账号5保存: 账号5保存,
+
+            账号1开关: 账号1开关,
+            账号2开关: 账号2开关,
+            账号3开关: 账号3开关,
+            账号4开关: 账号4开关,
+            账号5开关: 账号5开关,
+
+            选择启动角色: 选择启动角色,
+            角色1开关: 角色1开关,
+            角色2开关: 角色2开关,
+            角色3开关: 角色3开关,
+            角色4开关: 角色4开关,
+            角色5开关: 角色5开关,
 
             needHome: 0,
             fighting: 0,

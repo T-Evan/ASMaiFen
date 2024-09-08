@@ -37,8 +37,9 @@ class LvRenTask:
             if 功能开关['猫猫包自动升温'] == 0:
                 return
 
-        if 任务记录['旅人-猫猫果木-完成']:
+        if 任务记录['旅人-猫猫果木-完成'] :
             Toast('旅人 - 猫猫果 - 已完成')
+            return
 
         Toast('旅人 - 猫猫包 - 开始')
         self.dailyTask.homePage()
@@ -110,7 +111,7 @@ class LvRenTask:
         if 功能开关['优先升级同一技能'] == 0:
             re = imageFindClick('技能升级')
             if re:
-                ocrFindRangeClick('最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大')
                 tapSleep(365, 985)  # 点击升级按钮
 
         if 功能开关['优先升级同一技能'] == 1:

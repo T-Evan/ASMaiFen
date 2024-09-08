@@ -108,16 +108,17 @@ class YingDiTask:
             sleep(2)
             swipe(680, 804, 680, 251)
             sleep(2)
+            swipe(680, 804, 680, 251)
+            sleep(2)
 
             for i in range(1, 5):
                 # 上翻第二屏，继续识别
                 swipe(680, 451, 680, 804)
                 sleep(3)
-                isFind, x, y = imageFind('纸飞机')
+                isFind = TomatoOcrFindRangeClick('纸翼大作战')
                 if isFind:
                     break
         if isFind:
-            tapSleep(x, y, 1)
             res = TomatoOcrTap(566, 228, 604, 250, "任务")
             res = TomatoOcrTap(496, 304, 547, 332, "领取")
             tapSleep(345, 1058)  # 点击空白处关闭
@@ -137,7 +138,7 @@ class YingDiTask:
 
         # 判断是否在营地页面
         res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        res2 = TomatoOcrTap(366,1196,442,1232, "月月卡")
+        res2 = TomatoOcrTap(366, 1196, 442, 1232, "月月卡")
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
@@ -148,7 +149,7 @@ class YingDiTask:
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
-        res = TomatoOcrTap(366,1196,442,1232, "月月卡")
+        res = TomatoOcrTap(366, 1196, 442, 1232, "月月卡")
         sleep(1)
         if res:
             res = TomatoOcrTap(315, 1044, 410, 1090, "领取", 10, 10)
@@ -212,6 +213,8 @@ class YingDiTask:
         isFind, x, y = imageFind('月签到')
         if not isFind:
             # -- 返回活动最后一屏
+            swipe(680, 804, 680, 251)
+            sleep(2)
             swipe(680, 804, 680, 251)
             sleep(2)
             swipe(680, 804, 680, 251)
@@ -296,8 +299,8 @@ class YingDiTask:
             self.dailyTask.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
-            hd2 = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
+            hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
             if not hd1 and not hd2:
                 return
 
@@ -368,9 +371,13 @@ class YingDiTask:
             if needCount == '':
                 needCount = 0
             for i in range(1, 3):
-                res, buyCount = TomatoOcrText(497, 815, 509, 834, "已购买次数")  # 1 / 9
-                buyCount = safe_int(buyCount)
-                if buyCount != "" and buyCount >= needCount:
+                buyCount = ""
+                for j in range(1, 5):
+                    res, buyCount = TomatoOcrText(497, 815, 509, 834, "已购买次数")  # 1 / 9
+                    buyCount = safe_int(buyCount)
+                    if buyCount != "":
+                        break
+                if buyCount == "" or buyCount >= needCount:
                     TomatoOcrTap(94, 1186, 125, 1218, "回")  # 返回秘宝首页，等待抽取
                     break
                 if buyCount != "":
@@ -455,7 +462,7 @@ class YingDiTask:
                 findMap = True
 
         if selectMap == "无夜城":
-            re = ocrFindRangeClick('无夜城', sleep1=3, whiteList='无夜城')
+            re = TomatoOcrFindRangeClick('无夜城', sleep1=3, whiteList='无夜城')
             if re:
                 findMap = True
 
@@ -488,8 +495,8 @@ class YingDiTask:
             self.dailyTask.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
-            hd2 = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
+            hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
             if not hd1 and not hd2:
                 return
 
@@ -519,8 +526,8 @@ class YingDiTask:
             imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大', whiteList='最大')
-                ocrFindRangeClick('购买', whiteList='购买')
+                TomatoOcrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('购买', whiteList='购买')
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         # 星星经验
@@ -528,7 +535,7 @@ class YingDiTask:
             imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 825)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -536,7 +543,7 @@ class YingDiTask:
             imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 855)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -544,7 +551,7 @@ class YingDiTask:
             imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 820)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -552,7 +559,7 @@ class YingDiTask:
             imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 820)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -560,7 +567,7 @@ class YingDiTask:
             imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                ocrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大')
                 tapSleep(360, 855)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 

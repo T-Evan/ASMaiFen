@@ -44,9 +44,9 @@ while True:
 import time
 
 class TimeoutLock:
-    def __init__(self, lock, timeout = 10):
+    def __init__(self, lock, timeLock = 10):
         self.lock = lock
-        self.timeout = timeout
+        self.timeout = timeLock
         self.start_time = None
 
     def acquire_lock(self):
@@ -54,7 +54,7 @@ class TimeoutLock:
         while (time.time() - start_time) < self.timeout:
             if self.lock.acquire(False):
                 return True
-            time.sleep(0.1)
+            time.sleep(0.2)
         print(f"尝试获取锁超时，耗时: {time.time() - start_time} 秒")
         return False
 
@@ -97,6 +97,7 @@ def 初始化任务记录():
         "日常-骑兽乐园-完成": 0,
         "试炼-秘境-体力消耗完成": 0,
         "试炼-恶龙-完成次数": 0,
+        "日常-宝藏湖-完成": 0,
     })
 
     # 营地

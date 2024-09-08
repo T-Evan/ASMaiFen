@@ -48,9 +48,11 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
             # 检查 res 中是否有 center_x 和 center_y 键
             if "center_x" in res and "center_y" in res:
                 x, y = res["center_x"], res["center_y"]
+                print(f"imageFind识别成功: {name}")
                 return True, x, y
             else:
                 # 如果缺少键，返回默认值
+                print(f"imageFind识别失败: {name}")
                 return False, 0, 0
         else:
             return False, 0, 0
