@@ -500,6 +500,14 @@ class YingDiTask:
             if not hd1 and not hd2:
                 return
 
+        # 判断仓鼠百货已完成
+        re, x, y = imageFind('营地-仓鼠商店-已领取', x1=383, y1=202, x2=560, y2=370)
+        if re:
+            Toast('营地任务 - 仓鼠百货 - 识别已完成')
+            任务记录["仓鼠百货-完成"] = 1
+            sleep(1)
+            return
+
         # 点击仓鼠百货
         tapSleep(475, 285, 3)
 

@@ -279,7 +279,16 @@ class LvTuanTask:
 
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
         sleep(3)
-        tapSleep(400, 250, 3)
+
+        # 判断浇树已完成
+        re, x, y = imageFind('旅团-浇水-已领取', x1=307, y1=172, x2=462, y2=329)
+        if re:
+            Toast('旅团 - 浇树 - 识别已完成')
+            任务记录["旅团-浇树-完成"] = 1
+            sleep(1)
+            return
+
+        tapSleep(400, 250, 3) # 点击旅团浇水
 
         res, _ = TomatoOcrText(312, 627, 407, 655, "旅团之树")
         needCount = safe_int(功能开关["付费浇灌次数"])

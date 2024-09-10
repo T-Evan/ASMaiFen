@@ -191,30 +191,32 @@ class DailyTask:
             return
 
         # 主线领取
-        res = TomatoOcrTap(156, 1101, 206, 1129, "主线")
-        while 1:
-            # 识别黄色领取按钮
-            re, x, y = imageFind('手册-领取')
-            if re:
-                tapSleep(x, y, 1)
-                tapSleep(320, 1180)  # 点击空白处关闭
-            else:
-                break
+        if CompareColors.compare("235,1104,#F05C3F|235,1101,#F45F42|233,1100,#F36042"):
+            res = TomatoOcrTap(156, 1101, 206, 1129, "主线")
+            while 1:
+                # 识别黄色领取按钮
+                re, x, y = imageFind('手册-领取')
+                if re:
+                    tapSleep(x, y, 1)
+                    tapSleep(320, 1180)  # 点击空白处关闭
+                else:
+                    break
 
         # 日常领取
-        res = TomatoOcrTap(274, 1102, 326, 1130, "每日")
-        if res:
-            # 识别黄色领取按钮
-            re, x, y = imageFind('手册-领取')
-            if re:
-                tapSleep(x, y, 1)
-                tapSleep(357, 1224)  # 点击空白处关闭
-                # 点击宝箱（从右到左）
-                tapSleep(570, 390)
-                tapSleep(490, 390)
-                tapSleep(410, 390)
-                tapSleep(330, 390)
-                tapSleep(250, 390)
+        if CompareColors.compare("355,1104,#EF5C3F|355,1100,#F45F42|352,1103,#EF5C3F"):
+            res = TomatoOcrTap(274, 1102, 326, 1130, "每日")
+            if res:
+                # 识别黄色领取按钮
+                re, x, y = imageFind('手册-领取')
+                if re:
+                    tapSleep(x, y, 1)
+                    tapSleep(357, 1224)  # 点击空白处关闭
+                    # 点击宝箱（从右到左）
+                    tapSleep(570, 390)
+                    tapSleep(490, 390)
+                    tapSleep(410, 390)
+                    tapSleep(330, 390)
+                    tapSleep(250, 390)
 
         # 每周领取
         res = TomatoOcrTap(394, 1099, 448, 1132, "每周")
@@ -232,16 +234,17 @@ class DailyTask:
                 tapSleep(250, 390)
 
         # 成就领取
-        res = TomatoOcrTap(514, 1099, 570, 1132, "成就")
-        while 1:
-            # 识别黄色领取按钮
-            re, x, y = imageFind('手册-领取')
-            if re:
-                tapSleep(x, y, 3)
-                tapSleep(360, 1070)  # 点击空白处关闭
-                tapSleep(360, 1070)  # 点击空白处关闭（再次点击，避免成就升级页）
-            else:
-                break
+        if CompareColors.compare("593,1104,#EF5C40|593,1101,#F35F42|596,1101,#F35E41"):
+            res = TomatoOcrTap(514, 1099, 570, 1132, "成就")
+            while 1:
+                # 识别黄色领取按钮
+                re, x, y = imageFind('手册-领取')
+                if re:
+                    tapSleep(x, y, 2)
+                    tapSleep(360, 1070)  # 点击空白处关闭
+                    tapSleep(360, 1070)  # 点击空白处关闭（再次点击，避免成就升级页）
+                else:
+                    break
 
     # 前往新地图
     def newMap(self):
@@ -741,6 +744,14 @@ class DailyTask:
             hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
             if not hd1 and not hd2:
                 return
+
+        # 判断邮件已完成
+        re, x, y = imageFind('营地-邮箱-已领取', x1=194, y1=680, x2=383, y2=852)
+        if re:
+            Toast('营地任务 - 邮件领取 - 识别已完成')
+            任务记录["邮件领取-完成"] = 1
+            sleep(1)
+            return
 
         tapSleep(300, 740, 4)  # 邮件
         res = TomatoOcrTap(463, 1030, 510, 1061, "领取")

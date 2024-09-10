@@ -10,7 +10,7 @@ from .res.ui.ui import 功能开关
 # 实例方法
 def main():
     while True:
-        sleep(10)  # 等待 5 秒
+        sleep(8)  # 等待 5 秒
         if 功能开关["fighting"] == 0:
             noticeCancel()
 

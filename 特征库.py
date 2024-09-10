@@ -9,18 +9,18 @@ import time
 from .res.ui.ui import switch_lock
 from .res.ui.ui import TimeoutLock
 
-def swipe(x1, y1, x2, y2, dur=200):
+def swipe(x1, y1, x2, y2, dur=500):
     # print(x1, y1, x2, y2)
-    # action.slide(x1, y1, x2, y2, dur)
-    action.Touch.down(x1, y1, dur)
-    action.Touch.move(x2, y2, dur)
-    action.Touch.up(x2, y2, dur)
+    action.slide(x1, y1, x2, y2, dur)
+    # action.Touch.down(x1, y1, dur)
+    # action.Touch.move(x2, y2, dur)
+    # action.Touch.up(x2, y2, dur)
 
 
 def click(x, y, dur=200):
-    # action.click(x, y, dur)
-    action.Touch.down(x, y, dur)
-    action.Touch.up(x, y, dur)
+    action.click(x, y, dur)
+    # action.Touch.down(x, y, dur)
+    # action.Touch.up(x, y, dur)
 
 
 def sleep(s):
@@ -55,6 +55,7 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
                 print(f"imageFind识别失败: {name}")
                 return False, 0, 0
         else:
+            print(f"imageFind识别错误: {name}")
             return False, 0, 0
     except Exception as e:
         print(f"imageFind发生异常: {e}")
