@@ -245,11 +245,17 @@ class LvTuanTask:
         Toast("旅团 - 许愿墙 - 开始")
         self.dailyTask.homePage()
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+
+        if not CompareColors.compare("690,822,#EF5C3F|686,815,#FA6547|691,814,#FA6545"):
+            Toast("旅团 - 许愿墙 - 已送满 - 跳过任务")
+            return
+
         res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)
         if not res:
             return
 
         for i in range(1, 5):
+            Toast(f'旅团 - 许愿墙 - 捐赠中{i}/5')
             re = TomatoOcrFindRangeClick('捐献', whiteList='捐献')
             if re:
                 # # 点击最大

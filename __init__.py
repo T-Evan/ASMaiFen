@@ -15,6 +15,7 @@ from .res.ui.ui import 功能开关
 from .res.ui.ui import 初始化任务记录
 from .baseUtils import *
 from .thread import *
+from .threadMain import *
 import time
 from ascript.android.ui import Dialog
 import pymysql
@@ -237,9 +238,14 @@ def main():
         runThread1()
         runThread2()
         runThreadBaoZouBoss()
+        runThreadMijingTeam()
         counter = 0
         while True:
             try:
+                if 功能开关["fighting"] == 1:
+                    sleep(20)
+                    continue
+
                 # 获取当前设备运行的APP信息
                 info = Device.memory()
                 # 返回单位是字节
@@ -253,6 +259,7 @@ def main():
                     runThread1()
                     runThread2()
                     runThreadBaoZouBoss()
+                    runThreadMijingTeam()
                     counter = 0  # 重置计数器
 
                 # 启动app

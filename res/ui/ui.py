@@ -7,6 +7,7 @@ from ascript.android.system import R
 # 导入-屏幕检索库
 from ascript.android.ui import WebWindow
 from ascript.android.ui import Dialog
+import threading
 
 config = None
 
@@ -69,6 +70,9 @@ switch_ocr_apk_lock = Lock()
 global 功能开关
 功能开关 = config
 
+# thread_main_paused = False
+# thread_main_cond = threading.Condition()
+
 任务记录 = {
     "当前任务账号": 功能开关["选择启动账号"],
     "当前任务角色": 功能开关["选择启动角色"],
@@ -106,4 +110,5 @@ def 初始化任务记录():
         "月卡-完成": 0,
         "日礼包-完成": 0,
         "露营打卡点-完成": 0,
+        "秘宝领取-完成": 0,
     })

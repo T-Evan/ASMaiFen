@@ -35,12 +35,12 @@ def compareColors(colorStr, diff=0.9):
         return False
 
 
-def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
+def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
     try:
-        if TimeoutLock(switch_lock).acquire_lock():
+        if TimeoutLock(switch_lock, timeLock).acquire_lock():
             path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
             res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
-            TimeoutLock(switch_lock).release_lock()
+            TimeoutLock(switch_lock, timeLock).release_lock()
         else:
             print(f"imageFind获取锁超时")
             return False, 0, 0

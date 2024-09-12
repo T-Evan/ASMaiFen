@@ -234,7 +234,7 @@ class YingDiTask:
         if isFind:
             tapSleep(x, y, 1)
             TomatoOcrTap(310, 977, 408, 1009, "点击签到")
-            re, x, y = imageFind('月签到-累计奖励')
+            re, x, y = imageFind('月签到-累计奖励', confidence1=0.8)
             if re:
                 tapSleep(x, y, 1)
             任务记录["月签到-完成"] = 1
@@ -291,6 +291,9 @@ class YingDiTask:
             return
 
         Toast('营地任务 - 秘宝收集 - 开始')
+        if 任务记录["秘宝领取-完成"] == 1:
+            Toast('营地任务 - 秘宝领取 - 任务已执行 - 跳过')
+            return
 
         # 判断是否在营地页面
         res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
@@ -304,84 +307,115 @@ class YingDiTask:
             if not hd1 and not hd2:
                 return
 
+        # 判断秘宝已完成
+        # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=3)
+        # if re:
+        #     Toast('营地任务 - 秘宝领取 - 识别已完成')
+        #     任务记录["秘宝领取-完成"] = 1
+        #     sleep(1)
+        #     return
+
         # 点击秘宝
         tapSleep(241, 192, 4)  # 秘宝
-
         re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
         if not re:
             tapSleep(194, 178, 4)  # 秘宝
             re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
             if not re:
                 tapSleep(282, 178, 4)  # 秘宝
+                re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
+                if not re:
+                    Toast('营地任务 - 秘宝领取 - 识别未开启')
+                    任务记录["秘宝领取-完成"] = 1
+                    sleep(1)
+                    return
 
-        # 领取秘宝能量
-        findNL = False
-        findNum = 0
-        for i in range(1, 3):
-            re, x, y = imageFind('秘宝能量', 0.8)
-            if re:
-                findNL = True
-                tapSleep(x, y, 1)
-                tapSleep(360, 1100)  # 点击空白处关闭
-            else:
-                # 先找右侧
-                swipe(525, 1070, 180, 1070)
-                sleep(3)
-                # 领取秘宝能量
+
+        # 判断能量是否已满；能量已满暂不领取能源
+        res, availableNengLiang = TomatoOcrText(607, 80, 661, 102, "剩余能量")  # 右上角剩余嫩俩
+        availableNengLiang = safe_int(availableNengLiang)
+        if availableNengLiang != '' and availableNengLiang < 200:  # 识别剩余体力>200时，无需领取和补充能源
+            # 领取秘宝能量
+            findNL = False
+            findNum = 0
+            for i in range(1, 3):
                 re, x, y = imageFind('秘宝能量', 0.8)
                 if re:
                     findNL = True
                     tapSleep(x, y, 1)
                     tapSleep(360, 1100)  # 点击空白处关闭
-            if findNL:
-                break
-            findNum = i
-
-        # 返回左侧
-        for j in range(1, findNum):
-            swipe(180, 1070, 525, 1070)
-            sleep(3)
-
-        if not findNL:
-            for i in range(1, 3):
-                re, x, y = imageFind('秘宝能量', 0.8)
-                if re:
-                    tapSleep(x, y, 1)
-                    tapSleep(360, 1100)  # 点击空白处关闭
                 else:
-                    # 再找左侧
-                    swipe(180, 1070, 525, 1070)
+                    # 先找右侧
+                    swipe(525, 1070, 180, 1070)
                     sleep(3)
                     # 领取秘宝能量
                     re, x, y = imageFind('秘宝能量', 0.8)
                     if re:
+                        findNL = True
                         tapSleep(x, y, 1)
                         tapSleep(360, 1100)  # 点击空白处关闭
+                if findNL:
+                    break
+                findNum = i
 
-        # 购买秘宝能量
-        needNengLiang = False
+            # 返回左侧
+            for j in range(1, findNum):
+                swipe(180, 1070, 525, 1070)
+                sleep(3)
+
+            if not findNL:
+                for i in range(1, 3):
+                    re, x, y = imageFind('秘宝能量', 0.8)
+                    if re:
+                        tapSleep(x, y, 1)
+                        tapSleep(360, 1100)  # 点击空白处关闭
+                    else:
+                        # 再找左侧
+                        swipe(180, 1070, 525, 1070)
+                        sleep(3)
+                        # 领取秘宝能量
+                        re, x, y = imageFind('秘宝能量', 0.8)
+                        if re:
+                            tapSleep(x, y, 1)
+                            tapSleep(360, 1100)  # 点击空白处关闭
+
+            # 购买秘宝能量
+            needNengLiang = False
+            res, availableNengLiang = TomatoOcrText(603, 80, 672, 101, "剩余能量")  # 210
+            availableNengLiang = safe_int(availableNengLiang)
+            if availableNengLiang != '' and availableNengLiang < 200:  # 识别剩余体力不足200时，尝试补充
+                needNengLiang = True
+
+            if needNengLiang:
+                tapSleep(690, 90, 3)
+                needCount = safe_int(功能开关["秘宝钻石兑换次数"])
+                if needCount == '':
+                    needCount = 0
+                for i in range(1, 3):
+                    buyCount = ""
+                    for j in range(1, 5):
+                        res, buyCount = TomatoOcrText(497, 815, 509, 834, "已购买次数")  # 1 / 9
+                        buyCount = safe_int(buyCount)
+                        if buyCount != "":
+                            break
+                    if buyCount == "" or buyCount >= needCount:
+                        TomatoOcrTap(94, 1186, 125, 1218, "回")  # 返回秘宝首页，等待抽取
+                        break
+                    if buyCount != "":
+                        TomatoOcrTap(440, 869, 514, 896, "购买")
+        else:
+            Toast('秘宝能量已满 - 跳过领取')
+
         res, availableNengLiang = TomatoOcrText(603, 80, 672, 101, "剩余能量")  # 210
         availableNengLiang = safe_int(availableNengLiang)
-        if availableNengLiang != '' and availableNengLiang < 200:  # 识别剩余体力不足200时，尝试补充
-            needNengLiang = True
-
-        if needNengLiang:
-            tapSleep(690, 90, 3)
-            needCount = safe_int(功能开关["秘宝钻石兑换次数"])
-            if needCount == '':
-                needCount = 0
-            for i in range(1, 3):
-                buyCount = ""
-                for j in range(1, 5):
-                    res, buyCount = TomatoOcrText(497, 815, 509, 834, "已购买次数")  # 1 / 9
-                    buyCount = safe_int(buyCount)
-                    if buyCount != "":
-                        break
-                if buyCount == "" or buyCount >= needCount:
-                    TomatoOcrTap(94, 1186, 125, 1218, "回")  # 返回秘宝首页，等待抽取
-                    break
-                if buyCount != "":
-                    TomatoOcrTap(440, 869, 514, 896, "购买")
+        if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足50时，退出寻宝循环
+            Toast('秘宝能量不足 - 跳过寻宝')
+            # 返回营地
+            TomatoOcrTap(94, 1183, 125, 1220, "回")
+            sleep(2)
+            TomatoOcrTap(94, 1183, 125, 1220, "回")
+            sleep(3)
+            return
 
         findMap = self.miBaoChangeMap(0, 0)
         if findMap:

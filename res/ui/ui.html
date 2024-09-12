@@ -209,7 +209,7 @@
                 <legend>激活码</legend>
                 <input type="text" id="激活码" name="激活码" lay-verify="title"
                        autocomplete="off"
-                       placeholder="激活码" class="layui-input">
+                       placeholder="激活码（留空可试用）" class="layui-input">
                 </fieldset>
             </div>
             <form action="">
@@ -586,6 +586,9 @@
                         <div class="checkbox-item">
                             <input id="创建房间" name="vehicle" type="checkbox" value="Bike">创建房间<br>
                         </div>
+                        <div class="checkbox-item">
+                            <input id="秘境自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
+                        </div>
                     </div>
                     <div class="flex-container">
                         <label for="建房重复挑战次数">建房次数：</label>
@@ -890,6 +893,7 @@
         setSwitchStatus("秘境添加佣兵");
         setSwitchStatus("无体力继续");
         setSwitchStatus("创建房间");
+        setSwitchStatus("秘境自动接收邀请");
         var 建房重复挑战次数 = localStorage.getItem("建房重复挑战次数");
         document.getElementById("建房重复挑战次数").value = 建房重复挑战次数;
 
@@ -1167,6 +1171,7 @@
         秘境添加佣兵 = saveSwitchStatus("秘境添加佣兵");
         无体力继续 = saveSwitchStatus("无体力继续");
         创建房间 = saveSwitchStatus("创建房间");
+        秘境自动接收邀请 = saveSwitchStatus("秘境自动接收邀请");
         var 建房重复挑战次数 = document.getElementById("建房重复挑战次数").value;
         localStorage.setItem("建房重复挑战次数", 建房重复挑战次数);
 
@@ -1311,6 +1316,7 @@
             秘境添加佣兵: 秘境添加佣兵,
             秘境无体力继续: 无体力继续,
             秘境创建房间: 创建房间,
+            秘境自动接收邀请: 秘境自动接收邀请,
             秘境建房重复挑战次数: 建房重复挑战次数,
             秘境地图: 秘境地图,
             秘境关卡: 秘境关卡,

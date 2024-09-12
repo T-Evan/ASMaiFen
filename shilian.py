@@ -89,8 +89,7 @@ class ShiLianTask:
             return
 
         # 开始试炼
-
-        if 功能开关['秘境开关'] == 1:
+        if 功能开关['秘境开关'] == 1 and 功能开关['秘境自动接收邀请'] == 0:
             if 功能开关['秘境地图'] == "" or 功能开关['秘境关卡'] == "":
                 return
             while 1:
@@ -232,8 +231,7 @@ class ShiLianTask:
         # 判断是否重复挑战（已开启过宝箱）
         # re = imageFindClick('恶龙-宝箱已开启')
         re1 = TomatoOcrFindRange('最高', match_mode='fuzzy')
-        re2 = TomatoOcrFindRange('万', match_mode='fuzzy')
-        if re1 and re2:
+        if re1:
             if 功能开关["恶龙重复挑战"] == 0:
                 Toast("恶龙任务 - 已领取宝箱 - 退出挑战")
                 sleep(1.5)
@@ -841,8 +839,8 @@ class ShiLianTask:
             # 识别战斗中状态
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-            fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
-            if "等级" in teamName1 or "等级" in teamName2 or fightStatus:
+            res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
+            if "等级" in teamName1 or "等级" in teamName2:
                 if teamShoutDone == 0:
                     teamShoutDone = self.teamShout()
 
