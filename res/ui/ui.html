@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="layui/css/layui.css">
@@ -120,6 +120,9 @@
             color: rgb(0,150,255);
         }
 
+        h4 {
+            color: rgb(0,150,255);
+        }
         legend {
             color: rgb(0,150,255);
         }
@@ -204,12 +207,17 @@
         <div style="height: 35px; width: 100%;background-color: white;"></div>
         <li class="shouye_content">
             <h3>公告：Have Fun ！</h3>
+            <h4> 任务执行顺序
+                <br>
+                每日商店->秘宝->月签到->日礼包->月卡->邮件->招式->骑兽->强化装备->升级技能->猫猫包->试炼->旅团->纸飞机->星辰同行->定期活动->冒险手册->主线推图
+            </h4>
+            <br>
             <div class="flex-container">
                 <fieldset>
-                <legend>激活码</legend>
-                <input type="text" id="激活码" name="激活码" lay-verify="title"
-                       autocomplete="off"
-                       placeholder="激活码（留空可试用）" class="layui-input">
+                    <legend>激活码</legend>
+                    <input type="text" id="激活码" name="激活码" lay-verify="title"
+                           autocomplete="off"
+                           placeholder="激活码（留空可试用）" class="layui-input">
                 </fieldset>
             </div>
             <form action="">
@@ -220,8 +228,8 @@
             </form>
             <form action="">
                 <fieldset>
-                    <legend>多账号配置（修复中，暂无法使用）</legend>
-                    <legend>登录页保存账号信息（勾选并启动）</legend>
+                    <legend>多账号配置（需授予root权限）</legend>
+                    <legend>第一步：登录页保存账号信息（勾选并启动）</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input id="账号1保存" name="vehicle" type="checkbox" value="Bike">账号1<br>
@@ -239,14 +247,14 @@
                             <input id="账号5保存" name="vehicle" type="checkbox" value="Bike">账号5<br>
                         </div>
                     </div>
-                    <legend>保存账号后再配置切换</legend>
+                    <legend>第二步：保存账号后再配置切换</legend>
                     <div class="shouye_container">
                         <div class="item">
                             <label for="定时切账号">运行</label>
                         </div>
-                        <div class="item" style="width: 50px" >
+                        <div class="item" style="width: 50px">
                             <input type="text" id="定时切账号" name="定时切账号" lay-verify="title" autocomplete="off"
-                                   placeholder="分钟" class="layui-input" >
+                                   placeholder="分钟" class="layui-input">
                         </div>
                         <div class="item">
                             <label for="定时休息">分钟后切换下一账号</label>
@@ -269,19 +277,19 @@
                     </div>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input id="账号1开关" name="vehicle" type="checkbox" value="Bike">账号1<br>
+                            <input id="账号1开关" name="vehicle" type="checkbox" value="Bike">账号1开关<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号2开关" name="vehicle" type="checkbox" value="Bike">账号2<br>
+                            <input id="账号2开关" name="vehicle" type="checkbox" value="Bike">账号2开关<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号3开关" name="vehicle" type="checkbox" value="Bike">账号3<br>
+                            <input id="账号3开关" name="vehicle" type="checkbox" value="Bike">账号3开关<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号4开关" name="vehicle" type="checkbox" value="Bike">账号4<br>
+                            <input id="账号4开关" name="vehicle" type="checkbox" value="Bike">账号4开关<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号5开关" name="vehicle" type="checkbox" value="Bike">账号5<br>
+                            <input id="账号5开关" name="vehicle" type="checkbox" value="Bike">账号5开关<br>
                         </div>
                     </div>
                 </fieldset>
@@ -293,9 +301,9 @@
                         <div class="item">
                             <label for="定时运行">运行</label>
                         </div>
-                        <div class="item" style="width: 50px" >
+                        <div class="item" style="width: 50px">
                             <input type="text" id="定时运行" name="定时运行" lay-verify="title" autocomplete="off"
-                                   placeholder="分钟" class="layui-input" >
+                                   placeholder="分钟" class="layui-input">
                         </div>
                         <div class="item">
                             <label for="定时休息">分钟后休息</label>
@@ -310,11 +318,23 @@
                     </div>
                     <div class="shouye_container">
                         <div class="item">
+                            <label for="顶号等待">顶号等待</label>
+                        </div>
+                        <div class="item" style="width: 50px">
+                            <input type="text" id="顶号等待" name="顶号等待" lay-verify="title" autocomplete="off"
+                                   placeholder="分钟" class="layui-input">
+                        </div>
+                        <div class="item">
+                            <label for="顶号等待">分钟后重新登录</label>
+                        </div>
+                    </div>
+                    <div class="shouye_container">
+                        <div class="item">
                             <label for="定时切角色">运行</label>
                         </div>
-                        <div class="item" style="width: 50px" >
+                        <div class="item" style="width: 50px">
                             <input type="text" id="定时切角色" name="定时切角色" lay-verify="title" autocomplete="off"
-                                   placeholder="分钟" class="layui-input" >
+                                   placeholder="分钟" class="layui-input">
                         </div>
                         <div class="item">
                             <label for="定时休息">分钟后切换下一角色</label>
@@ -376,19 +396,6 @@
                         <div class="checkbox-item">
                             <input id="自动升级技能" name="vehicle" type="checkbox" value="Bike">自动升级技能<br>
                         </div>
-                        <div class="checkbox-item">
-                            <input id="领取猫猫包果木" name="vehicle" type="checkbox" value="Bike">领取猫猫包果木<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="猫猫包自动升温" name="vehicle" type="checkbox" value="Bike">猫猫包自动升温<br>
-                        </div>
-                    </div>
-
-                    <div class="flex-container">
-                        <label for="钻石兑换果木次数">钻石兑换果木次数:</label>
-                        <input type="text" id="钻石兑换果木次数" name="钻石兑换果木次数" lay-verify="title"
-                               autocomplete="off"
-                               placeholder="钻石兑换果木次数" class="layui-input">
                     </div>
 
                     <div class="flex-container">
@@ -396,7 +403,7 @@
                         <input id="优先升级同一技能至下一阶段" name="vehicle" type="checkbox" value="Bike">优先升级同一技能至下一阶段<br>
                     </div>
 
-                    <legend>战斗相关</legend>
+                    <legend>主线推图相关</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input id="自动挑战首领" name="vehicle" type="checkbox" value="Bike">自动挑战首领<br>
@@ -411,7 +418,7 @@
                             <input id="单飞后寻找结伴" name="vehicle" type="checkbox" value="Bike">单飞后寻找结伴<br>
                         </div>
                     </div>
-                    <legend>领取相关</legend>
+                    <legend>每日领取相关</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input id="冒险手册领取" name="vehicle" type="checkbox" value="Bike">冒险手册领取<br>
@@ -430,53 +437,52 @@
                         <label for="钻石兑换卢恩次数">钻石兑换卢恩次数:</label>
                         <input type="text" id="钻石兑换卢恩次数" name="钻石兑换卢恩次数" lay-verify="title"
                                autocomplete="off"
-                               placeholder="钻石兑换卢恩次数" class="layui-input">
+                               placeholder="留空不兑换" class="layui-input">
                     </div>
                     <div class="flex-container">
                         <label for="讲述故事次数">讲述故事次数:</label>
                         <input type="text" id="讲述故事次数" name="讲述故事次数" lay-verify="title" autocomplete="off"
-                               placeholder="讲述故事次数" class="layui-input">
+                               placeholder="留空不讲述" class="layui-input">
                     </div>
                     <div class="flex-container">
                         <label for="钻石兑换门票次数">钻石兑换门票次数:</label>
                         <input type="text" id="钻石兑换门票次数" name="钻石兑换门票次数" lay-verify="title"
                                autocomplete="off"
-                               placeholder="钻石兑换门票次数" class="layui-input">
+                               placeholder="留空不兑换" class="layui-input">
                     </div>
                     <div class="flex-container">
                         <label for="骑兽探索次数">骑兽探索次数:</label>
                         <input type="text" id="骑兽探索次数" name="骑兽探索次数" lay-verify="title" autocomplete="off"
-                               placeholder="骑兽探索次数" class="layui-input">
+                               placeholder="留空不探索" class="layui-input">
                     </div>
-                    <legend>活动相关</legend>
+                    <div class="flex-container">
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="领取猫猫包果木" name="vehicle" type="checkbox"
+                                       value="Bike">领取猫猫包果木<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="猫猫包自动升温" name="vehicle" type="checkbox"
+                                       value="Bike">猫猫包自动升温<br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="钻石兑换果木次数">钻石兑换果木次数:</label>
+                        <input type="text" id="钻石兑换果木次数" name="钻石兑换果木次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="留空不兑换" class="layui-input">
+                    </div>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input id="摸鱼时间到" name="vehicle" type="checkbox" value="Bike">摸鱼时间到<br>
+                            <input id="释放1次战术技能" name="vehicle" type="checkbox" value="Bike">释放1次战术技能<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="火力全开" name="vehicle" type="checkbox" value="Bike">火力全开<br>
+                            <input id="洗练1次装备" name="vehicle" type="checkbox" value="Bike">洗练1次装备（仓库第1件，洗练后保留原有）<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="宝藏湖" name="vehicle" type="checkbox" value="Bike">宝藏湖<br>
+                            <input id="升级1次麦乐兽" name="vehicle" type="checkbox" value="Bike">升级1次麦乐兽（仓库最后1只，升级后重置）<br>
                         </div>
-                        <div class="checkbox-item">
-                            <input id="登录好礼" name="vehicle" type="checkbox" value="Bike">登录好礼<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="BBQ派对" name="vehicle" type="checkbox" value="Bike">BBQ派对<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="限时特惠" name="vehicle" type="checkbox" value="Bike">限时特惠<br>
-                        </div>
-                    </div>
-                    <legend>喊话相关</legend>
-                    <div class="flex-container">
-                        <label for="世界喊话">世界喊话:</label>
-                        <input type="text" id="世界喊话" name="世界喊话" lay-verify="title" autocomplete="off"
-                               placeholder="世界喊话" class="layui-input">
-                    </div>
-                    <div class="checkbox-item">
-                        <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换喊话频道<br>
                     </div>
                 </fieldset>
             </form>
@@ -613,6 +619,7 @@
                                     <option value="绿洲">绿洲</option>
                                     <option value="火原">火原</option>
                                     <option value="下城">下城</option>
+                                    <option value="上城">上城</option>
                                 </select>
                             </div>
                             <div class="layui-input-inline">
@@ -655,19 +662,6 @@
                             <input id="恶龙重复挑战" name="vehicle" type="checkbox" value="Bike">重复挑战<br>
                         </div>
                     </div>
-                    <legend>史莱姆大暴走</legend>
-                    <input id="大暴走开关" name="vehicle" type="checkbox" value="Bike">大暴走开关<br>
-                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<br>
-                    <div class="flex-container">
-                        <label for="史莱姆选择">史莱姆选择:</label>
-                        <div class="layui-form">
-                            <div class="layui-input-inline">
-                                <select name="史莱姆选择" id="史莱姆选择" lay-filter="mijing1-filter">
-                                    <option value="暴走烈焰大王">暴走烈焰大王</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     <legend>职能相关</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
@@ -686,7 +680,7 @@
                             <input id="主动释放技能" name="vehicle" type="checkbox" value="Bike">主动释放技能(自动点击技能释放)<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="三技能自动释放" name="vehicle" type="checkbox" value="Bike">三技能自动开盾/打断(需先开启主动释放仅)<br>
+                            <input id="三技能自动释放" name="vehicle" type="checkbox" value="Bike">三技能自动开盾/打断(需先开启主动释放)<br>
                         </div>
                     </div>
                 </fieldset>
@@ -755,6 +749,59 @@
                 </fieldset>
             </form>
         </li>
+        <li class="qita_content">
+            <form action="">
+                <fieldset>
+                    <legend>活动相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="摸鱼时间到" name="vehicle" type="checkbox" value="Bike">摸鱼时间到<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="火力全开" name="vehicle" type="checkbox" value="Bike">火力全开<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="宝藏湖" name="vehicle" type="checkbox" value="Bike">宝藏湖<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="登录好礼" name="vehicle" type="checkbox" value="Bike">登录好礼<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="BBQ派对" name="vehicle" type="checkbox" value="Bike">BBQ派对<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="限时特惠" name="vehicle" type="checkbox" value="Bike">限时特惠<br>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>喊话相关</legend>
+                    <div class="flex-container">
+                        <label for="世界喊话">世界喊话:</label>
+                        <input type="text" id="世界喊话" name="世界喊话" lay-verify="title" autocomplete="off"
+                               placeholder="世界喊话" class="layui-input">
+                    </div>
+                    <div class="checkbox-item">
+                        <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换喊话频道<br>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>史莱姆大暴走</legend>
+                    <input id="大暴走开关" name="vehicle" type="checkbox" value="Bike">大暴走开关<br>
+                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<br>
+                    <div class="flex-container">
+                        <label for="史莱姆选择">史莱姆选择:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="史莱姆选择" id="史莱姆选择" lay-filter="mijing1-filter">
+                                    <option value="暴走烈焰大王">暴走烈焰大王</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </li>
 
     </ul>
 </div>
@@ -788,6 +835,9 @@
 
         var 定时休息 = localStorage.getItem("定时休息");
         document.getElementById("定时休息").value = 定时休息;
+
+        var 顶号等待 = localStorage.getItem("顶号等待");
+        document.getElementById("顶号等待").value = 顶号等待;
 
         var 定时切账号 = localStorage.getItem("定时切账号");
         document.getElementById("定时切账号").value = 定时切账号;
@@ -835,6 +885,10 @@
         setSwitchStatus("邮件领取");
         setSwitchStatus("招式创造");
         setSwitchStatus("骑兽乐园");
+
+        setSwitchStatus("释放1次战术技能");
+        setSwitchStatus("洗练1次装备");
+        setSwitchStatus("升级1次麦乐兽");
 
         <!--营地-->
         // 使用函数来设置不同的开关状态
@@ -1042,6 +1096,10 @@
           $mjgqSelect.html('<option value="魔偶师赌局">魔偶师赌局</option><option value="下城危险警报">下城危险警报</option><option value="无夜大王驾到">无夜大王驾到</option>');
         }
 
+        if(mjId === '上城') {
+          $mjgqSelect.html('<option value="金色歌剧院">金色歌剧院</option><option value="决战黄金穹顶">决战黄金穹顶</option>');
+        }
+
         form.render('select'); // 更新城市选择框的UI
       });
     });
@@ -1067,6 +1125,9 @@
 
         var 定时休息 = document.getElementById("定时休息").value;
         localStorage.setItem("定时休息", 定时休息);
+
+        var 顶号等待 = document.getElementById("顶号等待").value;
+        localStorage.setItem("顶号等待", 顶号等待);
 
         var 定时切账号 = document.getElementById("定时切账号").value;
         localStorage.setItem("定时切账号", 定时切账号);
@@ -1119,6 +1180,10 @@
         邮件领取 = saveSwitchStatus("邮件领取");
         招式创造 = saveSwitchStatus("招式创造");
         骑兽乐园 = saveSwitchStatus("骑兽乐园");
+
+        释放1次战术技能 = saveSwitchStatus("释放1次战术技能");
+        洗练1次装备 = saveSwitchStatus("洗练1次装备");
+        升级1次麦乐兽 = saveSwitchStatus("升级1次麦乐兽");
 
         摸鱼时间到 = saveSwitchStatus("摸鱼时间到");
         火力全开 = saveSwitchStatus("火力全开");
@@ -1229,6 +1294,7 @@
             激活码: 激活码,
             定时运行: 定时运行,
             定时休息: 定时休息,
+            顶号等待: 顶号等待,
             定时切账号: 定时切账号,
             定时切角色: 定时切角色,
 
@@ -1273,6 +1339,10 @@
             邮件领取: 邮件领取,
             招式创造: 招式创造,
             骑兽乐园: 骑兽乐园,
+
+            释放1次战术技能: 释放1次战术技能,
+            洗练1次装备: 洗练1次装备,
+            升级1次麦乐兽: 升级1次麦乐兽,
 
             摸鱼时间到: 摸鱼时间到,
             火力全开: 火力全开,

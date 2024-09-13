@@ -11,7 +11,7 @@ from .daily import DailyTask
 import shutil
 import os
 import sys
-
+from ascript.android import system
 class StartUp:
     # 构造器
     def __init__(self, app_name):
@@ -203,36 +203,93 @@ class StartUp:
                 return self.switchRole(2)
         任务记录['当前任务角色'] = 下一角色
 
+    def switchAccount(self):
+        功能开关["fighting"] = 0
+        功能开关["needHome"] = 0
+        if 任务记录['当前任务账号'] != "":
+            tmpAccount = safe_int(任务记录['当前任务账号'])
+            tmpAccount = tmpAccount + 1 # 切换下一角色
+            for i in range (tmpAccount,6):
+                if 功能开关['账号' + str(i) + '开关'] == 1:
+                    任务记录['当前任务账号'] = i
+                    return self.loadAccount(i)
+
+            # 循环一遍后，重新执行
+            for i in range (1,6):
+                if 功能开关['账号' + str(i) + '开关'] == 1:
+                    任务记录['当前任务账号'] = i
+                    return self.loadAccount(i)
+
+    def multiAccount(self):
+        if 功能开关['账号1保存']:
+            self.saveAccount(1)
+
+        if 功能开关['账号2保存']:
+            self.saveAccount(2)
+
+        if 功能开关['账号3保存']:
+            self.saveAccount(3)
+
+        if 功能开关['账号4保存']:
+            self.saveAccount(4)
+
+        if 功能开关['账号5保存']:
+            self.saveAccount(5)
+
+        # 指定账号启动
+        if 功能开关['选择启动账号'] != "" and 功能开关['选择启动账号'] != 0 and 功能开关['选择启动账号'] != "0":
+            self.loadAccount(功能开关['选择启动账号'])
+
+    def loadAccount(self, account_name):
+        account_name = str(account_name)
+        Toast('加载账号' + account_name)
+        # 结束应用
+        r = system.shell(f"am force-stop com.xd.cfbmf")
+        print(r)
+        oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
+        # 删除文件夹
+        r = system.shell(f"rm -rf {oldPath1} 2>/dev/null")
+
+        new_path1 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/"
+        flag1 = system.shell(f"cp -r -a {new_path1} {oldPath1}")
+
+        oldPath2 = "/data/data/com.xd.cfbmf/"
+        new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
+        flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}")
+
+
     def saveAccount(self, account_name):
         account_name = str(account_name)
-        old_path1 = "/data/data/com.xd.cfbmf/shared_prefs/"
-        new_path1 = "/data/data/com.xd.cfbmf/shared_prefs/accountConfig" + account_name + "_shared_prefs"
-
-        print(11111111)
-        # 删除文件夹
-        shutil.rmtree(new_path1, ignore_errors=True)
-        print(22222222)
-        # 新建文件夹
-        os.makedirs(new_path1, exist_ok=True)
-        print(33333333)
-        # 复制文件夹
-        flag1 = shutil.copytree(old_path1, new_path1, dirs_exist_ok=True)
-        print(444444444)
-
-        old_path2 = "/data/data/com.xd.cfbmf/app_webview/"
-        new_path2 = "/data/data/com.xd.cfbmf/shared_prefs/accountConfig" + account_name + "_app_webview"
+        old_path1 = "/data/data/com.xd.cfbmf/shared_prefs"
+        new_path1 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs"
 
         # 删除文件夹
-        shutil.rmtree(new_path2, ignore_errors=True)
+        r = system.shell(f"rm -rf {new_path1} 2>/dev/null")
+        # shutil.rmtree(new_path1, ignore_errors=True)
         # 新建文件夹
-        os.makedirs(new_path2, exist_ok=True)
+        # r = system.shell(f"mkdir -p {new_path1}")
+        # os.makedirs(new_path1, exist_ok=True)
         # 复制文件夹
-        flag2 = shutil.copytree(old_path2, new_path2, dirs_exist_ok=True)
+        flag1 = system.shell(f"cp -r -a {old_path1} {new_path1}")
+        # flag1 = shutil.copytree(old_path1, new_path1, dirs_exist_ok=True)
+
+        old_path2 = "/data/data/com.xd.cfbmf/app_webview"
+        new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_app_webview"
+
+        # 删除文件夹
+        r = system.shell(f"rm -rf {new_path2} 2>/dev/null")
+        # shutil.rmtree(new_path2, ignore_errors=True)
+        # 新建文件夹
+        # r = system.shell(f"mkdir -p {new_path2}")
+        # os.makedirs(new_path2, exist_ok=True)
+        # 复制文件夹
+        flag2 = system.shell(f"cp -r -a {old_path2} {new_path2}")
+        # flag2 = shutil.copytree(old_path2, new_path2, dirs_exist_ok=True)
 
         # 复制文件夹及里面所有文件
         if flag1 and flag2:
             Dialog.confirm(f"已保存账号 {account_name} 登录信息！请重启软件")
         else:
-            Dialog.confirm("保存失败！请联系作者")
+            Dialog.confirm("保存失败！请检查是否授予root权限")
         sys.exit()
-        return True  # 这里返回True可能不会被执行到，
+        return True

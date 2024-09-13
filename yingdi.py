@@ -7,6 +7,7 @@ from .daily import DailyTask
 from ascript.android.screen import Ocr
 from .baseUtils import *
 import re as repattern
+from ascript.android.screen import FindColors
 
 
 class YingDiTask:
@@ -234,9 +235,11 @@ class YingDiTask:
         if isFind:
             tapSleep(x, y, 1)
             TomatoOcrTap(310, 977, 408, 1009, "点击签到")
-            re, x, y = imageFind('月签到-累计奖励', confidence1=0.8)
-            if re:
-                tapSleep(x, y, 1)
+            # re, x, y = imageFind('月签到-累计奖励', confidence1=0.7)
+            point = FindColors.find("361,232,#E65638|361,225,#F46042|366,224,#F55E42",rect=[91,200,622,355])
+            if point:
+                print(point.x, point.y)
+                tapSleep(point.x, point.y, 1)
             任务记录["月签到-完成"] = 1
             tapSleep(36, 1123)  # 点击空白处关闭
         return
@@ -329,7 +332,6 @@ class YingDiTask:
                     任务记录["秘宝领取-完成"] = 1
                     sleep(1)
                     return
-
 
         # 判断能量是否已满；能量已满暂不领取能源
         res, availableNengLiang = TomatoOcrText(607, 80, 661, 102, "剩余能量")  # 右上角剩余嫩俩

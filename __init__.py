@@ -222,7 +222,7 @@ def main():
         need_wait_minute = safe_int(功能开关.get("定时休息", 0))  # 分钟
         if need_wait_minute == '':
             need_wait_minute = 0
-        need_switch_account_minute = safe_int(功能开关.get("定时切号", 0))  # 分钟
+        need_switch_account_minute = safe_int(功能开关.get("定时切账号", 0))  # 分钟
         if need_switch_account_minute == '':
             need_switch_account_minute = 0
         need_switch_role_minute = safe_int(功能开关.get("定时切角色", 0))  # 分钟
@@ -235,10 +235,14 @@ def main():
 
         start_time = int(time.time())
 
+        #多账号处理
+        start_up.multiAccount()
+
         runThread1()
         runThread2()
         runThreadBaoZouBoss()
         runThreadMijingTeam()
+        runThreadAnotherLogin()
         counter = 0
         while True:
             try:
@@ -247,19 +251,19 @@ def main():
                     continue
 
                 # 获取当前设备运行的APP信息
-                info = Device.memory()
-                # 返回单位是字节
-                total_memory_mb = info[2] / (1024 ** 2)
-                used_memory_mb = info[1] / (1024 ** 2)
-                free_memory_mb = info[0] / (1024 ** 2)
-                print(f"剩余内存:{free_memory_mb},已用内存{used_memory_mb},总共内存{total_memory_mb}")
+                # info = Device.memory()
+                # # 返回单位是字节
+                # total_memory_mb = info[2] / (1024 ** 2)
+                # used_memory_mb = info[1] / (1024 ** 2)
+                # free_memory_mb = info[0] / (1024 ** 2)
+                # print(f"剩余内存:{free_memory_mb},已用内存{used_memory_mb},总共内存{total_memory_mb}")
                 counter += 1
-
                 if counter % 3 == 0:
                     runThread1()
                     runThread2()
                     runThreadBaoZouBoss()
                     runThreadMijingTeam()
+                    runThreadAnotherLogin()
                     counter = 0  # 重置计数器
 
                 # 启动app
@@ -300,13 +304,31 @@ def main():
                     start_time = int(time.time())
 
                 # 定时切角色
-                if total_switch_role_minute != 0 and current_time - start_time >= total_switch_role_minute:
-                    Toast(f"运行 {need_switch_role_minute} 分钟，准确切换角色")
-                    功能开关["fighting"] = 0
-                    功能开关["needHome"] = 0
-                    初始化任务记录()
-                    start_up.switchRole()
-                    start_time = int(time.time())
+                if total_switch_role_minute != 0:
+                    if current_time - start_time >= total_switch_role_minute:
+                        Toast(f"运行 {need_switch_role_minute} 分钟，准确切换角色")
+                        功能开关["fighting"] = 0
+                        功能开关["needHome"] = 0
+                        初始化任务记录()
+                        start_up.switchRole()
+                        start_time = int(time.time())
+                    else:
+                        tmpMinute = (current_time - start_time) / 60
+                        tmpDiffMinute = (total_switch_role_minute - (current_time - start_time)) / 60
+                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 后切换角色")
+
+                # 定时切账号
+                if total_switch_account_minute != 0:
+                    if current_time - start_time >= total_switch_account_minute:
+                        Toast(f"运行 {total_switch_account_minute} 分钟，准确切换账号")
+                        初始化任务记录()
+                        start_up.switchAccount()
+                        start_time = int(time.time())
+                    else:
+                        tmpMinute = (current_time - start_time) / 60
+                        tmpDiffMinute = (total_switch_account_minute - (current_time - start_time)) / 60
+                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 后切换账号")
+
             except Exception as e:
                 # 处理异常
                 # 获取异常信息

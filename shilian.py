@@ -58,7 +58,8 @@ class ShiLianTask:
             ["雷电焦土深处", "九王角斗场"],
             ["溪谷大暴走", "躁动绿洲之丘", "白沙渊下的鼓动"],
             ["浴火燃墟伐木场", "激战构造体工厂", "无始无终燃烧塔"],
-            ["魔偶师赌局", "下城危险警报", "无夜大王驾到"]
+            ["魔偶师赌局", "下城危险警报", "无夜大王驾到"],
+            ["金色歌剧院", "决战黄金穹顶"]
         ]
 
         self.stagePoi = {
@@ -82,6 +83,8 @@ class ShiLianTask:
             "魔偶师赌局": [302, 373, 469, 401],
             "下城危险警报": [301, 568, 447, 596],
             "无夜大王驾到": [304, 759, 469, 792],
+            "金色歌剧院": [303, 373, 447, 401],
+            "决战黄金穹顶": [303, 567, 423, 596],
         }
 
     def shilian(self):
@@ -897,8 +900,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-            fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
-            if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2 and not fightStatus):
+            if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
                 Toast(f"战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1100,7 +1102,9 @@ class ShiLianTask:
     def fight_fail(self):
         res1, _ = TomatoOcrText(246, 459, 327, 482, "你被击败了")
         res2, _ = TomatoOcrText(475, 1038, 527, 1065, "放弃")
-        if res1 or res2:
+        res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+        res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+        if res1 or res2 or ("等级" not in teamName1 and "等级" not in teamName2): # 战败提示 or 队友全部离队
             Toast("战斗结束 - 战斗失败")
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
             self.quitTeamFighting()  # 退出队伍
@@ -1139,10 +1143,8 @@ class ShiLianTask:
             re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
             # ldE.element('首页-冒险').click().execute(sleep=1)
 
-            quitTeamRe = self.quitTeamFighting()
-            if not quitTeamRe:
-                # 判断战败页面
-                self.fight_fail()
+            # 判断战败页面
+            self.fight_fail()
 
             # 判断宝箱开启
             self.openTreasure()

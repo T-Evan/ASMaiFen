@@ -52,7 +52,7 @@ class LvTuanTask:
             Toast(f"旅团 - 调查队重复挑战第 {loopCount}/{needCount} 次")
             res1, _ = TomatoOcrText(636, 97, 670, 119, "秘钥")  # 识别调查队组队中 - 右上角 - 每日补给调查秘钥
             res2, _ = TomatoOcrText(501, 191, 581, 218, "离开队伍")  # 识别调查队组队中 - 右上角 - 离开队伍
-            if res1 and res2:
+            if res1 or res2:
                 # 组队中，对出队伍重新开启调查；保证重新匹配队友
                 TomatoOcrTap(501, 191, 581, 218, "离开队伍")  # 离开队伍
                 TomatoOcrTap(331, 727, 387, 758, "确定")  # 离开队伍 - 确定
@@ -75,17 +75,20 @@ class LvTuanTask:
                         break
 
             res = TomatoOcrTap(307, 964, 412, 1002, "开启调查")
-            tapSleep(205, 760)  # 添加队友
-            tapSleep(530, 435, 1)  # 添加队友1
-            tapSleep(530, 556, 1)  # 添加队友2
-            tapSleep(531, 674, 1)  # 添加队友3
-            tapSleep(532, 794, 1)  # 添加队友4
-            tapSleep(530, 910, 1)  # 添加队友5
-            res = TomatoOcrTap(70, 1200, 123, 1231, "返回", 10, 10)
-            res = TomatoOcrTap(331, 976, 386, 1005, "开始")
-            sleep(5)
-            # 战斗中
-            self.fighting()
+            if res:
+                tapSleep(205, 760)  # 添加队友
+                tapSleep(530, 435, 1)  # 添加队友1
+                tapSleep(530, 556, 1)  # 添加队友2
+                tapSleep(531, 674, 1)  # 添加队友3
+                tapSleep(532, 794, 1)  # 添加队友4
+                tapSleep(530, 910, 1)  # 添加队友5
+                res = TomatoOcrTap(70, 1200, 123, 1231, "返回", 10, 10)
+                res = TomatoOcrTap(331, 976, 386, 1005, "开始")
+                sleep(5)
+                if res:
+                    # 战斗中
+                    self.fighting()
+                    sleep(5)
         任务记录['旅团-调查队-完成'] = 1
 
     # 判断是否战斗中

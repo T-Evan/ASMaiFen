@@ -43,12 +43,12 @@ class DailyTask:
                 # 暂不处理，提高执行效率
                 # if not shou_ye1:
                 #     shou_ye2 = TomatoOcrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
-                    # shou_ye2 = TomatoOcrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
+                # shou_ye2 = TomatoOcrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
             if res2 or shou_ye1 or shou_ye2:
                 # if TimeoutLock(switch_lock).acquire_lock():
                 功能开关["needHome"] = 0
                 功能开关["fighting"] = 0
-                    # TimeoutLock(switch_lock).release_lock()
+                # TimeoutLock(switch_lock).release_lock()
                 Toast('已返回首页')
                 sleep(0.5)
                 return True
@@ -56,7 +56,7 @@ class DailyTask:
             # 开始异步处理返回首页
             # if TimeoutLock(switch_lock).acquire_lock():
             功能开关["needHome"] = 1
-                # TimeoutLock(switch_lock).release_lock()
+            # TimeoutLock(switch_lock).release_lock()
 
             # 判断宝箱开启
             self.shilianTask.openTreasure()
@@ -78,14 +78,96 @@ class DailyTask:
         self.zhaoShiChuangZao()
         # 骑兽乐园
         self.qiShouLeYuan()
+        # 释放1次战术技能
+        self.meiRiJiNeng()
+        # 洗练1次装备
+        self.meiRiXiLian()
+        # 升级1次麦乐兽
+        self.meiRiMaiLeShou()
+
         # 世界喊话
         self.shijieShout()
+
+    # 每日任务 - 洗练1次装备
+    def meiRiMaiLeShou(self):
+        if not 功能开关['升级1次麦乐兽']:
+            return
+
+        if 任务记录["日常-升级1次麦乐兽-完成"] == 1:
+            return
+
+        Toast("每日任务 - 升级1次麦乐兽 - 开始")
+        self.homePage()
+
+        res = TomatoOcrTap(522, 1205, 598, 1235, "麦乐兽")
+
+        tapSleep(551,942)  # 仓库最后1个麦乐兽
+
+        res = TomatoOcrTap(333, 1027, 358, 1049, "升")
+        if res:
+            tapSleep(138, 1051)  # 重置按钮
+            res = TomatoOcrTap(440, 787, 513, 820, "重置")
+            tapSleep(150, 1059)  # 点击空白处
+            任务记录["日常-升级1次麦乐兽-完成"] = 1
+        else:
+            Toast("每日任务 - 升级1次麦乐兽 - 未找到升级入口")
+
+    # 每日任务 - 洗练1次装备
+    def meiRiXiLian(self):
+        if not 功能开关['洗练1次装备']:
+            return
+
+        if 任务记录["日常-洗练1次装备-完成"] == 1:
+            return
+
+        Toast("每日任务 - 洗练1次装备 - 开始")
+        self.homePage()
+
+        res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
+
+        tapSleep(159, 680)  # 仓库第1件装备
+
+        res1 = TomatoOcrTap(519, 1054, 595, 1090, "洗练", 10, 10)
+        res2 = TomatoOcrTap(399,1055,473,1090, "洗练", 10, 10)
+        if res1 or res2:
+            res = TomatoOcrTap(323, 978, 394, 1010, "洗练", 10, 10)
+            tapSleep(249, 986)  # 保留原有
+            任务记录["日常-洗练1次装备-完成"] = 1
+        else:
+            Toast("每日任务 - 洗练1次装备 - 未找到洗练入口")
+
+    # 每日任务 - 释放1次战术技能
+    def meiRiJiNeng(self):
+        if not 功能开关['释放1次战术技能']:
+            return
+
+        if 任务记录["日常-释放1次战术技能-完成"] == 1:
+            return
+
+        Toast("每日任务 - 释放1次战术技能 - 开始")
+        self.homePage()
+
+        # 切为手动
+        res = TomatoOcrTap(645, 882, 690, 902, "自动", 10, -10)
+        # 点击技能
+        for i in range(1, 6):
+            self.homePage()
+            tapSleep(511, 1076, 0.6)  # 1技能
+            tapSleep(521, 1070, 0.6)  # 1技能
+            tapSleep(543, 974, 0.6)  # 2技能
+            tapSleep(544, 962, 0.6)  # 2技能
+            tapSleep(649, 953, 0.6)  # 3技能
+            tapSleep(659, 942, 0.6)  # 3技能
+            sleep(3)
+        # 切回自动
+        res = TomatoOcrTap(645, 882, 690, 902, "手动", 10, -10)
+        任务记录["日常-释放1次战术技能-完成"] = 1
 
     def shijieShout(self):
         if 功能开关['世界喊话'] == "":
             return 1
 
-        Toast("世界喊话")
+        Toast("世界喊话 - 开始")
 
         self.homePage()
 
@@ -591,20 +673,30 @@ class DailyTask:
         Toast('日常 - 骑兽乐园 - 开始')
 
         # 判断是否在营地页面
-        res1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
-        res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
-        if not res1 and not res2:
-            # 返回首页
-            self.homePage()
-            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
-            # 判断是否在营地页面
-            hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
-            hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
-            if not hd1 and not hd2:
-                return
-            tapSleep(200, 545, 3)  # 芙芙小铺
+        # 判断是否在营地页面
+        isYingDi = False
+        for i in range(1, 3):
+            res1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
             res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
+            if not res1 and not res2:
+                # 返回首页
+                self.homePage()
+                res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+                # 判断是否在营地页面
+                hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
+                if hd1 or hd2:
+                    isYingDi = True
+                    tapSleep(200, 545, 3)  # 芙芙小铺
+                    res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
+                    break
+            else:
+                isYingDi = True
+                break
+        if not isYingDi:
+            return
 
+        res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
         if res2:
             tapSleep(188, 321, 2)  # 点击门票（固定位置）
             tapSleep(540, 655)  # 点击空白处关闭
@@ -624,11 +716,14 @@ class DailyTask:
                         if buyCount != "":
                             break
                     if buyCount == "" or buyCount >= needCount:
+                        if buyCount != "" and buyCount >= needCount:
+                            任务记录["日常-骑兽乐园-完成"] = 1
                         TomatoOcrTap(70, 1202, 122, 1232, "返回", 10, 10)  # 返回芙
                         break
                     TomatoOcrTap(318, 876, 398, 898, "购买道具")
                     tapSleep(550, 1080)  # 点击空白处关闭
-            任务记录["日常-骑兽乐园-完成"] = 1
+            else:
+                任务记录["日常-骑兽乐园-完成"] = 1
 
         # 骑兽探索
         needCount = safe_int(功能开关["骑兽探索次数"])
@@ -657,16 +752,24 @@ class DailyTask:
         Toast('日常 - 招式创造 - 开始')
 
         # 判断是否在营地页面
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
-        if not res:
-            # 返回首页
-            self.homePage()
-            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
-            # 判断是否在营地页面
-            hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
-            hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
-            if not hd1 and not hd2:
-                return
+        isYingDi = False
+        for i in range(1, 3):
+            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            if not res:
+                # 返回首页
+                self.homePage()
+                res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+                # 判断是否在营地页面
+                hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
+                if hd1 or hd2:
+                    isYingDi = True
+                    break
+            else:
+                isYingDi = True
+                break
+        if not isYingDi:
+            return
 
         tapSleep(200, 545, 4)  # 芙芙小铺
         res = TomatoOcrTap(389, 1133, 489, 1163, "招式创造")
@@ -722,7 +825,6 @@ class DailyTask:
                 attempt = attempt + 1
         任务记录["日常-招式创造-完成"] = 1
 
-
     # 邮件领取
     def youJian(self):
         if 功能开关["邮件领取"] == 0:
@@ -773,7 +875,6 @@ class DailyTask:
         if wait1 or wait2:
             res5 = TomatoOcrTap(453, 727, 511, 760, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
 
-
         res1 = False
         res2 = False
         res3 = False
@@ -813,7 +914,6 @@ class DailyTask:
                 Toast("退出组队")
                 return True
         return False
-
 
     def moyuTeamShout(self, shoutText):
         if shoutText == "":
