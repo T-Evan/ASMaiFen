@@ -251,6 +251,7 @@ class LvTuanTask:
 
         if not CompareColors.compare("690,822,#EF5C3F|686,815,#FA6547|691,814,#FA6545"):
             Toast("旅团 - 许愿墙 - 已送满 - 跳过任务")
+            任务记录["旅团-许愿墙-完成"] = 1
             return
 
         res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)

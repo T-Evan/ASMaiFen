@@ -307,6 +307,21 @@ def safe_int(value):
     尝试将给定的值转换为整数，如果失败则返回默认值 0。
     """
     try:
+        # 兜底子母o
+        if value == "o" or value == "O":
+            return 0
         return int(value)
     except (TypeError, ValueError):
         return ""
+
+def safe_int_v2(value):
+    """
+    尝试将给定的值转换为整数，如果失败则返回默认值 0。
+    """
+    try:
+        # 兜底子母o
+        if value == "o" or value == "O":
+            return 0
+        return int(value)
+    except (TypeError, ValueError):
+        return 0

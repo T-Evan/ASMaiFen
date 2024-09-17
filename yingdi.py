@@ -18,11 +18,15 @@ class YingDiTask:
         if 功能开关["营地总开关"] == 0:
             return
 
+        # 秘宝
+        self.yingDiMiBao()
+
         # 每日商店
         self.yingDiShop()
 
-        # 秘宝
-        self.yingDiMiBao()
+    def yingdiTask2(self):
+        if 功能开关["营地总开关"] == 0:
+            return
 
         # 露营打卡点
         self.luYingDaKa()
@@ -35,6 +39,7 @@ class YingDiTask:
 
         # 月卡
         self.yueKa()
+
 
     def yingdiTaskEnd(self):
         if 功能开关["营地总开关"] == 0:
@@ -157,6 +162,10 @@ class YingDiTask:
             if res:
                 任务记录["月卡-完成"] = 1
                 tapSleep(60, 1135)  # 点击空白处关闭
+            res2 = TomatoOcrFindRange('续卡')
+            res3 = TomatoOcrFindRange('未激活')
+            if res2 or res3:
+                任务记录["月卡-完成"] = 1
             # 支付页兜底
             tapSleep(665, 142)
             res = TomatoOcrTap(91, 1184, 126, 1222, "回")  # 返回
@@ -311,12 +320,13 @@ class YingDiTask:
                 return
 
         # 判断秘宝已完成
+        re = CompareColors.compare("249,184,#FEFEFE|252,175,#FFFFFF|265,181,#BABBBE|255,190,#FFFFFF|270,183,#888A8F")
         # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=3)
-        # if re:
-        #     Toast('营地任务 - 秘宝领取 - 识别已完成')
-        #     任务记录["秘宝领取-完成"] = 1
-        #     sleep(1)
-        #     return
+        if re:
+            Toast('营地任务 - 秘宝领取 - 识别已完成')
+            任务记录["秘宝领取-完成"] = 1
+            sleep(1)
+            return
 
         # 点击秘宝
         tapSleep(241, 192, 4)  # 秘宝

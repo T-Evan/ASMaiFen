@@ -9,9 +9,12 @@ from .shilian import ShiLianTask
 
 shilianTask = ShiLianTask()
 
+
 # 实例方法
 def main():
-    if 功能开关["冒险总开关"] == 1 and 功能开关["秘境自动接收邀请"] == 1:
+    if 功能开关["冒险总开关"] == 1 and (
+            功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关[
+        '恶龙自动接收邀请'] == 1):
         while True:
             sleep(5)  # 等待 5 秒
             Toast('等待组队邀请')
@@ -22,7 +25,8 @@ def waitInvite():
     功能开关["fighting"] = 1
     tmpBx = 功能开关["秘境不开宝箱"]
     功能开关["秘境不开宝箱"] = 1
-    res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
+
+    res1, _ = TomatoOcrText(584, 651, 636, 678, "同意")
     res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
     # 判断体力用尽提示
     res3, _ = TomatoOcrText(242, 598, 314, 616, "体力不足")
@@ -37,15 +41,51 @@ def waitInvite():
         功能开关["秘境不开宝箱"] = tmpBx
         return
 
+    fight_type = '秘境'
     if res1:
-        Toast('接受组队邀请')
+        for i in range(1, 3):
+            resMengYan1, _ = TomatoOcrText(404, 587, 480, 611, "梦魇狂潮")  # 梦魇准备
+            resMengYan2, _ = TomatoOcrText(443, 590, 481, 612, "狂潮")  # 梦魇准备
+            if resMengYan1 or resMengYan2:
+                fight_type = "梦魇带队"
+                break
+        for i in range(1, 3):
+            resELong1, _ = TomatoOcrText(405, 588, 498, 615, "恶龙大通缉")  # 恶龙准备
+            if resELong1:
+                fight_type = "恶龙带队"
+                break
+
+        if fight_type == '梦魇带队':
+            if 功能开关['梦魇自动接收邀请'] == 0:
+                Toast('梦魇带队未开启，拒绝梦魇组队邀请')
+                功能开关["fighting"] = 0
+                return
+            else:
+                Toast('同意梦魇组队邀请')
+
+        if fight_type == '恶龙带队':
+            if 功能开关['恶龙自动接收邀请'] == 0:
+                Toast('恶龙带队未开启，拒绝恶龙组队邀请')
+                功能开关["fighting"] = 0
+                return
+            else:
+                Toast('同意恶龙组队邀请')
+
+        if fight_type == '秘境':
+            if 功能开关['秘境自动接收邀请'] == 0:
+                Toast('秘境带队未开启，拒绝秘境组队邀请')
+                功能开关["fighting"] = 0
+                return
+            else:
+                Toast('同意秘境组队邀请')
+        res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
 
     waitFight = False
     for i in range(1, 4):
         waitTime = (i - 1) * 10
         Toast(f'等待队长开始{waitTime}/30s')
         sleep(5)
-        waitFight = shilianTask.WaitFight()
+        waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
             break
         sleep(5)

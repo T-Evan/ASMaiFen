@@ -26,8 +26,16 @@ def anotherLogin():
         while True:
             current_time = int(time.time())
             if total_another_minute != 0 and current_time - start_time >= total_another_minute:
+                功能开关["needHome"] = 0
+                tapSleep(320, 760, 0.5)
+                tapSleep(320, 760, 0.5)
+                res = TomatoOcrTap(320, 760, 396, 798, "确认")
+                res = TomatoOcrTap(320, 760, 396, 798, "确认")
                 res = TomatoOcrTap(320, 760, 396, 798, "确认")
                 Toast("顶号等待，开始重新登录")
+                for i in range(1, 5):
+                    login()
+                    sleep(4)
                 break
             tmpMinute = (current_time - start_time) / 60
             tmpDiffMinute = (total_another_minute - (current_time - start_time)) / 60
@@ -35,6 +43,22 @@ def anotherLogin():
             tapSleep(505,667)  # 点击防止进入房车动画页
             sleep(10)  # 等待
     else:
+        login()
         print("顶号等待，检查状态正常")
 
     return
+
+
+def login():
+    功能开关["needHome"] = 0
+    sleep(1.5)
+    # 开始冒险之旅
+    login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
+    # 开始冒险
+    login2 = TomatoOcrTap(302, 1199, 414, 1231, "开始冒险")
+    # 跳过启动动画
+    if login2:
+        tapSleep(340, 930, 1)
+        tapSleep(340, 930, 1)
+        tapSleep(340, 930)
+        sleep(5)

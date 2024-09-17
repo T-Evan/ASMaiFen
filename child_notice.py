@@ -45,6 +45,13 @@ def noticeCancel():
         re = TomatoOcrFindRangeClick('确定', whiteList='确定', timeLock=3)
         if re:
             Toast('战斗结算弹窗确认')
+
+        # 退出待机状态
+        reWait, _ = TomatoOcrText(335, 978, 396, 1007, "旅行中")
+        if reWait:
+            swipe(213, 1104, 568, 1104)
+            Toast('退出待机状态')
+
         # if not re:
         #     tapSleep(45, 1245)
         #     Toast('关闭战斗结算弹窗')

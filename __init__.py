@@ -276,20 +276,26 @@ def main():
                 # 日常（优先领取）
                 dailyTask.dailyTask()
 
-                # 旅人相关
-                lvrenTask.lvrenTask()
+                # 试炼
+                shilianTask.shilian()
 
                 # 旅团相关
                 lvtuanTask.lvtuanTask()
 
-                # 营地活动（最后领取）
-                yingdiTask.yingdiTaskEnd()
+                # 旅人相关
+                lvrenTask.lvrenTask()
 
-                # 试炼
-                shilianTask.shilian()
+                # 日常2
+                dailyTask.dailyTask2()
 
                 # 日常（最后领取）
                 dailyTask.dailyTaskEnd()
+
+                # 营地活动（优先领取）
+                yingdiTask.yingdiTask2()
+
+                # 营地活动（最后领取）
+                yingdiTask.yingdiTaskEnd()
 
                 # 定时休息
                 current_time = int(time.time())

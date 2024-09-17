@@ -207,9 +207,9 @@
         <div style="height: 35px; width: 100%;background-color: white;"></div>
         <li class="shouye_content">
             <h3>公告：Have Fun ！</h3>
-            <h4> 任务执行顺序
+            <h4> 推荐任务执行顺序
                 <br>
-                每日商店->秘宝->月签到->日礼包->月卡->邮件->招式->骑兽->强化装备->升级技能->猫猫包->试炼->旅团->纸飞机->星辰同行->定期活动->冒险手册->主线推图
+                秘宝->每日商店->招式->骑兽->邮件->秘境->恶龙->梦魇->旅团->强化装备->升级技能->猫猫包->洗练装备->宠物升级->定期活动->主线推图->冒险手册->月签到->日礼包->月卡->纸飞机->星辰同行
             </h4>
             <br>
             <div class="flex-container">
@@ -661,6 +661,22 @@
                         <div class="checkbox-item">
                             <input id="恶龙重复挑战" name="vehicle" type="checkbox" value="Bike">重复挑战<br>
                         </div>
+                        <div class="checkbox-item">
+                            <input id="恶龙自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
+                        </div>
+                    </div>
+                    <legend>梦魇狂潮</legend>
+                    <input id="梦魇开关" name="vehicle" type="checkbox" value="Bike">梦魇开关<br>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="梦魇添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="梦魇自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
+                        </div>
+                        <!--                        <div class="checkbox-item">-->
+                        <!--                            <input id="自动加入队伍" name="vehicle" type="checkbox" value="Bike">自动加入队伍<br>-->
+                        <!--                        </div>-->
                     </div>
                     <legend>职能相关</legend>
                     <div class="checkbox-group">
@@ -677,11 +693,44 @@
                     <legend>通用配置</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input id="主动释放技能" name="vehicle" type="checkbox" value="Bike">主动释放技能(自动点击技能释放)<br>
+                            <input id="主动释放技能" name="vehicle" type="checkbox" value="Bike">主动释放技能(配合下方功能使用)<br>
                         </div>
                         <div class="checkbox-item">
                             <input id="三技能自动释放" name="vehicle" type="checkbox" value="Bike">三技能自动开盾/打断(需先开启主动释放)<br>
                         </div>
+                        <div class="checkbox-item">
+                            <input id="技能定时释放" name="vehicle" type="checkbox" value="Bike">技能定时释放(需关闭自动三技能)<br>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="宠物技能释放间隔">宠物技能释放间隔:</label>
+                        <input type="text" id="宠物技能释放间隔" name="宠物技能释放间隔" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="秒" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="技能1释放间隔">技能1释放间隔:</label>
+                        <input type="text" id="技能1释放间隔" name="技能1释放间隔" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="秒" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="技能2释放间隔">技能2释放间隔:</label>
+                        <input type="text" id="技能2释放间隔" name="技能2释放间隔" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="秒" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="技能3释放间隔">技能3释放间隔:</label>
+                        <input type="text" id="技能3释放间隔" name="技能3释放间隔" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="秒" class="layui-input">
+                    </div>
+                    <div class="flex-container">
+                        <label for="技能释放循环次数">技能释放循环次数:</label>
+                        <input type="text" id="技能释放循环次数" name="技能释放循环次数" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="留空循环1次后切换自动释放" class="layui-input">
                     </div>
                 </fieldset>
             </form>
@@ -1012,11 +1061,27 @@
         setSwitchStatus("恶龙开关");
         setSwitchStatus("恶龙添加佣兵");
         setSwitchStatus("恶龙重复挑战");
+        setSwitchStatus("恶龙自动接收邀请");
+        setSwitchStatus("梦魇开关");
+        setSwitchStatus("梦魇添加佣兵");
+        setSwitchStatus("梦魇自动接收邀请");
         setSwitchStatus("职能优先输出");
         setSwitchStatus("职能优先坦克");
         setSwitchStatus("职能优先治疗");
         setSwitchStatus("主动释放技能");
         setSwitchStatus("三技能自动释放");
+        setSwitchStatus("技能定时释放");
+        var 宠物技能释放间隔 = localStorage.getItem("宠物技能释放间隔");
+        document.getElementById("宠物技能释放间隔").value = 宠物技能释放间隔;
+
+        var 技能1释放间隔 = localStorage.getItem("技能1释放间隔");
+        document.getElementById("技能1释放间隔").value = 技能1释放间隔;
+        var 技能2释放间隔 = localStorage.getItem("技能2释放间隔");
+        document.getElementById("技能2释放间隔").value = 技能2释放间隔;
+        var 技能3释放间隔 = localStorage.getItem("技能3释放间隔");
+        document.getElementById("技能3释放间隔").value = 技能3释放间隔;
+        var 技能释放循环次数 = localStorage.getItem("技能释放循环次数");
+        document.getElementById("技能释放循环次数").value = 技能释放循环次数;
 
         <!--旅团-->
         setSwitchStatus("旅团总开关");
@@ -1260,11 +1325,26 @@
         恶龙开关 = saveSwitchStatus("恶龙开关");
         恶龙添加佣兵 = saveSwitchStatus("恶龙添加佣兵");
         恶龙重复挑战 = saveSwitchStatus("恶龙重复挑战");
+        恶龙自动接收邀请 = saveSwitchStatus("恶龙自动接收邀请");
+        梦魇开关 = saveSwitchStatus("梦魇开关");
+        梦魇添加佣兵 = saveSwitchStatus("梦魇添加佣兵");
+        梦魇自动接收邀请 = saveSwitchStatus("梦魇自动接收邀请");
         职能优先输出 = saveSwitchStatus("职能优先输出");
         职能优先坦克 = saveSwitchStatus("职能优先坦克");
         职能优先治疗 = saveSwitchStatus("职能优先治疗");
         主动释放技能 = saveSwitchStatus("主动释放技能");
         三技能自动释放 = saveSwitchStatus("三技能自动释放");
+        技能定时释放 = saveSwitchStatus("技能定时释放");
+        var 宠物技能释放间隔 = document.getElementById("宠物技能释放间隔").value;
+        localStorage.setItem("宠物技能释放间隔", 宠物技能释放间隔);
+        var 技能1释放间隔 = document.getElementById("技能1释放间隔").value;
+        localStorage.setItem("技能1释放间隔", 技能1释放间隔);
+        var 技能2释放间隔 = document.getElementById("技能2释放间隔").value;
+        localStorage.setItem("技能2释放间隔", 技能2释放间隔);
+        var 技能3释放间隔 = document.getElementById("技能3释放间隔").value;
+        localStorage.setItem("技能3释放间隔", 技能3释放间隔);
+        var 技能释放循环次数 = document.getElementById("技能释放循环次数").value;
+        localStorage.setItem("技能释放循环次数", 技能释放循环次数);
 
         <!--旅团-->
         旅团总开关 = saveSwitchStatus("旅团总开关");
@@ -1399,11 +1479,21 @@
             恶龙开关: 恶龙开关,
             恶龙添加佣兵: 恶龙添加佣兵,
             恶龙重复挑战: 恶龙重复挑战,
+            恶龙自动接收邀请: 恶龙自动接收邀请,
+            梦魇开关: 梦魇开关,
+            梦魇添加佣兵: 梦魇添加佣兵,
+            梦魇自动接收邀请: 梦魇自动接收邀请,
             职能优先输出: 职能优先输出,
             职能优先坦克: 职能优先坦克,
             职能优先治疗: 职能优先治疗,
             主动释放技能: 主动释放技能,
             三技能自动释放: 三技能自动释放,
+            技能定时释放: 技能定时释放,
+            宠物技能释放间隔: 宠物技能释放间隔,
+            技能1释放间隔: 技能1释放间隔,
+            技能2释放间隔: 技能2释放间隔,
+            技能3释放间隔: 技能3释放间隔,
+            技能释放循环次数: 技能释放循环次数,
 
             旅团总开关: 旅团总开关,
             旅团浇树: 旅团浇树,
