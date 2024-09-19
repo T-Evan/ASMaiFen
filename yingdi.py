@@ -103,7 +103,7 @@ class YingDiTask:
             if not hd1 and not hd2:
                 return
 
-        isFind, x, y = imageFind('纸飞机')
+        isFind = TomatoOcrFindRangeClick('纸翼大作战')
         if not isFind:
             # -- 返回活动最后一屏
             swipe(680, 804, 680, 251)

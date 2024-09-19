@@ -187,11 +187,15 @@ class DailyTask:
             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
             action.input(功能开关["世界喊话"])
             tapSleep(360, 104)  # 点击空白处确认输入
+            shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
+            if shuru:
+                action.input(功能开关["世界喊话"])
+                tapSleep(360, 104)  # 点击空白处确认输入
             res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
             if res:
-                tapSleep(101, 337)
+                tapSleep(472, 771, 0.5)
         # 关闭喊话窗口
-        tapSleep(101, 337)
+        tapSleep(472, 771, 0.5)
 
         if 功能开关['自动切换喊话频道']:
             for i in range(1, 10):
@@ -200,9 +204,11 @@ class DailyTask:
 
                 # print("切换喊话频道")
                 Toast("切换喊话频道")
+                # 关闭喊话窗口
+                tapSleep(472, 771, 0.5)
                 # 点击左下角聊天框，弹出上拉按钮
-                tapSleep(123, 942, 1.5)
-                tapSleep(28, 776)
+                tapSleep(123, 942, 1)
+                tapSleep(28, 776, 0.5)
                 # 点击世界频道
                 TomatoOcrTap(205, 75, 281, 108, '世界', 10, 10)
                 res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10)
@@ -210,33 +216,49 @@ class DailyTask:
                     continue
 
                 res, 当前频道 = TomatoOcrText(148, 607, 266, 658, '当前频道')
-                # print(当前频道)
+                print('当前频道：' + 当前频道)
                 当前频道数字 = rePattern.findall(r'\d+', 当前频道)
+                # 检查列表是否为空
+                if not 当前频道数字:
+                    continue
                 # print(当前频道数字)
                 if 当前频道数字 == '':
                     continue
                 当前频道数字 = safe_int(当前频道数字[0])
                 下一频道数字 = 当前频道数字 - 1
-                # print(下一频道数字)
-                下一频道 = '简体中文' + str(下一频道数字)
-                print(下一频道)
-                # 寻找下一频道
-                for i in range(1, 5):
-                    res = TomatoOcrFindRangeClick(下一频道)
-                    if not res:
-                        swipe(225, 814, 225, 714, 600)
-                    if res:
-                        shuru = TomatoOcrTap(80, 1196, 157, 1223, '点击输入')
+                findNext = False
+                if 下一频道数字 < 1:
+                    tapSleep(442, 632)  # 点击最后一个频道
+                    findNext = True
+                else:
+                    # print(下一频道数字)
+                    下一频道 = '简体中文' + str(下一频道数字)
+                    print('下一频道：' + 下一频道)
+                    # 寻找下一频道
+                    for i in range(1, 5):
+                        res = TomatoOcrFindRangeClick(下一频道)
+                        if not res:
+                            swipe(225, 814, 225, 714, 600)
+                        if res:
+                            findNext = True
+                            break
+                if findNext:
+                    for i in range(1, 3):
+                        shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
                         if shuru:
                             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
                             sleep(1)
                             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
                             action.input(功能开关["世界喊话"])
                             tapSleep(360, 104)  # 点击空白处确认输入
-                            res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
-                            # 关闭喊话窗口
-                            imageFindClick('喊话-收起')
-                        break
+                            shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
+                            if shuru:
+                                continue
+                            else:
+                                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
+                                # 关闭喊话窗口
+                                imageFindClick('喊话-收起')
+                                break
 
         return 0
 
@@ -456,7 +478,7 @@ class DailyTask:
         tapSleep(350, 1125)  # 点击空白处
         任务记录["限时特惠-完成"] = 1
 
-# 登录好礼
+    # 登录好礼
     def dengLuHaoLi(self):
         if 功能开关["登录好礼"] == 0:
             return

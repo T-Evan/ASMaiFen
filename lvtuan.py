@@ -10,7 +10,7 @@ from .daily import DailyTask
 from ascript.android.screen import Ocr
 from .baseUtils import *
 import re as repattern
-
+from ascript.android.screen import FindColors
 
 class LvTuanTask:
     def __init__(self):
@@ -165,45 +165,49 @@ class LvTuanTask:
         swipe(360, 750, 360, 850)
         sleep(2.5)
         for i in range(1, 5):
-            if 功能开关['旅团唤兽琴弦']:
-                re = imageFindClick('旅团-唤兽琴弦')
-                if re:
-                    self.shopBuy()
-            if 功能开关['旅团全价兽粮']:
-                re = imageFindClick('旅团-全价兽粮')
-                if re:
-                    self.shopBuy()
-            if 功能开关['旅团超级成长零食']:
-                re = imageFindClick('旅团-超级成长零食')
-                if re:
-                    self.shopBuy()
-            if 功能开关['旅团原材料']:
-                re = imageFindClick('旅团-原材料')
-                if re:
-                    self.shopBuy()
-            if 功能开关['旅团史诗经验']:
-                re = imageFindClick('旅团-史诗经验')
-                if re:
-                    self.shopBuy()
-            if 功能开关['旅团优秀经验']:
-                re = imageFindClick('旅团-优秀经验')
-                if re:
-                    self.shopBuy()
-            if 功能开关['旅团普通经验']:
-                re = imageFindClick('旅团-普通经验')
-                if re:
-                    self.shopBuy()
-            if 功能开关['旅团金币']:
-                re = imageFindClick('旅团-金币')
-                if re:
-                    self.shopBuy()
+            re = FindColors.find("120,703,#FEF396|131,705,#F5CE4F|140,708,#F2A94B|124,711,#F1D65A|129,714,#E8BA46|138,714,#F2A94B",rect=[78,527,639,1104])
+            if re: # 有可购买商品时，继续判断
+                if 功能开关['旅团唤兽琴弦']:
+                    re = imageFindClick('旅团-唤兽琴弦')
+                    if re:
+                        self.shopBuy()
+                if 功能开关['旅团全价兽粮']:
+                    re = imageFindClick('旅团-全价兽粮')
+                    if re:
+                        self.shopBuy()
+                if 功能开关['旅团超级成长零食']:
+                    re = imageFindClick('旅团-超级成长零食')
+                    if re:
+                        self.shopBuy()
+                if 功能开关['旅团原材料']:
+                    re = imageFindClick('旅团-原材料')
+                    if re:
+                        self.shopBuy()
+                if 功能开关['旅团史诗经验']:
+                    re = imageFindClick('旅团-史诗经验')
+                    if re:
+                        self.shopBuy()
+                if 功能开关['旅团优秀经验']:
+                    re = imageFindClick('旅团-优秀经验')
+                    if re:
+                        self.shopBuy()
+                if 功能开关['旅团普通经验']:
+                    re = imageFindClick('旅团-普通经验')
+                    if re:
+                        self.shopBuy()
+                if 功能开关['旅团金币']:
+                    re = imageFindClick('旅团-金币')
+                    if re:
+                        self.shopBuy()
             # 翻页
             swipe(360, 850, 360, 750)
             sleep(3.5)
         任务记录['旅团-商店-完成'] = 1
 
     def shopBuy(self):
-        TomatoOcrFindRangeClick('最大', whiteList='最大')
+        re = TomatoOcrFindRangeClick('最大', whiteList='最大')
+        if not re:
+            return
         # ldE.element('旅团-购买').click().execute(sleep=1)
         tapSleep(362, 866)  # 点击购买
         tapSleep(360, 1210)  # 点击空白处
@@ -298,7 +302,7 @@ class LvTuanTask:
             sleep(1)
             return
 
-        tapSleep(400, 250, 3) # 点击旅团浇水
+        tapSleep(400, 250, 3)  # 点击旅团浇水
 
         res, _ = TomatoOcrText(312, 627, 407, 655, "旅团之树")
         needCount = safe_int(功能开关["付费浇灌次数"])

@@ -228,7 +228,7 @@
             </form>
             <form action="">
                 <fieldset>
-                    <legend>多账号配置（需授予root权限）</legend>
+                    <legend>多账号配置（请参考视频说明后再使用，单账号使用无需配置）</legend>
                     <legend>第一步：登录页保存账号信息（勾选并启动）</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
@@ -838,12 +838,14 @@
                     <legend>史莱姆大暴走</legend>
                     <input id="大暴走开关" name="vehicle" type="checkbox" value="Bike">大暴走开关<br>
                     <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<br>
+                    <input id="暴走自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
                     <div class="flex-container">
                         <label for="史莱姆选择">史莱姆选择:</label>
                         <div class="layui-form">
                             <div class="layui-input-inline">
                                 <select name="史莱姆选择" id="史莱姆选择" lay-filter="mijing1-filter">
                                     <option value="暴走烈焰大王">暴走烈焰大王</option>
+                                    <option value="暴走深林大王">暴走深林大王</option>
                                 </select>
                             </div>
                         </div>
@@ -1025,6 +1027,7 @@
 
         setSwitchStatus("大暴走开关");
         setSwitchStatus("暴走进入战斗后启动");
+        setSwitchStatus("暴走自动接收邀请");
         var defaultValue = localStorage.getItem('史莱姆选择');
         var selectElement = document.getElementById('史莱姆选择');
         for (var i = 0; i < selectElement.options.length; i++) {
@@ -1316,6 +1319,7 @@
 
         大暴走开关 = saveSwitchStatus("大暴走开关");
         暴走进入战斗后启动 = saveSwitchStatus("暴走进入战斗后启动");
+        暴走自动接收邀请 = saveSwitchStatus("暴走自动接收邀请");
         var 史莱姆选择 = document.getElementById("史莱姆选择").value;
         localStorage.setItem("史莱姆选择", 史莱姆选择);
 
@@ -1473,6 +1477,7 @@
             补充体力次数: 补充体力次数,
             大暴走开关: 大暴走开关,
             暴走进入战斗后启动: 暴走进入战斗后启动,
+            暴走自动接收邀请: 暴走自动接收邀请,
             史莱姆选择: 史莱姆选择,
             喊话内容: 队伍喊话,
 

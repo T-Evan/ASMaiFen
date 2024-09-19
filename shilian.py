@@ -109,7 +109,7 @@ class ShiLianTask:
         if 功能开关['梦魇开关'] == 1 and 功能开关['梦魇自动接收邀请'] == 0:
             self.mengYan()
 
-        if 功能开关['大暴走开关'] == 1:
+        if 功能开关['大暴走开关'] == 1 and 功能开关['暴走自动接收邀请'] == 0:
             self.daBaoZou()
 
     def daBaoZou(self):
@@ -901,10 +901,70 @@ class ShiLianTask:
                         self.fightingMengYanTeam()
                     if fightType == "恶龙带队":
                         self.fightingELongTeam()
+                    if fightType == "暴走带队":
+                        self.fightingBaoZouTeam()
                     return True
                 sleep(5)
                 elapsed = elapsed + 5 * 1000
         return False
+
+    def fightingBaoZouTeam(self):
+        totalWait = 30
+        elapsed = 0
+        teamShoutDone = 0
+
+        Toast("战斗开始 - 暴走组队邀请")
+        failNum = 0  # 战斗中状态识别失败次数
+        while 1:
+            if elapsed >= totalWait:
+                Toast("战斗结束 - 暴走超时退出组队")
+                功能开关["fighting"] = 1
+                sleep(2)
+                self.quitTeamFighting()  # 退出队伍
+                功能开关["fighting"] = 0
+                break
+
+            # 识别战斗中状态
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
+            if "等级" in teamName1 or "等级" in teamName2:
+                # if teamShoutDone == 0:
+                #     teamShoutDone = self.teamShout()
+                Toast(f'暴走战斗中,战斗时长{elapsed}/{totalWait}秒')
+            else:
+                # 战斗结束
+                openStatus = self.openTreasure()
+                if openStatus == 1:
+                    Toast("暴走战斗结束 - 战斗胜利")
+                    break
+
+                # 兼容恶龙战斗结算页
+                res = TomatoOcrTap(322, 1049, 394, 1077, "开启")
+                if res:
+                    tapSleep(365, 1135)
+                    tapSleep(365, 1135)
+                    tapSleep(365, 1135)
+                    tapSleep(365, 1135, 3)
+                else:
+                    tapSleep(365, 1135, 3)
+                Toast("暴走任务 - 战斗胜利 - 结算页返回房间")
+                break
+
+            # 判断是否战斗失败（战斗4分钟后）
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
+                Toast(f"暴走战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                failNum = failNum + 1
+                if failNum > 4:
+                    Toast(f"暴走战斗中状态 - 识别失败 - 退出战斗")
+                    break
+                failStatus = self.fight_fail()
+                if failStatus:
+                    break
+            sleep(3)
+            elapsed = elapsed + 4
 
     def fightingELongTeam(self):
         totalWait = 30
@@ -938,9 +998,9 @@ class ShiLianTask:
                     break
 
                 # 兼容恶龙战斗结算页
-                res, _ = TomatoOcrText(300,572,415,615, "战斗详情")
+                res, _ = TomatoOcrText(300, 572, 415, 615, "战斗详情")
                 if res:
-                    res = TomatoOcrTap(322,1049,394,1077, "开启")
+                    res = TomatoOcrTap(322, 1049, 394, 1077, "开启")
                     if res:
                         tapSleep(365, 1135)
                         tapSleep(365, 1135)
@@ -965,7 +1025,6 @@ class ShiLianTask:
                     break
             sleep(3)
             elapsed = elapsed + 4
-
 
     def fightingMengYanTeam(self):
         totalWait = 30  # 30000 毫秒 = 30 秒
@@ -1218,6 +1277,8 @@ class ShiLianTask:
                 for i in range(1, 10):
                     if 功能开关["史莱姆选择"] == '暴走烈焰大王':
                         self.daBaoZouLieYan()
+                    if 功能开关["史莱姆选择"] == '暴走深林大王':
+                        self.daBaoZouShenLin()
 
                 # 战斗结束
                 res2 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
@@ -1250,6 +1311,65 @@ class ShiLianTask:
                     break
                 功能开关["fighting"] = 0
         功能开关["fighting"] = 0
+
+    # 大暴走（深林大王）
+    def daBaoZouShenLin(self):
+        def 草():
+            point = FindColors.find(
+                "67,675,#B2D3A9|71,669,#C8D7AF|78,673,#BBD6AC|74,686,#2D4744|63,691,#323C4A|61,675,#B4D6A9",
+                rect=[9, 637, 202, 803])
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        def 火():
+            point = FindColors.find(
+                "138,669,#323C4A|146,664,#DDC4A3|146,673,#E2AC88|151,672,#E2AF8A|157,678,#E29A78|159,686,#D97F63",
+                rect=[9, 637, 202, 803])
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        def 水():
+            point = FindColors.find(
+                "101,741,#9CD3CF|104,741,#9CD0CF|110,741,#9CD3CF|113,740,#9FD3CF|120,744,#91CECF|116,760,#57B1C7",
+                rect=[9, 637, 202, 803])
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        # 当前职业
+        当前职业 = ''
+        if 当前职业 == '':
+            re, x, y = imageFind("职业-战士", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-战士')
+                当前职业 = '战士'
+        if 当前职业 == '':
+            re, x, y = imageFind("职业-服事", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-服事')
+                当前职业 = '服事'
+        if 当前职业 == '':
+            re, x, y = imageFind("职业-刺客", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-刺客')
+                当前职业 = '刺客'
+        if 当前职业 == '':
+            re, x, y = imageFind("职业-法师", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-法师')
+                当前职业 = '法师'
+        if 当前职业 == '':
+            re, x, y = imageFind("职业-游侠", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-游侠')
+                当前职业 = '游侠'
+
+        for i in range(1, 5):
+            if 当前职业 == '战士':
+                Toast('战士-自动走位火')
+                火()
+            if 当前职业 == '服事':
+                Toast('服事-自动走位草')
+                草()
 
     # 大暴走（烈焰大王）
     def daBaoZouLieYan(self):
@@ -1327,20 +1447,6 @@ class ShiLianTask:
                             往左()
                         if 功能开关['bossNumber0'] != '' and 功能开关['bossNumber0'] in [0, 3, 6]:
                             Toast('原地不动')
-
-            # if 功能开关['bossNumber0'] == '' and 功能开关['bossNumber1'] == '' and 功能开关['bossNumber2'] == '':
-            #     Toast('等待返回水地块')
-            #     for i in range(1, 3):
-            #         # 返回水地块
-            #         isShui1 = ldE.element_exist('暴走-水地块')
-            #         isShui2 = ldE.element_exist('暴走-水地块2')
-            #         isShui3 = ldE.element_exist('暴走-水地块3')
-            #         isShui4 =  FindColors.find("532,751,#D2E4E8|542,749,#67BBD2|563,751,#6EC3D8|570,744,#5BB2CB|575,734,#4DA3BF|552,735,#68AAC1")
-            #         if not isShui1 and not isShui2 and not isShui3 and not isShui4:
-            #             往左()
-            #         else:
-            #             Toast('已返回水地块')
-            #             break
 
     def teamShout(self):
         if 功能开关['喊话内容'] == "":
@@ -1446,7 +1552,7 @@ class ShiLianTask:
                 if not res3:
                     res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
                     if not res4:
-                        res5 = TomatoOcrTap(634,557,701,582, "正在组队")
+                        res5 = TomatoOcrTap(634, 557, 701, 582, "正在组队")
         if res1 or res2 or res3 or res4 or res5:
             功能开关["needHome"] = 0
             teamStatus = TomatoOcrFindRangeClick('匹配中')

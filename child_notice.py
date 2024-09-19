@@ -50,6 +50,7 @@ def noticeCancel():
         reWait, _ = TomatoOcrText(335, 978, 396, 1007, "旅行中")
         if reWait:
             swipe(213, 1104, 568, 1104)
+            swipe(213, 1104, 568, 1104)
             Toast('退出待机状态')
 
         # if not re:
