@@ -20,6 +20,8 @@ class LvRenTask:
         if 功能开关["日常总开关"] == 0:
             return
 
+        self.dailyTask.homePage(needQuitTeam=True)
+
         # 旅人相关
 
         # 自动强化装备

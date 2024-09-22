@@ -89,6 +89,9 @@ class ShiLianTask:
         }
 
     def shilian(self):
+        if 功能开关['大暴走开关'] == 1 and 功能开关['暴走自动接收邀请'] == 0:
+            self.daBaoZou()
+
         if 功能开关['冒险总开关'] == 0:
             return
 
@@ -108,9 +111,6 @@ class ShiLianTask:
 
         if 功能开关['梦魇开关'] == 1 and 功能开关['梦魇自动接收邀请'] == 0:
             self.mengYan()
-
-        if 功能开关['大暴走开关'] == 1 and 功能开关['暴走自动接收邀请'] == 0:
-            self.daBaoZou()
 
     def daBaoZou(self):
         Toast('暴走史莱姆 - 开始')
@@ -191,7 +191,7 @@ class ShiLianTask:
                         res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
                 break
 
-            Toast("秘境任务 - 匹配中")
+            Toast("大暴走任务 - 匹配中")
 
             # 判断无合适队伍，重新开始匹配
             res, _ = TomatoOcrText(231, 624, 305, 645, "匹配超时")
@@ -229,7 +229,7 @@ class ShiLianTask:
         self.quitTeam()
         res = TomatoOcrTap(650, 522, 688, 544, "试炼")
         if res:
-            re = imageFindClick('梦魇狂潮', sleep1=2.5)
+            re = imageFindClick('梦魇狂潮', sleep1=2.5, x1=101, y1=140, x2=618, y2=1087)
             if not re:
                 Toast("秘境任务 - 未找到梦魇入口 - 重新尝试")
                 return
@@ -301,7 +301,7 @@ class ShiLianTask:
         self.quitTeam()
         res = TomatoOcrTap(650, 522, 688, 544, "试炼")
         if res:
-            re = imageFindClick('恶龙大通缉')
+            re = imageFindClick('恶龙大通缉', x1=101, y1=140, x2=618, y2=1087)
             if not re:
                 Toast("秘境任务 - 未找到恶龙入口 - 重新尝试")
                 return self.elong()
@@ -382,7 +382,7 @@ class ShiLianTask:
         selectStage = 功能开关['秘境关卡']
         res = TomatoOcrTap(650, 522, 688, 544, "试炼")
         if res:
-            re = imageFindClick('秘境之间')
+            re = imageFindClick('秘境之间', x1=85, y1=53, x2=636, y2=700)
             if not re:
                 Toast("秘境任务 - 未找到试炼入口 - 重新尝试")
                 res = TomatoOcrTap(233, 1205, 281, 1234, "行李")  # 尝试点击旅人切换页面，解决长时间停留首页，试炼按钮异常消失的情况（反作弊策略？）
@@ -534,7 +534,9 @@ class ShiLianTask:
                         # 等待进入战斗
                         for i in range(1, 7):
                             waitTime = 5 * (i - 1)
+                            res = TomatoOcrTap(595, 26, 644, 55, "跳过", 10, 10)  # 跳过战斗开始动画
                             Toast(f"秘境任务 - 匹配成功 - 等待进入战斗 - {waitTime}/30s")
+
                             if i == 6:
                                 Toast(f"秘境任务 - 匹配成功 - 等待进入战斗失败 - 重新等待队友")
                                 sleep(1)
@@ -722,24 +724,15 @@ class ShiLianTask:
         res1 = False
         res2 = False
         res3 = False
-        res4 = False
-        res5 = False
-        res6 = False
-        res7 = False
-        res1, _ = TomatoOcrText(313, 622, 404, 656, "通关奖励")  # 战斗结束页。宝箱提示
+        # res1, _ = TomatoOcrText(313, 622, 404, 656, "通关奖励")  # 战斗结束页。宝箱提示
+        res1 = TomatoOcrFindRange("通关奖励", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy')  # 战斗结束页。宝箱提示
         if not res1:
-            res2, _ = TomatoOcrText(267, 755, 313, 783, "开启")  # 战斗结束页。宝箱提示
-            if not res2:
-                res3, _ = TomatoOcrText(273, 397, 360, 425, "是否开启")  # 结算页，宝箱提示
-                if not res3:
-                    res4, _ = TomatoOcrText(265, 457, 314, 488, "开启")  # 结算页，宝箱提示
-                    if not res4:
-                        res5, _ = TomatoOcrText(312, 563, 404, 596, "通关奖励")  # 战斗结束页。宝箱提示
-                        if not res5:
-                            res6, _ = TomatoOcrText(309, 551, 406, 588, "通关奖励")  # 战斗结束页。宝箱提示
-                            if not res6:
-                                res7, _ = TomatoOcrText(264, 453, 356, 482, "开启宝箱")  # 战斗结束页。宝箱提示
-        if res1 or res2 or res3 or res4 or res5 or res6 or res7:
+            # res2, _ = TomatoOcrText(267, 755, 313, 783, "开启")  # 战斗结束页。宝箱提示
+            res2 = TomatoOcrFindRange("开启", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy')  # 战斗结束页。宝箱提示
+            # if not res2:
+            # res3, _ = TomatoOcrText(273, 397, 360, 425, "是否开启")  # 结算页，宝箱提示
+            # res3 = TomatoOcrFindRange("是否开启", x1=108, y1=462, x2=618, y2=1120)  # 结算页，宝箱提示
+        if res1 or res2 or res3:
             isTreasure = 1
         if 功能开关['秘境不开宝箱'] == 1:
             openStatus = 0
@@ -747,12 +740,12 @@ class ShiLianTask:
                 if 功能开关['秘境点赞队友'] == 1:
                     Toast('点赞队友')
                     for i in range(1, 3):
-                        imageFindClick('点赞1', confidence1=0.8, sleep1=0.7)
-                        imageFindClick('点赞2', confidence1=0.8, sleep1=0.7)
+                        imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
+                        imageFindClick('点赞2', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
                 Toast('返回房间')
-                tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
+                tapSleep(645, 1235, 2)  # 战斗结束页确认不领取
                 # res = TomatoOcrTap(329, 728, 386, 759, "确定")
-                res = TomatoOcrFindRangeClick("确定", whiteList='确定')  # 战斗结束页确认退出
+                res = TomatoOcrFindRangeClick("确定", whiteList='确定', x1=88, y1=277, x2=644, y2=986)  # 战斗结束页确认退出
                 if not res:
                     res = TomatoOcrTap(96, 1199, 130, 1232, "回")  # 返回
                     res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 确定
@@ -822,13 +815,13 @@ class ShiLianTask:
                 # 图色识别兜底
                 res = imageFindClick('宝箱-开启')
                 if res:
-                    sleep(2.5)
+                    sleep(2)
                     tapSleep(340, 930)
                     openStatus = 1
 
                 res = imageFindClick('宝箱-开启2')
                 if res:
-                    sleep(2.5)
+                    sleep(2)
                     tapSleep(340, 930)
                     openStatus = 1
 
@@ -845,14 +838,8 @@ class ShiLianTask:
             if not res:
                 # 识别战斗结束页提前返回
                 res1 = False
-                res2 = False
-                res3 = False
-                res1, _ = TomatoOcrText(313, 622, 404, 656, "通关奖励")  # 战斗结束页。宝箱提示
-                if not res1:
-                    res2, _ = TomatoOcrText(312, 563, 404, 596, "通关奖励")  # 战斗结束页。宝箱提示
-                if not res2:
-                    res3, _ = TomatoOcrText(309, 551, 406, 588, "通关奖励")  # 战斗结束页。宝箱提示
-                if res1 or res2 or res3:
+                res1 = TomatoOcrFindRange("通关奖励", x1=112, y1=456, x2=620, y2=1032)  # 战斗结束页。宝箱提示
+                if res1:
                     tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
                     # res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 战斗结束页确认退出
                     res = TomatoOcrFindRangeClick("确定", whiteList='确定')  # 战斗结束页确认退出
@@ -1241,9 +1228,9 @@ class ShiLianTask:
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
                 failNum = failNum + 1
-                if failNum > 10:
-                    Toast(f"战斗中状态 - 识别失败 - 次数 {failNum}/15")
-                if failNum > 15:
+                if failNum > 5:
+                    Toast(f"战斗中状态 - 识别失败 - 次数 {failNum}/10")
+                if failNum > 9:
                     Toast(f"战斗中状态 - 识别失败 - 退出战斗")
                     failStatus = self.fight_fail()
                     if failStatus:
@@ -1458,14 +1445,14 @@ class ShiLianTask:
         res2 = False
         if not res1:
             res2 = TomatoOcrTap(19, 1102, 90, 1127, "点击输入", 10, 10)
-        sleep(2.5)  # 等待输入法弹窗
+        sleep(1.5)  # 等待输入法弹窗
         if res1 or res2:
             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
             sleep(1)
             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
             action.input(功能开关["喊话内容"])
             tapSleep(360, 104)  # 点击空白处确认输入
-            for i in range(1, 2):
+            for i in range(1, 3):
                 # 检查是否已输入
                 notInput = TomatoOcrTap(78, 1155, 156, 1191, "点击输入", 5, 5)
                 if notInput:
@@ -1474,18 +1461,30 @@ class ShiLianTask:
 
             res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
             if res:
-                imageFindClick('喊话-收起')
+                # 关闭喊话窗口
+                point = FindColors.find(
+                    "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                    rect=[11, 26, 364, 489])
+                if point:
+                    tapSleep(point.x, point.y, 1)
                 return 1
 
-        imageFindClick('喊话-收起')
+        # 关闭喊话窗口
+        point = FindColors.find(
+            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+            rect=[11, 26, 364, 489])
+        if point:
+            tapSleep(point.x, point.y, 1)
         return 0
 
     # 战斗中退出组队
     def quitTeamFighting(self):
+        功能开关["fighting"] = 1
         res = TomatoOcrTap(649, 319, 694, 342, "队伍")
         if res:
             res = TomatoOcrTap(501, 191, 581, 217, "离开队伍")
             res = TomatoOcrTap(329, 726, 391, 761, "确定")
+        功能开关["fighting"] = 0
 
     def fight_fail(self):
         res1, _ = TomatoOcrText(246, 459, 327, 482, "你被击败了")
@@ -1553,7 +1552,8 @@ class ShiLianTask:
                     res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
                     if not res4:
                         res5 = TomatoOcrTap(634, 557, 701, 582, "正在组队")
-        if res1 or res2 or res3 or res4 or res5:
+        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+        if res1 or res2 or res3 or res4 or res5 or res6:
             功能开关["needHome"] = 0
             teamStatus = TomatoOcrFindRangeClick('匹配中')
             if teamStatus:

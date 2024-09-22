@@ -20,6 +20,8 @@ class LvTuanTask:
         if 功能开关["旅团总开关"] == 0:
             return
 
+        self.dailyTask.homePage(needQuitTeam=True)
+
         # 旅团签到
         self.lvTuanWater()
 

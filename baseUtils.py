@@ -297,7 +297,7 @@ def Toast(content, tim=1000):
     Dialog.toast(content, tim, 3 | 48, 200, 0)
 
 
-def tapSleep(x, y, s=1.7):
+def tapSleep(x, y, s=1.3):
     click(x, y)
     sleep(s)
 

@@ -29,6 +29,7 @@ from ascript.android.system import Device
 
 初始化任务记录()
 
+
 def kamiActive():
     db = pymysql.connect(
         host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
@@ -175,6 +176,7 @@ def kamiActive():
     # 执行完毕后记得关闭db,不然会并发连接失败哦
     db.close()
 
+
 print('卡密联网激活开始')
 kamiActive()
 print('卡密联网激活完成')
@@ -183,6 +185,7 @@ display = Device.display()
 # 屏幕宽度
 if display.widthPixels != 720 or display.heightPixels != 1280:
     Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
+
 
 # debug
 # res = Ocr.mlkitocr_v2()
@@ -235,7 +238,7 @@ def main():
 
         start_time = int(time.time())
 
-        #多账号处理
+        # 多账号处理
         start_up.multiAccount()
 
         runThread1()
@@ -268,7 +271,8 @@ def main():
 
                 # 启动app
                 start_up.start_app()
-                if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and 功能开关['冒险总开关'] == 0:
+                if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and \
+                        功能开关['冒险总开关'] == 0:
                     Toast('未开启功能，请检查功能配置')
                     sleep(3)
                 # 营地活动（优先领取）
@@ -312,27 +316,27 @@ def main():
                 # 定时切角色
                 if total_switch_role_minute != 0:
                     if current_time - start_time >= total_switch_role_minute:
-                        Toast(f"运行 {need_switch_role_minute} 分钟，准确切换角色")
+                        Toast(f"运行 {need_switch_role_minute} 分钟，准备切换角色")
                         功能开关["fighting"] = 0
                         功能开关["needHome"] = 0
                         初始化任务记录()
                         start_up.switchRole()
                         start_time = int(time.time())
                     else:
-                        tmpMinute = (current_time - start_time) / 60
-                        tmpDiffMinute = (total_switch_role_minute - (current_time - start_time)) / 60
+                        tmpMinute = round((current_time - start_time) / 60, 2)
+                        tmpDiffMinute = round((total_switch_role_minute - (current_time - start_time)) / 60, 2)
                         Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 后切换角色")
 
                 # 定时切账号
                 if total_switch_account_minute != 0:
                     if current_time - start_time >= total_switch_account_minute:
-                        Toast(f"运行 {total_switch_account_minute} 分钟，准确切换账号")
+                        Toast(f"运行 {total_switch_account_minute} 分钟，准备切换账号")
                         初始化任务记录()
                         start_up.switchAccount()
                         start_time = int(time.time())
                     else:
-                        tmpMinute = (current_time - start_time) / 60
-                        tmpDiffMinute = (total_switch_account_minute - (current_time - start_time)) / 60
+                        tmpMinute = round((current_time - start_time) / 60, 2)
+                        tmpDiffMinute = round((total_switch_account_minute - (current_time - start_time)) / 60, 2)
                         Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 后切换账号")
 
             except Exception as e:
@@ -356,5 +360,6 @@ def main():
         print(error_message)
         Dialog.confirm(error_message)
     sys.exit()
+
 
 main()

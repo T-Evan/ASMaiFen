@@ -18,6 +18,8 @@ class YingDiTask:
         if 功能开关["营地总开关"] == 0:
             return
 
+        self.dailyTask.homePage(needQuitTeam=True)
+
         # 秘宝
         self.yingDiMiBao()
 
@@ -27,6 +29,8 @@ class YingDiTask:
     def yingdiTask2(self):
         if 功能开关["营地总开关"] == 0:
             return
+
+        self.dailyTask.homePage(needQuitTeam=True)
 
         # 露营打卡点
         self.luYingDaKa()
@@ -40,10 +44,11 @@ class YingDiTask:
         # 月卡
         self.yueKa()
 
-
     def yingdiTaskEnd(self):
         if 功能开关["营地总开关"] == 0:
             return
+
+        self.dailyTask.homePage(needQuitTeam=True)
 
         # 纸翼大作战
         self.zhiFeiJi()
@@ -129,6 +134,7 @@ class YingDiTask:
             res = TomatoOcrTap(496, 304, 547, 332, "领取")
             tapSleep(345, 1058)  # 点击空白处关闭
             res = TomatoOcrTap(94, 1186, 125, 1217, "回")  # 返回纸飞机首页
+            res = TomatoOcrTap(359, 1056, 409, 1087, "领取")  # 一键领取
             res = TomatoOcrTap(359, 1056, 409, 1087, "领取")  # 一键领取
             tapSleep(345, 1058)  # 点击空白处关闭
             res = TomatoOcrTap(94, 1186, 125, 1217, "回")  # 返回活动首页
@@ -245,7 +251,7 @@ class YingDiTask:
             tapSleep(x, y, 1)
             TomatoOcrTap(310, 977, 408, 1009, "点击签到")
             # re, x, y = imageFind('月签到-累计奖励', confidence1=0.7)
-            point = FindColors.find("361,232,#E65638|361,225,#F46042|366,224,#F55E42",rect=[91,200,622,355])
+            point = FindColors.find("361,232,#E65638|361,225,#F46042|366,224,#F55E42", rect=[91, 200, 622, 355])
             if point:
                 print(point.x, point.y)
                 tapSleep(point.x, point.y, 1)
@@ -486,29 +492,29 @@ class YingDiTask:
         if selectMap == "暗月深林":
             re, x, y = imageFind('暗月深林')
             if re:
-                tapSleep(x, y, 3)
+                tapSleep(x, y, 2)
                 findMap = True
 
         if selectMap == "艾特拉火山":
             re, x, y = imageFind('艾特拉火山')
             if re:
-                tapSleep(x, y, 3)
+                tapSleep(x, y, 2)
                 findMap = True
 
         if selectMap == "鲁尔绿洲":
             re, x, y = imageFind('鲁尔绿洲')
             if re:
-                tapSleep(x, y, 3)
+                tapSleep(x, y, 2)
                 findMap = True
 
         if selectMap == "燃烧塔":
             re, x, y = imageFind('燃烧塔')
             if re:
-                tapSleep(x, y, 3)
+                tapSleep(x, y, 2)
                 findMap = True
 
         if selectMap == "无夜城":
-            re = TomatoOcrFindRangeClick('无夜城', sleep1=3, whiteList='无夜城')
+            re = TomatoOcrFindRangeClick('无夜城', sleep1=2, whiteList='无夜城')
             if re:
                 findMap = True
 
@@ -580,8 +586,8 @@ class YingDiTask:
             imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                TomatoOcrFindRangeClick('最大', whiteList='最大')
-                TomatoOcrFindRangeClick('购买', whiteList='购买')
+                TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                TomatoOcrFindRangeClick('购买', whiteList='购买',x1=93,y1=643,x2=618,y2=1004)
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         # 星星经验
@@ -589,7 +595,7 @@ class YingDiTask:
             imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                TomatoOcrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 tapSleep(360, 825)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -597,7 +603,7 @@ class YingDiTask:
             imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                TomatoOcrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 tapSleep(360, 855)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -605,7 +611,7 @@ class YingDiTask:
             imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                TomatoOcrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 tapSleep(360, 820)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -613,7 +619,7 @@ class YingDiTask:
             imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                TomatoOcrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 tapSleep(360, 820)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
@@ -621,7 +627,7 @@ class YingDiTask:
             imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951)
             re, x, y = imageFind('商店购买')
             if re:
-                TomatoOcrFindRangeClick('最大', whiteList='最大')
+                TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 tapSleep(360, 855)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 

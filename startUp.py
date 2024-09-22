@@ -12,6 +12,8 @@ import shutil
 import os
 import sys
 from ascript.android import system
+from ascript.android.screen import FindColors
+
 class StartUp:
     # 构造器
     def __init__(self, app_name):
@@ -39,14 +41,17 @@ class StartUp:
                     # 不在登录页，尝试开始返回首页
                     功能开关["needHome"] = 1
 
-            # 识别是否进入首页
-            res2, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
+            # 判断是否已在首页
+            # 判断底部冒险图标
+            res2 = FindColors.find(
+                "323,1210,#FCF8EE|333,1210,#FCF8ED|336,1212,#F9ECCB|336,1234,#FEF8E9|347,1231,#FCF8EE|363,1231,#FEF7EB|377,1229,#F4EFE1|372,1218,#88684E|353,1216,#9E8776",
+                rect=[301, 1130, 421, 1273])
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
-                shou_ye1 = TomatoOcrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
+                shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
-                    shou_ye2 = TomatoOcrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
+                    shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
             if res2 or shou_ye1 or shou_ye2:
                 # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
                 return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
@@ -64,8 +69,8 @@ class StartUp:
             # 识别是否战斗中
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-            res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
-            if res1 or (teamName1 != "" or teamName2 != ""):  # 战斗中
+            # res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
+            if teamName1 != "" or teamName2 != "":  # 战斗中
                 # 大暴走战斗中
                 if 功能开关["大暴走开关"] == 1 and 功能开关["暴走进入战斗后启动"] == 1:
                     Toast("进入暴走战斗成功 - 开始战斗")

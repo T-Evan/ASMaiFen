@@ -13,8 +13,7 @@ shilianTask = ShiLianTask()
 # 实例方法
 def main():
     if 功能开关["冒险总开关"] == 1 and (
-            功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关[
-        '恶龙自动接收邀请'] == 1 or 功能开关['暴走自动接收邀请'] == 1):
+            功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or 功能开关['暴走自动接收邀请'] == 1):
         while True:
             sleep(5)  # 等待 5 秒
             Toast('等待组队邀请')
@@ -29,10 +28,11 @@ def waitInvite():
     res1, _ = TomatoOcrText(584, 651, 636, 678, "同意")
     res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
     # 判断体力用尽提示
-    res3, _ = TomatoOcrFindRange("体力不足")
+    res3, _ = TomatoOcrText(242, 598, 314, 616, "体力不足")
     if res3:
-        Toast("秘境任务 - 体力不足继续挑战")
-        res = TomatoOcrFindRangeClick("确定")
+        if 功能开关["秘境无体力继续"]:
+            Toast("秘境任务 - 体力不足继续挑战")
+            res = TomatoOcrTap(334, 743, 385, 771, "确定")
 
     if not res1 and not res2:
         quitTeamRe = shilianTask.quitTeam()
@@ -57,6 +57,17 @@ def waitInvite():
             resMiJing1, _ = TomatoOcrText(405, 588, 480, 611, "秘境之间")  # 秘境邀请
             if resMiJing1:
                 fight_type = "秘境"
+                break
+        for i in range(1, 3):
+            resJueJing1 = TomatoOcrFindRange("绝境挑战", 0.9, 380, 583, 510, 615, match_mode='fuzzy')  # 绝境邀请
+            # resJueJing1, _ = TomatoOcrText(405, 588, 483, 610, "绝境挑战")  # 绝境邀请
+            if resJueJing1:
+                fight_type = "绝境"
+                break
+        for i in range(1, 3):
+            resZhongMo1 = TomatoOcrFindRange("终末战", 0.9, 380, 583, 510, 615, match_mode='fuzzy')  # 终末战邀请
+            if resZhongMo1:
+                fight_type = "终末战"
                 break
 
         if fight_type == '梦魇带队':
@@ -90,6 +101,16 @@ def waitInvite():
                 return
             else:
                 Toast('同意秘境组队邀请')
+        if fight_type == '绝境':
+            # if 功能开关['绝境自动接收邀请'] == 0:
+            Toast('绝境带队未开启，拒绝绝境组队邀请')
+            功能开关["fighting"] = 0
+            return
+        if fight_type == '终末战':
+            # if 功能开关['绝境自动接收邀请'] == 0:
+            Toast('终末战带队未开启，拒绝终末战组队邀请')
+            功能开关["fighting"] = 0
+            return
         res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
 
     waitFight = False
