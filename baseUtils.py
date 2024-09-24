@@ -151,15 +151,18 @@ from .res.ui.ui import TimeoutLock
 #         return False
 #
 
-def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, match_mode='exact'):
+def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
+                       match_mode='exact', bitmap=''):
     try:
         if whiteList == '':
             whiteList = keyword
         if TimeoutLock(switch_lock, timeLock).acquire_lock():
+            if bitmap == '':
+                bitmap = screen.capture(x1, y1, x2, y2)
             ocrRe = tomatoOcr.find_all(
                 license="gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==",
                 rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                capture=[x1, y1, x2, y2])
+                bitmap=bitmap)
             # print(ocrRe)
             TimeoutLock(switch_lock, timeLock).release_lock()
         else:
@@ -198,7 +201,9 @@ def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, wh
         print(f"TomatoOcrFindRange发生异常: {e}")
         return False
 
-def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, match_mode='exact'):
+
+def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
+                            match_mode='exact'):
     try:
         if whiteList == '':
             whiteList = keyword
@@ -269,6 +274,7 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
         print(f"toOcr发生异常: {e}")
         return False, ''
 
+
 def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0):
     try:
         if TimeoutLock(switch_lock).acquire_lock():
@@ -313,6 +319,7 @@ def safe_int(value):
         return int(value)
     except (TypeError, ValueError):
         return ""
+
 
 def safe_int_v2(value):
     """

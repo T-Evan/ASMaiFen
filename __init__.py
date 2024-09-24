@@ -198,7 +198,7 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # return1 = ldE.element_exist('返回-1')
 # print(return1)
 # if return1:
-# res = TomatoOcrFindRangeClick("高原", 1, 0.8, 12, 160, 282, 1171)
+# action.input("hhh")
 # sys.exit()
 
 def main():

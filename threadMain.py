@@ -18,7 +18,7 @@ def runThreadMain():
 
 
 def runThreadMijingTeam():
-    if 功能开关["冒险总开关"] == 1 and ( 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or 功能开关['暴走自动接收邀请'] == 1):
+    if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or 功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
         try:
             if not threadMijingTeam.is_alive():
                 threadMijingTeam.start()

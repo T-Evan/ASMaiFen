@@ -71,6 +71,9 @@ class DailyTask:
 
     # 日常任务聚合
     def dailyTask(self):
+        # 世界喊话
+        self.shijieShout()
+
         if 功能开关["日常总开关"] == 0:
             return
 
@@ -87,9 +90,6 @@ class DailyTask:
         self.qiShouLeYuan()
         # 邮件领取
         self.youJian()
-
-        # 世界喊话
-        self.shijieShout()
 
     def dailyTask2(self):
         if 功能开关["日常总开关"] == 0:
@@ -192,20 +192,19 @@ class DailyTask:
         res2 = False
         if not res1:
             res2 = TomatoOcrTap(17, 1103, 96, 1134, "点击输入", 10, 10)
-        sleep(2.5)  # 等待输入法弹窗
         if res1 or res2:
             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-            sleep(1.5)
+            sleep(0.5)
             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
             action.input(功能开关["世界喊话"])
-            tapSleep(360, 104)  # 点击空白处确认输入
+            tapSleep(360, 104, 0.5)  # 点击空白处确认输入
             shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
             if shuru:
                 action.input(功能开关["世界喊话"])
-                tapSleep(360, 104)  # 点击空白处确认输入
+                tapSleep(360, 104, 0.5)  # 点击空白处确认输入
             res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
-            if res:
-                tapSleep(472, 771, 0.5)
+            # if res:
+            #     tapSleep(472, 771, 0.5)
         # 关闭喊话窗口
         tapSleep(472, 771, 0.5)
 
@@ -222,13 +221,14 @@ class DailyTask:
 
                 # print("切换喊话频道")
                 Toast("切换喊话频道")
-                # 关闭喊话窗口
-                tapSleep(472, 771, 0.5)
+                # # 关闭喊话窗口
+                # tapSleep(472, 771, 0.5)
                 # 点击左下角聊天框，弹出上拉按钮
-                tapSleep(123, 942, 1)
+                tapSleep(123, 942, 0.5)
                 tapSleep(28, 776, 0.5)
                 # 点击世界频道
-                TomatoOcrTap(205, 75, 281, 108, '世界', 10, 10)
+                # TomatoOcrTap(205, 75, 281, 108, '世界', 10, 10)
+                tapSleep(236,83,0.4)
                 res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10)
                 if not res:
                     continue
@@ -262,18 +262,23 @@ class DailyTask:
                             break
                 if findNext:
                     for i in range(1, 3):
-                        shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
-                        if shuru:
+                        shuru1 = TomatoOcrTap(80,1194,118,1226, '点击')
+                        shuru2 = False
+                        if not shuru1:
+                            shuru2 = TomatoOcrTap(79,1155,118,1191, '点击')
+                        if shuru1 or shuru2:
                             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-                            sleep(1.5)
                             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
                             action.input(功能开关["世界喊话"])
                             Toast('输入文字结束')
                             sleep(0.5)
-                            # tapSleep(353,427)  # 点击空白处确认输入
+                            # tapSleep(353, 427, 0.5)  # 点击空白处确认输入
                             # re = TomatoOcrFindRangeClick('确定', 9, 591, 691, 1090)
-                            shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
-                            if shuru:
+                            shuru1 = TomatoOcrTap(80,1194,118,1226, '点击')
+                            shuru2 = False
+                            if not shuru1:
+                                shuru2 = TomatoOcrTap(79,1155,118,1191, '点击')
+                            if shuru1 or shuru2:
                                 continue
                             else:
                                 res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
@@ -772,7 +777,8 @@ class DailyTask:
 
         res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
         if res2:
-            point = FindColors.find("184,318,#9D9D9D|189,312,#939393|183,334,#ABABAB|189,323,#E1E1E1|194,320,#E8E8E8",rect=[115,244,262,432],diff=0.9)  # 已领取门票，灰色状态
+            point = FindColors.find("184,318,#9D9D9D|189,312,#939393|183,334,#ABABAB|189,323,#E1E1E1|194,320,#E8E8E8",
+                                    rect=[115, 244, 262, 432], diff=0.9)  # 已领取门票，灰色状态
             if point:
                 Toast('骑兽乐园 - 已领取门票')
             else:

@@ -8,6 +8,7 @@ from ascript.android.system import R
 from ascript.android.ui import WebWindow
 from ascript.android.ui import Dialog
 import threading
+import sys
 
 config = None
 
@@ -19,7 +20,7 @@ def tunner(k, v):
     print(v)
 
     if k == "guan" and v == "关闭":
-        R.exit()
+        config = "exit"
     if k == "submit":
         res = json.loads(v)
         config = res
@@ -38,8 +39,12 @@ from threading import Lock
 while True:
     print("循环等待中")
     time.sleep(1)
+    if config == "exit":
+        Dialog.toast('取消执行', 5, 3 | 48, 200, 0)
+        sys.exit()
     if config:
         Dialog.toast('资源加载中 - 请等待30s', 5, 3 | 48, 200, 0)
+        # time.sleep(2)
         break
 
 import time

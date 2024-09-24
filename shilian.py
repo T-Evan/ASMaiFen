@@ -86,6 +86,8 @@ class ShiLianTask:
             "无夜大王驾到": [304, 759, 469, 792],
             "金色歌剧院": [303, 373, 447, 401],
             "决战黄金穹顶": [303, 567, 423, 596],
+            "巨像思维首脑": [303, 373, 447, 401],
+            "世界万象其中": [303, 567, 423, 596],
         }
 
     def shilian(self):
@@ -535,6 +537,7 @@ class ShiLianTask:
                         for i in range(1, 7):
                             waitTime = 5 * (i - 1)
                             res = TomatoOcrTap(595, 26, 644, 55, "跳过", 10, 10)  # 跳过战斗开始动画
+                            res = TomatoOcrTap(596, 28, 643, 54, "跳过", 10, 10)  # 跳过战斗开始动画
                             Toast(f"秘境任务 - 匹配成功 - 等待进入战斗 - {waitTime}/30s")
 
                             if i == 6:
@@ -683,7 +686,7 @@ class ShiLianTask:
             # 判断是否已在第一屏
             res, _ = TomatoOcrText(110, 235, 175, 267, "原野")
             if res:
-                sleep(0.5)
+                sleep(0.1)
             else:
                 # 向上滚动第一屏
                 swipe(150, 300, 150, 700)
@@ -725,10 +728,13 @@ class ShiLianTask:
         res2 = False
         res3 = False
         # res1, _ = TomatoOcrText(313, 622, 404, 656, "通关奖励")  # 战斗结束页。宝箱提示
-        res1 = TomatoOcrFindRange("通关奖励", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy')  # 战斗结束页。宝箱提示
+        bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
+        res1 = TomatoOcrFindRange("通关奖励", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy',
+                                  bitmap=bitmap)  # 战斗结束页。宝箱提示
         if not res1:
             # res2, _ = TomatoOcrText(267, 755, 313, 783, "开启")  # 战斗结束页。宝箱提示
-            res2 = TomatoOcrFindRange("开启", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy')  # 战斗结束页。宝箱提示
+            res2 = TomatoOcrFindRange("开启", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy',
+                                      bitmap=bitmap)  # 战斗结束页。宝箱提示
             # if not res2:
             # res3, _ = TomatoOcrText(273, 397, 360, 425, "是否开启")  # 结算页，宝箱提示
             # res3 = TomatoOcrFindRange("是否开启", x1=108, y1=462, x2=618, y2=1120)  # 结算页，宝箱提示
@@ -856,6 +862,9 @@ class ShiLianTask:
         res1 = TomatoOcrTap(457, 607, 502, 631, "准备")  # 秘境准备
         res2 = TomatoOcrTap(453, 650, 505, 684, "准备")  # 恶龙准备
         res3 = False
+        res4 = False
+        if not res1 and not res2:
+            res4 = TomatoOcrFindRangeClick('准备')  # 全屏识别准备按钮
 
         # 队伍满员，开始挑战
         res, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
@@ -863,7 +872,7 @@ class ShiLianTask:
             res = TomatoOcrTap(455, 726, 509, 760, "确定")  # 队伍已满员，准备开启挑战 - 确定
             res3 = TomatoOcrTap(333, 974, 383, 1006, "开始")
 
-        if res1 or res2 or res3:
+        if res1 or res2 or res3 or res4:
             Toast("匹配成功 - 等待进入战斗")
             totalWait = 20 * 1000
             elapsed = 0
@@ -888,6 +897,12 @@ class ShiLianTask:
                         self.fightingMengYanTeam()
                     if fightType == "恶龙带队":
                         self.fightingELongTeam()
+                    if fightType == "绝境带队":
+                        self.fightingJueJingTeam()
+                    if fightType == "终末战带队":
+                        self.fightingZhongMoTeam()
+                    if fightType == "调查队带队":
+                        self.fightingDiaoChaTeam()
                     if fightType == "暴走带队":
                         self.fightingBaoZouTeam()
                     return True
@@ -946,6 +961,144 @@ class ShiLianTask:
                 failNum = failNum + 1
                 if failNum > 4:
                     Toast(f"暴走战斗中状态 - 识别失败 - 退出战斗")
+                    break
+                failStatus = self.fight_fail()
+                if failStatus:
+                    break
+            sleep(3)
+            elapsed = elapsed + 4
+
+    def fightingDiaoChaTeam(self):
+        totalWait = 30
+        elapsed = 0
+        teamShoutDone = 0
+
+        Toast("战斗开始 - 调查队组队邀请")
+        failNum = 0  # 战斗中状态识别失败次数
+        while 1:
+            if elapsed >= totalWait:
+                Toast("战斗结束 - 调查队超时退出组队")
+                功能开关["fighting"] = 1
+                sleep(2)
+                self.quitTeamFighting()  # 退出队伍
+                功能开关["fighting"] = 0
+                break
+
+            # 识别战斗中状态
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
+            if "等级" in teamName1 or "等级" in teamName2:
+                # if teamShoutDone == 0:
+                #     teamShoutDone = self.teamShout()
+                Toast(f'调查队战斗中,战斗时长{elapsed}/{totalWait}秒')
+            else:
+                # 战斗结束
+                openStatus = self.openTreasure()
+                if openStatus == 1:
+                    Toast("调查队战斗结束 - 战斗胜利")
+                    break
+
+            # 判断是否战斗失败（战斗4分钟后）
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
+                Toast(f"调查队战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                failNum = failNum + 1
+                if failNum > 4:
+                    Toast(f"调查队战斗中状态 - 识别失败 - 退出战斗")
+                    break
+                failStatus = self.fight_fail()
+                if failStatus:
+                    break
+            sleep(3)
+            elapsed = elapsed + 4
+
+    def fightingJueJingTeam(self):
+        totalWait = 30
+        elapsed = 0
+        teamShoutDone = 0
+
+        Toast("战斗开始 - 绝境组队邀请")
+        failNum = 0  # 战斗中状态识别失败次数
+        while 1:
+            if elapsed >= totalWait:
+                Toast("战斗结束 - 绝境超时退出组队")
+                功能开关["fighting"] = 1
+                sleep(2)
+                self.quitTeamFighting()  # 退出队伍
+                功能开关["fighting"] = 0
+                break
+
+            # 识别战斗中状态
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
+            if "等级" in teamName1 or "等级" in teamName2:
+                # if teamShoutDone == 0:
+                #     teamShoutDone = self.teamShout()
+                Toast(f'绝境战斗中,战斗时长{elapsed}/{totalWait}秒')
+            else:
+                # 战斗结束
+                openStatus = self.openTreasure()
+                if openStatus == 1:
+                    Toast("绝境战斗结束 - 战斗胜利")
+                    break
+
+            # 判断是否战斗失败（战斗4分钟后）
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
+                Toast(f"绝境战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                failNum = failNum + 1
+                if failNum > 4:
+                    Toast(f"绝境战斗中状态 - 识别失败 - 退出战斗")
+                    break
+                failStatus = self.fight_fail()
+                if failStatus:
+                    break
+            sleep(3)
+            elapsed = elapsed + 4
+
+    def fightingZhongMoTeam(self):
+        totalWait = 30
+        elapsed = 0
+        teamShoutDone = 0
+
+        Toast("战斗开始 - 终末战组队邀请")
+        failNum = 0  # 战斗中状态识别失败次数
+        while 1:
+            if elapsed >= totalWait:
+                Toast("战斗结束 - 终末战超时退出组队")
+                功能开关["fighting"] = 1
+                sleep(2)
+                self.quitTeamFighting()  # 退出队伍
+                功能开关["fighting"] = 0
+                break
+
+            # 识别战斗中状态
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
+            if "等级" in teamName1 or "等级" in teamName2:
+                # if teamShoutDone == 0:
+                #     teamShoutDone = self.teamShout()
+                Toast(f'终末战战斗中,战斗时长{elapsed}/{totalWait}秒')
+            else:
+                # 战斗结束
+                openStatus = self.openTreasure()
+                if openStatus == 1:
+                    Toast("终末战战斗结束 - 战斗胜利")
+                    break
+
+            # 判断是否战斗失败（战斗4分钟后）
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
+                Toast(f"终末战战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                failNum = failNum + 1
+                if failNum > 4:
+                    Toast(f"终末战战斗中状态 - 识别失败 - 退出战斗")
                     break
                 failStatus = self.fight_fail()
                 if failStatus:
@@ -1445,19 +1598,24 @@ class ShiLianTask:
         res2 = False
         if not res1:
             res2 = TomatoOcrTap(19, 1102, 90, 1127, "点击输入", 10, 10)
-        sleep(1.5)  # 等待输入法弹窗
+        # sleep(1.5)  # 等待输入法弹窗
         if res1 or res2:
             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-            sleep(1)
+            sleep(0.5)
             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
             action.input(功能开关["喊话内容"])
-            tapSleep(360, 104)  # 点击空白处确认输入
+            sleep(0.5)
+            tapSleep(360, 104, 0.5)  # 点击空白处确认输入
             for i in range(1, 3):
                 # 检查是否已输入
                 notInput = TomatoOcrTap(78, 1155, 156, 1191, "点击输入", 5, 5)
                 if notInput:
+                    sleep(1)
                     action.input(功能开关["喊话内容"])
-                    tapSleep(360, 104)  # 点击空白处确认输入
+                    sleep(1)
+                    tapSleep(360, 104, 0.5)  # 点击空白处确认输入
+                else:
+                    break
 
             res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
             if res:
