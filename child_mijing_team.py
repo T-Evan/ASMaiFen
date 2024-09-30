@@ -13,7 +13,9 @@ shilianTask = ShiLianTask()
 
 # 实例方法
 def main():
-    if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or 功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
+    if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or \
+            功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
+            功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
         while True:
             sleep(5)  # 等待 5 秒
             Toast('等待组队邀请')
@@ -27,8 +29,6 @@ def waitInvite():
 
     res1, _ = TomatoOcrText(584, 651, 636, 678, "同意")
     res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
-    # 判断体力用尽提示
-    res = TomatoOcrFindRangeClick("确定", whiteList='确定', x1=105, y1=290, x2=625, y2=1013)  # 战斗结束页确认退出
 
     if not res1 and not res2:
         quitTeamRe = shilianTask.quitTeam()
@@ -139,12 +139,37 @@ def waitInvite():
             else:
                 Toast('同意调查队组队邀请')
         res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
+        if res1:
+            # 判断体力用尽提示
+            res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 
     waitFight = False
-    for i in range(1, 6):
-        waitTime = (i - 1) * 10
+    findDoneStatus = False
+    for i in range(1, 25):
+        waitTime = (i - 1) * 2
         Toast(f'等待队长开始{waitTime}/50s')
-        sleep(5)
+        # 房间 - 特殊状态识别
+        if fight_type == '梦魇带队' and not findDoneStatus:
+            re1, _ = TomatoOcrText(445, 375, 500, 402, "24/24")
+            re2, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
+            if not re1 or re2:
+                Toast('梦魇 - 未完成挑战 - 进入战斗后等待战斗结束')
+                fight_type = '梦魇挑战'
+            else:
+                findDoneStatus = True
+                Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
+        # 返回房间
+        res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
+        if fight_type == '恶龙带队' and not findDoneStatus:
+            # 判断是否未开宝箱
+            re1 = CompareColors.compare("325,356,#F2A949|334,356,#F2A949|342,358,#F2A949")
+            # 未开宝箱，不退队
+            if not re1:
+                Toast('恶龙 - 未完成挑战 - 进入战斗后等待战斗结束')
+                fight_type = '恶龙挑战'
+            else:
+                findDoneStatus = True
+                Toast('恶龙 - 已完成挑战 - 进入战斗后自动留影')
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
             break
@@ -154,7 +179,7 @@ def waitInvite():
             Toast('队友全部离队')
             sleep(1)
             break
-        sleep(5)
+        sleep(2)
     if not waitFight:
         Toast(f'等待进入战斗超时，退出组队')
 

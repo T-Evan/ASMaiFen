@@ -208,8 +208,8 @@ class LvTuanTask:
 
     def shopBuy(self):
         re = TomatoOcrFindRangeClick('最大', whiteList='最大')
-        if not re:
-            return
+        # if not re:
+        #     return
         # ldE.element('旅团-购买').click().execute(sleep=1)
         tapSleep(362, 866)  # 点击购买
         tapSleep(360, 1210)  # 点击空白处

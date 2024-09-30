@@ -203,7 +203,7 @@ def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, wh
 
 
 def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
-                            match_mode='exact'):
+                            match_mode='exact', offsetX=0, offsetY=0):
     try:
         if whiteList == '':
             whiteList = keyword
@@ -240,7 +240,7 @@ def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=7
                 center_x = (rx1 + rx2) / 2
                 center_y = (ry1 + ry2) / 2
         if center_x > 0 and center_y > 0:
-            tapSleep(center_x + x1, center_y + y1)
+            tapSleep(center_x + x1 + offsetX, center_y + y1 + offsetY)
             sleep(sleep1)
             print(f"TomatoOcrFindRangeClick识别成功-{keyword}|{center_x}|{center_y}")
             return True
@@ -303,7 +303,7 @@ def Toast(content, tim=1000):
     Dialog.toast(content, tim, 3 | 48, 200, 0)
 
 
-def tapSleep(x, y, s=1.3):
+def tapSleep(x, y, s=1):
     click(x, y)
     sleep(s)
 

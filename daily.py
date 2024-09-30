@@ -10,6 +10,7 @@ from .res.ui.ui import switch_lock
 from .thread import *
 import re as rePattern
 from ascript.android.screen import FindColors
+from ascript.android.action import Path
 
 
 class DailyTask:
@@ -30,6 +31,10 @@ class DailyTask:
             # return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
             # if return3:
             #     Toast('返回首页')
+
+            if 功能开关["fighting"] == 1:
+                sleep(2)
+                continue
 
             # 点击首页-冒险
             re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
@@ -228,7 +233,7 @@ class DailyTask:
                 tapSleep(28, 776, 0.5)
                 # 点击世界频道
                 # TomatoOcrTap(205, 75, 281, 108, '世界', 10, 10)
-                tapSleep(236,83,0.4)
+                tapSleep(236, 83, 0.4)
                 res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10)
                 if not res:
                     continue
@@ -262,10 +267,10 @@ class DailyTask:
                             break
                 if findNext:
                     for i in range(1, 3):
-                        shuru1 = TomatoOcrTap(80,1194,118,1226, '点击')
+                        shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
                         shuru2 = False
                         if not shuru1:
-                            shuru2 = TomatoOcrTap(79,1155,118,1191, '点击')
+                            shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
                         if shuru1 or shuru2:
                             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
                             # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
@@ -274,10 +279,10 @@ class DailyTask:
                             sleep(0.5)
                             # tapSleep(353, 427, 0.5)  # 点击空白处确认输入
                             # re = TomatoOcrFindRangeClick('确定', 9, 591, 691, 1090)
-                            shuru1 = TomatoOcrTap(80,1194,118,1226, '点击')
+                            shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
                             shuru2 = False
                             if not shuru1:
-                                shuru2 = TomatoOcrTap(79,1155,118,1191, '点击')
+                                shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
                             if shuru1 or shuru2:
                                 continue
                             else:
@@ -326,6 +331,8 @@ class DailyTask:
         self.dengLuHaoLi()
         # 限时特惠
         self.XianShiTeHui()
+        # 箱庭苗圃
+        self.XiangTingMiaoPu()
 
         # 前往新地图
         self.newMap()
@@ -498,6 +505,93 @@ class DailyTask:
                         sleep(4)  # 等待动画
                         res = TomatoOcrTap(359, 741, 391, 775, "确认跟随", 10, 10)
 
+    # 箱庭苗圃
+    def XiangTingMiaoPu(self):
+        if 功能开关["箱庭苗圃"] == 0:
+            return
+        # if 任务记录["箱庭苗圃-完成"] == 1:
+        #     return
+        if 任务记录["箱庭苗圃-倒计时"] > 0:
+            diffTime = time.time() - 任务记录["箱庭苗圃-倒计时"]
+            if diffTime < 20 * 60:
+                Toast(f'日常 - 箱庭苗圃 - 倒计时{20 - round(diffTime / 60, 2)}min')
+                return
+        Toast('日常 - 箱庭苗圃 - 开始')
+
+        self.homePage()
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+        # 判断是否在营地页面
+        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        if not res:
+            return
+
+        # res = TomatoOcrFindRangeClick('箱庭苗圃', 0.9, 14, 98,1025,180,1051, offsetX=30, offsetY=-20)
+        res = TomatoOcrTap(98, 1025, 180, 1051, '箱庭苗圃', offsetX=30, offsetY=-20)
+        if not res:
+            return
+
+        sleep(3)  # 等待动画
+
+        re1 = imageFindClick('花园苗圃-苗圃币', confidence1=0.7)
+        re2 = False
+        if not re1:
+            re2 = imageFindClick('花园苗圃-苗圃币2', confidence1=0.7)
+        if re1 or re2:
+            tapSleep(473, 1076)  # 点击空白处
+            tapSleep(473, 1076)  # 点击空白处
+            tapSleep(473, 1076, 0.3)  # 点击空白处
+
+        for i in range(1, 5):
+            res = TomatoOcrTap(595, 1025, 642, 1052, '浇水')
+            sleep(2)
+
+            res1 = TomatoOcrFindRangeClick('可收获', 0.9, 0.9, 114, 482, 575, 1010, offsetY=-40)
+            if res1:
+                res = TomatoOcrFindRangeClick('全部收获', 0.9, 0.9, 85, 980, 643, 1123, 1010, offsetX=20, offsetY=-20)
+                tapSleep(473, 1076)  # 点击空白处
+                tapSleep(473, 1076)  # 点击空白处
+                tapSleep(473, 1076, 0.3)  # 点击空白处
+
+            res1 = TomatoOcrFindRangeClick('可种植', 0.9, 0.9, 114, 482, 575, 1010, offsetY=-20)
+            sleep(1)
+            if res1:
+                line1 = Path(0, 3000)
+                # 移动初始点
+                line1.moveTo(129, 1046)
+                # 使用二次贝塞尔曲线 从点(500,800) 到 (250,900)
+                line1.quadTo(129, 1046, 203, 891)
+                line1.quadTo(203, 891, 236, 565)
+                line1.quadTo(236, 565, 560, 557)
+                line1.quadTo(560, 557, 214, 560)
+                action.gesture([line1])
+                sleep(4)
+
+            res2 = TomatoOcrFindRangeClick('可种植', 0.9, 14, 114, 482, 575, 1010, offsetY=-20)
+            sleep(1)
+            if res2:
+                line2 = Path(0, 5000)
+                # 移动初始点
+                line2.moveTo(219, 1040)
+                # 拖动种子拖动到对应位置
+                line2.quadTo(219, 1040, 353, 890)
+                line2.quadTo(353, 890, 322, 691)
+                line2.quadTo(322, 691, 508, 700)
+                line2.quadTo(508, 700, 336, 703)
+                line2.quadTo(336, 703, 521, 703)
+                line2.quadTo(521, 703, 532, 885)
+                line2.quadTo(532, 885, 356, 883)
+                action.gesture([line2])
+                sleep(6)
+
+            if res1 or res2:
+                TomatoOcrTap(595, 1025, 642, 1052, '浇水')
+                sleep(2)
+
+            tapSleep(660, 689, 3)  # 翻下一页
+
+        任务记录["箱庭苗圃-倒计时"] = time.time()
+        任务记录["箱庭苗圃-完成"] = 1
+
     # 限时特惠
     def XianShiTeHui(self):
         if 功能开关["限时特惠"] == 0:
@@ -513,11 +607,9 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrTap(96, 1024, 176, 1046, "限时特惠")
+        res = TomatoOcrFindRangeClick('限时特惠', 0.9, 14, 11, 778, 197, 1057, offsetX=30, offsetY=-20)
         if not res:
-            res = TomatoOcrTap(96, 938, 178, 960, "限时特惠")
-            if not res:
-                return
+            return
 
         tapSleep(595, 150)  # 点击特惠宝箱
         tapSleep(350, 1125)  # 点击空白处
@@ -567,7 +659,7 @@ class DailyTask:
         res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
         if not res:
             return
-        res = TomatoOcrTap(20, 937, 84, 960, "宝藏湖", 10, 10)
+        res = TomatoOcrFindRangeClick('宝藏湖', 0.9, 14, 11, 778, 197, 1057, offsetX=30, offsetY=-20)
         if not res:
             return
 
@@ -602,20 +694,18 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrTap(96, 1024, 176, 1046, "BBQ派对")  # 进入BBQ派对
+        res = TomatoOcrFindRangeClick('BBQ派对', 0.9, 14, 11, 778, 197, 1057, offsetX=30, offsetY=-20)
         if not res:
-            res = TomatoOcrTap(96, 938, 178, 960, "BBQ派对")  # 进入BBQ派对
-            if not res:
-                return
+            return
 
         while True:
             res, availableCount = TomatoOcrText(615, 81, 653, 102, "烤刷数量")  # 1/9
             availableCount = safe_int(availableCount)
             if availableCount == "" or availableCount == 0:
-                res, _ = TomatoOcrText(96, 1200, 129, 1232, "回", 10, 10)  # 返回
+                res = TomatoOcrTap(96, 1200, 129, 1232, "回", 10, 10)  # 返回
                 break
 
-            res = TomatoOcrTap(433, 1093, 533, 11236, "连续烧烤")
+            res = TomatoOcrTap(433, 1091, 533, 1122, "连续烧烤")
             sleep(5)
             tapSleep(360, 1220)  # 点击空白处
 
@@ -784,8 +874,8 @@ class DailyTask:
             else:
                 Toast('骑兽乐园 - 领取门票')
                 tapSleep(188, 321, 2)  # 点击门票（固定位置）
-                tapSleep(540, 655, 1)  # 点击空白处关闭
-                tapSleep(540, 655, 0.5)  # 点击空白处关闭
+                tapSleep(540, 655, 1.7)  # 点击空白处关闭
+                tapSleep(540, 655, 1.7)  # 点击空白处关闭
 
             # 兑换门票
             needCount = safe_int(功能开关["钻石兑换门票次数"])
@@ -794,9 +884,14 @@ class DailyTask:
             if needCount > 0:
                 for i in range(1, 5):
                     TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10)
+                    res, _ = TomatoOcrText(320, 372, 401, 399, "兑换门票")
+                    if not res:
+                        TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10)
+
                     buyCount = ""
                     for j in range(1, 5):
-                        res, buyCount = TomatoOcrText(377, 929, 390, 947, "每日限购次数")  # 1/9
+                        res, buyCount = TomatoOcrText(379, 930, 394, 947, "每日限购次数")  # 1/9
+                        buyCount = buyCount.replace("/", "")
                         buyCount = safe_int(buyCount)
                         if buyCount != "":
                             break
@@ -967,9 +1062,9 @@ class DailyTask:
         res2 = False
         res3 = False
         res4 = False
-        res1 = TomatoOcrTap(635, 628, 705, 653, "正在组队")
+        res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
         if not res1:
-            res2 = TomatoOcrFindRangeClick('正在组队', whiteList='正在组队', x1=546, y1=410, x2=699, y2=587)
+            res2 = TomatoOcrFindRangeClick('正在组队', whiteList='正在组队', x1=549, y1=340, x2=699, y2=696)
             # res2 = TomatoOcrTap(631, 558, 699, 581, "正在组队")
             if not res2:
                 # res3 = TomatoOcrFindRangeClick('匹配中', whiteList='匹配中')

@@ -335,13 +335,13 @@ class YingDiTask:
             return
 
         # 点击秘宝
-        tapSleep(241, 192, 4)  # 秘宝
+        tapSleep(241, 192, 3.5)  # 秘宝
         re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
         if not re:
-            tapSleep(194, 178, 4)  # 秘宝
+            tapSleep(194, 178, 3.5)  # 秘宝
             re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
             if not re:
-                tapSleep(282, 178, 4)  # 秘宝
+                tapSleep(282, 178, 3.5)  # 秘宝
                 re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
                 if not re:
                     Toast('营地任务 - 秘宝领取 - 识别未开启')
@@ -405,11 +405,11 @@ class YingDiTask:
                 needNengLiang = True
 
             if needNengLiang:
-                tapSleep(690, 90, 3)
+                tapSleep(690, 90, 1.5)
                 needCount = safe_int(功能开关["秘宝钻石兑换次数"])
                 if needCount == '':
                     needCount = 0
-                for i in range(1, 3):
+                for i in range(1, 5):
                     buyCount = ""
                     for j in range(1, 5):
                         res, buyCount = TomatoOcrText(497, 815, 509, 834, "已购买次数")  # 1 / 9
@@ -441,7 +441,27 @@ class YingDiTask:
                 res, availableNengLiang = TomatoOcrText(603, 80, 672, 101, "剩余能量")  # 210
                 availableNengLiang = safe_int(availableNengLiang)
                 if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
-                    break
+                    # 购买秘宝能量
+                    tapSleep(690, 90, 1.5)
+                    needCount = safe_int(功能开关["秘宝钻石兑换次数"])
+                    if needCount == '':
+                        needCount = 0
+                    for k in range(1, 5):
+                        buyCount = ""
+                        for j in range(1, 5):
+                            res, buyCount = TomatoOcrText(497, 815, 509, 834, "已购买次数")  # 1 / 9
+                            buyCount = safe_int(buyCount)
+                            if buyCount != "":
+                                break
+                        if buyCount == "" or buyCount >= needCount:
+                            TomatoOcrTap(94, 1186, 125, 1218, "回")  # 返回秘宝首页，等待抽取
+                            break
+                        if buyCount != "":
+                            TomatoOcrTap(440, 869, 514, 896, "购买")
+                    res, availableNengLiang = TomatoOcrText(603, 80, 672, 101, "剩余能量")  # 210
+                    availableNengLiang = safe_int(availableNengLiang)
+                    if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
+                        break
                     # 返回秘宝首页，避免寻宝页卡死
 
                 if availableNengLiang != '' and availableNengLiang >= 100:
@@ -522,6 +542,10 @@ class YingDiTask:
             re = TomatoOcrFindRangeClick('黄金穹顶', sleep1=2, whiteList='黄金穹顶')
             if re:
                 findMap = True
+            if not re:
+                re = TomatoOcrFindRangeClick('黄金穹顶', sleep1=2, whiteList='黄金穹顶')
+                if re:
+                    findMap = True
 
         if not findMap:
             # 左右均未找到

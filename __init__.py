@@ -21,6 +21,7 @@ from ascript.android.ui import Dialog
 import pymysql
 from datetime import datetime
 from ascript.android.system import Device
+from ascript.android.ui import Loger
 
 # ldE.set_log_level(10)  # Debug
 # ldE.set_log_level(20)  # Info
@@ -197,8 +198,14 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 #         print("文字范围:",r.rect)
 # return1 = ldE.element_exist('返回-1')
 # print(return1)
-# if return1:
-# action.input("hhh")
+# def tunner(k,v):
+#     print(k,v)
+
+# loger 继承 Window ,因此 Window 中的方法,loger都可以使用
+# lw = Loger(R.ui("loger.html"))
+# lw.tunner(tunner) # 设置消息通道
+# lw.show() # 展示
+# sleep(5)
 # sys.exit()
 
 def main():
@@ -211,7 +218,7 @@ def main():
         shilianTask = ShiLianTask()
 
         # debug
-        # start_up.saveAccount(2)
+        # shilianTask.changeChongWu(fight_type='恶龙挑战')
         # sys.exit()
 
         功能开关["breakChild"] = 0

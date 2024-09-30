@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="layui/css/layui.css">
@@ -569,176 +569,288 @@
                 <fieldset>
                     <legend>冒险功能</legend>
                     <input id="冒险总开关" name="vehicle" type="checkbox" value="Bike">冒险总开关<br>
-                    <legend>秘境之间</legend>
-                    <input id="秘境开关" name="vehicle" type="checkbox" value="Bike">秘境开关<br>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="不开宝箱" name="vehicle" type="checkbox" value="Bike">不开宝箱<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="点赞队友" name="vehicle" type="checkbox" value="Bike">点赞队友<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="秘境添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="无体力继续" name="vehicle" type="checkbox" value="Bike">无体力继续<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="创建房间" name="vehicle" type="checkbox" value="Bike">创建房间<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="秘境自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
-                        </div>
-                    </div>
-                    <div class="flex-container">
-                        <label for="建房重复挑战次数">建房次数：</label>
-                        <input type="text" id="建房重复挑战次数" name="建房重复挑战次数" lay-verify="title"
-                               autocomplete="off"
-                               placeholder="建房重复挑战次数" class="layui-input">
-                    </div>
-                    <div class="flex-container">
-                        <label for="秘境关卡">秘境关卡:</label>
-                        <div class="layui-form">
-                            <div class="layui-input-inline">
-                                <select name="秘境地图" id="秘境地图" lay-filter="mijing1-filter">
-                                    <option value="">秘境地图</option>
-                                    <option value="原野">原野</option>
-                                    <option value="森林">森林</option>
-                                    <option value="沙漠">沙漠</option>
-                                    <option value="海湾">海湾</option>
-                                    <option value="深林">深林</option>
-                                    <option value="冰原">冰原</option>
-                                    <option value="火山">火山</option>
-                                    <option value="高原">高原</option>
-                                    <option value="绿洲">绿洲</option>
-                                    <option value="火原">火原</option>
-                                    <option value="下城">下城</option>
-                                    <option value="上城">上城</option>
-                                    <option value="万象">万象</option>
-                                </select>
+                    <fieldset>
+                        <legend>秘境之间</legend>
+                        <input id="秘境开关" name="vehicle" type="checkbox" value="Bike">秘境开关<br>
+                        <legend>自动匹配设置</legend>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="不开宝箱" name="vehicle" type="checkbox" value="Bike">不开宝箱<br>
                             </div>
-                            <div class="layui-input-inline">
-                                <select name="秘境关卡" id="秘境关卡" lay-filter="mijing2-filter"
-                                        lay-depend="mijing1-filter">
-                                    <option value="">秘境关卡</option>
-                                    <!-- 根据level1的选择动态加载的选项 -->
-                                </select>
+                            <div class="checkbox-item">
+                                <input id="点赞队友" name="vehicle" type="checkbox" value="Bike">点赞队友<br>
                             </div>
-                            <!-- 更多的联动层级（如果需要） -->
+                            <div class="checkbox-item">
+                                <input id="秘境添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="无体力继续" name="vehicle" type="checkbox" value="Bike">无体力继续<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="创建房间" name="vehicle" type="checkbox" value="Bike">创建房间<br>
+                            </div>
                         </div>
-                    </div>
+                        <div class="flex-container">
+                            <label for="建房重复挑战次数">建房次数：</label>
+                            <input type="text" id="建房重复挑战次数" name="建房重复挑战次数" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="建房重复挑战次数" class="layui-input">
+                        </div>
+                        <div class="flex-container">
+                            <label for="秘境关卡">秘境关卡:</label>
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select name="秘境地图" id="秘境地图" lay-filter="mijing1-filter">
+                                        <option value="">秘境地图</option>
+                                        <option value="原野">原野</option>
+                                        <option value="森林">森林</option>
+                                        <option value="沙漠">沙漠</option>
+                                        <option value="海湾">海湾</option>
+                                        <option value="深林">深林</option>
+                                        <option value="冰原">冰原</option>
+                                        <option value="火山">火山</option>
+                                        <option value="高原">高原</option>
+                                        <option value="绿洲">绿洲</option>
+                                        <option value="火原">火原</option>
+                                        <option value="下城">下城</option>
+                                        <option value="上城">上城</option>
+                                        <option value="万象">万象</option>
+                                    </select>
+                                </div>
+                                <div class="layui-input-inline">
+                                    <select name="秘境关卡" id="秘境关卡" lay-filter="mijing2-filter"
+                                            lay-depend="mijing1-filter">
+                                        <option value="">秘境关卡</option>
+                                        <!-- 根据level1的选择动态加载的选项 -->
+                                    </select>
+                                </div>
+                                <!-- 更多的联动层级（如果需要） -->
+                            </div>
+                        </div>
 
-                    <div class="flex-container">
-                        <label for="补充体力次数">补充体力次数:</label>
-                        <div class="layui-form">
-                            <div class="layui-input-inline">
-                                <select name="补充体力次数" id="补充体力次数" lay-filter="mijing1-filter">
-                                    <option value="0">0</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                </select>
+                        <div class="flex-container">
+                            <label for="补充体力次数">补充体力次数:</label>
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select name="补充体力次数" id="补充体力次数" lay-filter="mijing1-filter">
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="flex-container">
-                        <label for="队伍喊话">队伍喊话:</label>
-                        <input type="text" id="队伍喊话" name="队伍喊话" lay-verify="title" autocomplete="off"
-                               placeholder="队伍喊话" class="layui-input">
-                    </div>
-                    <legend>恶龙大通缉</legend>
-                    <input id="恶龙开关" name="vehicle" type="checkbox" value="Bike">恶龙开关<br>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="恶龙添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                        <div class="flex-container">
+                            <label for="队伍喊话">队伍喊话:</label>
+                            <input type="text" id="队伍喊话" name="队伍喊话1" lay-verify="title" autocomplete="off"
+                                   placeholder="队伍喊话内容（留空不执行）" class="layui-input">
+                        </div>
+<!--                        <input type="text" id="队伍喊话2" name="队伍喊话2" lay-verify="title" autocomplete="off"-->
+<!--                               placeholder="队伍喊话内容2（留空不执行）" class="layui-input">-->
+                        <input type="text" id="队伍喊话间隔" name="队伍喊话间隔" lay-verify="title" autocomplete="off"
+                               placeholder="队伍喊话间隔（分钟）(留空每局都喊话)" class="layui-input">
+                        <legend>自动入队设置</legend>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="秘境自动接收邀请" name="vehicle" type="checkbox"
+                                       value="Bike">自动接收邀请<br>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>恶龙大通缉</legend>
+                        <input id="恶龙开关" name="vehicle" type="checkbox" value="Bike">恶龙开关<br>
+                        <legend>自动匹配设置</legend>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="恶龙添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="恶龙重复挑战" name="vehicle" type="checkbox" value="Bike">领取低保后继续挑战<br>
+                            </div>
+                        </div>
+                        <legend>自动入队设置</legend>
+                        <div class="flex-container">
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input id="恶龙自动接收邀请" name="vehicle" type="checkbox"
+                                           value="Bike">自动接收邀请<br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex-container">
+                            <label for="自动离队等待时间">自动离队等待时间:</label>
+                            <input type="text" id="恶龙自动离队时间" name="恶龙自动离队时间" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="默认进入战斗后30s离队" class="layui-input">
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>梦魇狂潮</legend>
+                        <input id="梦魇开关" name="vehicle" type="checkbox" value="Bike">梦魇开关<br>
+                        <legend>自动匹配设置</legend>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="梦魇添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                            </div>
+                        </div>
+                        <legend>自动入队设置</legend>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="梦魇自动接收邀请" name="vehicle" type="checkbox"
+                                       value="Bike">自动接收邀请<br>
+                            </div>
+                        </div>
+                        <div class="flex-container">
+                            <label for="梦魇离队等待时间">自动离队等待时间:</label>
+                            <input type="text" id="梦魇自动离队时间" name="梦魇自动离队时间" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="默认进入战斗后30s离队" class="layui-input">
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>绝境挑战</legend>
+                        <input id="绝境开关" name="vehicle" type="checkbox" value="Bike">绝境开关<br>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="绝境自动接收邀请" name="vehicle" type="checkbox"
+                                       value="Bike">自动接收邀请<br>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>终末战追忆</legend>
+                        <input id="终末战开关" name="vehicle" type="checkbox" value="Bike">终末战开关<br>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="终末战自动接收邀请" name="vehicle" type="checkbox"
+                                       value="Bike">自动接收邀请<br>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>职能相关</legend>
+                        通用：
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="职能优先输出" name="vehicle" type="checkbox" value="Bike">职能优先输出<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="职能优先坦克" name="vehicle" type="checkbox" value="Bike">职能优先坦克<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="职能优先治疗" name="vehicle" type="checkbox" value="Bike">职能优先治疗<br>
+                            </div>
+                        </div>
+                        恶龙：
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="恶龙职能优先输出" name="vehicle" type="checkbox"
+                                       value="Bike">职能优先输出<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="恶龙职能优先坦克" name="vehicle" type="checkbox"
+                                       value="Bike">职能优先坦克<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="恶龙职能优先治疗" name="vehicle" type="checkbox"
+                                       value="Bike">职能优先治疗<br>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>宠物相关</legend>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="自动切换主战宠物" name="vehicle" type="checkbox" value="Bike">自动切换主战宠物<br>
+                            </div>
                         </div>
                         <div class="checkbox-item">
-                            <input id="恶龙重复挑战" name="vehicle" type="checkbox" value="Bike">重复挑战<br>
+                            <input id="恶龙宠物切换" name="vehicle" type="checkbox" value="Bike">恶龙：<br>
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select name="恶龙宠物名称" id="恶龙宠物名称" lay-filter="mijing1-filter">
+                                        <option value="光翼">光翼</option>
+                                        <option value="影中鸦">影中鸦</option>
+                                        <option value="鸣雷声">鸣雷声</option>
+                                        <option value="冰谷驹">冰谷驹</option>
+                                        <option value="霜风虎">霜风虎</option>
+                                        <option value="克拉肯姆">克拉肯姆</option>
+                                        <option value="魔魔狗">魔魔狗</option>
+                                        <option value="寒风隼">寒风隼</option>
+                                        <option value="利爪剑犬">利爪剑犬</option>
+                                        <option value="山王雪豹">山王雪豹</option>
+                                        <option value="智谋多">智谋多</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="checkbox-item">
-                            <input id="恶龙自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
+                            <input id="梦魇宠物切换" name="vehicle" type="checkbox" value="Bike">梦魇：<br>
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select name="梦魇宠物名称" id="梦魇宠物名称" lay-filter="mijing1-filter">
+                                        <option value="光翼">光翼</option>
+                                        <option value="影中鸦">影中鸦</option>
+                                        <option value="鸣雷声">鸣雷声</option>
+                                        <option value="冰谷驹">冰谷驹</option>
+                                        <option value="霜风虎">霜风虎</option>
+                                        <option value="克拉肯姆">克拉肯姆</option>
+                                        <option value="魔魔狗">魔魔狗</option>
+                                        <option value="寒风隼">寒风隼</option>
+                                        <option value="利爪剑犬">利爪剑犬</option>
+                                        <option value="山王雪豹">山王雪豹</option>
+                                        <option value="智谋多">智谋多</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <legend>梦魇狂潮</legend>
-                    <input id="梦魇开关" name="vehicle" type="checkbox" value="Bike">梦魇开关<br>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="梦魇添加佣兵" name="vehicle" type="checkbox" value="Bike">添加佣兵<br>
+                    </fieldset>
+                    <fieldset>
+                        <legend>技能相关</legend>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="主动释放技能" name="vehicle" type="checkbox" value="Bike">主动释放技能(配合下方功能使用)<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="三技能自动释放" name="vehicle" type="checkbox" value="Bike">三技能自动开盾/打断(需先开启主动释放)<br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="技能定时释放" name="vehicle" type="checkbox" value="Bike">技能定时释放(需关闭自动三技能)<br>
+                            </div>
                         </div>
-                        <div class="checkbox-item">
-                            <input id="梦魇自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
+                        <div class="flex-container">
+                            <label for="宠物技能释放间隔">宠物技能释放间隔:</label>
+                            <input type="text" id="宠物技能释放间隔" name="宠物技能释放间隔" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="秒" class="layui-input">
                         </div>
-                    </div>
-                    <legend>绝境挑战</legend>
-                    <input id="绝境开关" name="vehicle" type="checkbox" value="Bike">绝境开关<br>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="绝境自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
+                        <div class="flex-container">
+                            <label for="技能1释放间隔">技能1释放间隔:</label>
+                            <input type="text" id="技能1释放间隔" name="技能1释放间隔" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="秒" class="layui-input">
                         </div>
-                    </div>
-                    <legend>终末战追忆</legend>
-                    <input id="终末战开关" name="vehicle" type="checkbox" value="Bike">终末战开关<br>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="终末战自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<br>
+                        <div class="flex-container">
+                            <label for="技能2释放间隔">技能2释放间隔:</label>
+                            <input type="text" id="技能2释放间隔" name="技能2释放间隔" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="秒" class="layui-input">
                         </div>
-                    </div>
-                    <legend>职能相关</legend>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="职能优先输出" name="vehicle" type="checkbox" value="Bike">职能优先输出<br>
+                        <div class="flex-container">
+                            <label for="技能3释放间隔">技能3释放间隔:</label>
+                            <input type="text" id="技能3释放间隔" name="技能3释放间隔" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="秒" class="layui-input">
                         </div>
-                        <div class="checkbox-item">
-                            <input id="职能优先坦克" name="vehicle" type="checkbox" value="Bike">职能优先坦克<br>
+                        <div class="flex-container">
+                            <label for="技能释放循环次数">技能释放循环次数:</label>
+                            <input type="text" id="技能释放循环次数" name="技能释放循环次数" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="留空循环1次后切换自动释放" class="layui-input">
                         </div>
-                        <div class="checkbox-item">
-                            <input id="职能优先治疗" name="vehicle" type="checkbox" value="Bike">职能优先治疗<br>
-                        </div>
-                    </div>
-                    <legend>通用配置</legend>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="主动释放技能" name="vehicle" type="checkbox" value="Bike">主动释放技能(配合下方功能使用)<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="三技能自动释放" name="vehicle" type="checkbox" value="Bike">三技能自动开盾/打断(需先开启主动释放)<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="技能定时释放" name="vehicle" type="checkbox" value="Bike">技能定时释放(需关闭自动三技能)<br>
-                        </div>
-                    </div>
-                    <div class="flex-container">
-                        <label for="宠物技能释放间隔">宠物技能释放间隔:</label>
-                        <input type="text" id="宠物技能释放间隔" name="宠物技能释放间隔" lay-verify="title"
-                               autocomplete="off"
-                               placeholder="秒" class="layui-input">
-                    </div>
-                    <div class="flex-container">
-                        <label for="技能1释放间隔">技能1释放间隔:</label>
-                        <input type="text" id="技能1释放间隔" name="技能1释放间隔" lay-verify="title"
-                               autocomplete="off"
-                               placeholder="秒" class="layui-input">
-                    </div>
-                    <div class="flex-container">
-                        <label for="技能2释放间隔">技能2释放间隔:</label>
-                        <input type="text" id="技能2释放间隔" name="技能2释放间隔" lay-verify="title"
-                               autocomplete="off"
-                               placeholder="秒" class="layui-input">
-                    </div>
-                    <div class="flex-container">
-                        <label for="技能3释放间隔">技能3释放间隔:</label>
-                        <input type="text" id="技能3释放间隔" name="技能3释放间隔" lay-verify="title"
-                               autocomplete="off"
-                               placeholder="秒" class="layui-input">
-                    </div>
-                    <div class="flex-container">
-                        <label for="技能释放循环次数">技能释放循环次数:</label>
-                        <input type="text" id="技能释放循环次数" name="技能释放循环次数" lay-verify="title"
-                               autocomplete="off"
-                               placeholder="留空循环1次后切换自动释放" class="layui-input">
-                    </div>
+                    </fieldset>
                 </fieldset>
             </form>
         </li>
@@ -830,6 +942,9 @@
                         </div>
                         <div class="checkbox-item">
                             <input id="限时特惠" name="vehicle" type="checkbox" value="Bike">限时特惠<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="箱庭苗圃" name="vehicle" type="checkbox" value="Bike">箱庭苗圃<br>
                         </div>
                     </div>
                 </fieldset>
@@ -984,6 +1099,7 @@
         setSwitchStatus("登录好礼");
         setSwitchStatus("BBQ派对");
         setSwitchStatus("限时特惠");
+        setSwitchStatus("箱庭苗圃");
         setSwitchStatus("自动切换喊话频道");
 
         var 世界喊话 = localStorage.getItem("世界喊话");
@@ -1035,6 +1151,24 @@
             }
         }
 
+        var defaultValue = localStorage.getItem('恶龙宠物名称');
+        var selectElement = document.getElementById('恶龙宠物名称');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        var defaultValue = localStorage.getItem('梦魇宠物名称');
+        var selectElement = document.getElementById('梦魇宠物名称');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
         setSwitchStatus("大暴走开关");
         setSwitchStatus("暴走进入战斗后启动");
         setSwitchStatus("暴走自动接收邀请");
@@ -1070,14 +1204,21 @@
 
         var 队伍喊话 = localStorage.getItem("队伍喊话");
         document.getElementById("队伍喊话").value = 队伍喊话;
+        var 队伍喊话间隔 = localStorage.getItem("队伍喊话间隔");
+        document.getElementById("队伍喊话间隔").value = 队伍喊话间隔;
 
         setSwitchStatus("恶龙开关");
         setSwitchStatus("恶龙添加佣兵");
         setSwitchStatus("恶龙重复挑战");
         setSwitchStatus("恶龙自动接收邀请");
+        var 恶龙自动离队时间 = localStorage.getItem("恶龙自动离队时间");
+        document.getElementById("恶龙自动离队时间").value = 恶龙自动离队时间;
+
         setSwitchStatus("梦魇开关");
         setSwitchStatus("梦魇添加佣兵");
         setSwitchStatus("梦魇自动接收邀请");
+        var 梦魇自动离队时间 = localStorage.getItem("梦魇自动离队时间");
+        document.getElementById("梦魇自动离队时间").value = 梦魇自动离队时间;
         setSwitchStatus("终末战开关");
         setSwitchStatus("终末战自动接收邀请");
         setSwitchStatus("绝境开关");
@@ -1085,6 +1226,14 @@
         setSwitchStatus("职能优先输出");
         setSwitchStatus("职能优先坦克");
         setSwitchStatus("职能优先治疗");
+        setSwitchStatus("恶龙职能优先治疗");
+        setSwitchStatus("恶龙职能优先输出");
+        setSwitchStatus("恶龙职能优先坦克");
+
+        setSwitchStatus("自动切换主战宠物");
+        setSwitchStatus("恶龙宠物切换");
+        setSwitchStatus("梦魇宠物切换");
+
         setSwitchStatus("主动释放技能");
         setSwitchStatus("三技能自动释放");
         setSwitchStatus("技能定时释放");
@@ -1278,6 +1427,7 @@
         登录好礼 = saveSwitchStatus("登录好礼");
         BBQ派对 = saveSwitchStatus("BBQ派对");
         限时特惠 = saveSwitchStatus("限时特惠");
+        箱庭苗圃 = saveSwitchStatus("箱庭苗圃");
         自动切换喊话频道 = saveSwitchStatus("自动切换喊话频道");
 
         var 世界喊话 = document.getElementById("世界喊话").value;
@@ -1336,6 +1486,12 @@
         var 补充体力次数 = document.getElementById("补充体力次数").value;
         localStorage.setItem("补充体力次数", 补充体力次数);
 
+        var 恶龙宠物名称 = document.getElementById("恶龙宠物名称").value;
+        localStorage.setItem("恶龙宠物名称", 恶龙宠物名称);
+
+        var 梦魇宠物名称 = document.getElementById("梦魇宠物名称").value;
+        localStorage.setItem("梦魇宠物名称", 梦魇宠物名称);
+
         大暴走开关 = saveSwitchStatus("大暴走开关");
         暴走进入战斗后启动 = saveSwitchStatus("暴走进入战斗后启动");
         暴走自动接收邀请 = saveSwitchStatus("暴走自动接收邀请");
@@ -1344,14 +1500,21 @@
 
         var 队伍喊话 = document.getElementById("队伍喊话").value;
         localStorage.setItem("队伍喊话", 队伍喊话);
+        var 队伍喊话间隔 = document.getElementById("队伍喊话间隔").value;
+        localStorage.setItem("队伍喊话间隔", 队伍喊话间隔);
 
         恶龙开关 = saveSwitchStatus("恶龙开关");
         恶龙添加佣兵 = saveSwitchStatus("恶龙添加佣兵");
         恶龙重复挑战 = saveSwitchStatus("恶龙重复挑战");
         恶龙自动接收邀请 = saveSwitchStatus("恶龙自动接收邀请");
+        var 恶龙自动离队时间 = document.getElementById("恶龙自动离队时间").value;
+        localStorage.setItem("恶龙自动离队时间", 恶龙自动离队时间);
+
         梦魇开关 = saveSwitchStatus("梦魇开关");
         梦魇添加佣兵 = saveSwitchStatus("梦魇添加佣兵");
         梦魇自动接收邀请 = saveSwitchStatus("梦魇自动接收邀请");
+        var 梦魇自动离队时间 = document.getElementById("梦魇自动离队时间").value;
+        localStorage.setItem("梦魇自动离队时间", 梦魇自动离队时间);
         终末战开关 = saveSwitchStatus("终末战开关");
         终末战自动接收邀请 = saveSwitchStatus("终末战自动接收邀请");
         绝境开关 = saveSwitchStatus("绝境开关");
@@ -1359,6 +1522,14 @@
         职能优先输出 = saveSwitchStatus("职能优先输出");
         职能优先坦克 = saveSwitchStatus("职能优先坦克");
         职能优先治疗 = saveSwitchStatus("职能优先治疗");
+        恶龙职能优先输出 = saveSwitchStatus("恶龙职能优先输出");
+        恶龙职能优先坦克 = saveSwitchStatus("恶龙职能优先坦克");
+        恶龙职能优先治疗 = saveSwitchStatus("恶龙职能优先治疗");
+
+        自动切换主战宠物 = saveSwitchStatus("自动切换主战宠物");
+        恶龙宠物切换 = saveSwitchStatus("恶龙宠物切换");
+        梦魇宠物切换 = saveSwitchStatus("梦魇宠物切换");
+
         主动释放技能 = saveSwitchStatus("主动释放技能");
         三技能自动释放 = saveSwitchStatus("三技能自动释放");
         技能定时释放 = saveSwitchStatus("技能定时释放");
@@ -1458,6 +1629,7 @@
             登录好礼: 登录好礼,
             BBQ派对: BBQ派对,
             限时特惠: 限时特惠,
+            箱庭苗圃: 箱庭苗圃,
 
             自动切换喊话频道: 自动切换喊话频道,
             世界喊话: 世界喊话,
@@ -1504,14 +1676,17 @@
             暴走自动接收邀请: 暴走自动接收邀请,
             史莱姆选择: 史莱姆选择,
             喊话内容: 队伍喊话,
+            队伍喊话间隔: 队伍喊话间隔,
 
             恶龙开关: 恶龙开关,
             恶龙添加佣兵: 恶龙添加佣兵,
             恶龙重复挑战: 恶龙重复挑战,
             恶龙自动接收邀请: 恶龙自动接收邀请,
+            恶龙自动离队时间: 恶龙自动离队时间,
             梦魇开关: 梦魇开关,
             梦魇添加佣兵: 梦魇添加佣兵,
             梦魇自动接收邀请: 梦魇自动接收邀请,
+            梦魇自动离队时间: 梦魇自动离队时间,
             终末战开关: 终末战开关,
             终末战自动接收邀请: 终末战自动接收邀请,
             绝境开关: 绝境开关,
@@ -1519,6 +1694,16 @@
             职能优先输出: 职能优先输出,
             职能优先坦克: 职能优先坦克,
             职能优先治疗: 职能优先治疗,
+            恶龙职能优先输出: 恶龙职能优先输出,
+            恶龙职能优先坦克: 恶龙职能优先坦克,
+            恶龙职能优先治疗: 恶龙职能优先治疗,
+
+            自动切换主战宠物: 自动切换主战宠物,
+            恶龙宠物切换: 恶龙宠物切换,
+            恶龙宠物名称: 恶龙宠物名称,
+            梦魇宠物切换: 梦魇宠物切换,
+            梦魇宠物名称: 梦魇宠物名称,
+
             主动释放技能: 主动释放技能,
             三技能自动释放: 三技能自动释放,
             技能定时释放: 技能定时释放,
