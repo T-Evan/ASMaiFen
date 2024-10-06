@@ -87,7 +87,7 @@ class ShiLianTask:
             "金色歌剧院": [303, 373, 447, 401],
             "决战黄金穹顶": [303, 567, 423, 596],
             "巨像思维首脑": [303, 373, 447, 401],
-            "世界万象其中": [303, 567, 423, 596],
+            "世间万象其中": [303, 567, 423, 596],
         }
 
     def shilian(self):
@@ -542,8 +542,9 @@ class ShiLianTask:
 
                         # 等待进入战斗
                         for i in range(1, 7):
+                            sleep(5)
                             waitTime = 5 * (i - 1)
-                            TomatoOcrFindRangeClick('跳过', sleep1=1, confidence1=0.9, x1=581, y1=12, x2=720, y2=66)
+                            TomatoOcrFindRangeClick('跳过', sleep1=1, confidence1=0.9, x1=522, y1=17, x2=685, y2=110)
                             Toast(f"秘境任务 - 匹配成功 - 等待进入战斗 - {waitTime}/30s")
 
                             if i == 6:
@@ -581,8 +582,6 @@ class ShiLianTask:
                                 elapsed = 0  # 初始化等待队员时间
                                 fightDone = 1
                                 break
-                            # 进入战斗失败，重新匹配
-                            sleep(5)
                     # 等待队员
                     sleep(4)
                     elapsed = elapsed + 4 * 1000
@@ -667,7 +666,8 @@ class ShiLianTask:
         tapSleep(690, 90)  # 点击补充体力加号
         for i in range(1, 3):
             res, count = TomatoOcrText(500, 817, 515, 834, "0")
-            buyCount = safe_int(count)
+            buyCount = count.replace("/", "")
+            buyCount = safe_int(buyCount)
             needCount = safe_int(功能开关["补充体力次数"])
             if buyCount != "" and buyCount < needCount:
                 res = TomatoOcrTap(456, 873, 499, 898, "购买")
@@ -888,7 +888,7 @@ class ShiLianTask:
                     Toast("进入战斗失败 - 队友未准备")
                     return False
 
-                TomatoOcrFindRangeClick('跳过', sleep1=1, confidence1=0.9, x1=581, y1=12, x2=720, y2=66)
+                TomatoOcrFindRangeClick('跳过', sleep1=1, confidence1=0.9, x1=522, y1=17, x2=685, y2=110)
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                 Toast("等待进入战斗")
@@ -1309,6 +1309,7 @@ class ShiLianTask:
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
             if "等级" in teamName1 or "等级" in teamName2:
+                功能开关["fighting"] = 1
                 if teamShoutDone == 0:
                     teamShoutDone = self.teamShout()
 
@@ -1426,6 +1427,9 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
+                shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
+                if shou_ye1:
+                    break
                 failNum = failNum + 1
                 if failNum > 6:
                     Toast(f"战斗中状态 - 次数 {failNum}/15")
@@ -1468,19 +1472,21 @@ class ShiLianTask:
                         self.daBaoZouLieYan()
                     if 功能开关["史莱姆选择"] == '暴走深林大王':
                         self.daBaoZouShenLin()
+                    if 功能开关["史莱姆选择"] == '暴走水波大王':
+                        self.daBaoZouShuiBo()
 
                 # 战斗结束
-                res2 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
-                res3 = TomatoOcrTap(332, 1067, 387, 1096, "开启")  # 领取宝箱
-                if res2 or res3:
-                    Toast("战斗结束 - 战斗胜利")
-                    tapSleep(55, 1140)  # 领取后，点击空白
-                    tapSleep(55, 1140)  # 领取后，点击空白
-                    break
-                sleep(1)
+                # res2 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
+                # res3 = TomatoOcrTap(332, 1067, 387, 1096, "开启")  # 领取宝箱
+                # if res2 or res3:
+                #     Toast("战斗结束 - 战斗胜利")
+                #     tapSleep(55, 1140)  # 领取后，点击空白
+                #     tapSleep(55, 1140)  # 领取后，点击空白
+                #     break
+                sleep(0.5)
 
             # 判断是否战斗失败（战斗5分钟后）
-            if res1 or (teamName1 != "" or teamName2 != ""):
+            if not res1 and (teamName1 == "" and teamName2 == ""):
                 功能开关["fighting"] = 0
                 # 战斗结束
                 res1 = TomatoOcrTap(333, 716, 384, 744, "开启")  # 领取宝箱
@@ -1489,6 +1495,7 @@ class ShiLianTask:
                 if res1 or res2 or res3:
                     Toast("战斗结束 - 战斗胜利")
                     sleep(2)
+                    tapSleep(55, 1140)  # 领取后，点击空白
                     tapSleep(55, 1140)  # 领取后，点击空白
                     break
                 res3, _ = TomatoOcrText(499, 191, 581, 215, "离开队伍")  # 已返回队伍
@@ -1500,6 +1507,128 @@ class ShiLianTask:
                     break
                 功能开关["fighting"] = 0
         功能开关["fighting"] = 0
+
+    # 大暴走（水波大王）
+    def daBaoZouShuiBo(self):
+        def 草():
+            point = FindColors.find(
+                "145,673,#B9D6AB|153,672,#BFD7AD|159,672,#95B48C|151,680,#A1D8A1|138,681,#98D99D|148,688,#2D4645",
+                rect=[9, 637, 202, 803], diff=0.94)
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        def 火():
+            point = FindColors.find(
+                "137,683,#DF8768|138,675,#E1A482|146,677,#CF9677|156,683,#DF8768|157,677,#E29E7C|146,675,#E2A382",
+                rect=[9, 637, 202, 803], diff=0.94)
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        def 水():
+            point = FindColors.find(
+                "63,673,#91CFCE|69,667,#A5D4CE|75,672,#95D0CF|69,691,#57BACF|74,686,#5CBACE|77,686,#5AB9CF",
+                rect=[9, 637, 202, 803], diff=0.94)
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        # 当前职业
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-战士", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-战士')
+                功能开关['当前职业'] = '战士'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-服事", 0.95, 4, 41, 72, 118)
+            if re:
+                # Toast('识别当前职业-服事')
+                功能开关['当前职业'] = '服事'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-刺客", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-刺客')
+                功能开关['当前职业'] = '刺客'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-法师", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-法师')
+                功能开关['当前职业'] = '法师'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-游侠", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-游侠')
+                功能开关['当前职业'] = '游侠'
+
+        sleep(0.5)
+        if 功能开关['bossColor'] == '' and 功能开关['bossColor1'] == '' and 功能开关['bossColor2'] == '':
+            # if 当前职业 == '战士':
+            #     Toast('战士-战斗中-自动走位火')
+            #     火()
+            if 功能开关['当前职业'] == '服事':
+                Toast('服事-战斗中-自动走位草')
+                草()
+            # if 当前职业 == '刺客':
+            #     Toast('刺客-战斗中-自动走位火')
+            #     火()
+            # if 当前职业 == '游侠':
+            #     Toast('游侠-战斗中-自动走位火')
+            #     火()
+            # if 当前职业 == '法师':
+            #     Toast('法师-战斗中-自动走位火')
+            #     火()
+
+        if 功能开关['bossColor1'] != '' and 功能开关['bossColor2'] != '':
+            if 功能开关['bossLastColor1'] != '' and 功能开关['bossLastColor2'] != '' and (
+                    功能开关['bossLastColor1'] == 功能开关['bossColor1'] and 功能开关['bossLastColor2'] == 功能开关[
+                'bossColor2']):
+                Toast('战斗中')
+            else:
+                功能开关['bossLastColor1'] = 功能开关['bossColor1']
+                功能开关['bossLastColor2'] = 功能开关['bossColor2']
+                if 功能开关['bossLastColor1'] == '水':
+                    if 功能开关['bossLastColor2'] == '水':
+                        Toast('前往-水')
+                        水()
+                        sleep(1)
+                    if 功能开关['bossLastColor2'] == '花':
+                        Toast('前往-草')
+                        草()
+                        sleep(1)
+                    if 功能开关['bossLastColor2'] == '蒸汽':
+                        Toast('前往-火')
+                        火()
+                        sleep(1)
+                if 功能开关['bossLastColor1'] == '木':
+                    if 功能开关['bossLastColor2'] == '木':
+                        Toast('前往-木')
+                        草()
+                        sleep(1)
+                if 功能开关['bossLastColor1'] == '火':
+                    if 功能开关['bossLastColor2'] == '火':
+                        Toast('前往-火')
+                        火()
+                        sleep(1)
+                    if 功能开关['bossLastColor2'] == '篝火':
+                        Toast('前往-木')
+                        草()
+                        sleep(1)
+
+        if 功能开关['bossColor'] != "":
+            if 功能开关['bossLastColor'] != '' and (功能开关['bossLastColor'] == 功能开关['bossColor']):
+                Toast('战斗中')
+            else:
+                功能开关['bossLastColor'] = 功能开关['bossColor']
+                if 功能开关['bossColor'] == "水":
+                    Toast('前往-水')
+                    水()
+                    sleep(1)
+                if 功能开关['bossColor'] == "木":
+                    Toast('前往-木')
+                    草()
+                    sleep(1)
+                if 功能开关['bossColor'] == "火":
+                    Toast('前往-火')
+                    火()
+                    sleep(1)
 
     # 大暴走（深林大王）
     def daBaoZouShenLin(self):
@@ -1678,14 +1807,18 @@ class ShiLianTask:
             res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
             if res:
                 # 关闭喊话窗口
-                point = FindColors.find("99,331,#6584B9|94,344,#6483B9|102,344,#E3E1DA|110,337,#6583B9|112,350,#6484B9|102,355,#6584B9",diff=0.9)
+                point = FindColors.find(
+                    "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                    rect=[11, 26, 364, 489])
                 if point:
                     tapSleep(point.x, point.y, 1)
                 任务记录["队伍喊话-倒计时"] = time.time()
                 return 1
 
         # 关闭喊话窗口
-        point = FindColors.find("99,331,#6584B9|94,344,#6483B9|102,344,#E3E1DA|110,337,#6583B9|112,350,#6484B9|102,355,#6584B9",diff=0.9)
+        point = FindColors.find(
+            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+            rect=[11, 26, 364, 489])
         if point:
             tapSleep(point.x, point.y, 1)
         return 0

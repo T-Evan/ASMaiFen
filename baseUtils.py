@@ -203,15 +203,17 @@ def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, wh
 
 
 def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
-                            match_mode='exact', offsetX=0, offsetY=0):
+                            match_mode='exact', offsetX=0, offsetY=0, bitmap=''):
     try:
         if whiteList == '':
             whiteList = keyword
         if TimeoutLock(switch_lock, timeLock).acquire_lock():
+            if bitmap == '':
+                bitmap = screen.capture(x1, y1, x2, y2)
             ocrRe = tomatoOcr.find_all(
                 license="gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==",
                 rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                capture=[x1, y1, x2, y2])
+                bitmap=bitmap)
             # print(ocrRe)
             TimeoutLock(switch_lock, timeLock).release_lock()
         else:
@@ -298,7 +300,17 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0):
         return False
 
 
+lastToast = ''
+lastToastTime = 0
 def Toast(content, tim=1000):
+    global lastToast
+    global lastToastTime
+    nowTime = time.time()
+    # 重复提示，2s 1次
+    if lastToast == content and nowTime - lastToastTime < 5:
+        return
+    lastToast = content
+    lastToastTime = nowTime
     print(f"提示-{content}")
     Dialog.toast(content, tim, 3 | 48, 200, 0)
 

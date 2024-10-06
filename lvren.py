@@ -56,7 +56,14 @@ class LvRenTask:
             # 点击果木
             re = imageFindClick('猫猫果木')
             if re:
-                res = TomatoOcrTap(265, 863, 452, 893, "点击空白处可领取奖励", 30, 100)
+                # res = TomatoOcrTap(265, 863, 452, 893, "点击空白处可领取奖励", 30, 100)
+                tapSleep(216,1224) # 点击空白处可领取奖励
+
+            # 领取4代果木
+            tapSleep(577,1218) # 点击4代烤箱
+            tapSleep(369,160,0.3) # 点击4代烤箱
+            tapSleep(367,175,0.3) # 点击4代烤箱
+            tapSleep(216,1224) # 点击空白处可领取奖励
 
             # 快捷兑换
             res = TomatoOcrTap(557, 188, 639, 214, "快速兑换", 30, -30)

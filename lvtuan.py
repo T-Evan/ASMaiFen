@@ -12,6 +12,7 @@ from .baseUtils import *
 import re as repattern
 from ascript.android.screen import FindColors
 
+
 class LvTuanTask:
     def __init__(self):
         self.dailyTask = DailyTask()
@@ -61,8 +62,9 @@ class LvTuanTask:
             else:
                 # 重新进入调查队，重新选择队友；避免队友不足
                 for i in range(1, 3):
-                    res = TomatoOcrTap(632, 916, 702, 947, "调查队")
-                    if not res:
+                    res1 = TomatoOcrTap(632, 916, 702, 947, "调查队", 20, -20)
+                    res2 = TomatoOcrTap(636, 992, 702, 1016, "调查队", 20, -20)
+                    if not res1 and not res2:
                         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                         if not res:
                             # 返回首页
@@ -70,8 +72,9 @@ class LvTuanTask:
                             # 退出组队
                             self.dailyTask.quitTeam()
                         else:
-                            res = TomatoOcrTap(637, 947, 697, 971, "调查队", 30, -20)
-                            if res:
+                            res1 = TomatoOcrTap(632, 916, 702, 947, "调查队", 20, -20)
+                            res2 = TomatoOcrTap(636, 992, 702, 1016, "调查队", 20, -20)
+                            if res1 or res2:
                                 break
                     else:
                         break
@@ -160,15 +163,19 @@ class LvTuanTask:
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
         res = TomatoOcrTap(635, 697, 700, 724, "服务区", 20)
         if not res:
-            return
+            res = TomatoOcrTap(634, 651, 701, 680, "服务区", 20)
+            if not res:
+                return
         sleep(4)  # 等待跳转动画
 
         # 翻页（先返回上面）
         swipe(360, 750, 360, 850)
         sleep(2.5)
         for i in range(1, 5):
-            re = FindColors.find("120,703,#FEF396|131,705,#F5CE4F|140,708,#F2A94B|124,711,#F1D65A|129,714,#E8BA46|138,714,#F2A94B",rect=[78,527,639,1104])
-            if re: # 有可购买商品时，继续判断
+            re = FindColors.find(
+                "120,703,#FEF396|131,705,#F5CE4F|140,708,#F2A94B|124,711,#F1D65A|129,714,#E8BA46|138,714,#F2A94B",
+                rect=[78, 527, 639, 1104])
+            if re:  # 有可购买商品时，继续判断
                 if 功能开关['旅团唤兽琴弦']:
                     re = imageFindClick('旅团-唤兽琴弦')
                     if re:
@@ -227,7 +234,9 @@ class LvTuanTask:
         sleep(1)
         res = TomatoOcrTap(625, 769, 708, 797, "旅团任务", 20, -20)
         if not res:
-            return
+            res = TomatoOcrTap(626, 729, 705, 752, "旅团任务", 20, -20)
+            if not res:
+                return
 
         for i in range(1, 5):
             re = TomatoOcrFindRangeClick('领取', whiteList='领取')
@@ -255,14 +264,16 @@ class LvTuanTask:
         self.dailyTask.homePage()
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
 
-        if not CompareColors.compare("690,822,#EF5C3F|686,815,#FA6547|691,814,#FA6545"):
+        if not CompareColors.compare("690,822,#EF5C3F|686,815,#FA6547|691,814,#FA6545") and not CompareColors.compare("691,776,#F05C3F|691,778,#F45842|693,774,#F46043"):
             Toast("旅团 - 许愿墙 - 已送满 - 跳过任务")
             任务记录["旅团-许愿墙-完成"] = 1
             return
 
         res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)
         if not res:
-            return
+            res = TomatoOcrTap(636, 817, 701, 839, "许愿墙", 20, -20)
+            if not res:
+                return
 
         for i in range(1, 5):
             Toast(f'旅团 - 许愿墙 - 捐赠中{i}/5')

@@ -308,6 +308,9 @@ def main():
                 # 营地活动（最后领取）
                 yingdiTask.yingdiTaskEnd()
 
+                # 日常（最后领取一次冒险手册）
+                dailyTask.maoXianShouCe()
+
                 # 定时休息
                 current_time = int(time.time())
 

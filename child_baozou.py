@@ -14,16 +14,23 @@ from ascript.android.screen import FindColors
 from ascript.android.screen import YoLov5
 
 yolo = ''
+
+
 # 实例方法
 def main():
     功能开关['bossColor'] = ''
+    功能开关['bossColor1'] = ''
+    功能开关['bossColor2'] = ''
     功能开关['bossLastColor'] = ''
+    功能开关['bossLastColor1'] = ''
+    功能开关['bossLastColor2'] = ''
     功能开关['bossNumber0'] = ''
     功能开关['bossNumber1'] = ''
     功能开关['bossNumber2'] = ''
     功能开关['bossLastNumber0'] = ''
     功能开关['bossLastNumber1'] = ''
     功能开关['bossLastNumber2'] = ''
+    功能开关['当前职业'] = ''
     while True:
         if 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走烈焰大王":
             global yolo
@@ -44,8 +51,151 @@ def main():
                     daBaoZouLieYanBoss()
                 else:
                     sleep(3)
+        elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走水波大王":
+            yolo = YoLov5("麦芬-水波大暴走:0.1")
+            # while 1:
+            #     ts = yolo.find_all()
+            #     for r in ts:
+            #         print(r)
+            #     sleep(0.5)
+
+            while 1:
+                if 功能开关["fighting"] == 1:
+                    # 检测战斗状态
+                    # 异步识别boss状态
+                    daBaoZouShuiBoBoss()
+                else:
+                    sleep(3)
         else:
             break
+
+
+def daBaoZouShuiBoBoss():
+    功能开关['bossColor'] = ''
+    功能开关['bossColor1'] = ''
+    功能开关['bossColor2'] = ''
+
+    # 进入二阶段后，识别基础和目标颜色
+    bossColor = ''
+    bossColor1 = ''
+    bossColor2 = ''
+
+    # prob = 0.8
+    # for _ in range(3):
+    #     if bossColor == '' and (bossColor1 == '' and bossColor2 == ''):
+    #         prob = prob - 0.1
+    #     bossColor = ''
+    #     bossColor1 = ''
+    #     bossColor2 = ''
+    #
+    #     results2 = []
+
+    # ts = yolo.find_all(rect=[105,291,620,452])
+    # print(ts)
+    # for r in ts:
+    #     # print(r)
+    #     if r.prob > prob:
+    #         if '单-木' in r.label:
+    #             bossColor = "木"
+    #         if '单-水' in r.label:
+    #             bossColor = "水"
+    #         if '单-火' in r.label:
+    #             bossColor = "火"
+    #
+    #         if '双-水' in r.label:
+    #             bossColor1 = "水"
+    #         if '双-火' in r.label:
+    #             bossColor1 = "火"
+    #         if '双-木' in r.label:
+    #             bossColor1 = "木"
+    #
+    #         if '双-目标-火' in r.label:
+    #             bossColor2 = "火"
+    #         if '双-目标-木' in r.label:
+    #             bossColor2 = "木"
+    #         if '双-目标-水' in r.label:
+    #             bossColor2 = "水"
+    #         if '双-目标-蒸汽' in r.label:
+    #             bossColor2 = "蒸汽"
+    #         if '双-目标-花' in r.label:
+    #             bossColor2 = "花"
+    #
+    # if bossColor != '' or bossColor1 != '' or bossColor2 != '':
+    #     results2.append((bossColor, bossColor1, bossColor2))
+
+    # 单-水；兜底
+    if bossColor == '' and bossColor1 == '' and bossColor2 == '':
+        res = CompareColors.compare("360,378,#A0E4F3", diff=0.9)
+        if res:
+            bossColor = '水'
+        if not res:
+            res = CompareColors.compare("360,380,#FEB390", diff=0.93)
+            if res:
+                bossColor = '火'
+        if not res:
+            res = CompareColors.compare("356,387,#9CDD72", diff=0.9)
+            if res:
+                bossColor = '木'
+
+        # 识别双色
+        if bossColor == '':
+            # res1 = CompareColors.compare("240,361,#FEFEFE|241,370,#FEFEFE|247,370,#C0ECF6|251,374,#FEFEFE|246,381,#9EE3F3|243,381,#94E2F1",diff=0.9)
+            # if res1:
+            #     bossColor1 = '水'
+
+            res2, _, _ = imageFind('火焰大王-蒸汽', 0.9, 434, 328, 516, 416)
+            if res2:
+                bossColor2 = '蒸汽'
+            if not res2:
+                res2, _, _ = imageFind('火焰大王-花')
+                if res2:
+                    bossColor2 = '花'
+            if not res2:
+                res2, _, _ = imageFind('火焰大王-水', confidence1=0.92)
+                if res2:
+                    bossColor2 = '水'
+
+            if bossColor2 != '':
+                # 游戏简化后，基础状态仅有水
+                bossColor1 = '水'
+
+            # res2 = CompareColors.compare("468,363,#BEF6FD|475,364,#C6F9FE|473,377,#93D9FB|464,380,#66ABF4|472,380,#87CEFA|473,383,#8BCAFA",diff=0.8)
+            # if res2:
+            #     bossColor2 = '水'
+            # if not res2:
+            #     res2 = CompareColors.compare("468,366,#B567BE|473,366,#B7EBFC|481,366,#B469C0|464,377,#B671BD|472,375,#D5F6FB|478,372,#A07FD5",diff=0.8)
+            #     if res2:
+            #         bossColor2 = '蒸汽'
+            # if not res2:
+            #     res2 = CompareColors.compare("465,367,#C2FAFD|475,367,#8DEFDB|484,369,#CEFAFD|486,375,#77DBB2|487,385,#ECFAFA|468,388,#51B97E",diff=0.8)
+            #     if res2:
+            #         bossColor2 = '花'
+
+    if bossColor == '':
+        # boss状态刷新
+        功能开关['bossLastColor'] = ''
+    if bossColor1 == '' and bossColor2 == '':
+        功能开关['bossLastColor1'] = ''
+        功能开关['bossLastColor2'] = ''
+
+    # 统计结果
+    # counter = Counter(results2)
+    # 取最多出现的结果
+    # if len(counter.most_common(1)) > 0:
+    # print(counter.most_common(1))
+    # bossColor, bossColor1, bossColor2 = counter.most_common(1)[0][0]
+
+    if bossColor != '':
+        功能开关['bossColor'] = bossColor
+    if bossColor1 != '':
+        功能开关['bossColor1'] = bossColor1
+    if bossColor2 != '':
+        功能开关['bossColor2'] = bossColor2
+
+    print(功能开关['bossColor'], '|', 功能开关['bossColor1'], '|', 功能开关['bossColor2'], '|')
+    if 功能开关['bossColor'] != '' or (功能开关['bossColor1'] != '' and 功能开关['bossColor2'] != ''):
+        sleep(0.5)
+    sleep(0.3)
 
 
 def daBaoZouLieYanBoss():

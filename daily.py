@@ -18,14 +18,17 @@ class DailyTask:
         self.shilianTask = ShiLianTask()
 
     def homePage(self, needQuitTeam=False):
+        tryTimes = 0
         while True:
+            tryTimes=tryTimes+1
             # todo 区分是否进入的摸鱼活动
             # res6 = self.shilianTask.WaitFight()
 
-            # 暂不处理战败页启动，提高执行效率
-            # if not quitTeamRe:
-            #     # 判断战败页面
-            #     self.shilianTask.fight_fail()
+            if tryTimes > 10:
+                # 暂不处理战败页启动，提高执行效率
+                # 判断战败页面
+                self.shilianTask.fight_fail()
+                quitTeamRe = self.quitTeam()
 
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
             # return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
@@ -87,6 +90,8 @@ class DailyTask:
         # 日常相关
 
         # 活动
+        # 前往新地图
+        self.newMap()
 
         # 领取相关
         # 招式创造
@@ -890,8 +895,10 @@ class DailyTask:
 
                     buyCount = ""
                     for j in range(1, 5):
-                        res, buyCount = TomatoOcrText(379, 930, 394, 947, "每日限购次数")  # 1/9
-                        buyCount = buyCount.replace("/", "")
+                        # res, buyCount = TomatoOcrText(379, 930, 394, 947, "每日限购次数")  # 1/9
+                        res, buyCount = TomatoOcrText(274,923,438,956, "每日限购次数")  # 1/9
+                        buyCount = buyCount.replace("每日限购（", "")
+                        buyCount = buyCount.replace("/9）", "")
                         buyCount = safe_int(buyCount)
                         if buyCount != "":
                             break
@@ -975,7 +982,10 @@ class DailyTask:
                 res = TomatoOcrTap(571, 261, 645, 287, "兑换卢恩", 10, 10)
                 buyCount = ""
                 for j in range(1, 5):
-                    res, buyCount = TomatoOcrText(375, 944, 387, 960, "已购买次数")  # 1/9
+                    # res, buyCount = TomatoOcrText(375, 944, 387, 960, "已购买次数")  # 1/9
+                    res, buyCount = TomatoOcrText(284,935,425,968, "已购买次数")  # 1/9
+                    buyCount = buyCount.replace("每日限购（", "")
+                    buyCount = buyCount.replace("/15）", "")
                     buyCount = safe_int(buyCount)
                     if buyCount != "":
                         break
