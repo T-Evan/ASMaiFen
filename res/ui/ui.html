@@ -396,6 +396,7 @@
                         <label for="高级配置">高级配置:</label>
                         <input id="优先升级同一技能至下一阶段" name="vehicle" type="checkbox" value="Bike">优先升级同一技能至下一阶段<br>
                     </div>
+                    <input id="仅强化武器戒指护腕" name="vehicle" type="checkbox" value="Bike">仅强化武器戒指护腕<br>
 
                     <legend>主线推图相关</legend>
                     <div class="checkbox-group">
@@ -928,6 +929,7 @@
                         <div class="checkbox-item">
                             <input id="摸鱼时间到" name="vehicle" type="checkbox" value="Bike">摸鱼时间到<br>
                         </div>
+
                         <div class="checkbox-item">
                             <input id="火力全开" name="vehicle" type="checkbox" value="Bike">火力全开<br>
                         </div>
@@ -956,7 +958,12 @@
                                placeholder="世界喊话" class="layui-input">
                     </div>
                     <div class="checkbox-item">
-                        <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换喊话频道<br>
+                        <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换世界频道<br>
+                    </div>
+                    <div class="flex-container">
+                        <label for="摸鱼队伍喊话">摸鱼队伍喊话:</label>
+                        <input type="text" id="摸鱼队伍喊话" name="摸鱼队伍喊话" lay-verify="title" autocomplete="off"
+                               placeholder="摸鱼队伍喊话" class="layui-input">
                     </div>
                 </fieldset>
                 <fieldset>
@@ -1051,6 +1058,7 @@
         document.getElementById("钻石兑换果木次数").value = 钻石兑换果木次数;
 
         setSwitchStatus("优先升级同一技能至下一阶段");
+        setSwitchStatus("仅强化武器戒指护腕");
 
 
         setSwitchStatus("自动挑战首领");
@@ -1105,6 +1113,8 @@
 
         var 世界喊话 = localStorage.getItem("世界喊话");
         document.getElementById("世界喊话").value = 世界喊话;
+        var 摸鱼队伍喊话 = localStorage.getItem("摸鱼队伍喊话");
+        document.getElementById("摸鱼队伍喊话").value = 摸鱼队伍喊话;
 
         var defaultValue = localStorage.getItem('秘宝地图');
         var selectElement = document.getElementById('秘宝地图');
@@ -1407,6 +1417,7 @@
         localStorage.setItem("钻石兑换果木次数", 钻石兑换果木次数);
 
         优先升级同一技能至下一阶段 = saveSwitchStatus("优先升级同一技能至下一阶段");
+        仅强化武器戒指护腕 = saveSwitchStatus("仅强化武器戒指护腕");
 
         自动挑战首领 = saveSwitchStatus("自动挑战首领");
         自动换图 = saveSwitchStatus("自动换图");
@@ -1433,6 +1444,8 @@
 
         var 世界喊话 = document.getElementById("世界喊话").value;
         localStorage.setItem("世界喊话", 世界喊话);
+        var 摸鱼队伍喊话 = document.getElementById("摸鱼队伍喊话").value;
+        localStorage.setItem("摸鱼队伍喊话", 摸鱼队伍喊话);
 
         <!--营地-->
         营地总开关 = saveSwitchStatus("营地总开关");
@@ -1610,6 +1623,7 @@
             钻石兑换果木次数: 钻石兑换果木次数,
 
             优先升级同一技能: 优先升级同一技能至下一阶段,
+            仅强化武器戒指护腕: 仅强化武器戒指护腕,
             自动挑战首领: 自动挑战首领,
             自动换图: 自动换图,
             队员不满足单飞: 队员不满足单飞,
@@ -1634,6 +1648,7 @@
 
             自动切换喊话频道: 自动切换喊话频道,
             世界喊话: 世界喊话,
+            摸鱼队伍喊话: 摸鱼队伍喊话,
 
             <!--营地-->
             营地总开关: 营地总开关,

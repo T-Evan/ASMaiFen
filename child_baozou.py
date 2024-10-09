@@ -147,7 +147,7 @@ def daBaoZouShuiBoBoss():
             if res2:
                 bossColor2 = '蒸汽'
             if not res2:
-                res2, _, _ = imageFind('火焰大王-花')
+                res2, _, _ = imageFind('火焰大王-花', confidence1=0.87)
                 if res2:
                     bossColor2 = '花'
             if not res2:

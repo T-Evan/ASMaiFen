@@ -186,6 +186,7 @@ display = Device.display()
 # 屏幕宽度
 if display.widthPixels != 720 or display.heightPixels != 1280:
     Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
+    Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
 
 
 # debug
@@ -313,6 +314,16 @@ def main():
 
                 # 定时休息
                 current_time = int(time.time())
+
+                # 将时间戳转换为 datetime 对象
+                start_time_dt = datetime.fromtimestamp(start_time)
+                current_time_dt = datetime.fromtimestamp(current_time)
+
+                # 判断是否跨天（重置每日任务）
+                if start_time_dt.date() != current_time_dt.date():
+                    # 判断当前时间是否大于凌晨5点
+                    if current_time_dt.time() > datetime.min.time().replace(hour=5):
+                        初始化任务记录()
 
                 if total_wait != 0 and current_time - start_time >= total_wait:
                     Toast(f"休息 {need_wait_minute} 分钟")

@@ -10,7 +10,7 @@ from .daily import DailyTask
 from ascript.android.screen import Ocr
 from .baseUtils import *
 import re as repattern
-
+from ascript.android.screen import FindColors
 
 class LvRenTask:
     def __init__(self):
@@ -88,11 +88,11 @@ class LvRenTask:
                 availableGuoMu = safe_int(availableGuoMu)
                 if availableGuoMu == "" or availableGuoMu <= 100:
                     break
-                res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动升温")
+                res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动烘焙")
                 if not res:
                     # 开启自动升温
                     tapSleep(515, 1030)
-                res = TomatoOcrTap(320, 1006, 399, 1033, "自动升温")
+                res = TomatoOcrTap(320, 1006, 399, 1033, "自动烘焙")
 
                 if res:
                     for i in range(1, 5):
@@ -182,4 +182,38 @@ class LvRenTask:
         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
         if not res:
             return
-        re = imageFindClick('一键强化')
+
+        yiJianRes = False
+        if 功能开关['仅强化武器戒指护腕'] == 0:
+            yiJianRes = imageFindClick('一键强化')
+            if yiJianRes:
+                return
+        if 功能开关['仅强化武器戒指护腕'] == 1 or not yiJianRes:
+            for i in range(1, 6):
+                tapSleep(140,175) # 点击武器
+                re = FindColors.find("427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",rect=[94,705,627,1092],diff=0.9)
+                if not re:
+                    Toast('旅人 - 强化装备 - 材料用尽')
+                    break
+                tapSleep(re.x, re.y)
+                tapSleep(129,1023,0.3)
+                TomatoOcrTap(94,1188,127,1216, "回")
+
+                tapSleep(579,287) # 点击护腕
+                re = FindColors.find("427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",rect=[94,705,627,1092],diff=0.9)
+                if not re:
+                    Toast('旅人 - 强化装备 - 材料用尽')
+                    break
+                tapSleep(re.x, re.y)
+                tapSleep(129,1023,0.3)
+                TomatoOcrTap(94,1188,127,1216, "回")
+
+                tapSleep(228,506) # 点击戒指
+                re = FindColors.find("427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",rect=[94,705,627,1092],diff=0.9)
+                if not re:
+                    Toast('旅人 - 强化装备 - 材料用尽')
+                    break
+                tapSleep(re.x, re.y)
+                tapSleep(129,1023,0.3)
+                TomatoOcrTap(94,1188,127,1216, "回")
+

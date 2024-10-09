@@ -20,7 +20,7 @@ class DailyTask:
     def homePage(self, needQuitTeam=False):
         tryTimes = 0
         while True:
-            tryTimes=tryTimes+1
+            tryTimes = tryTimes + 1
             # todo 区分是否进入的摸鱼活动
             # res6 = self.shilianTask.WaitFight()
 
@@ -317,6 +317,8 @@ class DailyTask:
         return 0
 
     def dailyTaskEnd(self):
+        # 摸鱼时间到
+        self.huoDongMoYu()
         if 功能开关["日常总开关"] == 0:
             return
 
@@ -324,8 +326,6 @@ class DailyTask:
         # 日常相关
 
         # 活动
-        # 摸鱼时间到
-        self.huoDongMoYu()
         # 火力全开
         self.huoLiQuanKai()
         # BBQ派对
@@ -594,6 +594,19 @@ class DailyTask:
 
             tapSleep(660, 689, 3)  # 翻下一页
 
+        # 拜访
+        for i in range(1, 5):
+            tapSleep(617, 1139, 2)  # 点击拜访
+            res = TomatoOcrTap(246, 348, 287, 374, '旅团')
+            if res:
+                tapSleep(527, 455 + 120 * i, 2)  # 点击拜访
+                available, _ = TomatoOcrText(643, 1062, 672, 1080, '0/2')
+                if available:
+                    Toast('箱庭苗圃-旅团浇水完成')
+                    break
+                tapSleep(615, 1010, 2)  # 点击浇水
+                tapSleep(339, 1223)  # 点击空白
+
         任务记录["箱庭苗圃-倒计时"] = time.time()
         任务记录["箱庭苗圃-完成"] = 1
 
@@ -742,16 +755,19 @@ class DailyTask:
             return
 
         Toast('日常 - 摸鱼时间到 - 开始')
-
-        for i in range(1, 3):
-            self.homePage()
-
+        for i in range(1, 6):
             # res = TomatoOcrTap(566, 379, 609, 404, "摸鱼")
             res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
             res2 = TomatoOcrTap(551, 462, 622, 488, "摸鱼", 15, -20)
             res3 = TomatoOcrTap(553, 546, 620, 570, "摸鱼", 15, -20)
-            if not res1 and not res2 and not res3:
-                return
+            res4 = TomatoOcrTap(325, 1095, 427, 1128, "开始匹配")
+            if not res1 and not res2 and not res3 and not res4:
+                self.homePage()
+                res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
+                res2 = TomatoOcrTap(551, 462, 622, 488, "摸鱼", 15, -20)
+                res3 = TomatoOcrTap(553, 546, 620, 570, "摸鱼", 15, -20)
+                if not res1 and not res2 and not res3:
+                    return
 
             res = TomatoOcrTap(325, 1095, 427, 1128, "开始匹配")
             res = TomatoOcrTap(451, 603, 505, 635, "准备")
@@ -822,17 +838,17 @@ class DailyTask:
                         tapSleep(236, 765, 0.4)  # 顺时针点击
                         tapSleep(236, 765, 0.4)  # 顺时针点击
                         if (res2 or res3) and hasShout1 == 0:
-                            hasShout1 = self.moyuTeamShout("顺时针 左下角")
+                            hasShout1 = self.moyuTeamShout(功能开关["摸鱼队伍喊话"])
                         tapSleep(588, 1100, 0.4)  # 选中离手
                         tapSleep(588, 1100, 0.4)  # 选中离手
                     else:
                         res = TomatoOcrTap(313, 1105, 411, 1136, "领取奖励")
                         if res:
-                            tapSleep(140, 1000, 1)  # 点击空白处关闭
-                            sleep(1)
+                            tapSleep(535,1218, 0.5)  # 点击空白处关闭
+                            tapSleep(535,1218, 0.5)  # 点击空白处关闭
                             break
                         doneCt = doneCt + 1
-                        if doneCt > 4:  # 连续两次未识别到时退出
+                        if doneCt > 3:  # 连续两次未识别到时退出
                             break
                     sleep(2)  # 等待3s
 
@@ -896,7 +912,7 @@ class DailyTask:
                     buyCount = ""
                     for j in range(1, 5):
                         # res, buyCount = TomatoOcrText(379, 930, 394, 947, "每日限购次数")  # 1/9
-                        res, buyCount = TomatoOcrText(274,923,438,956, "每日限购次数")  # 1/9
+                        res, buyCount = TomatoOcrText(274, 923, 438, 956, "每日限购次数")  # 1/9
                         buyCount = buyCount.replace("每日限购（", "")
                         buyCount = buyCount.replace("/9）", "")
                         buyCount = safe_int(buyCount)
@@ -983,7 +999,7 @@ class DailyTask:
                 buyCount = ""
                 for j in range(1, 5):
                     # res, buyCount = TomatoOcrText(375, 944, 387, 960, "已购买次数")  # 1/9
-                    res, buyCount = TomatoOcrText(284,935,425,968, "已购买次数")  # 1/9
+                    res, buyCount = TomatoOcrText(284, 935, 425, 968, "已购买次数")  # 1/9
                     buyCount = buyCount.replace("每日限购（", "")
                     buyCount = buyCount.replace("/15）", "")
                     buyCount = safe_int(buyCount)
@@ -1114,7 +1130,10 @@ class DailyTask:
         if shoutText == "":
             return 1
 
-        res1, text1 = TomatoOcrText(19, 1104, 94, 1128, "点击输入")
+        res1 = TomatoOcrTap(19, 1101, 94, 1135, "点击输入", 10, 10)
+        if not res1:
+            res1 = TomatoOcrTap(16, 1100, 96, 1135, "点击输入", 10, 10)
+        # res1, text1 = TomatoOcrText(19, 1104, 94, 1128, "点击输入")
         res2 = False
         res3 = False
         if not res1:
@@ -1126,14 +1145,14 @@ class DailyTask:
 
         Toast("队伍发言")
 
-        res1 = TomatoOcrTap(19, 1101, 94, 1135, "点击输入", 10, 10)
-        if not res1:
-            res2 = TomatoOcrTap(16, 1100, 96, 1135, "点击输入", 10, 10)
-        sleep(2.5)  # 等待输入法弹窗
-        if res1 or res2:
+        # res1 = TomatoOcrTap(19, 1101, 94, 1135, "点击输入", 10, 10)
+        # if not res1:
+        #     res2 = TomatoOcrTap(16, 1100, 96, 1135, "点击输入", 10, 10)
+        # sleep(1.5)  # 等待输入法弹窗
+        if res1:
             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-            sleep(1)
-            # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
+            sleep(1.8)
+            action.input(shoutText)
             action.input(shoutText)
             tapSleep(360, 104)  # 点击空白处确认输入
             res = TomatoOcrTap(555, 1156, 603, 1188, "发送")

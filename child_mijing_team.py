@@ -148,6 +148,13 @@ def waitInvite():
     for i in range(1, 25):
         waitTime = (i - 1) * 2
         Toast(f'等待队长开始{waitTime}/50s')
+
+        # 未进入房间兜底
+        res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
+        if res1:
+            # 判断体力用尽提示
+            res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
+
         # 房间 - 特殊状态识别
         if fight_type == '梦魇带队' and not findDoneStatus:
             re1, _ = TomatoOcrText(445, 375, 500, 402, "24/24")

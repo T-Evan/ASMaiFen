@@ -1,5 +1,7 @@
 # 导包
 from ascript.android import system
+from six import print_
+
 from .特征库 import *
 from ascript.android.ui import Dialog
 from .res.ui.ui import 功能开关
@@ -26,6 +28,7 @@ class StartUp:
         global 功能开关
 
         system.open(self.app_name)
+        # r = system.shell(f"start -n com.xd.cfbmf")
 
         max_attempt = 15
         for attempt in range(max_attempt):
@@ -249,6 +252,7 @@ class StartUp:
         account_name = str(account_name)
         Toast('加载账号' + account_name)
         # 结束应用
+        r = system.shell(f"am kill com.xd.cfbmf")
         r = system.shell(f"am force-stop com.xd.cfbmf")
         print(r)
         oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
@@ -261,7 +265,17 @@ class StartUp:
         oldPath2 = "/data/data/com.xd.cfbmf/"
         new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
         flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}")
-
+        print(flag1)
+        sleep(0.5)
+        # system.open("com.xd.cfbmf")
+        # r = system.shell(f"am start -n com.xd.cfbmf")
+        # r = system.shell(f"am kill com.xd.cfbmf")
+        # r = system.shell(f"am force-stop com.xd.cfbmf")
+        # system.open("com.xd.cfbmf")
+        # r = system.shell(f"am start -a com.xd.cfbmf")
+        # r = system.shell(f"am start -a com.xd.cfbmf")
+        # system.open("com.xd.cfbmf")
+        system.open("出发吧麦芬")
 
     def saveAccount(self, account_name):
         account_name = str(account_name)
@@ -292,7 +306,7 @@ class StartUp:
         # flag2 = shutil.copytree(old_path2, new_path2, dirs_exist_ok=True)
 
         # 复制文件夹及里面所有文件
-        if flag1 and flag2:
+        if flag1 is None and flag2 is None:
             Dialog.confirm(f"已保存账号 {account_name} 登录信息！请重启软件")
         else:
             Dialog.confirm("保存失败！请检查是否授予root权限")
