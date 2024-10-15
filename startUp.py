@@ -9,7 +9,6 @@ from .res.ui.ui import 任务记录
 from .res.ui.ui import switch_lock
 from .baseUtils import *
 from .shilian import ShiLianTask
-from .daily import DailyTask
 import shutil
 import os
 import sys
@@ -21,7 +20,6 @@ class StartUp:
     def __init__(self, app_name):
         self.app_name = app_name
         self.shilianTask = ShiLianTask()
-        self.dailyTask = DailyTask()
 
     # 实例方法
     def start_app(self):
@@ -143,17 +141,17 @@ class StartUp:
         login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
         login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
         if not login1 and not login2:
-            self.dailyTask.homePage()
-            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
-            tapSleep(47, 340)
-            res = TomatoOcrTap(135, 741, 222, 774, "返回主界面", 10, 10)
-            if res:
+            # 重启应用
+            r = system.shell(f"am kill com.xd.cfbmf")
+            r = system.shell(f"am force-stop com.xd.cfbmf")
+            system.open(self.app_name)
+            sleep(5)
+            for i in range(1, 6):
+                system.open(self.app_name)
+                login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
+                if login1:
+                    break
                 sleep(5)
-                for i in range(1, 6):
-                    login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
-                    if login1:
-                        break
-                    sleep(5)
             else:
                 Toast('返回登录界面失败，跳过角色切换')
                 return

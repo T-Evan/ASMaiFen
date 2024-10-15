@@ -12,6 +12,7 @@ from ascript.android.system import R
 from ascript.android import plug
 from .res.ui.ui import TimeoutLock
 
+
 # plug.load("BDS_OcrText")
 # from BDS_OcrText import *
 
@@ -151,11 +152,13 @@ from .res.ui.ui import TimeoutLock
 #         return False
 #
 
-def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
-                       match_mode='exact', bitmap=''):
+def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
+                       match_mode='exact', bitmap='', keywords = None):
     try:
         if whiteList == '':
             whiteList = keyword
+        if keywords is None:
+            keywords = []
         if TimeoutLock(switch_lock, timeLock).acquire_lock():
             if bitmap == '':
                 bitmap = screen.capture(x1, y1, x2, y2)
@@ -172,18 +175,27 @@ def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, wh
         center_y = 0
         ocrReJson = json.loads(ocrRe)
         for line in ocrReJson:
-            # print(line)
-            # print(line)
+            lineWords = line.get('words', '')
             isFind = False
             if match_mode == 'fuzzy':
-                if keyword in line.get('words', ''):
+                if keyword in lineWords:
                     isFind = True
             elif match_mode == 'exact':
-                if line.get('words') == keyword:
+                if lineWords == keyword:
                     isFind = True
             else:
                 raise ValueError(f"无效的匹配模式: {match_mode}")
-
+            for key in keywords:
+                if key['match_mode'] == 'fuzzy':
+                    if key['keyword'] in lineWords:
+                        isFind = True
+                        break
+                elif key['match_mode'] == 'exact':
+                    if lineWords == key['keyword']:
+                        isFind = True
+                        break
+                else:
+                    raise ValueError(f"无效的匹配模式: {key['match_mode']}")
             if isFind:
                 box = line.get('location')
                 rx1, ry1 = box[0][0], box[0][1]
@@ -192,21 +204,23 @@ def TomatoOcrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, wh
                 center_x = (rx1 + rx2) / 2
                 center_y = (ry1 + ry2) / 2
         if center_x > 0 and center_y > 0:
-            print(f"TomatoOcrFindRange识别成功-{keyword}|{center_x}|{center_y}")
+            print(f"TomatoOcrFindRange识别成功-{keyword}-{keywords}|{center_x}|{center_y}")
             return True
         # print(f"TomatoOcrFindRange识别失败-{keyword}|{ocrRe}")
-        print(f"TomatoOcrFindRange识别失败-{keyword}")
+        print(f"TomatoOcrFindRange识别失败-{keyword}-{keywords}")
         return False
     except Exception as e:
         print(f"TomatoOcrFindRange发生异常: {e}")
         return False
 
 
-def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
-                            match_mode='exact', offsetX=0, offsetY=0, bitmap=''):
+def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
+                            match_mode='exact', offsetX=0, offsetY=0, bitmap='', keywords = None):
     try:
         if whiteList == '':
             whiteList = keyword
+        if keywords is None:
+            keywords = []
         if TimeoutLock(switch_lock, timeLock).acquire_lock():
             if bitmap == '':
                 bitmap = screen.capture(x1, y1, x2, y2)
@@ -224,15 +238,28 @@ def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=7
         ocrReJson = json.loads(ocrRe)
         for line in ocrReJson:
             # print(line)
+            lineWords = line.get('words', '')
             isFind = False
             if match_mode == 'fuzzy':
-                if keyword in line.get('words', ''):
+                if keyword in lineWords:
                     isFind = True
             elif match_mode == 'exact':
-                if line.get('words') == keyword:
+                if lineWords == keyword:
                     isFind = True
             else:
                 raise ValueError(f"无效的匹配模式: {match_mode}")
+
+            for key in keywords:
+                if key['match_mode'] == 'fuzzy':
+                    if key['keyword'] in lineWords:
+                        isFind = True
+                        break
+                elif key['match_mode'] == 'exact':
+                    if lineWords == key['keyword']:
+                        isFind = True
+                        break
+                else:
+                    raise ValueError(f"无效的匹配模式: {key['match_mode']}")
 
             if isFind:
                 box = line.get('location')
@@ -244,10 +271,10 @@ def TomatoOcrFindRangeClick(keyword, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=7
         if center_x > 0 and center_y > 0:
             tapSleep(center_x + x1 + offsetX, center_y + y1 + offsetY)
             sleep(sleep1)
-            print(f"TomatoOcrFindRangeClick识别成功-{keyword}|{center_x}|{center_y}")
+            print(f"TomatoOcrFindRangeClick识别成功-{keyword}-{keywords}|{center_x}|{center_y}")
             return True
         # print(f"TomatoOcrFindRangeClick识别失败-{keyword}|{ocrRe}")
-        print(f"TomatoOcrFindRangeClick识别失败-{keyword}")
+        print(f"TomatoOcrFindRangeClick识别失败-{keyword}-{keywords}")
         return False
     except Exception as e:
         print(f"TomatoOcrFindRangeClick发生异常: {e}")
@@ -302,6 +329,8 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0):
 
 lastToast = ''
 lastToastTime = 0
+
+
 def Toast(content, tim=1000):
     global lastToast
     global lastToastTime

@@ -177,40 +177,40 @@ class LvTuanTask:
                 rect=[78, 527, 639, 1104])
             if re:  # 有可购买商品时，继续判断
                 if 功能开关['旅团唤兽琴弦']:
-                    re = imageFindClick('旅团-唤兽琴弦')
+                    re = imageFindClick('旅团-唤兽琴弦',confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团全价兽粮']:
-                    re = imageFindClick('旅团-全价兽粮')
+                    re = imageFindClick('旅团-全价兽粮',confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团超级成长零食']:
-                    re = imageFindClick('旅团-超级成长零食')
+                    re = imageFindClick('旅团-超级成长零食',confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团原材料']:
-                    re = imageFindClick('旅团-原材料')
+                    re = imageFindClick('旅团-原材料',confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团史诗经验']:
-                    re = imageFindClick('旅团-史诗经验')
+                    re = imageFindClick('旅团-史诗经验',confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团优秀经验']:
-                    re = imageFindClick('旅团-优秀经验')
+                    re = imageFindClick('旅团-优秀经验',confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团普通经验']:
-                    re = imageFindClick('旅团-普通经验')
+                    re = imageFindClick('旅团-普通经验',confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团金币']:
-                    re = imageFindClick('旅团-金币')
+                    re = imageFindClick('旅团-金币',confidence1=0.85)
                     if re:
                         self.shopBuy()
             # 翻页
             swipe(360, 850, 360, 750)
-            sleep(3.5)
+            sleep(3)
         任务记录['旅团-商店-完成'] = 1
 
     def shopBuy(self):

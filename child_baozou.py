@@ -52,7 +52,7 @@ def main():
                 else:
                     sleep(3)
         elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走水波大王":
-            yolo = YoLov5("麦芬-水波大暴走:0.1")
+            # yolo = YoLov5("麦芬-水波大暴走:0.1")
             # while 1:
             #     ts = yolo.find_all()
             #     for r in ts:

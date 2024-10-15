@@ -206,7 +206,7 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # lw = Loger(R.ui("loger.html"))
 # lw.tunner(tunner) # 设置消息通道
 # lw.show() # 展示
-# sleep(5)
+# screen.capture()
 # sys.exit()
 
 def main():
@@ -283,6 +283,14 @@ def main():
                         功能开关['冒险总开关'] == 0:
                     Toast('未开启功能，请检查功能配置')
                     sleep(3)
+
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    for i in range(5):
+                        Toast(f'重复推图到最新关卡 第{i + 1}次')
+                        res = dailyTask.newMap()
+                        if not res:
+                            break
+
                 # 营地活动（优先领取）
                 yingdiTask.yingdiTask()
                 # 日常（优先领取）
