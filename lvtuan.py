@@ -64,7 +64,8 @@ class LvTuanTask:
                 for i in range(1, 3):
                     res1 = TomatoOcrTap(632, 916, 702, 947, "调查队", 20, -20)
                     res2 = TomatoOcrTap(636, 992, 702, 1016, "调查队", 20, -20)
-                    if not res1 and not res2:
+                    res3 = TomatoOcrTap(636,948,699,973, "调查队", 20, -20)
+                    if not res1 and not res2 and not res3:
                         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                         if not res:
                             # 返回首页
@@ -74,7 +75,8 @@ class LvTuanTask:
                         else:
                             res1 = TomatoOcrTap(632, 916, 702, 947, "调查队", 20, -20)
                             res2 = TomatoOcrTap(636, 992, 702, 1016, "调查队", 20, -20)
-                            if res1 or res2:
+                            res3 = TomatoOcrTap(636,948,699,973, "调查队", 20, -20)
+                            if res1 or res2 or res3:
                                 break
                     else:
                         break

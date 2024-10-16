@@ -151,7 +151,7 @@ class ShiLianTask:
         sleep(2)
         if res == False:
             res = TomatoOcrTap(554, 464, 622, 487, "大暴走", 30, -10)  # 适配新手试炼 - 下方大暴走入口
-        sleep(2)
+        sleep(1)
 
         # 结算前一次的宝箱（兜底）
         res = TomatoOcrTap(333, 715, 384, 745, "开启")  # 领取宝箱
@@ -162,7 +162,7 @@ class ShiLianTask:
             tapSleep(125, 1050)  # 领取后，点击空白
 
         hdPage, _ = TomatoOcrText(383, 573, 436, 605, "大王")
-        if hdPage == False:
+        if not hdPage:
             return
 
         self.startFightBaoZou()
@@ -742,7 +742,8 @@ class ShiLianTask:
         # res1, _ = TomatoOcrText(313, 622, 404, 656, "通关奖励")  # 战斗结束页。宝箱提示
         bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
         res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
-                                  bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},{'keyword': '开启', 'match_mode': 'fuzzy'}])  # 战斗结束页。宝箱提示
+                                  bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
+                                                           {'keyword': '开启', 'match_mode': 'fuzzy'}])  # 战斗结束页。宝箱提示
         # if not res1:
         # res2, _ = TomatoOcrText(267, 755, 313, 783, "开启")  # 战斗结束页。宝箱提示
         # res2 = TomatoOcrFindRange("开启", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy',
@@ -1478,6 +1479,8 @@ class ShiLianTask:
             # 循环10次，优先处理战斗中走位
             if res1 or (teamName1 != "" or teamName2 != ""):
                 for i in range(1, 10):
+                    if 功能开关["史莱姆选择"] == '暴走雷电大王':
+                        self.daBaoZouLeidian()
                     if 功能开关["史莱姆选择"] == '暴走烈焰大王':
                         self.daBaoZouLieYan()
                     if 功能开关["史莱姆选择"] == '暴走深林大王':
@@ -1517,6 +1520,109 @@ class ShiLianTask:
                     break
                 功能开关["fighting"] = 0
         功能开关["fighting"] = 0
+
+    # 大暴走（雷电大王）
+    def daBaoZouLeidian(self):
+        def 草():
+            point = FindColors.find(
+                "145,673,#B9D6AB|153,672,#BFD7AD|159,672,#95B48C|151,680,#A1D8A1|138,681,#98D99D|148,688,#2D4645",
+                rect=[9, 637, 202, 803], diff=0.94)
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        def 火():
+            point = FindColors.find(
+                "137,683,#DF8768|138,675,#E1A482|146,677,#CF9677|156,683,#DF8768|157,677,#E29E7C|146,675,#E2A382",
+                rect=[9, 637, 202, 803], diff=0.94)
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        def 水():
+            point = FindColors.find(
+                "63,673,#91CFCE|69,667,#A5D4CE|75,672,#95D0CF|69,691,#57BACF|74,686,#5CBACE|77,686,#5AB9CF",
+                rect=[9, 637, 202, 803], diff=0.94)
+            if point:
+                tapSleep(point.x, point.y, 1)
+
+        # 当前职业
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-战士", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-战士')
+                功能开关['当前职业'] = '战士'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-服事", 0.95, 4, 41, 72, 118)
+            if re:
+                # Toast('识别当前职业-服事')
+                功能开关['当前职业'] = '服事'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-刺客", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-刺客')
+                功能开关['当前职业'] = '刺客'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-法师", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-法师')
+                功能开关['当前职业'] = '法师'
+        if 功能开关['当前职业'] == '':
+            re, x, y = imageFind("职业-游侠", 0.95, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-游侠')
+                功能开关['当前职业'] = '游侠'
+
+        sleep(0.5)
+        if 功能开关['bossColor'] == '' and 功能开关['userColor'] == '':
+            # if 当前职业 == '战士':
+            #     Toast('战士-战斗中-自动走位火')
+            #     火()
+            if 功能开关['当前职业'] == '服事':
+                Toast('服事-战斗中-自动走位草')
+                草()
+            # if 当前职业 == '刺客':
+            #     Toast('刺客-战斗中-自动走位火')
+            #     火()
+            # if 当前职业 == '游侠':
+            #     Toast('游侠-战斗中-自动走位火')
+            #     火()
+            # if 当前职业 == '法师':
+            #     Toast('法师-战斗中-自动走位火')
+            #     火()
+
+        if 功能开关['bossColor'] != '' and 功能开关['userColor'] != '':
+            if (功能开关['bossLastColor'] != '' and 功能开关['bossLastColor'] == 功能开关['bossColor']) and (
+                    功能开关['userLastColor'] != '' and 功能开关['userLastColor'] == 功能开关['userColor']):
+                Toast('战斗中')
+            else:
+                功能开关['bossLastColor'] = 功能开关['bossColor']
+                功能开关['userLastColor'] = 功能开关['userColor']
+                if 功能开关['userColor'] == '开花':
+                    if 功能开关['bossColor'] == '木':
+                        Toast('前往-水')
+                        水()
+                        sleep(1)
+                    if 功能开关['bossColor'] == '水':
+                        Toast('前往-草')
+                        草()
+                        sleep(1)
+                if 功能开关['userColor'] == '篝火':
+                    if 功能开关['bossColor'] == '火':
+                        Toast('前往-草')
+                        草()
+                        sleep(1)
+                    if 功能开关['bossColor'] == '木':
+                        Toast('前往-火')
+                        火()
+                        sleep(1)
+                if 功能开关['userColor'] == '蒸汽':
+                    if 功能开关['bossColor'] == '火':
+                        Toast('前往-水')
+                        水()
+                        sleep(1)
+                    if 功能开关['bossColor'] == '水':
+                        Toast('前往-火')
+                        火()
+                        sleep(1)
 
     # 大暴走（水波大王）
     def daBaoZouShuiBo(self):

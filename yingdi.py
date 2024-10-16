@@ -547,6 +547,15 @@ class YingDiTask:
                 if re:
                     findMap = True
 
+        if selectMap == "巨像的旷野":
+            re = TomatoOcrFindRangeClick('巨像的旷野', sleep1=2, whiteList='巨像的旷野')
+            if re:
+                findMap = True
+            if not re:
+                re = TomatoOcrFindRangeClick('巨像的旷野', sleep1=2, whiteList='巨像的旷野')
+                if re:
+                    findMap = True
+
         if not findMap:
             # 左右均未找到
             if left >= 4 and right >= 4:

@@ -19,6 +19,8 @@ yolo = ''
 # 实例方法
 def main():
     功能开关['bossColor'] = ''
+    功能开关['userColor'] = ''
+    功能开关['userLastColor'] = ''
     功能开关['bossColor1'] = ''
     功能开关['bossColor2'] = ''
     功能开关['bossLastColor'] = ''
@@ -64,6 +66,12 @@ def main():
                     # 检测战斗状态
                     # 异步识别boss状态
                     daBaoZouShuiBoBoss()
+                else:
+                    sleep(3)
+        elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走雷电大王":
+            while 1:
+                if 功能开关["fighting"] == 1:
+                    daBaoZouLeiDianBoss()
                 else:
                     sleep(3)
         else:
@@ -194,6 +202,66 @@ def daBaoZouShuiBoBoss():
 
     print(功能开关['bossColor'], '|', 功能开关['bossColor1'], '|', 功能开关['bossColor2'], '|')
     if 功能开关['bossColor'] != '' or (功能开关['bossColor1'] != '' and 功能开关['bossColor2'] != ''):
+        sleep(0.5)
+    sleep(0.3)
+
+
+def daBaoZouLeiDianBoss():
+    功能开关['bossColor'] = ''
+    功能开关['userColor'] = ''
+
+    # 进入二阶段后，识别基础和目标颜色
+    bossColor = ''
+    userColor = ''
+
+    # 单-水；兜底
+    if bossColor == '':
+        res = CompareColors.compare("360,378,#A0E4F3", diff=0.9)
+        if res:
+            bossColor = '水'
+        if not res:
+            res = CompareColors.compare("360,380,#FEB390", diff=0.93)
+            if res:
+                bossColor = '火'
+        if not res:
+            res = CompareColors.compare("356,387,#9CDD72", diff=0.9)
+            if res:
+                bossColor = '木'
+
+        # 识别玩家
+        if bossColor != '':
+            res2, _, _ = imageFind('雷电大王-蒸汽', 0.85, 145,656,618,1029)
+            if res2:
+                userColor = '蒸汽'
+            if not res2:
+                res2, _, _ = imageFind('雷电大王-篝火', 0.85,145,656,618,1029)
+                if res2:
+                    userColor = '篝火'
+            if not res2:
+                res2, _, _ = imageFind('雷电大王-花', 0.86,145,656,618,1029)
+                if res2:
+                    userColor = '开花'
+
+    if bossColor == '':
+        # boss状态刷新
+        功能开关['bossLastColor'] = ''
+    if userColor == '':
+        功能开关['userLastColor'] = ''
+
+    # 统计结果
+    # counter = Counter(results2)
+    # 取最多出现的结果
+    # if len(counter.most_common(1)) > 0:
+    # print(counter.most_common(1))
+    # bossColor, bossColor1, bossColor2 = counter.most_common(1)[0][0]
+
+    if bossColor != '':
+        功能开关['bossColor'] = bossColor
+    if userColor != '':
+        功能开关['userColor'] = userColor
+
+    print(功能开关['bossColor'], '|', 功能开关['userColor'], '|')
+    if 功能开关['bossColor'] != '' and 功能开关['userColor'] != '':
         sleep(0.5)
     sleep(0.3)
 

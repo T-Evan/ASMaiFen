@@ -22,6 +22,7 @@ import pymysql
 from datetime import datetime
 from ascript.android.system import Device
 from ascript.android.ui import Loger
+from ascript.android import system
 
 # ldE.set_log_level(10)  # Debug
 # ldE.set_log_level(20)  # Info
@@ -106,7 +107,7 @@ def kamiActive():
                     Dialog.confirm(activeInfo, "激活码失效")
                     Toast(activeInfo, 3000)
                     sleep(2)
-                    sys.exit()
+                    system.exit()
                 else:
                     activeInfo = '试用已激活，' + '过期时间：' + formatted_date
                     Toast(activeInfo, 3000)
@@ -115,7 +116,7 @@ def kamiActive():
     # activeInfo = '卡密不存在，请重新输入'
     # Dialog.confirm(activeInfo, "激活码失效")
     # Toast(activeInfo, 3000)
-    # sys.exit()
+    # system.exit()
     if kami != '':
         # 判断首次激活
         if expire_time == 0:
@@ -143,7 +144,7 @@ def kamiActive():
                 Dialog.confirm(activeInfo, "激活码失效")
                 Toast(activeInfo, 3000)
                 sleep(2)
-                sys.exit()
+                system.exit()
             # 判断登录设备数
             now_device_id = Device.id()
             device_ids = json.loads(device_id)
@@ -158,7 +159,7 @@ def kamiActive():
                     Dialog.confirm(activeInfo, "激活码失效")
                     Toast(activeInfo, 3000)
                     sleep(2)
-                    sys.exit()
+                    system.exit()
                 else:
                     # 激活当前设备
                     device_ids.append(now_device_id)
@@ -207,7 +208,7 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # lw.tunner(tunner) # 设置消息通道
 # lw.show() # 展示
 # screen.capture()
-# sys.exit()
+# system.exit()
 
 def main():
     try:
@@ -220,7 +221,7 @@ def main():
 
         # debug
         # shilianTask.changeChongWu(fight_type='恶龙挑战')
-        # sys.exit()
+        # system.exit()
 
         功能开关["breakChild"] = 0
         功能开关["fighting"] = 0
