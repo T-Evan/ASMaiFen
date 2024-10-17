@@ -9,6 +9,7 @@ from ascript.android.ui import WebWindow
 from ascript.android.ui import Dialog
 import threading
 import sys
+from ascript.android import system
 
 config = None
 
@@ -24,9 +25,9 @@ def tunner(k, v):
     if k == "submit":
         res = json.loads(v)
         config = res
-        print(type(config))
+        # print(type(config))
     if k == "加载" and v == "成功":
-        print(v)
+        print('加载成功')
 
 
 formW = WebWindow(R.ui("ui.html"))
@@ -41,7 +42,7 @@ while True:
     time.sleep(1)
     if config == "exit":
         Dialog.toast('取消执行', 5, 3 | 48, 200, 0)
-        sys.exit()
+        system.exit()
     if config:
         Dialog.toast('资源加载中 - 请等待30s', 5, 3 | 48, 200, 0)
         # time.sleep(2)
@@ -82,6 +83,22 @@ global 功能开关
     "当前任务账号": 功能开关["选择启动账号"],
     "当前任务角色": 功能开关["选择启动角色"],
 }
+
+def safe_int_v2(value):
+    """
+    尝试将给定的值转换为整数，如果失败则返回默认值 0。
+    """
+    try:
+        # 兜底子母o
+        if value == "o" or value == "O":
+            return 0
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+if 功能开关["选择启动角色"] != "" and  功能开关["选择启动角色"] != "0":
+    任务记录['当前任务角色'] = safe_int_v2(功能开关["选择启动角色"]) - 1 # 计算并执行下一角色，此处-1默认为当前角色
+
 
 def 初始化任务记录():
     # 日常
@@ -125,4 +142,5 @@ def 初始化任务记录():
         "箱庭苗圃-倒计时": 0,
         "箱庭苗圃-完成": 0,
         "队伍喊话-倒计时": 0,
+        "世界喊话-倒计时": 0,
     })

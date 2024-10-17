@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html"
+      xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="layui/css/layui.css">
@@ -156,6 +157,24 @@
         margin: 0 10px; /* 添加一些间距 */
     }
 
+    .toast {
+        position: fixed;
+        bottom: 70px;
+        right: 20px;
+        background-color: #4caf50;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .show {
+        opacity: 1;
+    }
+
     </style>
 </head>
 <body style="margin: 0;padding: 0;list-style: none;text-decoration: none;">
@@ -201,7 +220,7 @@
         <div style="height: 35px; width: 100%;background-color: white;"></div>
         <li class="shouye_content">
             <h3>公告：Have Fun ！</h3>
-            <h4> 推荐任务执行顺序
+            <h4> 任务按以下顺序检查并执行
                 <br>
                 秘宝->每日商店->招式->骑兽->邮件->秘境->恶龙->梦魇->旅团->强化装备->升级技能->猫猫包->洗练装备->宠物升级->定期活动->主线推图->冒险手册->月签到->日礼包->月卡->纸飞机->星辰同行
             </h4>
@@ -217,75 +236,80 @@
             <form action="">
                 <fieldset>
                     <legend>配置切换</legend>
-                    功能迁移中，敬请期待~
-                </fieldset>
-            </form>
-            <form action="">
-                <fieldset>
-                    <legend>多账号配置（！！！请参考视频教程后再使用，单账号无需配置！！！）</legend>
-                    <legend>第一步：登录页保存账号信息（勾选并启动）</legend>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="账号1保存" name="vehicle" type="checkbox" value="Bike">账号1<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号2保存" name="vehicle" type="checkbox" value="Bike">账号2<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号3保存" name="vehicle" type="checkbox" value="Bike">账号3<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号4保存" name="vehicle" type="checkbox" value="Bike">账号4<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号5保存" name="vehicle" type="checkbox" value="Bike">账号5<br>
-                        </div>
-                    </div>
-                    <legend>第二步：保存账号后再配置切换</legend>
-                    <div class="shouye_container">
-                        <div class="item">
-                            <label for="定时切账号">运行</label>
-                        </div>
-                        <div class="item" style="width: 50px">
-                            <input type="text" id="定时切账号" name="定时切账号" lay-verify="title" autocomplete="off"
-                                   placeholder="分钟" class="layui-input">
-                        </div>
-                        <div class="item">
-                            <label for="定时休息">分钟后切换下一账号</label>
-                        </div>
+<!--                    <button onclick="deleteAllItems()"-->
+<!--                            style="margin-bottom:5px;color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"-->
+<!--                            type="button">-->
+<!--                        重置全部配置-->
+<!--                    </button>-->
+                    <div class="flex-container">
+                        <input type="text" id="配置1名称" name="配置1" lay-verify="title" autocomplete="off"
+                               placeholder="配置1" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <button onclick="saveConfigItems(1)"
+                                style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            保存
+                        </button>
+                        <button onclick="readAllItems(1)"
+                                style="margin-left:5px;margin-right:5px;color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            读取
+                        </button>
+
+                        <input type="text" id="配置2名称" name="配置2" lay-verify="title" autocomplete="off"
+                               placeholder="配置2" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <button onclick="saveConfigItems(2)"
+                                style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            保存
+                        </button>
+                        <button onclick="readAllItems(2)"
+                                style="margin-left:5px;color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            读取
+                        </button>
                     </div>
                     <div class="flex-container">
-                        <label for="选择启动账号">选择启动账号:</label>
-                        <div class="layui-form">
-                            <div class="layui-input-inline">
-                                <select name="选择启动账号" id="选择启动账号" lay-filter="mijing1-filter">
-                                    <option value="0">默认(不切换)</option>
-                                    <option value="1">账号1</option>
-                                    <option value="2">账号2</option>
-                                    <option value="3">账号3</option>
-                                    <option value="4">账号4</option>
-                                    <option value="5">账号5</option>
-                                </select>
-                            </div>
-                        </div>
+                        <input type="text" id="配置3名称" name="配置3" lay-verify="title" autocomplete="off"
+                               placeholder="配置3" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <button onclick="saveConfigItems(3)"
+                                style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            保存
+                        </button>
+                        <button onclick="readAllItems(3)"
+                                style="margin-left:5px;margin-right:5px;color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            读取
+                        </button>
+
+                        <input type="text" id="配置4名称" name="配置4" lay-verify="title" autocomplete="off"
+                               placeholder="配置4" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <button onclick="saveConfigItems(4)"
+                                style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            保存
+                        </button>
+                        <button onclick="readAllItems(4)"
+                                style="margin-left:5px;color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            读取
+                        </button>
                     </div>
-                    <div class="checkbox-group">
-                        <div class="checkbox-item">
-                            <input id="账号1开关" name="vehicle" type="checkbox" value="Bike">账号1开关<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号2开关" name="vehicle" type="checkbox" value="Bike">账号2开关<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号3开关" name="vehicle" type="checkbox" value="Bike">账号3开关<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号4开关" name="vehicle" type="checkbox" value="Bike">账号4开关<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="账号5开关" name="vehicle" type="checkbox" value="Bike">账号5开关<br>
-                        </div>
+                    <div class="flex-container">
+                        <input type="text" id="配置5名称" name="配置5" lay-verify="title" autocomplete="off"
+                               placeholder="配置5" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <button onclick="saveConfigItems(5)"
+                                style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            保存
+                        </button>
+                        <button onclick="readAllItems(5)"
+                                style="margin-left:5px;color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
+                                type="button">
+                            读取
+                        </button>
                     </div>
+                    <div id="toast" class="toast">保存成功</div>
                 </fieldset>
             </form>
             <form action="">
@@ -366,7 +390,149 @@
                             <input id="角色5开关" name="vehicle" type="checkbox" value="Bike">角色5<br>
                         </div>
                     </div>
-                    <br><br>
+                </fieldset>
+            </form>
+            <form action="">
+                <fieldset>
+                    <legend>多账号配置（！请参考视频教程后再使用，单账号无需配置！）</legend>
+                    <legend>第一步：登录页保存账号信息（勾选并启动，保存成功后取消勾选）</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="账号1保存" name="vehicle" type="checkbox" value="Bike">账号1<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号2保存" name="vehicle" type="checkbox" value="Bike">账号2<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号3保存" name="vehicle" type="checkbox" value="Bike">账号3<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号4保存" name="vehicle" type="checkbox" value="Bike">账号4<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="账号5保存" name="vehicle" type="checkbox" value="Bike">账号5<br>
+                        </div>
+                    </div>
+                    <legend>第二步：保存账号后再配置切换</legend>
+                    <div class="shouye_container">
+                        <div class="item">
+                            <label for="定时切账号">运行</label>
+                        </div>
+                        <div class="item" style="width: 50px">
+                            <input type="text" id="定时切账号" name="定时切账号" lay-verify="title" autocomplete="off"
+                                   placeholder="分钟" class="layui-input">
+                        </div>
+                        <div class="item">
+                            <label for="定时休息">分钟后切换下一账号</label>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="选择启动账号">选择启动账号:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="选择启动账号" id="选择启动账号" lay-filter="mijing1-filter">
+                                    <option value="0">默认(不切换)</option>
+                                    <option value="1">账号1</option>
+                                    <option value="2">账号2</option>
+                                    <option value="3">账号3</option>
+                                    <option value="4">账号4</option>
+                                    <option value="5">账号5</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input style="margin-right: 5px;" id="账号1开关" name="vehicle" type="checkbox" value="Bike">
+                            <input type="text" id="账号1名称" name="账号1" lay-verify="title" autocomplete="off"
+                                   placeholder="账号1开关" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select  name="账号1配置" id="账号1配置" lay-filter="mijing1-filter">
+                                        <option value="0">选择配置(默认)</option>
+                                        <option value="1">配置1</option>
+                                        <option value="2">配置2</option>
+                                        <option value="3">配置3</option>
+                                        <option value="4">配置4</option>
+                                        <option value="5">配置5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input style="margin-right: 5px;" id="账号2开关" name="vehicle" type="checkbox" value="Bike">
+                            <input type="text" id="账号2名称" name="账号2" lay-verify="title" autocomplete="off"
+                                   placeholder="账号2开关" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select  name="账号2配置" id="账号2配置" lay-filter="mijing1-filter">
+                                        <option value="0">选择配置(默认)</option>
+                                        <option value="1">配置1</option>
+                                        <option value="2">配置2</option>
+                                        <option value="3">配置3</option>
+                                        <option value="4">配置4</option>
+                                        <option value="5">配置5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input style="margin-right: 5px;" id="账号3开关" name="vehicle" type="checkbox" value="Bike">
+                            <input type="text" id="账号3名称" name="账号3" lay-verify="title" autocomplete="off"
+                                   placeholder="账号3开关" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select  name="账号3配置" id="账号3配置" lay-filter="mijing1-filter">
+                                        <option value="0">选择配置(默认)</option>
+                                        <option value="1">配置1</option>
+                                        <option value="2">配置2</option>
+                                        <option value="3">配置3</option>
+                                        <option value="4">配置4</option>
+                                        <option value="5">配置5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input style="margin-right: 5px;" id="账号4开关" name="vehicle" type="checkbox" value="Bike">
+                            <input type="text" id="账号4名称" name="账号4" lay-verify="title" autocomplete="off"
+                                   placeholder="账号4开关" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select  name="账号4配置" id="账号4配置" lay-filter="mijing1-filter">
+                                        <option value="0">选择配置(默认)</option>
+                                        <option value="1">配置1</option>
+                                        <option value="2">配置2</option>
+                                        <option value="3">配置3</option>
+                                        <option value="4">配置4</option>
+                                        <option value="5">配置5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input style="margin-right: 5px;" id="账号5开关" name="vehicle" type="checkbox" value="Bike">
+                            <input type="text" id="账号5名称" name="账号5" lay-verify="title" autocomplete="off"
+                                   placeholder="账号5开关" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                            <div class="layui-form">
+                                <div class="layui-input-inline">
+                                    <select  name="账号5配置" id="账号5配置" lay-filter="mijing1-filter">
+                                        <option value="0">选择配置(默认)</option>
+                                        <option value="1">配置1</option>
+                                        <option value="2">配置2</option>
+                                        <option value="3">配置3</option>
+                                        <option value="4">配置4</option>
+                                        <option value="5">配置5</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
         </li>
@@ -430,6 +596,12 @@
                         </div>
                         <div class="checkbox-item">
                             <input id="骑兽乐园" name="vehicle" type="checkbox" value="Bike">骑兽乐园<br>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <label for="高级配置">高级配置:</label>
+                        <div class="checkbox-item">
+                            <input id="冒险手册完成后停止" name="vehicle" type="checkbox" value="Bike">冒险手册完成后停止<br>
                         </div>
                     </div>
                     <div class="flex-container">
@@ -989,6 +1161,8 @@
                         <input type="text" id="世界喊话" name="世界喊话" lay-verify="title" autocomplete="off"
                                placeholder="世界喊话" class="layui-input">
                     </div>
+                    <input type="text" id="世界喊话间隔" name="世界喊话间隔" lay-verify="title" autocomplete="off"
+                           placeholder="世界喊话间隔（分钟）(留空无间隔)" class="layui-input">
                     <div class="checkbox-item">
                         <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换世界频道<br>
                     </div>
@@ -1035,12 +1209,90 @@
 <script src="layui/layui.js"></script>
 <script src="layui/jquery-3.6.1.js"></script>
 <script type="text/javascript">
-    window.onload = function () {
-        console.log("窗口加载成功了");
-        airscript.call("加载", "成功");
+    // 定义一个函数用于保存开关的状态到 localStorage
+    function saveSwitchStatus(id) {
+        var isChecked = document.getElementById(id).checked;
+        localStorage.setItem(id, isChecked);
+        return isChecked
+    }
 
+    function deleteAllItems(configNum) {
+        localStorage.clear();
+        console.log('当前配置 已清空');
+        setAllItems()
+    }
+
+    function saveConfigItems(configNum) {
+        saveAllItems()
+        const allItems = {};
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (!key.includes('config')) {
+                const value = localStorage.getItem(key);
+                allItems[key] = value;
+            }
+        }
+        const jsonString = JSON.stringify(allItems, null, 2);
+        localStorage.setItem('config' + configNum, jsonString);
+
+        console.log('All Items:', localStorage.getItem("config1"));
+        showToast('保存成功')
+    }
+
+     function showToast(message) {
+        var toast = document.getElementById('toast');
+        toast.innerHTML = message; // 设置 toast 的内容
+        toast.classList.add('show');
+
+        setTimeout(function() {
+            toast.classList.remove('show');
+        }, 2000); // 3秒后自动隐藏
+    }
+
+    function readAllItems(configNum) {
+        const jsonString = localStorage.getItem('config' + configNum);
+        if (jsonString) {
+            try {
+                console.log('读取的配置:', jsonString);
+                const configData = JSON.parse(jsonString); // 将 JSON 字符串转换回对象
+
+                // 遍历 configData 对象的每个键值对
+                for (const key in configData) {
+                    if (configData.hasOwnProperty(key)) {
+                        if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码')) {
+                            localStorage.setItem(key, configData[key]);
+                        }
+                    }
+                }
+                setAllItems()
+                showToast('加载成功')
+            } catch (error) {
+                console.error('解析 JSON 失败:', error);
+            }
+        } else {
+            console.log('没有找到配置');
+        }
+    }
+
+    function setAllItems() {
         var 激活码 = localStorage.getItem("激活码");
         document.getElementById("激活码").value = 激活码;
+
+        var 配置1名称 = localStorage.getItem("配置1名称");
+        document.getElementById("配置1名称").value = 配置1名称;
+
+        var 配置2名称 = localStorage.getItem("配置2名称");
+        document.getElementById("配置2名称").value = 配置2名称;
+
+        var 配置3名称 = localStorage.getItem("配置3名称");
+        document.getElementById("配置3名称").value = 配置3名称;
+
+        var 配置4名称 = localStorage.getItem("配置4名称");
+        document.getElementById("配置4名称").value = 配置4名称;
+
+        var 配置5名称 = localStorage.getItem("配置5名称");
+        document.getElementById("配置5名称").value = 配置5名称;
 
         var 定时运行 = localStorage.getItem("定时运行");
         document.getElementById("定时运行").value = 定时运行;
@@ -1065,7 +1317,65 @@
         setSwitchStatus("账号3开关");
         setSwitchStatus("账号4开关");
         setSwitchStatus("账号5开关");
+        var 账号1名称 = localStorage.getItem("账号1名称");
+        document.getElementById("账号1名称").value = 账号1名称;
 
+        var 账号2名称 = localStorage.getItem("账号2名称");
+        document.getElementById("账号2名称").value = 账号2名称;
+
+        var 账号3名称 = localStorage.getItem("账号3名称");
+        document.getElementById("账号3名称").value = 账号3名称;
+
+        var 账号4名称 = localStorage.getItem("账号4名称");
+        document.getElementById("账号4名称").value = 账号4名称;
+
+        var 账号5名称 = localStorage.getItem("账号5名称");
+        document.getElementById("账号5名称").value = 账号5名称;
+
+        var defaultValue = localStorage.getItem('账号1配置');
+        var selectElement = document.getElementById('账号1配置');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        var defaultValue = localStorage.getItem('账号2配置');
+        var selectElement = document.getElementById('账号2配置');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        var defaultValue = localStorage.getItem('账号3配置');
+        var selectElement = document.getElementById('账号3配置');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        var defaultValue = localStorage.getItem('账号4配置');
+        var selectElement = document.getElementById('账号4配置');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
+        var defaultValue = localStorage.getItem('账号5配置');
+        var selectElement = document.getElementById('账号5配置');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
         var 定时切角色 = localStorage.getItem("定时切角色");
         document.getElementById("定时切角色").value = 定时切角色;
 
@@ -1100,6 +1410,7 @@
         setSwitchStatus("邮件领取");
         setSwitchStatus("招式创造");
         setSwitchStatus("骑兽乐园");
+        setSwitchStatus("冒险手册完成后停止");
 
         setSwitchStatus("释放1次战术技能");
         setSwitchStatus("洗练1次装备");
@@ -1146,6 +1457,10 @@
 
         var 世界喊话 = localStorage.getItem("世界喊话");
         document.getElementById("世界喊话").value = 世界喊话;
+
+        var 世界喊话间隔 = localStorage.getItem("世界喊话间隔");
+        document.getElementById("世界喊话间隔").value = 世界喊话间隔;
+
         var 摸鱼队伍喊话 = localStorage.getItem("摸鱼队伍喊话");
         document.getElementById("摸鱼队伍喊话").value = 摸鱼队伍喊话;
 
@@ -1319,6 +1634,12 @@
         setSwitchStatus("旅团优秀经验");
         setSwitchStatus("旅团普通经验");
         setSwitchStatus("旅团金币");
+    }
+
+    window.onload = function () {
+        console.log("窗口加载成功了");
+        airscript.call("加载", "成功");
+        setAllItems()
     };
 
     layui.use(['form'], function(){
@@ -1405,11 +1726,24 @@
         document.getElementById("bjip").innerHTML = xip;
     }
 
-    function submit() {
-        console.log("点击了确定");
-
+    function saveAllItems() {
         var 激活码 = document.getElementById("激活码").value;
         localStorage.setItem("激活码", 激活码);
+
+        var 配置1名称 = document.getElementById("配置1名称").value;
+        localStorage.setItem("配置1名称", 配置1名称);
+
+        var 配置2名称 = document.getElementById("配置2名称").value;
+        localStorage.setItem("配置2名称", 配置2名称);
+
+        var 配置3名称 = document.getElementById("配置3名称").value;
+        localStorage.setItem("配置3名称", 配置3名称);
+
+        var 配置4名称 = document.getElementById("配置4名称").value;
+        localStorage.setItem("配置4名称", 配置4名称);
+
+        var 配置5名称 = document.getElementById("配置5名称").value;
+        localStorage.setItem("配置5名称", 配置5名称);
 
         var 定时运行 = document.getElementById("定时运行").value;
         localStorage.setItem("定时运行", 定时运行);
@@ -1437,6 +1771,36 @@
         账号3开关 = saveSwitchStatus("账号3开关");
         账号4开关 = saveSwitchStatus("账号4开关");
         账号5开关 = saveSwitchStatus("账号5开关");
+
+        var 账号1名称 = document.getElementById("账号1名称").value;
+        localStorage.setItem("账号1名称", 账号1名称);
+
+        var 账号2名称 = document.getElementById("账号2名称").value;
+        localStorage.setItem("账号2名称", 账号2名称);
+
+        var 账号3名称 = document.getElementById("账号3名称").value;
+        localStorage.setItem("账号3名称", 账号3名称);
+
+        var 账号4名称 = document.getElementById("账号4名称").value;
+        localStorage.setItem("账号4名称", 账号4名称);
+
+        var 账号5名称 = document.getElementById("账号5名称").value;
+        localStorage.setItem("账号5名称", 账号5名称);
+
+        var 账号1配置 = document.getElementById("账号1配置").value;
+        localStorage.setItem("账号1配置", 账号1配置);
+
+        var 账号2配置 = document.getElementById("账号2配置").value;
+        localStorage.setItem("账号2配置", 账号2配置);
+
+        var 账号3配置 = document.getElementById("账号3配置").value;
+        localStorage.setItem("账号3配置", 账号3配置);
+
+        var 账号4配置 = document.getElementById("账号4配置").value;
+        localStorage.setItem("账号4配置", 账号4配置);
+
+        var 账号5配置 = document.getElementById("账号5配置").value;
+        localStorage.setItem("账号5配置", 账号5配置);
 
         var 定时切角色 = document.getElementById("定时切角色").value;
         localStorage.setItem("定时切角色", 定时切角色);
@@ -1474,6 +1838,7 @@
         邮件领取 = saveSwitchStatus("邮件领取");
         招式创造 = saveSwitchStatus("招式创造");
         骑兽乐园 = saveSwitchStatus("骑兽乐园");
+        冒险手册完成后停止 = saveSwitchStatus("冒险手册完成后停止");
 
         释放1次战术技能 = saveSwitchStatus("释放1次战术技能");
         洗练1次装备 = saveSwitchStatus("洗练1次装备");
@@ -1493,6 +1858,8 @@
 
         var 世界喊话 = document.getElementById("世界喊话").value;
         localStorage.setItem("世界喊话", 世界喊话);
+        var 世界喊话间隔 = document.getElementById("世界喊话间隔").value;
+        localStorage.setItem("世界喊话间隔", 世界喊话间隔);
         var 摸鱼队伍喊话 = document.getElementById("摸鱼队伍喊话").value;
         localStorage.setItem("摸鱼队伍喊话", 摸鱼队伍喊话);
 
@@ -1634,6 +2001,11 @@
         旅团普通经验 = saveSwitchStatus("旅团普通经验");
         旅团金币 = saveSwitchStatus("旅团金币");
 
+        配置1 = localStorage.getItem('config1');
+        配置2 = localStorage.getItem('config2');
+        配置3 = localStorage.getItem('config3');
+        配置4 = localStorage.getItem('config4');
+        配置5 = localStorage.getItem('config5');
 
         var data = {
             激活码: 激活码,
@@ -1655,6 +2027,12 @@
             账号3开关: 账号3开关,
             账号4开关: 账号4开关,
             账号5开关: 账号5开关,
+
+            账号1配置: 账号1配置,
+            账号2配置: 账号2配置,
+            账号3配置: 账号3配置,
+            账号4配置: 账号4配置,
+            账号5配置: 账号5配置,
 
             选择启动角色: 选择启动角色,
             角色1开关: 角色1开关,
@@ -1687,6 +2065,7 @@
             邮件领取: 邮件领取,
             招式创造: 招式创造,
             骑兽乐园: 骑兽乐园,
+            冒险手册完成后停止: 冒险手册完成后停止,
 
             释放1次战术技能: 释放1次战术技能,
             洗练1次装备: 洗练1次装备,
@@ -1705,6 +2084,7 @@
 
             自动切换喊话频道: 自动切换喊话频道,
             世界喊话: 世界喊话,
+            世界喊话间隔: 世界喊话间隔,
 
             <!--营地-->
             营地总开关: 营地总开关,
@@ -1804,16 +2184,20 @@
             旅团优秀经验: 旅团优秀经验,
             旅团普通经验: 旅团普通经验,
             旅团金币: 旅团金币,
+
+            配置1: 配置1,
+            配置2: 配置2,
+            配置3: 配置3,
+            配置4: 配置4,
+            配置5: 配置5,
         };
 
-    // 定义一个函数用于保存开关的状态到 localStorage
-    function saveSwitchStatus(id) {
-        var isChecked = document.getElementById(id).checked;
-        localStorage.setItem(id, isChecked);
-        return isChecked
+        return data
     }
 
-<!--        console.log(data);-->
+    function submit() {
+        console.log("点击了确定");
+        data = saveAllItems()
         // 将data 转为JSON文件传递给PY
         airscript.call("submit", JSON.stringify(data));
         airscript.close();

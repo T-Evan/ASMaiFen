@@ -12,6 +12,7 @@ from .thread import *
 import re as rePattern
 from ascript.android.screen import FindColors
 from ascript.android.action import Path
+from ascript.android import system
 
 
 class DailyTask:
@@ -222,6 +223,15 @@ class DailyTask:
 
         Toast("世界喊话 - 开始")
 
+        need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
+        if need_dur_minute == '':
+            need_dur_minute = 0
+        if need_dur_minute > 0 and 任务记录["世界喊话-倒计时"] > 0:
+            diffTime = time.time() - 任务记录["世界喊话-倒计时"]
+            if diffTime < need_dur_minute * 60:
+                Toast(f'日常 - 世界喊话 - 倒计时{need_dur_minute - round(diffTime / 60, 2)}min')
+                return
+
         self.homePage()
 
         res1 = TomatoOcrTap(18, 1098, 97, 1134, "点击输入", 10, 10)
@@ -239,8 +249,9 @@ class DailyTask:
                 action.input(功能开关["世界喊话"])
                 tapSleep(360, 104, 0.5)  # 点击空白处确认输入
             res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
-            # if res:
-            #     tapSleep(472, 771, 0.5)
+            if res:
+                任务记录["世界喊话-倒计时"] = time.time()
+                # tapSleep(472, 771, 0.5)
         # 关闭喊话窗口
         tapSleep(472, 771, 0.5)
 
@@ -420,20 +431,27 @@ class DailyTask:
                     break
 
         # 日常领取
-        if CompareColors.compare("355,1104,#EF5C3F|355,1100,#F45F42|352,1103,#EF5C3F"):
-            res = TomatoOcrTap(274, 1102, 326, 1130, "每日")
-            if res:
-                # 识别黄色领取按钮
-                re, x, y = imageFind('手册-领取')
-                if re:
-                    tapSleep(x, y, 1)
-                    tapSleep(357, 1224)  # 点击空白处关闭
-                    # 点击宝箱（从右到左）
-                    tapSleep(570, 390)
-                    tapSleep(490, 390)
-                    tapSleep(410, 390)
-                    tapSleep(330, 390)
-                    tapSleep(250, 390)
+        # if CompareColors.compare("355,1104,#EF5C3F|355,1100,#F45F42|352,1103,#EF5C3F"):
+        res = TomatoOcrTap(274, 1102, 326, 1130, "每日")
+        if res:
+            # 识别黄色领取按钮
+            re, x, y = imageFind('手册-领取')
+            if re:
+                tapSleep(x, y, 1)
+                tapSleep(357, 1224)  # 点击空白处关闭
+                # 点击宝箱（从右到左）
+                tapSleep(570, 390)
+                tapSleep(490, 390)
+                tapSleep(410, 390)
+                tapSleep(330, 390)
+                tapSleep(250, 390)
+
+            if 功能开关['冒险手册完成后停止'] == 1:
+                # 判断是否完成日常
+                res = CompareColors.compare("573,394,#FAF3C5|579,391,#D97D6C|570,391,#CE9F82|574,399,#F7E0B4|579,394,#D4B887|546,392,#F2A94A|546,386,#F2A94A")
+                if res:
+                    Dialog.confirm("日常任务已完成")
+                    system.exit()
 
         # 每周领取
         res = TomatoOcrTap(394, 1099, 448, 1132, "每周")
@@ -462,6 +480,9 @@ class DailyTask:
                     tapSleep(360, 1070)  # 点击空白处关闭（再次点击，避免成就升级页）
                 else:
                     break
+
+        # 返回首页
+        self.homePage()
 
     # 前往新地图
     def newMap(self):

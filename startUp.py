@@ -210,6 +210,7 @@ class StartUp:
         任务记录['当前任务角色'] = 下一角色
 
     def switchAccount(self):
+        global 功能开关
         功能开关["fighting"] = 0
         功能开关["needHome"] = 0
         if 任务记录['当前任务账号'] != "":
@@ -218,6 +219,9 @@ class StartUp:
             for i in range (tmpAccount,6):
                 if 功能开关['账号' + str(i) + '开关'] == 1:
                     任务记录['当前任务账号'] = i
+                    if 功能开关['账号' + str(i) + '配置'] != 0:
+                        功能开关 = json.loads(功能开关['配置'+ str(i)])
+                        print(功能开关)
                     return self.loadAccount(i)
 
             # 循环一遍后，重新执行
@@ -305,8 +309,8 @@ class StartUp:
 
         # 复制文件夹及里面所有文件
         if flag1 is None and flag2 is None:
-            Dialog.confirm(f"已保存账号 {account_name} 登录信息！请重启软件")
+            Dialog.confirm(f"已保存账号 {account_name} 登录信息！请重新启动后继续配置")
         else:
             Dialog.confirm("保存失败！请检查是否授予root权限")
-        sys.exit()
+        system.exit()
         return True

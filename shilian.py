@@ -1472,6 +1472,7 @@ class ShiLianTask:
             if res1 or ("等级" in teamName1 or "等级" in teamName2):
                 # Toast("战斗中")
                 功能开关["fighting"] = 1
+                Toast('暴走史莱姆 - 战斗中')
             else:
                 功能开关["fighting"] = 0
 
@@ -1506,14 +1507,14 @@ class ShiLianTask:
                 res2 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
                 res3 = TomatoOcrTap(332, 1067, 387, 1096, "开启")  # 领取宝箱
                 if res1 or res2 or res3:
-                    Toast("战斗结束 - 战斗胜利")
+                    Toast("暴走史莱姆 - 战斗结束 - 战斗胜利")
                     sleep(2)
                     tapSleep(55, 1140)  # 领取后，点击空白
                     tapSleep(55, 1140)  # 领取后，点击空白
                     break
                 res3, _ = TomatoOcrText(499, 191, 581, 215, "离开队伍")  # 已返回队伍
                 if res3:
-                    Toast("战斗结束")
+                    Toast("暴走史莱姆 - 战斗结束")
                     break
                 quitStatus = self.quitTeam()
                 if quitStatus:
@@ -1592,7 +1593,7 @@ class ShiLianTask:
         if 功能开关['bossColor'] != '' and 功能开关['userColor'] != '':
             if (功能开关['bossLastColor'] != '' and 功能开关['bossLastColor'] == 功能开关['bossColor']) and (
                     功能开关['userLastColor'] != '' and 功能开关['userLastColor'] == 功能开关['userColor']):
-                Toast('战斗中')
+                Toast('暴走史莱姆 - 战斗中 - 无需走位')
             else:
                 功能开关['bossLastColor'] = 功能开关['bossColor']
                 功能开关['userLastColor'] = 功能开关['userColor']

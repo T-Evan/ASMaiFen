@@ -230,15 +230,15 @@ def daBaoZouLeiDianBoss():
 
         # 识别玩家
         if bossColor != '':
-            res2, _, _ = imageFind('雷电大王-蒸汽', 0.85, 145,656,618,1029)
+            res2, _, _ = imageFind('雷电大王-蒸汽', 0.85, 146,631,576,1122)
             if res2:
                 userColor = '蒸汽'
             if not res2:
-                res2, _, _ = imageFind('雷电大王-篝火', 0.85,145,656,618,1029)
+                res2, _, _ = imageFind('雷电大王-篝火', 0.85,146,631,576,1122)
                 if res2:
                     userColor = '篝火'
             if not res2:
-                res2, _, _ = imageFind('雷电大王-花', 0.86,145,656,618,1029)
+                res2, _, _ = imageFind('雷电大王-花', 0.85,146,631,576,1122)
                 if res2:
                     userColor = '开花'
 
