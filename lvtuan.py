@@ -266,19 +266,21 @@ class LvTuanTask:
         self.dailyTask.homePage()
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
 
-        if not CompareColors.compare("690,822,#EF5C3F|686,815,#FA6547|691,814,#FA6545") and not CompareColors.compare("691,776,#F05C3F|691,778,#F45842|693,774,#F46043"):
-            Toast("旅团 - 许愿墙 - 已送满 - 跳过任务")
-            任务记录["旅团-许愿墙-完成"] = 1
-            return
+        # if not CompareColors.compare("690,822,#EF5C3F|686,815,#FA6547|691,814,#FA6545") and not CompareColors.compare("691,776,#F05C3F|691,778,#F45842|693,774,#F46043"):
+        #     Toast("旅团 - 许愿墙 - 已送满 - 跳过任务")
+        #     任务记录["旅团-许愿墙-完成"] = 1
+        #     return
 
-        res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)
+        res = TomatoOcrTap(636,858,699,887, "许愿墙", 20, -20)
         if not res:
-            res = TomatoOcrTap(636, 817, 701, 839, "许愿墙", 20, -20)
+            res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)
             if not res:
-                return
+                res = TomatoOcrTap(636, 817, 701, 839, "许愿墙", 20, -20)
+                if not res:
+                    return
 
         for i in range(1, 5):
-            Toast(f'旅团 - 许愿墙 - 捐赠中{i}/5')
+            Toast(f'旅团 - 许愿墙 - 捐献中{i}/5')
             re = TomatoOcrFindRangeClick('捐献', whiteList='捐献')
             if re:
                 # # 点击最大
@@ -286,10 +288,13 @@ class LvTuanTask:
                 # tapSleep(504, 718)
                 # tapSleep(504, 781)
                 # 点击捐赠
-                res = TomatoOcrTap(328, 822, 389, 854, "捐赠")
+                res = TomatoOcrTap(328, 822, 389, 854, "捐献")
                 # res = TomatoOcrTap(97, 1200, 129, 1231, "回")  # 返回许愿墙首页
                 tapSleep(365, 1214)  # 点击空白处
             else:
+                re = TomatoOcrFindRangeClick('公共捐献', whiteList='公共捐献')
+                if re:
+                    res = TomatoOcrTap(328, 822, 389, 854, "捐献")
                 break
         任务记录["旅团-许愿墙-完成"] = 1
         return
