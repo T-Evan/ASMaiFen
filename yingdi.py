@@ -621,7 +621,7 @@ class YingDiTask:
 
         # 原材料
         if 功能开关['商店原材料'] == 1:
-            imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951)
+            imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951,confidence1=0.85)
             re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
             re2 = False
             if not re1:
@@ -632,7 +632,7 @@ class YingDiTask:
 
         # 星星经验
         if 功能开关['商店星星经验'] == 1:
-            imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951)
+            imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951,confidence1=0.85)
             re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
             re2 = False
             if not re1:
@@ -642,7 +642,7 @@ class YingDiTask:
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店全价兽粮'] == 1:
-            imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951)
+            imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951,confidence1=0.85)
             re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
             re2 = False
             if not re1:
@@ -652,7 +652,7 @@ class YingDiTask:
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店超级成长零食三折'] == 1:
-            imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951)
+            imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951,confidence1=0.85)
             re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
             re2 = False
             if not re1:
@@ -662,7 +662,7 @@ class YingDiTask:
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店黑烬突破石五折'] == 1:
-            imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951)
+            imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951,confidence1=0.85)
             re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
             re2 = False
             if not re1:
@@ -672,7 +672,7 @@ class YingDiTask:
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         if 功能开关['商店经验补剂五折'] == 1:
-            imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951)
+            imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951,confidence1=0.85)
             re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
             re2 = False
             if not re1:

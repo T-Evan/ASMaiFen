@@ -6,6 +6,8 @@ from .特征库 import *
 from ascript.android.ui import Dialog
 from .res.ui.ui import 功能开关
 from .res.ui.ui import 任务记录
+from .res.ui.ui import 功能配置
+from .res.ui.ui import loadConfig
 from .res.ui.ui import switch_lock
 from .baseUtils import *
 from .shilian import ShiLianTask
@@ -130,6 +132,13 @@ class StartUp:
         return shou_ye
 
     def switchRole(self, ifRestart=1, selectRole=''):
+        if 功能开关['选择启动角色'] == "false" and 功能开关['角色1开关'] == "false" and 功能开关['角色2开关'] == "false" and 功能开关['角色3开关'] == "false" and 功能开关['角色4开关'] == "false" and 功能开关['角色5开关'] == "false":
+            Toast('未配置角色切换')
+            return
+        if 功能开关['选择启动角色'] == 0 and 功能开关['角色1开关'] == 0 and 功能开关['角色2开关'] == 0 and 功能开关['角色3开关'] == 0 and 功能开关['角色4开关'] == 0 and 功能开关['角色5开关'] == 0:
+            Toast('未配置角色切换')
+            return
+
         功能开关['fighting'] = 0
         功能开关['needHome'] = 0
         Toast('开始切换角色')
@@ -168,7 +177,8 @@ class StartUp:
             下一角色 = 1
 
         角色开关 = '角色' + str(下一角色) + '开关'
-        if 功能开关[角色开关] == 0:
+        # print(角色开关 + 功能开关[角色开关])
+        if 功能开关[角色开关] == 0 or 功能开关[角色开关] == "false":
             Toast(角色开关 + '-未开启')
             任务记录['当前任务角色'] = 下一角色
             return self.switchRole(2)
@@ -185,7 +195,7 @@ class StartUp:
         if 下一角色 <= 3:
             swipe(190, 1090, 555, 1090)  # 翻到最左
             sleep(3)
-            x = 190 + (下一角色 - 1) * 165  # 从第一个角色 190，依次往右加 165 至下一角色
+            x = 190 + (下一角色 - 1) * 157  # 从第一个角色 190，依次往右加 165 至下一角色
             y = 1090
             tapSleep(x, y)
             res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
@@ -210,23 +220,19 @@ class StartUp:
         任务记录['当前任务角色'] = 下一角色
 
     def switchAccount(self):
-        global 功能开关
         功能开关["fighting"] = 0
         功能开关["needHome"] = 0
         if 任务记录['当前任务账号'] != "":
             tmpAccount = safe_int(任务记录['当前任务账号'])
-            tmpAccount = tmpAccount + 1 # 切换下一角色
+            tmpAccount = tmpAccount + 1 # 切换下一账号
             for i in range (tmpAccount,6):
-                if 功能开关['账号' + str(i) + '开关'] == 1:
+                if 功能开关['账号' + str(i) + '开关'] == 1 or 功能开关['账号' + str(i) + '开关'] == "true":
                     任务记录['当前任务账号'] = i
-                    if 功能开关['账号' + str(i) + '配置'] != 0:
-                        功能开关 = json.loads(功能开关['配置'+ str(i)])
-                        print(功能开关)
                     return self.loadAccount(i)
 
             # 循环一遍后，重新执行
             for i in range (1,6):
-                if 功能开关['账号' + str(i) + '开关'] == 1:
+                if 功能开关['账号' + str(i) + '开关'] ==  1 or 功能开关['账号' + str(i) + '开关'] == "true":
                     任务记录['当前任务账号'] = i
                     return self.loadAccount(i)
 
@@ -268,6 +274,12 @@ class StartUp:
         new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
         flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}")
         print(flag1)
+        global 功能开关
+        configNum = 功能开关['账号' + str(account_name) + '配置']
+        if configNum != 0 and configNum != '' and configNum != '0':
+            Toast(f'加载账号{account_name} + 加载配置{configNum}')
+            功能开关 = loadConfig(configNum)
+            print(功能开关)
         sleep(0.5)
         # system.open("com.xd.cfbmf")
         # r = system.shell(f"am start -n com.xd.cfbmf")

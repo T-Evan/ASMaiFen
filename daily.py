@@ -50,9 +50,7 @@ class DailyTask:
                 swipe(213, 1104, 568, 1104)
                 swipe(213, 1104, 568, 1104)
                 tapSleep(666,1191)
-                Toast('退出待机状态')
-
-            if tryTimes > 20:
+            elif tryTimes > 20:
                 Toast('尝试重启游戏')
                 # 重启游戏
                 self.startupTask.start_app()
@@ -717,12 +715,24 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrFindRangeClick('限时特惠', 0.9, 14, 11, 778, 197, 1057, offsetX=30, offsetY=-20)
+        res = TomatoOcrTap(98, 1026, 175, 1047, "限时特惠",30,-20)
         if not res:
-            return
+            res = TomatoOcrTap(99, 940, 175, 958, "限时特惠",30,-20)
+        if res:
+            tapSleep(595,153)  # 点击特惠宝箱
+            tapSleep(595,153)  # 点击特惠宝箱
+            tapSleep(341,1136)  # 点击空白处
+            tapSleep(86,1202)  # 点击返回
+            任务记录["限时特惠-完成"] = 1
 
-        tapSleep(595, 150)  # 点击特惠宝箱
-        tapSleep(350, 1125)  # 点击空白处
+        res = imageFindClick("营地-限时礼包",0.9,0.9,94,880,187,1057)
+        if res:
+            tapSleep(595,153)  # 点击特惠宝箱
+            tapSleep(595,153)  # 点击特惠宝箱
+            tapSleep(341,1136)  # 点击空白处
+            tapSleep(86,1202)  # 点击返回
+            任务记录["限时特惠-完成"] = 1
+
         任务记录["限时特惠-完成"] = 1
 
     # 登录好礼
@@ -1014,23 +1024,25 @@ class DailyTask:
             if needCount == '':
                 needCount = 0
             if needCount > 0:
-                for i in range(1, 5):
+                for i in range(5):
                     TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10)
                     res, _ = TomatoOcrText(320, 372, 401, 399, "兑换门票")
                     if not res:
                         TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10)
 
                     buyCount = ""
-                    for j in range(1, 5):
+                    for j in range(5):
                         # res, buyCount = TomatoOcrText(379, 930, 394, 947, "每日限购次数")  # 1/9
-                        res, buyCount = TomatoOcrText(274, 923, 438, 956, "每日限购次数")  # 1/9
+                        res, buyCount = TomatoOcrText(268,921,431,970, "每日限购次数")  # 1/9
                         buyCount = buyCount.replace("每日限购（", "")
                         buyCount = buyCount.replace("/9）", "")
                         buyCount = safe_int(buyCount)
                         if buyCount != "":
                             break
-                    if buyCount != 0 and (buyCount == "" or buyCount >= needCount):
-                        if buyCount != "" and buyCount >= needCount:
+                    if buyCount == "":
+                        continue
+                    if buyCount != 0 and buyCount >= needCount:
+                        if buyCount >= needCount:
                             任务记录["日常-骑兽乐园-完成"] = 1
                         TomatoOcrTap(70, 1202, 122, 1232, "返回", 10, 10)  # 返回芙
                         break
@@ -1047,9 +1059,9 @@ class DailyTask:
             attempt = 0
             while attempt < needCount:
                 TomatoOcrTap(204, 917, 245, 940, "探索")
-                sleep(2)
+                sleep(1.5)
                 TomatoOcrTap(597, 28, 642, 53, "跳过")  # 跳过动画
-                sleep(2)
+                sleep(1.5)
                 TomatoOcrTap(597, 28, 642, 53, "跳过")  # 跳过动画
                 tapSleep(90, 980, 3)  # 点击空白处
                 tapSleep(90, 980)  # 点击空白处
@@ -1130,9 +1142,8 @@ class DailyTask:
         if needCount > 0:
             attempt = 0
             # 关闭批量讲述
-            res = CompareColors.compare(
-                "513,1090,#B8D3B1|517,1092,#BAD3B2|521,1085,#59B249|522,1084,#5BB34B")  # 勾选的绿色对勾
-            if res:
+            res, _ = TomatoOcrText(317,1054,401,1082, "讲述故事")
+            if not res:
                 tapSleep(515, 1088)
             while attempt < needCount:
                 res = TomatoOcrTap(319, 1062, 398, 1083, "讲述故事")

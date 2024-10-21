@@ -4,14 +4,13 @@ import traceback
 import json
 
 # 导入动作模块
-from ascript.android import action
+from .res.ui.ui import 功能开关,loadConfig
 from .shilian import ShiLianTask
 from .lvtuan import LvTuanTask
 from .lvren import LvRenTask
 from .startUp import StartUp
 from .yingdi import YingDiTask
 from .daily import DailyTask
-from .res.ui.ui import 功能开关
 from .res.ui.ui import 初始化任务记录
 from .baseUtils import *
 from .thread import *
@@ -207,7 +206,11 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # lw = Loger(R.ui("loger.html"))
 # lw.tunner(tunner) # 设置消息通道
 # lw.show() # 展示
-# screen.capture()
+# print(功能开关['角色4开关'])
+# if 功能开关['角色4开关'] == 0 or 功能开关['角色4开关'] == False:
+# loadConfig(1)
+# loadConfig(2)
+# system.reboot()
 # system.exit()
 
 def main():
@@ -250,8 +253,8 @@ def main():
         # 多账号处理
         start_up.multiAccount()
 
-        runThread1()
-        runThread2()
+        runThreadNotice()
+        runThreadReturnHome()
         runThreadBaoZouBoss()
         runThreadMijingTeam()
         runThreadAnotherLogin()
@@ -271,8 +274,8 @@ def main():
                 # print(f"剩余内存:{free_memory_mb},已用内存{used_memory_mb},总共内存{total_memory_mb}")
                 counter += 1
                 if counter % 3 == 0:
-                    runThread1()
-                    runThread2()
+                    runThreadNotice()
+                    runThreadReturnHome()
                     runThreadBaoZouBoss()
                     runThreadMijingTeam()
                     runThreadAnotherLogin()
@@ -344,6 +347,7 @@ def main():
                     start_time = int(time.time())
 
                 # 定时切角色
+                nextStartTime = 0
                 if total_switch_role_minute != 0:
                     if current_time - start_time >= total_switch_role_minute:
                         Toast(f"运行 {need_switch_role_minute} 分钟，准备切换角色")
@@ -351,23 +355,38 @@ def main():
                         功能开关["needHome"] = 0
                         初始化任务记录()
                         start_up.switchRole()
-                        start_time = int(time.time())
+                        nextStartTime = int(time.time())
                     else:
                         tmpMinute = round((current_time - start_time) / 60, 2)
-                        tmpDiffMinute = round((total_switch_role_minute - (current_time - start_time)) / 60, 2)
-                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 后切换角色")
+                        tmpDiffMinute = round(need_switch_account_minute - ((current_time - start_time) / 60), 2)
+                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换角色")
 
                 # 定时切账号
+                current_time = int(time.time())
                 if total_switch_account_minute != 0:
                     if current_time - start_time >= total_switch_account_minute:
-                        Toast(f"运行 {total_switch_account_minute} 分钟，准备切换账号")
+                        Toast(f"运行 {need_switch_account_minute} 分钟，准备切换账号")
                         初始化任务记录()
                         start_up.switchAccount()
-                        start_time = int(time.time())
+                        print(功能开关)
+                        nextStartTime = int(time.time())
                     else:
                         tmpMinute = round((current_time - start_time) / 60, 2)
-                        tmpDiffMinute = round((total_switch_account_minute - (current_time - start_time)) / 60, 2)
-                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 后切换账号")
+                        tmpDiffMinute = round(need_switch_account_minute - ((current_time - start_time) / 60), 2)
+                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换账号")
+                if nextStartTime > 0:
+                    start_time = nextStartTime
+
+                # 定时重启脚本（3h）
+                need_reboot_minute = 3 * 60
+                total_reboot_minute = need_reboot_minute * 60
+                if current_time - start_time >= total_reboot_minute:
+                    Toast(f"运行 {need_reboot_minute} 分钟,重启脚本")
+                    system.reboot()
+                else:
+                    tmpMinute = round((current_time - start_time) / 60, 2)
+                    tmpDiffMinute = round(need_reboot_minute - ((current_time - start_time) / 60), 2)
+                    Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后重启脚本")
 
             except Exception as e:
                 # 处理异常

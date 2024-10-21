@@ -7,9 +7,11 @@ from .res.ui.ui import 功能开关
 def main():
     while True:
         if 功能开关["fighting"] == 0:
-            sleep(2)  # 等待 5 秒
+            # print('空白弹窗处理线程 - 运行中')
+            sleep(2.5)  # 等待 5 秒
             noticeCancel()
         if 功能开关["fighting"] == 1 and 功能开关["needHome"] == 0:
+            # print('空白弹窗处理线程 - 运行中')
             sleep(10)  # 等待 5 秒
             noticeCancel()
 

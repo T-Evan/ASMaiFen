@@ -15,6 +15,7 @@ from ascript.android.screen import FindColors
 def main():
     while True:
         if 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
+            print("返回首页处理线程 - 运行中")
             returnHome()
             sleep(1)  # 等待 1 秒
         else:
@@ -48,6 +49,9 @@ def returnHome():
 
         if not return1 and not return2 and not return3 and not return4:
             # 识别是否进入首页
+            # 点击首页-冒险
+            # re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
+
             # 判断底部冒险图标
             res2 = FindColors.find(
                 "323,1210,#FCF8EE|333,1210,#FCF8ED|336,1212,#F9ECCB|336,1234,#FEF8E9|347,1231,#FCF8EE|363,1231,#FEF7EB|377,1229,#F4EFE1|372,1218,#88684E|353,1216,#9E8776",

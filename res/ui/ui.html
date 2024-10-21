@@ -106,6 +106,7 @@
         form input {
             margin-top: 6px;
             margin-bottom: 6px;
+            margin-right: 3px;
             height: 16px;
             width: 16px;
             position: relative;
@@ -128,7 +129,7 @@
             color: rgb(0,150,255);
         }
 
-         .checkbox-group {
+    .checkbox-group {
         display: flex;
         flex-wrap: wrap;
         gap: 10px; /* 添加间距以分隔复选框 */
@@ -137,6 +138,16 @@
         display: flex;
         align-items: center;
     }
+
+    .gray-text {
+        color: gray;
+    }
+
+     #countdown {
+            margin-top: 10px;
+            font-size: 18px;
+            color: rgb(0,150,255);
+        }
 
     .flex-container {
         display: flex;
@@ -175,13 +186,67 @@
         opacity: 1;
     }
 
+/* 头部样式 */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1E9FFF;
+    height: 50px; /* 增加高度 */
+    width: 100%;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 8;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    transition: background-color 0.3s ease; /* 平滑过渡效果 */
+}
+
+.header:hover {
+    background-color: #1C86EE; /* 鼠标悬停时改变背景颜色 */
+}
+
+.header h3 {
+    color: white;
+    font-size: 1.2em; /* 增大字体大小 */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* 添加文字阴影 */
+    margin-bottom: 13px;
+}
+
+/* 按钮标签样式 */
+.button-label {
+    position: fixed;
+    left: 0;
+    width: 16.6%;
+    height: 28px;
+    color: #1E9FFF;
+    background-color: white;
+    border: 2px solid #1E9FFF;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    z-index: 8;
+    cursor: pointer; /* 鼠标指针变为手形 */
+    transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡效果 */
+}
+
+/* 鼠标悬停时的样式 */
+.button-label:hover {
+    background-color: #1E9FFF;
+    color: white;
+}
+
+/* 鼠标点击时的样式 */
+.button-label:active {
+    background-color: #1C86EE;
+    color: white;
+}
     </style>
 </head>
 <body style="margin: 0;padding: 0;list-style: none;text-decoration: none;">
-<div style=" align-items: center;justify-content: center;  background-color: #1E9FFF; height: 35px; width: 100%;text-align: center;position: fixed; top: 0px; left: 0px;z-index:8;">
-    <h3 style="margin: 0;margin-top: 10px;  color: white;">
-        挂机吧麦芬
-    </h3>
+<div class="header">
+    <h3>挂机吧麦芬</h3>
 </div>
 <div style="height: 36px; width: 100%;">
 </div>
@@ -192,28 +257,27 @@
     <input id="yingdi" name="sexx" style="display: none;z-index:8;" type="radio">
     <input id="lvtuan" name="sexx" style="display: none;z-index:8;" type="radio">
     <input id="qita" name="sexx" style="display: none;z-index:8;" type="radio">
-    <label for="shouye"
-           style="position: fixed; left: 0%; width: 16.6%;height: 28px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 5px;text-align: center;font-size: 16px;z-index:8;">
+    <label class="button-label" for="shouye">
         首页
     </label>
-    <label for="richang"
-           style="position: fixed; left: 16.6%; width: 16.6%;height: 28px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 5px;text-align: center;font-size: 16px;z-index:8;">
+    <label class="button-label" for="richang"
+           style="left: 16.6%;">
         日常
     </label>
-    <label for="maoxian"
-           style="position: fixed; left: 33.2%; width: 16.6%;height: 28px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 5px ;text-align: center;font-size: 16px;z-index:8;">
+    <label class="button-label" for="maoxian"
+           style="left: 33.2%;">
         冒险
     </label>
-    <label for="yingdi"
-           style="position: fixed; left: 49.8%; width: 16.6%;height: 28px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 5px ;text-align: center;font-size: 16px;z-index:8;">
+    <label class="button-label" for="yingdi"
+           style="left: 49.8%;">
         营地
     </label>
-    <label for="lvtuan"
-           style="position: fixed; left: 66.4%; width: 16.6%;height: 28px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 5px ;text-align: center;font-size: 16px;z-index:8;">
+    <label class="button-label" for="lvtuan"
+           style="left: 66.4%;">
         旅团
     </label>
-    <label for="qita"
-           style="position: fixed; left: 83%; width: 16.6%;height: 28px; color:#1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 5px ;text-align: center;font-size: 16px;z-index:8;">
+    <label class="button-label" for="qita"
+           style="left: 83%;">
         其他
     </label>
     <ul style="margin:0px 3px;padding: 0px;width:100%;">
@@ -398,19 +462,19 @@
                     <legend>第一步：登录页保存账号信息（勾选并启动，保存成功后取消勾选）</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
-                            <input id="账号1保存" name="vehicle" type="checkbox" value="Bike">账号1<br>
+                            <input id="账号1保存" name="vehicle" type="checkbox" value="Bike">账号1保存<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号2保存" name="vehicle" type="checkbox" value="Bike">账号2<br>
+                            <input id="账号2保存" name="vehicle" type="checkbox" value="Bike">账号2保存<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号3保存" name="vehicle" type="checkbox" value="Bike">账号3<br>
+                            <input id="账号3保存" name="vehicle" type="checkbox" value="Bike">账号3保存<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号4保存" name="vehicle" type="checkbox" value="Bike">账号4<br>
+                            <input id="账号4保存" name="vehicle" type="checkbox" value="Bike">账号4保存<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="账号5保存" name="vehicle" type="checkbox" value="Bike">账号5<br>
+                            <input id="账号5保存" name="vehicle" type="checkbox" value="Bike">账号5保存<br>
                         </div>
                     </div>
                     <legend>第二步：保存账号后再配置切换</legend>
@@ -834,7 +898,7 @@
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input id="秘境自动接收邀请" name="vehicle" type="checkbox"
-                                       value="Bike">自动接收邀请<br>
+                                       value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
                             </div>
                         </div>
                     </fieldset>
@@ -855,7 +919,7 @@
                             <div class="checkbox-group">
                                 <div class="checkbox-item">
                                     <input id="恶龙自动接收邀请" name="vehicle" type="checkbox"
-                                           value="Bike">自动接收邀请<br>
+                                           value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
                                 </div>
                             </div>
                         </div>
@@ -879,7 +943,7 @@
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input id="梦魇自动接收邀请" name="vehicle" type="checkbox"
-                                       value="Bike">自动接收邀请<br>
+                                       value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
                             </div>
                         </div>
                         <div class="flex-container">
@@ -897,7 +961,7 @@
                                 <input id="绝境自动接收邀请" name="vehicle" type="checkbox"
                                        value="Bike">自动接收邀请<br>
                                 <input id="绝境不退出房间" name="vehicle" type="checkbox"
-                                       value="Bike">不退出房间<br>
+                                       value="Bike">不退出房间（留在当前房间自动准备）<br>
                             </div>
                         </div>
                         <div class="flex-container">
@@ -1078,7 +1142,7 @@
                     </div>
                     <legend>旅团商店</legend>
                     <input id="旅团商店开关" name="vehicle" type="checkbox"
-                           value="Bike">旅团商店开关(默认最大次数兑换)<br>
+                           value="Bike">旅团商店开关<label class="gray-text">(默认最大次数兑换)</label><br>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input id="旅团唤兽琴弦" name="vehicle" type="checkbox" value="Bike">唤兽琴弦<br>
@@ -1159,19 +1223,28 @@
                     <div class="flex-container">
                         <label for="世界喊话">世界喊话:</label>
                         <input type="text" id="世界喊话" name="世界喊话" lay-verify="title" autocomplete="off"
-                               placeholder="世界喊话" class="layui-input">
+                               placeholder="世界喊话输入内容" class="layui-input">
                     </div>
+                    <div class="flex-container">
+                    <label for="世界喊话间隔">世界喊话间隔:</label>
                     <input type="text" id="世界喊话间隔" name="世界喊话间隔" lay-verify="title" autocomplete="off"
                            placeholder="世界喊话间隔（分钟）(留空无间隔)" class="layui-input">
+                    </div>
                     <div class="checkbox-item">
                         <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换世界频道<br>
                     </div>
                 </fieldset>
                 <fieldset>
                     <legend>史莱姆大暴走</legend>
+                    <label class="gray-text">(游戏画质建议调整为高)</label><br>
                     <input id="大暴走开关" name="vehicle" type="checkbox" value="Bike">大暴走开关<br>
-                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动（战斗外不操作，进入战斗后自动走位）<br>
-                    <input id="暴走自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请（等待组队邀请，不会自动匹配）<br>
+                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<label class="gray-text">(需手动进入战斗，战斗中自动走位)</label><br>
+                    <input id="暴走自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
+                    <div class="flex-container">
+                        <label for="暴走目标阶段">目标阶段:</label>
+                        <input type="text" id="暴走目标阶段" name="暴走目标阶段" lay-verify="title" autocomplete="off"
+                               placeholder="多少阶后停止(留空循环挑战3次)" class="layui-input" style="width:70%;">
+                    </div>
                     <div class="flex-container">
                         <label for="史莱姆选择">史莱姆选择:</label>
                         <div class="layui-form">
@@ -1185,12 +1258,28 @@
                             </div>
                         </div>
                     </div>
+                    <legend>职能相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="暴走职能优先输出" name="vehicle" type="checkbox"
+                                   value="Bike">职能优先输出<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="暴走职能优先坦克" name="vehicle" type="checkbox"
+                                   value="Bike">职能优先坦克<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="暴走职能优先治疗" name="vehicle" type="checkbox"
+                                   value="Bike">职能优先治疗<label class="gray-text">(空闲时站草)</label><br>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
         </li>
 
     </ul>
 </div>
+<div style="  display: flex; margin-bottom: 5px; align-items: center;justify-content: center; width: 100%; height: 15px; position: sticky;" id="countdown"></div>
 <div style="  display: flex; margin-bottom: 30px; align-items: center;justify-content: center; width: 100%; height: 46px; position: sticky;">
     <button id="guanbi" onclick="wclose()"
             style="flex: 1;height: 40px;color: #1E9FFF; background-color: white;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 16px;"
@@ -1236,7 +1325,7 @@
         const jsonString = JSON.stringify(allItems, null, 2);
         localStorage.setItem('config' + configNum, jsonString);
 
-        console.log('All Items:', localStorage.getItem("config1"));
+<!--        console.log('All Items:', localStorage.getItem("config1"));-->
         showToast('保存成功')
     }
 
@@ -1272,6 +1361,29 @@
             }
         } else {
             console.log('没有找到配置');
+        }
+    }
+
+    function autoClickButton() {
+        const button = document.getElementById('queding');
+        const countdownElement = document.getElementById('countdown');
+
+        if (button && countdownElement) {
+            let remainingTime = 60;
+            countdownElement.textContent = `将在 ${remainingTime} 秒后自动启动`;
+
+            const intervalId = setInterval(() => {
+                remainingTime--;
+                countdownElement.textContent = `将在 ${remainingTime} 秒后自动启动`;
+
+                if (remainingTime <= 0) {
+                    clearInterval(intervalId);
+                    button.click();  // 触发按钮的点击事件
+                    console.log("按钮已点击");
+                }
+            }, 1000);  // 每秒更新一次倒计时
+        } else {
+            console.error("未找到按钮或倒计时元素");
         }
     }
 
@@ -1531,6 +1643,12 @@
         setSwitchStatus("大暴走开关");
         setSwitchStatus("暴走进入战斗后启动");
         setSwitchStatus("暴走自动接收邀请");
+        var 暴走目标阶段 = localStorage.getItem("暴走目标阶段");
+        document.getElementById("暴走目标阶段").value = 暴走目标阶段;
+
+        setSwitchStatus("暴走职能优先输出");
+        setSwitchStatus("暴走职能优先坦克");
+        setSwitchStatus("暴走职能优先治疗");
         var defaultValue = localStorage.getItem('史莱姆选择');
         var selectElement = document.getElementById('史莱姆选择');
         for (var i = 0; i < selectElement.options.length; i++) {
@@ -1638,6 +1756,7 @@
 
     window.onload = function () {
         console.log("窗口加载成功了");
+        autoClickButton();
         airscript.call("加载", "成功");
         setAllItems()
     };
@@ -1925,6 +2044,11 @@
         大暴走开关 = saveSwitchStatus("大暴走开关");
         暴走进入战斗后启动 = saveSwitchStatus("暴走进入战斗后启动");
         暴走自动接收邀请 = saveSwitchStatus("暴走自动接收邀请");
+        var 暴走目标阶段 = document.getElementById("暴走目标阶段").value;
+        localStorage.setItem("暴走目标阶段", 暴走目标阶段);
+        暴走职能优先输出 = saveSwitchStatus("暴走职能优先输出");
+        暴走职能优先坦克 = saveSwitchStatus("暴走职能优先坦克");
+        暴走职能优先治疗 = saveSwitchStatus("暴走职能优先治疗");
         var 史莱姆选择 = document.getElementById("史莱姆选择").value;
         localStorage.setItem("史莱姆选择", 史莱姆选择);
 
@@ -2126,6 +2250,10 @@
             大暴走开关: 大暴走开关,
             暴走进入战斗后启动: 暴走进入战斗后启动,
             暴走自动接收邀请: 暴走自动接收邀请,
+            暴走目标阶段: 暴走目标阶段,
+            暴走职能优先输出: 暴走职能优先输出,
+            暴走职能优先坦克: 暴走职能优先坦克,
+            暴走职能优先治疗: 暴走职能优先治疗,
             史莱姆选择: 史莱姆选择,
             喊话内容: 队伍喊话,
             队伍喊话间隔: 队伍喊话间隔,

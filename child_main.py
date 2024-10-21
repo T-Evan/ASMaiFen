@@ -56,8 +56,8 @@ def mainTask():
 
     start_time = int(time.time())
 
-    runThread1()
-    runThread2()
+    runThreadNotice()
+    runThreadReturnHome()
     runThreadBaoZouBoss()
     counter = 0
 
@@ -80,8 +80,8 @@ def mainTask():
                 counter += 1
 
                 if counter % 3 == 0:
-                    runThread1()
-                    runThread2()
+                    runThreadNotice()
+                    runThreadReturnHome()
                     runThreadBaoZouBoss()
                     counter = 0  # 重置计数器
 

@@ -73,8 +73,25 @@ global switch_lock
 switch_lock = Lock()
 global switch_ocr_apk_lock # apk ocr 识别锁
 switch_ocr_apk_lock = Lock()
-global 功能开关
+功能开关 = {}
 功能开关 = config
+功能配置 = {'配置1': config['配置1'], '配置2': config['配置2'], '配置3': config['配置3'], '配置4': config['配置4'],
+            '配置5': config['配置5']}
+
+def loadConfig(configNum):
+    global 功能开关
+    configName = '配置'+ str(configNum)
+    new = json.loads(功能配置[configName])
+    for index, value in new.items():
+        if value == 'false':
+            value = False
+        if value == 'true':
+            value = True
+        功能开关[index] = value
+    # print(222)
+    # 功能开关 = new
+    print(功能开关)
+    return 功能开关
 
 # thread_main_paused = False
 # thread_main_cond = threading.Condition()
@@ -83,22 +100,6 @@ global 功能开关
     "当前任务账号": 功能开关["选择启动账号"],
     "当前任务角色": 功能开关["选择启动角色"],
 }
-
-def safe_int_v2(value):
-    """
-    尝试将给定的值转换为整数，如果失败则返回默认值 0。
-    """
-    try:
-        # 兜底子母o
-        if value == "o" or value == "O":
-            return 0
-        return int(value)
-    except (TypeError, ValueError):
-        return 0
-
-if 功能开关["选择启动角色"] != "" and  功能开关["选择启动角色"] != "0":
-    任务记录['当前任务角色'] = safe_int_v2(功能开关["选择启动角色"]) - 1 # 计算并执行下一角色，此处-1默认为当前角色
-
 
 def 初始化任务记录():
     # 日常

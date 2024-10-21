@@ -77,10 +77,13 @@ def imageFindClick(name, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280)
                 x, y = res["center_x"], res["center_y"]
                 click(x, y)
                 sleep(sleep1)
+                print(f"imageFindClick识别成功: {name}")
                 return True
             else:
+                print(f"imageFindClick识别失败: {name}")
                 return False
         else:
+            print(f"imageFindClick识别错误: {name}")
             return False
     except Exception as e:
         print(f"imageFindClick发生异常: {e}")

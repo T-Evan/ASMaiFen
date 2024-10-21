@@ -230,17 +230,31 @@ def daBaoZouLeiDianBoss():
 
         # 识别玩家
         if bossColor != '':
-            res2, _, _ = imageFind('雷电大王-蒸汽', 0.85, 146,631,576,1122)
+            res2, _, _ = imageFind('雷电大王-蒸汽', 0.8, 164,639,524,1052)
             if res2:
                 userColor = '蒸汽'
             if not res2:
-                res2, _, _ = imageFind('雷电大王-篝火', 0.85,146,631,576,1122)
+                res2 = FindColors.find("311,711,#C15895|314,713,#B35EAE|318,710,#C171C6|322,713,#ACE7FC|325,710,#C3569D|323,716,#B58FE2|309,721,#D5F3FA",rect=[164,639,524,1052],diff=0.85)
+                if res2:
+                    userColor = '蒸汽'
+
+            if not res2:
+                res2, _, _ = imageFind('雷电大王-篝火', 0.8,164,639,524,1052)
                 if res2:
                     userColor = '篝火'
+                if not res2:
+                    res2 = FindColors.find("352,710,#FDF9EE|355,710,#FDF9EF|361,710,#FDF9EF|364,711,#A4B87A|342,713,#54AB65|348,719,#FEE9D1|356,722,#F8C29B",rect=[164,639,524,1052],diff=0.85)
+                    if res2:
+                        userColor = '篝火'
+
             if not res2:
-                res2, _, _ = imageFind('雷电大王-花', 0.85,146,631,576,1122)
+                res2, _, _ = imageFind('雷电大王-花', 0.8,164,639,524,1052)
                 if res2:
                     userColor = '开花'
+                if not res2:
+                    res2 = FindColors.find("344,727,#46A46D|350,713,#C3F9FB|358,713,#C6F9FB|363,714,#CDFAFD|363,719,#E7FBFC|363,724,#81E2B5|347,730,#3EA367",rect=[164,639,524,1052],diff=0.85)
+                    if res2:
+                        userColor = '开花'
 
     if bossColor == '':
         # boss状态刷新

@@ -312,6 +312,8 @@ class LvTuanTask:
         self.dailyTask.homePage()
 
         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+        if not res:
+            return
         sleep(3)
 
         # 判断浇树已完成
@@ -340,15 +342,22 @@ class LvTuanTask:
                     # 免费浇灌
                     tapSleep(360, 1100)
                     tapSleep(510,1216,0.3)  # 点击空白处关闭
-                    tapSleep(510,1216,0.3)  # 点击空白处关闭
-                    sleep(2)
+                    sleep(1)
 
-                res, buyCount = TomatoOcrText(400, 1137, 416, 1153, "已购买次数")  # 1/5
-                buyCount = safe_int(buyCount)
-                # 付费浇灌
-                if buyCount - 1 < needCount:
-                    tapSleep(360, 1100,2)
-                    tapSleep(465, 750, 2)
-                    tapSleep(465, 750, 1)
-                    tapSleep(510,1216,0.3)  # 点击空白处关闭
-                    tapSleep(510,1216,0.3)  # 点击空白处关闭
+                    res, buyCount = TomatoOcrText(400, 1137, 416, 1153, "已购买次数")  # 1/5
+                    buyCount = safe_int(buyCount)
+                    # 付费浇灌
+                    if buyCount != "" and buyCount - 1 < needCount:
+                        tapSleep(360, 1100,1.5)
+                        tapSleep(465, 750, 1.5)
+                        tapSleep(465, 750, 1.5)
+                        tapSleep(510,1216,0.3)  # 点击空白处关闭
+                        # tapSleep(510,1216,0.3)  # 点击空白处关闭
+                else:
+                    # 付费浇灌
+                    if buyCount - 1 < needCount:
+                        tapSleep(360, 1100,1.5)
+                        tapSleep(465, 750, 1.5)
+                        tapSleep(465, 750, 1.5)
+                        tapSleep(510,1216,0.3)  # 点击空白处关闭
+                        # tapSleep(510,1216,0.3)  # 点击空白处关闭

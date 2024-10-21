@@ -165,6 +165,16 @@ class ShiLianTask:
         if not hdPage:
             return
 
+        # 识别目标阶段
+        toLevel = safe_int_v2(功能开关['暴走目标阶段'])
+        if toLevel > 0:
+            re, level = TomatoOcrText(118,1021,202,1046, "阶段")
+            level = level.replace("阶", "")
+            level = safe_int_v2(level)
+            if level >= toLevel:
+                Toast("暴走史莱姆 - 已达到目标等阶")
+                return
+
         self.startFightBaoZou()
 
     def startFightBaoZou(self):
@@ -197,15 +207,14 @@ class ShiLianTask:
                         res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
                 break
 
-            Toast("大暴走任务 - 匹配中")
-
+            Toast(f"大暴走任务 - 匹配中 - 等待{elapsed // 1000}/150s")
             # 判断无合适队伍，重新开始匹配
             res, _ = TomatoOcrText(231, 624, 305, 645, "匹配超时")
             if res:
                 Toast("大暴走 - 匹配超时 - 无合适队伍 - 重新匹配")
                 res = TomatoOcrTap(451, 727, 510, 757, "确定")
-                if res:
-                    elapsed = 0
+                # if res:
+                    # elapsed = 0
 
             waitStatus, _ = TomatoOcrText(311, 1156, 407, 1182, "匹配中")
             if waitStatus == False:
@@ -1581,7 +1590,7 @@ class ShiLianTask:
             # if 当前职业 == '战士':
             #     Toast('战士-战斗中-自动走位火')
             #     火()
-            if 功能开关['当前职业'] == '服事':
+            if 功能开关['当前职业'] == '服事' and 功能开关['暴走职能优先治疗'] == 1:
                 Toast('服事-战斗中-自动走位草')
                 草()
             # if 当前职业 == '刺客':
@@ -1906,6 +1915,9 @@ class ShiLianTask:
         res2 = False
         if not res1:
             res2 = TomatoOcrTap(19, 1102, 90, 1127, "点击输入", 10, 10)
+        if not res1 and not res2:
+            tapSleep(74,1120)
+            res1 = True
         # sleep(1.5)  # 等待输入法弹窗
         if res1 or res2:
             # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
@@ -1990,7 +2002,7 @@ class ShiLianTask:
                 return True
 
             # 开始异步处理返回首页
-            runThread2()
+            runThreadReturnHome()
             功能开关["needHome"] = 1
 
             # 点击首页-冒险

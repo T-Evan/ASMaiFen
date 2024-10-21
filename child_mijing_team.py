@@ -18,8 +18,9 @@ def main():
             功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
         while True:
             sleep(5)  # 等待 5 秒
-            Toast('等待组队邀请')
-            waitInvite()
+            if 功能开关["fighting"] == 0:
+                Toast('等待组队邀请')
+                waitInvite()
 
 
 def waitInvite():
@@ -175,6 +176,11 @@ def waitInvite():
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
         # 返回房间
         res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
+        if not res1:
+            shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
+            if shou_ye1:
+                Toast('未进入房间')
+                break
         if fight_type == '恶龙带队' and not findDoneStatus:
             # 判断是否未开宝箱
             re1 = CompareColors.compare("325,356,#F2A949|334,356,#F2A949|342,358,#F2A949")
