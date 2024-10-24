@@ -26,12 +26,12 @@ class StartUp:
     # 实例方法
     def start_app(self):
         global 功能开关
-
-        system.open(self.app_name)
         # r = system.shell(f"start -n com.xd.cfbmf")
 
-        max_attempt = 15
+        max_attempt = 12
         for attempt in range(max_attempt):
+            system.open(self.app_name)
+
             # 识别是否进入登录页
             login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
             login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")

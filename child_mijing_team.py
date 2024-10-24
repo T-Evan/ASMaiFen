@@ -18,6 +18,10 @@ def main():
             功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
         while True:
             sleep(5)  # 等待 5 秒
+            # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
+            # if res1:
+            #     Toast('已在房间中，跳过组队邀请识别')
+            #     continue
             if 功能开关["fighting"] == 0:
                 Toast('等待组队邀请')
                 waitInvite()
@@ -38,6 +42,7 @@ def waitInvite():
         res, _ = TomatoOcrText(402, 337, 442, 361, "险境")
         if res:
             fight_type = '绝境带队'
+
         if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
             Toast('不退出房间')
         else:

@@ -152,6 +152,7 @@ class LvRenTask:
             skill_level_map = {}
 
             for skill in skills:
+                Toast('旅人 - 升级技能 - 检索优先升阶的技能')
                 tapSleep(skill['x'], skill['y'])
                 # 识别当前等级
                 res, skill_level = TomatoOcrText(391, 524, 423, 542, "技能等级")
