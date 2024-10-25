@@ -531,11 +531,12 @@ class ShiLianTask:
                         if not res2:
                             res3 = TomatoOcrTap(632, 570, 684, 598, "匹配中")
                     # 返回房间 - 队伍满员，开始挑战提醒
-                    wait1, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
-                    wait2, _ = TomatoOcrText(240, 610, 344, 653, "队伍已满员")  # 队伍已满员，准备开启挑战
-                    if wait1 or wait2:
-                        Toast("秘境任务 - 队伍已满员，返回队伍")
-                        res = TomatoOcrTap(453, 727, 511, 760, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
+                    # wait1, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
+                    # wait2, _ = TomatoOcrText(240, 610, 344, 653, "队伍已满员")  # 队伍已满员，准备开启挑战
+                    # if wait1 or wait2:
+                    #     Toast("秘境任务 - 队伍已满员，返回队伍")
+                    #     res = TomatoOcrTap(453, 727, 511, 760, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
+                    res = TomatoOcrTap(453,727,506,759, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
 
                     # 判断是否在队伍页面
                     res, _ = TomatoOcrText(502, 192, 581, 215, "离开队伍")

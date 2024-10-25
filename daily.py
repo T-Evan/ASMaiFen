@@ -64,13 +64,15 @@ class DailyTask:
                 # swipe(213, 1104, 568, 1104)
                 # swipe(213, 1104, 568, 1104)
                 # tapSleep(666,1191)
-            elif tryTimes > 20:
+            if tryTimes > 20:
                 Toast('尝试重启游戏')
                 # 结束应用
                 r = system.shell(f"am kill com.xd.cfbmf")
                 r = system.shell(f"am force-stop com.xd.cfbmf")
                 # 重启游戏
                 self.startupTask.start_app()
+            if tryTimes > 23:
+                return
 
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
             # return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
@@ -1223,12 +1225,12 @@ class DailyTask:
         res5 = False
 
         # 返回房间 - 队伍满员，开始挑战提醒
-        wait1, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
-        wait2 = False
-        if not wait1:
-            wait2, _ = TomatoOcrText(240, 610, 344, 653, "队伍已满员")  # 队伍已满员，准备开启挑战
-        if wait1 or wait2:
-            res5 = TomatoOcrTap(453, 727, 511, 760, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
+        # wait1, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
+        # wait2 = False
+        # if not wait1:
+        #     wait2, _ = TomatoOcrText(240, 610, 344, 653, "队伍已满员")  # 队伍已满员，准备开启挑战
+        # if wait1 or wait2:
+        res5 = TomatoOcrTap(453,727,506,759, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
 
         res1 = False
         res2 = False

@@ -51,10 +51,9 @@ while True:
 import time
 
 class TimeoutLock:
-    def __init__(self, lock, timeLock = 10):
-        self.lock = lock
+    def __init__(self, timeLock = 10):
+        self.lock = switch_lock
         self.timeout = timeLock
-        self.start_time = None
 
     def acquire_lock(self):
         start_time = time.time()
@@ -67,6 +66,16 @@ class TimeoutLock:
 
     def release_lock(self):
         self.lock.release()
+
+    def __enter__(self):
+        if not self.acquire_lock():
+            raise RuntimeError("无法在指定时间内获取锁")
+        # print("锁已成功获取")
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.release_lock()
+        # print("锁已成功释放")
 
 # 初始化锁
 global switch_lock
