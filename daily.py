@@ -65,6 +65,8 @@ class DailyTask:
                 # swipe(213, 1104, 568, 1104)
                 # tapSleep(666,1191)
             if tryTimes > 20:
+                if 功能开关["顶号等待"] != "0":
+                    return
                 Toast('尝试重启游戏')
                 # 结束应用
                 r = system.shell(f"am kill com.xd.cfbmf")

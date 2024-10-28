@@ -12,7 +12,7 @@ def main():
     if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
         while True:
             anotherLogin()
-            sleep(40)
+            sleep(10)
 
 def anotherLogin():
     res, _ = TomatoOcrText(311, 588, 408, 637, "异地登录")
@@ -24,9 +24,10 @@ def anotherLogin():
             need_another_minute = 0
         total_another_minute = need_another_minute * 60
         while True:
+            功能开关["needHome"] = 0
+            功能开关["fighting"] = 1
             current_time = int(time.time())
             if total_another_minute != 0 and current_time - start_time >= total_another_minute:
-                功能开关["needHome"] = 0
                 tapSleep(320, 760, 0.5)
                 tapSleep(320, 760, 0.5)
                 res = TomatoOcrTap(320, 760, 396, 798, "确认")
@@ -36,6 +37,8 @@ def anotherLogin():
                 for i in range(1, 5):
                     login()
                     sleep(4)
+                    功能开关["fighting"] = 0
+                    sleep(30)
                 break
             tmpMinute = (current_time - start_time) / 60
             tmpDiffMinute = (total_another_minute - (current_time - start_time)) / 60
@@ -43,7 +46,7 @@ def anotherLogin():
             tapSleep(505,667)  # 点击防止进入房车动画页
             sleep(10)  # 等待
     else:
-        login()
+        # login()
         print("顶号等待，检查状态正常")
 
     return
@@ -51,6 +54,7 @@ def anotherLogin():
 
 def login():
     功能开关["needHome"] = 0
+    功能开关["fighting"] = 1
     sleep(1.5)
     # 开始冒险之旅
     login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")

@@ -210,7 +210,6 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # if 功能开关['角色4开关'] == 0 or 功能开关['角色4开关'] == False:
 # loadConfig(1)
 # loadConfig(2)
-# system.reboot()
 # system.exit()
 
 def main():

@@ -1334,7 +1334,7 @@
 
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (!key.includes('config')) {
+            if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码') && !key.includes('配置')) {
                 const value = localStorage.getItem(key);
                 allItems[key] = value;
             }
@@ -1366,7 +1366,7 @@
                 // 遍历 configData 对象的每个键值对
                 for (const key in configData) {
                     if (configData.hasOwnProperty(key)) {
-                        if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码')) {
+                        if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码') && !key.includes('配置')) {
                             localStorage.setItem(key, configData[key]);
                         }
                     }
@@ -1391,7 +1391,7 @@
                 // 遍历 configData 对象的每个键值对
                 for (const key in configData) {
                     if (configData.hasOwnProperty(key)) {
-                        if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码')) {
+                        if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码') && !key.includes('配置')) {
                             localStorage.setItem(key, configData[key]);
                         }
                     }
@@ -1416,7 +1416,7 @@
                 // 遍历 configData 对象的每个键值对
                 for (const key in configData) {
                     if (configData.hasOwnProperty(key)) {
-                        if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码')) {
+                        if (!key.includes('config') && !key.includes('账号') && !key.includes('角色') && !key.includes('激活码') && !key.includes('配置')) {
                             localStorage.setItem(key, configData[key]);
                         }
                     }
@@ -2401,6 +2401,7 @@
 
     function submit() {
         console.log("点击了确定");
+        isAutoClicked = true;
         data = saveAllItems()
         // 将data 转为JSON文件传递给PY
         airscript.call("submit", JSON.stringify(data));

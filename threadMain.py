@@ -17,6 +17,14 @@ class RunThreadMijingTeam(dynamic_proxy(Runnable)):
     def run(self):
         print("启动自动入队处理线程")
         mijing_team()
+
+class RunThreadAnotherLogin(dynamic_proxy(Runnable)):
+    def __init__(self):
+        super().__init__()
+    def run(self):
+        print("启动顶号等待处理线程")
+        another_login()
+
 def runThreadMain():
     try:
         if not threadMain.is_alive():
@@ -42,7 +50,13 @@ def runThreadMijingTeam():
 def runThreadAnotherLogin():
     if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
         try:
-            if not threadAnotherLogin.is_alive():
-                threadAnotherLogin.start()
+            r = RunThreadAnotherLogin()
+            t = Thread(r)
+            t.start()
         except RuntimeError as e:
-            print(f"ThreadAnotherLogin Error: {e}")
+            print(f"顶号等待处理线程 Error: {e}")
+        # try:
+        #     if not threadAnotherLogin.is_alive():
+        #         threadAnotherLogin.start()
+        # except RuntimeError as e:
+        #     print(f"ThreadAnotherLogin Error: {e}")

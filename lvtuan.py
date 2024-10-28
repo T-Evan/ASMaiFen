@@ -2,6 +2,8 @@
 import math
 from time import sleep
 
+from PIL.ImageChops import offset
+
 from .特征库 import *
 from ascript.android.ui import Dialog
 from .res.ui.ui import 功能开关
@@ -62,10 +64,8 @@ class LvTuanTask:
             else:
                 # 重新进入调查队，重新选择队友；避免队友不足
                 for i in range(1, 3):
-                    res1 = TomatoOcrTap(632, 916, 702, 947, "调查队", 20, -20)
-                    res2 = TomatoOcrTap(636, 992, 702, 1016, "调查队", 20, -20)
-                    res3 = TomatoOcrTap(636,948,699,973, "调查队", 20, -20)
-                    if not res1 and not res2 and not res3:
+                    res = TomatoOcrFindRangeClick("调查队", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                    if not res:
                         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                         if not res:
                             # 返回首页
@@ -73,10 +73,9 @@ class LvTuanTask:
                             # 退出组队
                             self.dailyTask.quitTeam()
                         else:
-                            res1 = TomatoOcrTap(632, 916, 702, 947, "调查队", 20, -20)
-                            res2 = TomatoOcrTap(636, 992, 702, 1016, "调查队", 20, -20)
-                            res3 = TomatoOcrTap(636,948,699,973, "调查队", 20, -20)
-                            if res1 or res2 or res3:
+                            res = TomatoOcrFindRangeClick("调查队", x1=626, y1=648, x2=709, y2=986, offsetX=20,
+                                                          offsetY=-20)
+                            if res:
                                 break
                     else:
                         break
@@ -161,58 +160,73 @@ class LvTuanTask:
             return
 
         Toast("旅团 - 商店兑换 - 开始")
-        self.dailyTask.homePage()
-        res = TomatoOcrTap(647, 592, 689, 614, "旅团")
-        res = TomatoOcrTap(635, 697, 700, 724, "服务区", 20)
-        if not res:
-            res = TomatoOcrTap(634, 651, 701, 680, "服务区", 20)
+        # 判断是否在旅团页面
+        isLvtuan = False
+        for i in range(2):
+            res = TomatoOcrFindRangeClick("服务区", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
             if not res:
-                return
-        sleep(4)  # 等待跳转动画
+                # 返回首页
+                self.dailyTask.homePage()
+                res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+                # 判断是否在旅团页面
+                res = TomatoOcrFindRangeClick("服务区", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                if res:
+                    isLvtuan = True
+                    break
+            else:
+                isLvtuan = True
+                break
+        if not isLvtuan:
+            Toast("旅团 - 商店兑换 - 未找到任务入口")
+            return
+
+        sleep(3)  # 等待跳转动画
 
         # 翻页（先返回上面）
         swipe(360, 750, 360, 850)
         sleep(2.5)
-        for i in range(1, 5):
+        for i in range(5):
             re = FindColors.find(
                 "120,703,#FEF396|131,705,#F5CE4F|140,708,#F2A94B|124,711,#F1D65A|129,714,#E8BA46|138,714,#F2A94B",
                 rect=[78, 527, 639, 1104])
             if re:  # 有可购买商品时，继续判断
                 if 功能开关['旅团唤兽琴弦']:
-                    re = imageFindClick('旅团-唤兽琴弦',confidence1=0.85)
+                    re = imageFindClick('旅团-唤兽琴弦', confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团全价兽粮']:
-                    re = imageFindClick('旅团-全价兽粮',confidence1=0.85)
+                    re = imageFindClick('旅团-全价兽粮', confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团超级成长零食']:
-                    re = imageFindClick('旅团-超级成长零食',confidence1=0.85)
+                    re = imageFindClick('旅团-超级成长零食', confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团原材料']:
-                    re = imageFindClick('旅团-原材料',confidence1=0.85)
+                    re = imageFindClick('旅团-原材料', confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团史诗经验']:
-                    re = imageFindClick('旅团-史诗经验',confidence1=0.85)
+                    re = imageFindClick('旅团-史诗经验', confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团优秀经验']:
-                    re = imageFindClick('旅团-优秀经验',confidence1=0.85)
+                    re = imageFindClick('旅团-优秀经验', confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团普通经验']:
-                    re = imageFindClick('旅团-普通经验',confidence1=0.85)
+                    re = imageFindClick('旅团-普通经验', confidence1=0.85)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团金币']:
-                    re = imageFindClick('旅团-金币',confidence1=0.85)
+                    re = imageFindClick('旅团-金币', confidence1=0.85)
                     if re:
                         self.shopBuy()
             # 翻页
-            swipe(360, 850, 360, 750)
+            swipe(360, 850, 360, 780)
             sleep(3)
+
+        res = TomatoOcrTap(66, 1186, 121, 1220, "返回")  # 返回旅团首页
         任务记录['旅团-商店-完成'] = 1
 
     def shopBuy(self):
@@ -231,14 +245,25 @@ class LvTuanTask:
             return
 
         Toast("旅团 - 旅团任务领取 - 开始")
-        self.dailyTask.homePage()
-        res = TomatoOcrTap(647, 592, 689, 614, "旅团")
-        sleep(1)
-        res = TomatoOcrTap(625, 769, 708, 797, "旅团任务", 20, -20)
-        if not res:
-            res = TomatoOcrTap(626, 729, 705, 752, "旅团任务", 20, -20)
+        # 判断是否在旅团页面
+        isLvtuan = False
+        for i in range(2):
+            res = TomatoOcrFindRangeClick("旅团任务", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
             if not res:
-                return
+                # 返回首页
+                self.dailyTask.homePage()
+                res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+                # 判断是否在旅团页面
+                res = TomatoOcrFindRangeClick("旅团任务", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                if res:
+                    isLvtuan = True
+                    break
+            else:
+                isLvtuan = True
+                break
+        if not isLvtuan:
+            Toast("旅团 - 旅团任务领取 - 未找到任务入口")
+            return
 
         for i in range(1, 5):
             re = TomatoOcrFindRangeClick('领取', whiteList='领取')
@@ -252,6 +277,8 @@ class LvTuanTask:
         tapSleep(410, 390)
         tapSleep(330, 390)
         tapSleep(250, 390)
+
+        res = tapSleep(96, 1183)  # 返回旅团首页
         任务记录["旅团-任务-完成"] = 1
 
     # 旅团许愿墙
@@ -263,23 +290,41 @@ class LvTuanTask:
             return
 
         Toast("旅团 - 许愿墙 - 开始")
-        self.dailyTask.homePage()
-        res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+
+        # 判断是否在旅团页面
+        isLvtuan = False
+        for i in range(2):
+            res = TomatoOcrFindRangeClick("许愿墙", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+            if not res:
+                # 返回首页
+                self.dailyTask.homePage()
+                res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+                # 判断是否在旅团页面
+                res = TomatoOcrFindRangeClick("许愿墙", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                if res:
+                    isLvtuan = True
+                    break
+            else:
+                isLvtuan = True
+                break
+        if not isLvtuan:
+            Toast("旅团 - 许愿墙 - 未找到任务入口")
+            return
 
         # if not CompareColors.compare("690,822,#EF5C3F|686,815,#FA6547|691,814,#FA6545") and not CompareColors.compare("691,776,#F05C3F|691,778,#F45842|693,774,#F46043"):
         #     Toast("旅团 - 许愿墙 - 已送满 - 跳过任务")
         #     任务记录["旅团-许愿墙-完成"] = 1
         #     return
 
-        res = TomatoOcrTap(636,858,699,887, "许愿墙", 20, -20)
-        if not res:
-            res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)
-            if not res:
-                res = TomatoOcrTap(636, 817, 701, 839, "许愿墙", 20, -20)
-                if not res:
-                    return
+        # res = TomatoOcrTap(636,858,699,887, "许愿墙", 20, -20)
+        # if not res:
+        #     res = TomatoOcrTap(637, 859, 697, 882, "许愿墙", 20, -20)
+        #     if not res:
+        #         res = TomatoOcrTap(636, 817, 701, 839, "许愿墙", 20, -20)
+        #         if not res:
+        #             return
 
-        for i in range(1, 5):
+        for i in range(4):
             Toast(f'旅团 - 许愿墙 - 捐献中{i}/5')
             re = TomatoOcrFindRangeClick('捐献', whiteList='捐献')
             if re:
@@ -296,6 +341,8 @@ class LvTuanTask:
                 if re:
                     res = TomatoOcrTap(328, 822, 389, 854, "捐献")
                 break
+
+        res = TomatoOcrTap(96, 1183, 132, 1223, "回")  # 返回旅团首页
         任务记录["旅团-许愿墙-完成"] = 1
         return
 
@@ -341,23 +388,25 @@ class LvTuanTask:
                 if buyCount == 0:
                     # 免费浇灌
                     tapSleep(360, 1100)
-                    tapSleep(510,1216,0.3)  # 点击空白处关闭
+                    tapSleep(510, 1216, 0.3)  # 点击空白处关闭
                     sleep(1)
 
                     res, buyCount = TomatoOcrText(400, 1137, 416, 1153, "已购买次数")  # 1/5
                     buyCount = safe_int(buyCount)
                     # 付费浇灌
                     if buyCount != "" and buyCount - 1 < needCount:
-                        tapSleep(360, 1100,1.5)
+                        tapSleep(360, 1100, 1.5)
                         tapSleep(465, 750, 1.5)
                         tapSleep(465, 750, 1.5)
-                        tapSleep(510,1216,0.3)  # 点击空白处关闭
+                        tapSleep(510, 1216, 0.3)  # 点击空白处关闭
                         # tapSleep(510,1216,0.3)  # 点击空白处关闭
                 else:
                     # 付费浇灌
                     if buyCount - 1 < needCount:
-                        tapSleep(360, 1100,1.5)
+                        tapSleep(360, 1100, 1.5)
                         tapSleep(465, 750, 1.5)
                         tapSleep(465, 750, 1.5)
-                        tapSleep(510,1216,0.3)  # 点击空白处关闭
+                        tapSleep(510, 1216, 0.3)  # 点击空白处关闭
                         # tapSleep(510,1216,0.3)  # 点击空白处关闭
+
+            res = TomatoOcrTap(167, 1183, 205, 1223, "回")  # 返回旅团首页

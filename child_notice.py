@@ -12,7 +12,7 @@ def main():
             noticeCancel()
         if 功能开关["fighting"] == 1 and 功能开关["needHome"] == 0:
             # print('空白弹窗处理线程 - 运行中')
-            sleep(10)  # 等待 5 秒
+            sleep(5)  # 等待 5 秒
             noticeCancel()
 
         # 如果 commonVar["fighting"] 为 1 ，则不做任何操作
@@ -39,7 +39,7 @@ def noticeCancel():
                                       offsetX=10, offsetY=10, bitmap=bitmap,
                                       keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
         if res:
-            tapSleep(45, 1245)
+            # tapSleep(45, 1245)
             Toast('关闭弹窗')
 
         res = TomatoOcrTap(214, 1071, 274, 1098, "确定", 10, 10)

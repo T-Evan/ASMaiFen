@@ -39,7 +39,8 @@ def returnHome():
         if not return1 and not return3 and 功能开关["fighting"] == 0:
             return5 = TomatoOcrTap(69, 1182, 127, 1220, '营地', 10, 10)
             if not return5:
-                return2 = imageFindClick('返回_1')
+                # return2 = imageFindClick('返回_1')
+                return2 = TomatoOcrTap(86,1193,140,1224, '返回', 10, 10)
                 if return2 and 功能开关["needHome"] == 1:
                     Toast('返回首页')
 
