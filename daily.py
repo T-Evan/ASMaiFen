@@ -23,11 +23,13 @@ class DailyTask:
     def homePage(self, needQuitTeam=False):
         tryTimes = 0
         while True:
-            if 功能开关["fighting"] == 1:
-                sleep(2)
-                continue
-
             tryTimes = tryTimes + 1
+            if 功能开关["fighting"] == 1:
+                if tryTimes < 5:
+                    Toast(f'返回首页 - 等待战斗结束{tryTimes * 10}/50')
+                    sleep(10)
+                    continue
+
             # todo 区分是否进入的摸鱼活动
             # res6 = self.shilianTask.WaitFight()
 
@@ -396,6 +398,8 @@ class DailyTask:
     def dailyTaskEnd(self):
         # 摸鱼时间到
         self.huoDongMoYu()
+        # 派对大师
+        self.PaiDuiDaShi()
         if 功能开关["日常总开关"] == 0:
             return
 
@@ -415,6 +419,8 @@ class DailyTask:
         self.XianShiTeHui()
         # 箱庭苗圃
         self.XiangTingMiaoPu()
+        # 派对大师
+        self.XiangTingMiaoPu()
 
         # 前往新地图
         self.newMap()
@@ -428,14 +434,14 @@ class DailyTask:
             return
         Toast("日常 - 冒险手册领取 - 开始")
         self.homePage()
-        res = TomatoOcrTap(626, 379, 711, 405, "冒险手册", 30, -20)
+        res = TomatoOcrTap(626, 379, 711, 405, "冒险手册", 30, -20, sleep1=0.6)
         if not res:
             Toast("识别冒险手册失败")
             return
 
         # 主线领取
         if CompareColors.compare("235,1104,#F05C3F|235,1101,#F45F42|233,1100,#F36042"):
-            res = TomatoOcrTap(156, 1101, 206, 1129, "主线")
+            res = TomatoOcrTap(156, 1101, 206, 1129, "主线", sleep1=0.8)
             while 1:
                 # 识别黄色领取按钮
                 re, x, y = imageFind('手册-领取')
@@ -447,7 +453,7 @@ class DailyTask:
 
         # 日常领取
         # if CompareColors.compare("355,1104,#EF5C3F|355,1100,#F45F42|352,1103,#EF5C3F"):
-        res = TomatoOcrTap(274, 1102, 326, 1130, "每日")
+        res = TomatoOcrTap(274, 1102, 326, 1130, "每日", sleep1=0.9)
         if res:
             # 识别黄色领取按钮
             re, x, y = imageFind('手册-领取')
@@ -463,13 +469,14 @@ class DailyTask:
 
             if 功能开关['冒险手册完成后停止'] == 1:
                 # 判断是否完成日常
-                res = CompareColors.compare("573,394,#FAF3C5|579,391,#D97D6C|570,391,#CE9F82|574,399,#F7E0B4|579,394,#D4B887|546,392,#F2A94A|546,386,#F2A94A")
+                res = CompareColors.compare(
+                    "573,394,#FAF3C5|579,391,#D97D6C|570,391,#CE9F82|574,399,#F7E0B4|579,394,#D4B887|546,392,#F2A94A|546,386,#F2A94A")
                 if res:
                     Dialog.confirm("日常任务已完成")
                     system.exit()
 
         # 每周领取
-        res = TomatoOcrTap(394, 1099, 448, 1132, "每周")
+        res = TomatoOcrTap(394, 1099, 448, 1132, "每周", sleep1=0.9)
         if res:
             # 识别黄色领取按钮
             re, x, y = imageFind('手册-领取')
@@ -485,7 +492,7 @@ class DailyTask:
 
         # 成就领取
         if CompareColors.compare("593,1104,#EF5C40|593,1101,#F35F42|596,1101,#F35E41"):
-            res = TomatoOcrTap(514, 1099, 570, 1132, "成就")
+            res = TomatoOcrTap(514, 1099, 570, 1132, "成就", sleep1=0.9)
             while 1:
                 # 识别黄色领取按钮
                 re, x, y = imageFind('手册-领取')
@@ -537,6 +544,7 @@ class DailyTask:
                         if res1:
                             Toast('主线挑战首领 - 失败')
                         Toast('主线挑战首领 - 完成')
+                        sleep(5)
                         break
 
         if 功能开关["自动换图"] == 1:
@@ -546,7 +554,7 @@ class DailyTask:
             newMapOK, x, y = imageFind('首页-前往新关卡', confidence1=0.7, x1=565, y1=643, x2=705, y2=822)
             if newMapOK:
                 tapSleep(x, y, 5)
-            res = TomatoOcrTap(593,676,638,693, "前往")
+            res = TomatoOcrTap(593, 676, 638, 693, "前往")
             if not newMapOK:
                 res1, _ = TomatoOcrText(573, 200, 694, 238, "新关卡已解锁")
                 res2 = False
@@ -556,7 +564,7 @@ class DailyTask:
                     # if 1:
                     # 结伴入口切换
                     res = TomatoOcrTap(647, 450, 689, 474, "结伴", 10, -10)
-                    res = TomatoOcrTap(373, 1106, 471, 1141, "关卡大厅")
+                    res = TomatoOcrTap(373, 1106, 471, 1141, "关卡大厅", 0.7)
                     for i in range(1, 5):
                         x = 0
                         re, x, y = imageFind('当前地图')
@@ -616,6 +624,369 @@ class DailyTask:
                             sleep(4)  # 等待动画
                             res = TomatoOcrTap(359, 741, 391, 775, "确认跟随", 10, 10)
                             任务记录["寻找结伴-完成"] = 1
+
+    # 派对大师
+    def PaiDuiDaShi(self):
+        if 功能开关["派对大师"] == 0:
+            return
+
+        if 任务记录["派对大师-完成"] == 1:
+            return
+
+        Toast('日常 - 派对大师 - 开始')
+
+        self.homePage()
+        self.quitTeam()
+        # 开始派对大师
+        res = TomatoOcrTap(556, 380, 618, 404, "派对大师", 30, -10)
+        if not res:
+            res = TomatoOcrTap(554, 464, 622, 487, "派对大师", 30, -10)  # 适配新手试炼 - 下方大暴走入口
+        sleep(1)
+
+        # 识别是否已完成
+        re = CompareColors.compare("517,939,#F1A949|524,939,#F1A949")  # 第五格宝箱
+        if re:
+            Toast('日常 - 派对大师 - 已完成')
+            tapSleep(549, 920)
+            tapSleep(519, 1136)
+            任务记录["派对大师-完成"] = 1
+            return
+
+        re = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
+        if not re:
+            Toast('派对大师 - 进入失败')
+            return
+
+        Toast('派对大师 - 开始匹配')
+
+        attempts = 0  # 初始化尝试次数
+        maxAttempts = 4  # 设置最大尝试次数
+        resStart = False
+        failCount = 0
+        while attempts < maxAttempts:
+            resStart = TomatoOcrTap(453, 602, 503, 634, '准备', 50, 10)
+            startStatus = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
+            waitStatus, _ = TomatoOcrText(320, 1039, 399, 1066, "匹配中")
+            if resStart:
+                Toast("匹配成功 - 已准备")
+                for j in range(10):
+                    resStart = TomatoOcrTap(453, 602, 503, 634, '准备', 50, 10)
+                    startStatus = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
+                    res1, text1 = TomatoOcrText(93, 303, 176, 336, "本轮目标")
+                    if res1:
+                        Toast("匹配成功 - 开始游戏")
+                        self.PaiDuiDaShiFighting()
+                        break
+                    sleep(2)  # 等待进入
+                break
+
+    def PaiDuiDaShiFighting(self):
+        # 开始战斗
+        功能开关['fighting'] = 1
+        attempt = 0
+        while True:
+            re, text = TomatoOcrText(337, 118, 382, 137, '当前轮次')
+            if "轮" not in text:
+                attempt = attempt + 1
+            if attempt > 3:
+                Toast('派对大师-战斗结束')
+                break
+            res1, _ = TomatoOcrText(323, 842, 401, 865, "每日奖励")
+            res2 = FindColors.find(
+                "323,1210,#FCF8EE|333,1210,#FCF8ED|336,1212,#F9ECCB|336,1234,#FEF8E9|347,1231,#FCF8EE|363,1231,#FEF7EB|377,1229,#F4EFE1|372,1218,#88684E|353,1216,#9E8776",
+                rect=[301, 1130, 421, 1273])
+            if res1 or res2:
+                Toast('派对大师-战斗结束')
+                break
+
+            attempt2 = 0
+            for i in range(15):
+                object = ''
+                re, x, y = imageFind('派对大师-猫咪', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '猫咪'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-帽子', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '帽子'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-幽灵', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '幽灵'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-南瓜', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '南瓜'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-糖果', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '糖果'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                if object != '':
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, text = TomatoOcrText(337, 118, 382, 137, '当前轮次')
+                if "轮" not in text:
+                    attempt2 = attempt2 + 1
+                    if attempt2 > 5:
+                        break
+                Toast(f'等待下一轮开始')
+                sleep(1)
+
+            if object != '':
+                sleep(2)
+                re, 轮次 = TomatoOcrText(337, 118, 382, 137, '当前轮次')
+                find = False
+                isSwipe = False
+                swipeArr = []
+                points = ''
+                attempt3 = 0
+                for i in range(20):
+                    tmpPoints = ''
+                    tmpSwipeArr = []
+                    # 识别卡牌
+                    if not find:
+                        if object == '猫咪':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-猫咪', 0.9, 82, 222, 674, 1112)
+                        elif object == '帽子':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-帽子', 0.9, 82, 222, 674, 1112)
+                        elif object == '幽灵':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-幽灵', 0.9, 82, 222, 674, 1112)
+                        elif object == '南瓜':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-南瓜', 0.9, 82, 222, 674, 1112)
+                        elif object == '糖果':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-糖果', 0.9, 82, 222, 674, 1112)
+
+                        if re:
+                            find = True
+                            points = tmpPoints
+                            # centerArr = []
+                            # for p in points:
+                            #     centerX = p['center_x']
+                            #     centerY = p['center_y']
+                            #     centerArr.append({centerX, centerY})
+                            Toast(f'已寻找到{object}')
+
+                    re2, tmpPoints = imageFindAll('派对大师-卡牌-猫咪', 0.9, 82, 222, 674, 1112)
+                    if not isSwipe and not re2:
+                        sleep(2)
+                        if 轮次 == '第5轮':
+                            Toast('等待旋转')
+                            sleep(3)
+                        # 卡牌关闭，开始检查旋转
+                        # 识别旋转；从顶部第一个开始
+                        # 第一排
+                        re = CompareColors.compare("375,288,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 375, 'y': 285})
+                        # 第二排
+                        re = CompareColors.compare("230,396,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 230, 'y': 395})
+                        re = CompareColors.compare("369,394,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 370, 'y': 395})
+                        re = CompareColors.compare("508,396,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 510, 'y': 395})
+                        # 第三排
+                        re = CompareColors.compare("148,505,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 150, 'y': 505})
+                        re = CompareColors.compare("293,503,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 295, 'y': 505})
+                        re = CompareColors.compare("442,503,#ECBF7C")
+                        if not re:
+                            tmpSwipeArr.append({'x': 440, 'y': 505})
+                        re = CompareColors.compare("581,506,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 580, 'y': 505})
+                        # 第四排
+                        re = CompareColors.compare("143,610,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 145, 'y': 610})
+                        re = CompareColors.compare("574,613,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 575, 'y': 610})
+                        # 第五排
+                        re = CompareColors.compare("137,721,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 135, 'y': 720})
+                        re = CompareColors.compare("568,724,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 565, 'y': 720})
+                        # 第六排
+                        re = CompareColors.compare("134,828,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 135, 'y': 830})
+                        re = CompareColors.compare("277,828,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 275, 'y': 830})
+                        re = CompareColors.compare("423,827,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 425, 'y': 830})
+                        re = CompareColors.compare("563,827,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 565, 'y': 830})
+                        # 第七排
+                        re = CompareColors.compare("205,940,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 205, 'y': 940})
+                        re = CompareColors.compare("345,937,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 345, 'y': 940})
+                        re = CompareColors.compare("484,937,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 485, 'y': 940})
+                        # 第八排
+                        re = CompareColors.compare("336,1046,#ECBF7E")
+                        if not re:
+                            tmpSwipeArr.append({'x': 335, 'y': 1045})
+
+                        for p in points:
+                            for swipe in tmpSwipeArr:
+                                if swipe['x'] - 55 < p['center_x'] < swipe['x'] + 65 and swipe['y'] - 55 < p[
+                                    'center_y'] < swipe['y'] + 65:
+                                    isSwipe = True
+                                    swipeArr = tmpSwipeArr
+                                    Toast('识别到卡牌交换')
+                                    print('识别到卡牌交换')
+                                    break
+
+                    # 等待进入选择
+                    sleep(1)
+                    if "轮" not in 轮次:
+                        attempt3 = attempt3 + 1
+                        if attempt3 > 5:
+                            break
+                    else:
+                        attempt3 = 0
+
+                    res, _ = TomatoOcrText(402, 1164, 445, 1184, '提示')
+                    if res:
+                        break
+
+                if find:
+                    # 开始选择
+                    Toast('开始选牌')
+                    sleep(1)
+                    for i in range(10):
+                        if points:
+                            for p in points:
+                                # 检查队友是否提示卡牌
+                                pointsTeam = FindColors.find_all("421,776,#3AFF70|421,776,#3AFF70")
+                                if pointsTeam:
+                                    for j in pointsTeam:
+                                        Toast('选择队友提示的卡牌')
+                                        tapSleep(j.x + 30, j.y + 30, 0.3)
+                                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                                        tapSleep(j.x + 30, j.y - 30, 0.3)
+                                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                                        tapSleep(j.x - 30, j.y - 30, 0.3)
+                                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+
+                                # 选择记录的卡牌
+                                x = p['center_x']
+                                y = p['center_y']
+                                if 轮次 == '第1轮':
+                                    Toast('第一轮')
+                                if 轮次 == '第3轮':
+                                    if 95 < int(x) < 645 and 450 < int(y) < 885:
+                                        Toast('第三轮，交换中间坐标')
+                                        # 从左上开始计算
+                                        if 450 < int(y) < 560:
+                                            if 90 < int(x) < 210:
+                                                x = 580
+                                                y = 500
+                                            if 240 < int(x) < 355:
+                                                x = 570
+                                                y = 615
+                                            if 385 < int(x) < 500:
+                                                x = 570
+                                                y = 725
+                                            if 525 < int(x) < 640:
+                                                x = 565
+                                                y = 830
+                                        # 中间第二排
+                                        if 555 < int(y) < 660:
+                                            if 85 < int(x) < 210:
+                                                x = 435
+                                                y = 505
+                                            if 525 < int(x) < 640:
+                                                x = 420
+                                                y = 830
+                                        # 中间第三排
+                                        if 660 < int(y) < 775:
+                                            if 85 < int(x) < 210:
+                                                x = 295
+                                                y = 505
+                                            if 525 < int(x) < 640:
+                                                x = 280
+                                                y = 830
+                                        # 中间第四排
+                                        if 775 < int(y) < 880:
+                                            if 80 < int(x) < 195:
+                                                x = 150
+                                                y = 505
+                                            if 220 < int(x) < 340:
+                                                x = 145
+                                                y = 615
+                                            if 360 < int(x) < 485:
+                                                x = 135
+                                                y = 715
+                                            if 505 < int(x) < 630:
+                                                x = 130
+                                                y = 830
+                                if 轮次 == '第4轮':
+                                    Toast('第四轮，顺时针旋转180°')
+                                    x = 720 - x
+                                    y = 1280 - y
+                                if 轮次 == '第5轮':
+                                    Toast('第五轮，顺时针旋转180°')
+                                    x = 720 - x
+                                    y = 1280 - y
+                                Toast('选择卡牌')
+                                tapSleep(x, y, 0.3)
+                                TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+
+                        # 检查队友是否提示卡牌
+                        pointsTeam = FindColors.find_all("421,776,#3AFF70|421,776,#3AFF70")
+                        if pointsTeam:
+                            for p in pointsTeam:
+                                Toast('选择队友提示的卡牌')
+                                tapSleep(p.x + 30, p.y + 30, 0.3)
+                                TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+
+                        # 检查交换后的卡牌
+                        if isSwipe and (轮次 == '第1轮' or 轮次 == '第2轮' or 轮次 == '第3轮' or 轮次 == '第5轮'):
+                            Toast('选择交换后的卡牌')
+                            print(swipeArr)
+                            for p in swipeArr:
+                                tapSleep(p['x'], p['y'], 0.3)
+                                TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+
+                        res, _ = TomatoOcrText(402, 1164, 445, 1184, '提示')
+                        if not res:
+                            break
+
+                        # 兜底选取任意卡牌
+                        tapSleep(510, 395, 0.3)
+                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                        tapSleep(205, 940, 0.3)
+                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+        功能开关['fighting'] = 0
 
     # 箱庭苗圃
     def XiangTingMiaoPu(self):
@@ -732,22 +1103,22 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrTap(98, 1026, 175, 1047, "限时特惠",30,-20)
+        res = TomatoOcrTap(98, 1026, 175, 1047, "限时特惠", 30, -20)
         if not res:
-            res = TomatoOcrTap(99, 940, 175, 958, "限时特惠",30,-20)
+            res = TomatoOcrTap(99, 940, 175, 958, "限时特惠", 30, -20)
         if res:
-            tapSleep(595,153)  # 点击特惠宝箱
-            tapSleep(595,153)  # 点击特惠宝箱
-            tapSleep(341,1136)  # 点击空白处
-            tapSleep(86,1202)  # 点击返回
+            tapSleep(595, 153)  # 点击特惠宝箱
+            tapSleep(595, 153)  # 点击特惠宝箱
+            tapSleep(341, 1136)  # 点击空白处
+            tapSleep(86, 1202)  # 点击返回
             任务记录["限时特惠-完成"] = 1
 
-        res = imageFindClick("营地-限时礼包",0.9,0.9,94,880,187,1057)
+        res = imageFindClick("营地-限时礼包", 0.9, 0.9, 94, 880, 187, 1057)
         if res:
-            tapSleep(595,153)  # 点击特惠宝箱
-            tapSleep(595,153)  # 点击特惠宝箱
-            tapSleep(341,1136)  # 点击空白处
-            tapSleep(86,1202)  # 点击返回
+            tapSleep(595, 153)  # 点击特惠宝箱
+            tapSleep(595, 153)  # 点击特惠宝箱
+            tapSleep(341, 1136)  # 点击空白处
+            tapSleep(86, 1202)  # 点击返回
             任务记录["限时特惠-完成"] = 1
 
         任务记录["限时特惠-完成"] = 1
@@ -800,6 +1171,10 @@ class DailyTask:
         if not res:
             return
 
+        re = CompareColors.compare("438,1109,#D94F47|440,1107,#D94F47")
+        if re:
+            Toast('宝藏湖 - 能量用尽')
+            return
         res = TomatoOcrTap(395, 1076, 496, 1100, "大容量充磁")
         sleep(8)  # 等待动画
         tapSleep(360, 1040)  # 点击空白处
@@ -809,7 +1184,11 @@ class DailyTask:
         tapSleep(76, 335)  # 领取回收物进度奖励
         tapSleep(360, 1040)  # 点击空白处
 
-        res = TomatoOcrTap(554, 1239, 636, 1265, "伊尼兰特")
+        re = CompareColors.compare("697,1183,#F35F42|697,1178,#F76143")
+        if not re:
+            return
+        # res = TomatoOcrTap(554, 1239, 636, 1265, "伊尼兰特")
+        tapSleep(660, 1227, 0.6)
         if res:
             res = TomatoOcrTap(321, 1073, 402, 1096, "高压充磁", 10, 10)
             sleep(8)  # 等待动画
@@ -1029,8 +1408,8 @@ class DailyTask:
 
             res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
             if res2:
-                point = FindColors.find("184,318,#9D9D9D|189,312,#939393|183,334,#ABABAB|189,323,#E1E1E1|194,320,#E8E8E8",
-                                        rect=[115, 244, 262, 432], diff=0.9)  # 已领取门票，灰色状态
+                point = FindColors.find("180,314,#767676|168,342,#A1A1A1|183,331,#A6A6A6|197,326,#C6C6C6",
+                                        rect=[124, 263, 252, 448], diff=0.95)  # 已领取门票，灰色状态
                 if point:
                     Toast('骑兽乐园 - 已领取门票')
                 else:
@@ -1045,18 +1424,20 @@ class DailyTask:
                     needCount = 0
                 if needCount > 0:
                     for i in range(5):
-                        TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10)
-                        res, _ = TomatoOcrText(320, 372, 401, 399, "兑换门票")
+                        res = TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10, sleep1=0.5)
+                        # res, _ = TomatoOcrText(320, 372, 401, 399, "兑换门票")
                         if not res:
-                            TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10)
+                            TomatoOcrFindRangeClick("兑换门票", x1=554, y1=208, x2=661, y2=296, sleep1=0.5)
 
                         buyCount = ""
-                        for j in range(5):
+                        for p in range(5):
                             # res, buyCount = TomatoOcrText(379, 930, 394, 947, "每日限购次数")  # 1/9
-                            res, buyCount = TomatoOcrText(268,921,431,970, "每日限购次数")  # 1/9
-                            buyCount = buyCount.replace("每日限购（", "")
-                            buyCount = buyCount.replace("/9）", "")
+                            res, buyCount = TomatoOcrText(268, 921, 431, 970, "每日限购次数")  # 1/9
+                            buyCount = (buyCount.replace("每日限购", "").replace("/9", "").
+                                        replace("(", "").replace(")", "").replace("（", "").
+                                        replace("）", "").replace("/", "").replace("9", "").replace(" ", ""))
                             buyCount = safe_int(buyCount)
+                            Toast("已购次数：" + str(buyCount))
                             if buyCount != "":
                                 break
                         if buyCount == "":
@@ -1148,12 +1529,14 @@ class DailyTask:
                 for i in range(1, 5):
                     res = TomatoOcrTap(571, 261, 645, 287, "兑换卢恩", 10, 10)
                     buyCount = ""
-                    for j in range(1, 5):
+                    for p in range(1, 5):
                         # res, buyCount = TomatoOcrText(375, 944, 387, 960, "已购买次数")  # 1/9
                         res, buyCount = TomatoOcrText(284, 935, 425, 968, "已购买次数")  # 1/9
-                        buyCount = buyCount.replace("每日限购（", "")
-                        buyCount = buyCount.replace("/15）", "")
+                        buyCount = (buyCount.replace("每日限购", "").replace("/15", "").replace("（", "").
+                                    replace("）","").replace("(", "").replace(")", "").
+                                    replace("/", "").replace("15", "").replace(" ", ""))
                         buyCount = safe_int(buyCount)
+                        Toast("已购次数：" + str(buyCount))
                         if buyCount != "":
                             break
                     if buyCount != 0 and (buyCount == "" or buyCount >= needCount):
@@ -1170,7 +1553,7 @@ class DailyTask:
             if needCount > 0:
                 attempt = 0
                 # 关闭批量讲述
-                res, _ = TomatoOcrText(317,1054,401,1082, "讲述故事")
+                res, _ = TomatoOcrText(317, 1054, 401, 1082, "讲述故事")
                 if not res:
                     tapSleep(515, 1088)
                 while attempt < needCount:
@@ -1232,7 +1615,7 @@ class DailyTask:
         # if not wait1:
         #     wait2, _ = TomatoOcrText(240, 610, 344, 653, "队伍已满员")  # 队伍已满员，准备开启挑战
         # if wait1 or wait2:
-        res5 = TomatoOcrTap(453,727,506,759, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
+        res5 = TomatoOcrTap(453, 727, 506, 759, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
 
         res1 = False
         res2 = False
@@ -1254,7 +1637,9 @@ class DailyTask:
             if teamStatus:
                 Toast('取消匹配')
 
-            teamExist = TomatoOcrFindRangeClick('离开队伍', whiteList='离开队伍', x1=416, y1=126, x2=628, y2=284)
+            teamExist = TomatoOcrTap(500, 184, 579, 214, "离开队伍", 20, 20)
+            if not teamExist:
+                teamExist = TomatoOcrFindRangeClick('离开队伍', whiteList='离开队伍', x1=416, y1=126, x2=628, y2=284)
             if teamExist:
                 teamExist = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=105, y1=304, x2=631, y2=953)
                 if teamExist:

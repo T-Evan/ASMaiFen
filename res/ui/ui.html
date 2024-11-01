@@ -762,9 +762,6 @@
                         <div class="checkbox-item">
                             <input id="秘宝收集" name="vehicle" type="checkbox" value="Bike">秘宝收集<br>
                         </div>
-                        <div class="checkbox-item">
-                            <input id="露营打卡点" name="vehicle" type="checkbox" value="Bike">露营打卡点<br>
-                        </div>
                     </div>
                     <br>
                     <legend>仓鼠百货付费购买</legend>
@@ -1188,7 +1185,7 @@
                 <fieldset>
                     <legend>活动相关</legend>
                     <fieldset>
-                    <legend>其他活动</legend>
+                    <legend>常驻活动</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
                             <input id="火力全开" name="vehicle" type="checkbox" value="Bike">火力全开<br>
@@ -1205,10 +1202,27 @@
                         <div class="checkbox-item">
                             <input id="限时特惠" name="vehicle" type="checkbox" value="Bike">限时特惠<br>
                         </div>
-                        <div class="checkbox-item">
-                            <input id="箱庭苗圃" name="vehicle" type="checkbox" value="Bike">箱庭苗圃<br>
-                        </div>
                     </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>限时活动</legend>
+                        <label class="gray-text">(~请留意活动是否开启~)</label><br>
+                        <div class="flex-container">
+                            <div class="checkbox-group">
+                                <div class="checkbox-item">
+                                    <input id="箱庭苗圃" name="vehicle" type="checkbox" value="Bike">箱庭苗圃<br>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input id="露营打卡点" name="vehicle" type="checkbox" value="Bike">露营打卡点<br>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input id="舞会签到簿" name="vehicle" type="checkbox" value="Bike">舞会签到簿<br>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input id="派对大师" name="vehicle" type="checkbox" value="Bike">派对大师<br>
+                                </div>
+                            </div>
+                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>摸鱼时间到</legend>
@@ -1247,7 +1261,7 @@
                 </fieldset>
                 <fieldset>
                     <legend>史莱姆大暴走</legend>
-                    <label class="gray-text">(游戏画质建议调整为高)</label><br>
+                    <label class="gray-text">(！游戏画质建议调整为高！)</label><br>
                     <input id="大暴走开关" name="vehicle" type="checkbox" value="Bike">大暴走开关<br>
                     <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<label class="gray-text">(需手动进入战斗，战斗中自动走位)</label><br>
                     <div class="flex-container">
@@ -1609,7 +1623,6 @@
         setSwitchStatus("星辰同行");
         setSwitchStatus("纸飞机");
         setSwitchStatus("秘宝收集");
-        setSwitchStatus("露营打卡点");
         setSwitchStatus("星星经验");
         setSwitchStatus("原材料");
         setSwitchStatus("全价兽粮");
@@ -1633,6 +1646,9 @@
         setSwitchStatus("BBQ派对");
         setSwitchStatus("限时特惠");
         setSwitchStatus("箱庭苗圃");
+        setSwitchStatus("派对大师");
+        setSwitchStatus("露营打卡点");
+        setSwitchStatus("舞会签到簿");
         setSwitchStatus("自动切换喊话频道");
 
         var 摸鱼重复次数 = localStorage.getItem("摸鱼重复次数");
@@ -2043,6 +2059,9 @@
         BBQ派对 = saveSwitchStatus("BBQ派对");
         限时特惠 = saveSwitchStatus("限时特惠");
         箱庭苗圃 = saveSwitchStatus("箱庭苗圃");
+        派对大师 = saveSwitchStatus("派对大师");
+        露营打卡点 = saveSwitchStatus("露营打卡点");
+        舞会签到簿 = saveSwitchStatus("舞会签到簿");
         自动切换喊话频道 = saveSwitchStatus("自动切换喊话频道");
 
         var 摸鱼重复次数 = document.getElementById("摸鱼重复次数").value;
@@ -2064,7 +2083,6 @@
         星辰同行 = saveSwitchStatus("星辰同行");
         纸飞机 = saveSwitchStatus("纸飞机");
         秘宝收集 = saveSwitchStatus("秘宝收集");
-        露营打卡点 = saveSwitchStatus("露营打卡点");
         星星经验 = saveSwitchStatus("星星经验");
         原材料 = saveSwitchStatus("原材料");
         全价兽粮 = saveSwitchStatus("全价兽粮");
@@ -2280,6 +2298,9 @@
             BBQ派对: BBQ派对,
             限时特惠: 限时特惠,
             箱庭苗圃: 箱庭苗圃,
+            派对大师: 派对大师,
+            露营打卡点: 露营打卡点,
+            舞会签到簿: 舞会签到簿,
 
             自动切换喊话频道: 自动切换喊话频道,
             世界喊话: 世界喊话,
@@ -2294,7 +2315,6 @@
             星辰同行: 星辰同行,
             纸飞机: 纸飞机,
             秘宝收集: 秘宝收集,
-            露营打卡点: 露营打卡点,
             商店星星经验: 星星经验,
             商店原材料: 原材料,
             商店全价兽粮: 全价兽粮,

@@ -64,7 +64,8 @@ class LvTuanTask:
             else:
                 # 重新进入调查队，重新选择队友；避免队友不足
                 for i in range(1, 3):
-                    res = TomatoOcrFindRangeClick("调查队", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                    res = TomatoOcrFindRangeClick("调查队", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20,
+                                                  sleep1=0.7)
                     if not res:
                         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                         if not res:
@@ -80,15 +81,16 @@ class LvTuanTask:
                     else:
                         break
 
-            res = TomatoOcrTap(307, 964, 412, 1002, "开启调查")
+            sleep(0.5)
+            res = TomatoOcrTap(307, 964, 412, 1002, "开启调查",sleep1=0.7)
             if res:
-                tapSleep(205, 760)  # 添加队友
+                tapSleep(205, 760, 0.5)  # 添加队友
                 tapSleep(530, 435, 1)  # 添加队友1
                 tapSleep(530, 556, 1)  # 添加队友2
                 tapSleep(531, 674, 1)  # 添加队友3
                 tapSleep(532, 794, 1)  # 添加队友4
                 tapSleep(530, 910, 1)  # 添加队友5
-                res = TomatoOcrTap(70, 1200, 123, 1231, "返回", 10, 10)
+                res = TomatoOcrTap(70, 1200, 123, 1231, "返回", 10, 10, sleep1=0.5)
                 res = TomatoOcrTap(331, 976, 386, 1005, "开始")
                 sleep(5)
                 if res:

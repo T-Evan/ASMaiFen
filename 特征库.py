@@ -62,8 +62,29 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
         print(f"imageFind发生异常: {e}")
         return False, 0, 0
 
+def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
+    try:
+        lock =  TimeoutLock(timeLock)
+        try:
+            with lock:
+                path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
+                res = FindImages.find_all_template(path, [x1, y1, x2, y2], confidence=confidence1)
+        except RuntimeError as e:
+            print(f"imageFind获取锁超时")
+            return False, []
+        if len(res) > 0:
+            print(f"imageFind识别成功: {name}")
+            return True, res
+        else:
+            # 如果缺少键，返回默认值
+            print(f"imageFind识别失败: {name}")
+            return False, []
+    except Exception as e:
+        print(f"imageFind发生异常: {e}")
+        return False, []
 
-def imageFindClick(name, sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280):
+
+def imageFindClick(name, sleep1=1, confidence1=0.7, x1=0, y1=0, x2=720, y2=1280):
     try:
         lock =  TimeoutLock()
         try:

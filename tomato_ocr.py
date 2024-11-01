@@ -3,7 +3,7 @@ from ascript.android import plug
 from ascript.android.ui import Dialog
 from ascript.android import system
 
-plug.load("TomatoOcr:1.0.3")
+plug.load("TomatoOcr:1.0.6")
 try:
     from TomatoOcr import TomatoOcr
 except Exception as e:
@@ -11,14 +11,12 @@ except Exception as e:
     system.exit()
 
 global tomatoOcr
-global tomatoOcrJson
+# global tomatoOcrJson
 def init_tomatoOcr():
     ocr = TomatoOcr()
     ocr.setContext(rec_type="ch-3.0")
 
-    # 这里用了一个免费半年的 许可
-    ocr.setLicense(
-        "gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==")
+    ocr.setLicense("DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO","挂机吧麦芬")
 
     ocr.setRecType("ch-3.0")
     ocr.setDetBoxType("rect")
@@ -33,9 +31,7 @@ def init_tomatoOcrJson():
     ocr = TomatoOcr()
     ocr.setContext(rec_type="ch-3.0")
 
-    # 这里用了一个免费半年的 许可
-    ocr.setLicense(
-        "gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==")
+    ocr.setLicense("DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO","挂机吧麦芬")
 
     ocr.setRecType("ch-3.0")
     ocr.setDetBoxType("rect")
@@ -47,4 +43,4 @@ def init_tomatoOcrJson():
     tomatoOcrJson = ocr
 
 init_tomatoOcr()  # 初始化
-init_tomatoOcrJson()  # 初始化
+# init_tomatoOcrJson()  # 初始化

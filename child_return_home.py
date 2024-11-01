@@ -19,11 +19,11 @@ def main():
             returnHome()
             sleep(1)  # 等待 1 秒
         else:
-            sleep(3)  # 等待 5 秒
+            sleep(1)  # 等待 5 秒
 
 
 def returnHome():
-    for i in range(1, 4):
+    for i in range(3):
         return1 = False
         return2 = False
         return3 = False
@@ -31,22 +31,25 @@ def returnHome():
         return5 = False
         return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
         return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
-        if (return1 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0) or (return3 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0):
+        if i == 3 and (return1 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0) or (return3 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0):
             # 返回上级页面时二次确认入口通用处理
+            sleep(0.4)
             re = TomatoOcrFindRangeClick(x1=39,y1=250,x2=674,y2=1205,keywords=[{'keyword': '确定', 'match_mode': 'exact'},{'keyword': '确认', 'match_mode': 'exact'}])
             Toast('返回首页')
 
         if not return1 and not return3 and 功能开关["fighting"] == 0:
-            return5 = TomatoOcrTap(69, 1182, 127, 1220, '营地', 10, 10)
-            if not return5:
-                # return2 = imageFindClick('返回_1')
-                return2 = TomatoOcrTap(86,1193,140,1224, '返回', 10, 10)
-                if return2 and 功能开关["needHome"] == 1:
-                    Toast('返回首页')
+            return6 = TomatoOcrTap(89,1197,136,1220, '返回', 10, 10)
+            if not return6:
+                return5 = TomatoOcrTap(69, 1182, 127, 1220, '营地', 10, 10)
+                if not return5:
+                    # return2 = imageFindClick('返回_1')
+                    return2 = TomatoOcrTap(86,1193,140,1224, '返回', 10, 10)
+                    if return2 and 功能开关["needHome"] == 1:
+                        Toast('返回首页')
 
-                return4 = imageFindClick('返回_2')
-                if return4 and 功能开关["needHome"] == 1:
-                    Toast('返回首页')
+                    return4 = imageFindClick('返回_2')
+                    if return4 and 功能开关["needHome"] == 1:
+                        Toast('返回首页')
 
         if not return1 and not return2 and not return3 and not return4:
             # 识别是否进入首页

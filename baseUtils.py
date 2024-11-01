@@ -4,14 +4,13 @@ import json
 from .特征库 import *
 from ascript.android.ui import Dialog
 from .tomato_ocr import tomatoOcr
-from .tomato_ocr import tomatoOcrJson
 from ascript.android import screen
 from .res.ui.ui import switch_lock
 from .res.ui.ui import switch_ocr_apk_lock
 from ascript.android.system import R
 from ascript.android import plug
 from .res.ui.ui import TimeoutLock
-
+from ascript.android.screen import Ocr
 
 # plug.load("BDS_OcrText")
 # from BDS_OcrText import *
@@ -163,11 +162,15 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
         try:
             with lock:
                 if bitmap == '':
-                    bitmap = screen.capture(x1, y1, x2, y2)
-                ocrRe = tomatoOcr.find_all(
-                    license="gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    bitmap=bitmap)
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        capture=[x1, y1, x2, y2])
+                else:
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        bitmap=bitmap)
                 # print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
@@ -214,8 +217,29 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
         print(f"TomatoOcrFindRange发生异常: {e}")
         return False
 
+def PaddleOcrFindRangeClick(keyword='T^&*', sleep1=0.9, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=5,
+                            match_mode='exact', offsetX=0, offsetY=0, keywords = None):
+    try:
+        if whiteList == '':
+            whiteList = keyword
+        if keywords is None:
+            keywords = []
+        ocrReJson = Ocr().paddleocr_v3(rect=[x1, y1, x2, y2], pattern=keyword)
+        # print(ocrRe)
+        if ocrReJson is not None:
+            for line in ocrReJson:
+                tapSleep(line.center_x +  offsetX, line.center_y + offsetY, sleep1)
+                print(f"PaddleOcrFindRangeClick识别成功-{keyword}-{keywords}|{line.center_x}|{line.center_y}")
+                return True
+        else:
+            # print(f"PaddleOcrFindRangeClick识别失败-{keyword}|{ocrRe}")
+            print(f"PaddleOcrFindRangeClick识别失败-{keyword}-{keywords}")
+            return False
+    except Exception as e:
+        print(f"PaddleOcrFindRangeClick发生异常: {e}")
+        return False
 
-def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=1, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=5,
+def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=5,
                             match_mode='exact', offsetX=0, offsetY=0, bitmap='', keywords = None):
     try:
         if whiteList == '':
@@ -226,11 +250,15 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=1, confidence1=0.9, x1=0, y1=
         try:
             with lock:
                 if bitmap == '':
-                    bitmap = screen.capture(x1, y1, x2, y2)
-                ocrRe = tomatoOcr.find_all(
-                    license="gAAAAABmPEIUAAAAAGchBoDtGyTGWXNtBCDTslF0i5dJnZ-AzQYjxuU2PqBsNZujr3utPCa4tnBCa1srVQw5vntwg-DucgQco-p4XA9_AWK9AsHguLHRm5vKeOaZKiO_8A==",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    bitmap=bitmap)
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        capture=[x1, y1, x2, y2])
+                else:
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        bitmap=bitmap)
                 # print(ocrRe)
         except RuntimeError as e:
                 print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
@@ -271,8 +299,7 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=1, confidence1=0.9, x1=0, y1=
                 center_x = (rx1 + rx2) / 2
                 center_y = (ry1 + ry2) / 2
         if center_x > 0 and center_y > 0:
-            tapSleep(center_x + x1 + offsetX, center_y + y1 + offsetY)
-            sleep(sleep1)
+            tapSleep(center_x + x1 + offsetX, center_y + y1 + offsetY, sleep1)
             print(f"TomatoOcrFindRangeClick识别成功-{keyword}-{keywords}|{center_x}|{center_y}")
             return True
         # print(f"TomatoOcrFindRangeClick识别失败-{keyword}|{ocrRe}")
@@ -292,39 +319,53 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
         try:
             with lock:
                 bitmap = screen.capture(x1, y1, x2, y2)
-                ocrText = tomatoOcr.ocrBitmap(bitmap, 3)
+                tomatoOcr.setReturnType('json')
+                ocrText = tomatoOcr.ocrBitmap(bitmap, 2)
+                # print(ocrText)
         except RuntimeError as e:
             print(f"TomatoOcrText获取锁超时")
             return False, ''
-        if ocrText != "" and ocrText == keyword:
-            print(f"o识别成功-{keyword}|{ocrText}")
-            return True, ocrText
+        if ocrText != '' and ocrText is not None:
+            ocrReJson = json.loads(ocrText)
+            lineWords = ''
+            lineWords = ocrReJson.get('words', '')
+            if lineWords != "" and lineWords == keyword:
+                print(f"o识别成功-{keyword}|{lineWords}")
+                return True, lineWords
+            print(f"oText识别失败-不匹配-{keyword}|{lineWords}")
+            return False, lineWords
         else:
-            print(f"o识别失败-不匹配-{keyword}|{ocrText}")
+            print(f"oText识别失败-不匹配-{keyword}|{ocrText}")
             return False, ocrText
     except Exception as e:
         print(f"toOcr发生异常: {e}")
         return False, ''
 
 
-def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0):
+def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
     try:
         lock =  TimeoutLock()
         try:
             with lock:
                 bitmap = screen.capture(x1, y1, x2, y2)
-                ocrText = tomatoOcr.ocrBitmap(bitmap, 3)
+                tomatoOcr.setReturnType('json')
+                ocrText = tomatoOcr.ocrBitmap(bitmap, 2)
+                # print(ocrText)
         except RuntimeError as e:
             print(f"TomatoOcrTap获取锁超时")
             return False
-        # 所有识别运行完成后，可释放插件
-        # tomatoOcr.end()
-        if ocrText != "" and ocrText == keyword:
-            tapSleep(x1 + offsetX, y1 + offsetY)
-            print(f"o识别成功-{keyword}|{ocrText}|{x1}|{y1}")
-            return True
+        if ocrText != '' and ocrText is not None:
+            ocrReJson = json.loads(ocrText)
+            lineWords = ''
+            lineWords = ocrReJson.get('words', '')
+            if lineWords != "" and lineWords == keyword:
+                tapSleep(x1 + offsetX, y1 + offsetY, sleep1)
+                print(f"o识别成功-{keyword}|{lineWords}|{x1}|{y1}")
+                return True
+            print(f"oTap识别失败-不匹配-{keyword}|{lineWords}")
+            return False
         else:
-            print(f"o识别失败-不匹配-{keyword}|{ocrText}")
+            print(f"oTap识别失败-不匹配-{keyword}|{ocrText}")
             return False
     except Exception as e:
         print(f"toOcrTap发生异常: {e}")
@@ -348,7 +389,7 @@ def Toast(content, tim=1000):
     Dialog.toast(content, tim, 3 | 48, 200, 0)
 
 
-def tapSleep(x, y, s=0.8):
+def tapSleep(x, y, s=0.4):
     click(x, y)
     sleep(s)
 

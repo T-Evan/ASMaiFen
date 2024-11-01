@@ -209,7 +209,6 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # print(功能开关['角色4开关'])
 # if 功能开关['角色4开关'] == 0 or 功能开关['角色4开关'] == False:
 # loadConfig(1)
-# loadConfig(2)
 # system.exit()
 
 def main():
@@ -222,7 +221,7 @@ def main():
         shilianTask = ShiLianTask()
 
         # debug
-        # shilianTask.changeChongWu(fight_type='恶龙挑战')
+        # dailyTask.PaiDuiDaShiFighting()
         # system.exit()
 
         功能开关["breakChild"] = 0
@@ -262,6 +261,7 @@ def main():
         while True:
             try:
                 if 功能开关["fighting"] == 1:
+                    Toast('战斗中 - 主进程暂停')
                     sleep(20)
                     continue
 
@@ -330,12 +330,21 @@ def main():
                 # 将时间戳转换为 datetime 对象
                 start_time_dt = datetime.fromtimestamp(start_time)
                 current_time_dt = datetime.fromtimestamp(current_time)
+                nextStartTime = 0
 
                 # 判断是否跨天（重置每日任务）
                 if start_time_dt.date() != current_time_dt.date():
                     # 判断当前时间是否大于凌晨5点
                     if current_time_dt.time() > datetime.min.time().replace(hour=5):
+                        Toast(f"5点重置每日任务")
                         初始化任务记录()
+                        nextStartTime = int(time.time())
+
+                # 判断执行时间超过4小时（重置每日任务）
+                if current_time - start_time > 60 * 60 * 4:
+                    Toast(f"执行时间超过4小时，重置每日任务")
+                    初始化任务记录()
+                    nextStartTime = int(time.time())
 
                 if total_wait != 0 and current_time - start_time >= total_wait:
                     Toast(f"休息 {need_wait_minute} 分钟")
@@ -344,10 +353,9 @@ def main():
                     action.Key.home()
                     初始化任务记录()
                     sleep(need_wait_minute * 60)
-                    start_time = int(time.time())
+                    nextStartTime = int(time.time())
 
                 # 定时切角色
-                nextStartTime = 0
                 if total_switch_role_minute != 0:
                     if current_time - start_time >= total_switch_role_minute:
                         Toast(f"运行 {need_switch_role_minute} 分钟，准备切换角色")

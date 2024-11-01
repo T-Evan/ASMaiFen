@@ -228,7 +228,7 @@ class LvRenTask:
                 return
         if 功能开关['仅强化武器戒指护腕'] == 1 or not yiJianRes:
             for i in range(6):
-                tapSleep(140, 175)  # 点击武器
+                tapSleep(140, 175,0.6)  # 点击武器
                 re = FindColors.find(
                     "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
                     rect=[94, 705, 627, 1092], diff=0.9)
@@ -241,7 +241,7 @@ class LvRenTask:
                 tapSleep(129, 1023, 0.3)
                 TomatoOcrTap(94, 1188, 127, 1216, "回")
 
-                tapSleep(579, 287)  # 点击护腕
+                tapSleep(579, 287,0.6)  # 点击护腕
                 re = FindColors.find(
                     "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
                     rect=[94, 705, 627, 1092], diff=0.9)
@@ -254,7 +254,7 @@ class LvRenTask:
                 tapSleep(129, 1023, 0.3)
                 TomatoOcrTap(94, 1188, 127, 1216, "回")
 
-                tapSleep(228, 506)  # 点击戒指
+                tapSleep(228, 506,0.6)  # 点击戒指
                 re = FindColors.find(
                     "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
                     rect=[94, 705, 627, 1092], diff=0.9)

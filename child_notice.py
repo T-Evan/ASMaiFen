@@ -2,7 +2,6 @@
 from .baseUtils import *
 from .res.ui.ui import 功能开关
 
-
 # 实例方法
 def main():
     while True:
@@ -33,22 +32,24 @@ def noticeCancel():
         # res2 = TomatoOcrTap(279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 20)
         # res3 = TomatoOcrTap(266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
         # res5 = TomatoOcrTap(268, 869, 359, 888, "点击空白处", 30, 100)
-
         bitmap = screen.capture(107,759,603,1257)
         res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107,759,603,1257, whiteList='点击空白处', timeLock=5,
-                                      offsetX=10, offsetY=10, bitmap=bitmap,
+                                      offsetX=20, offsetY=40, bitmap=bitmap,
                                       keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
         if res:
             # tapSleep(45, 1245)
             Toast('关闭弹窗')
+        # res = PaddleOcrFindRangeClick('空白', x1=107, y1=759, x2=603, y2=1257, offsetX=20, offsetY=40)
+        # if res:
+        #     Toast('关闭弹窗')
 
         res = TomatoOcrTap(214, 1071, 274, 1098, "确定", 10, 10)
         if res:
             Toast('战斗结算弹窗确认')
 
-        res = TomatoOcrTap(587,66,631,89, "跳过", 10, 10)
+        res = TomatoOcrTap(587, 66, 631, 89, "跳过", 10, 10)
         if res:
-            res = TomatoOcrTap(432,598,475,632, "是", 10, 10)
+            res = TomatoOcrTap(432, 598, 475, 632, "是", 10, 10)
             Toast('跳过教程')
 
         # res = TomatoOcrFindRange('本轮时长', 0.9, 113, 831, 720, 1280, whiteList='本轮时长', timeLock=3)

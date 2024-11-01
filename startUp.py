@@ -27,6 +27,7 @@ class StartUp:
     def start_app(self):
         global 功能开关
         # r = system.shell(f"start -n com.xd.cfbmf")
+        功能开关["fighting"] = 0
 
         max_attempt = 12
         for attempt in range(max_attempt):
@@ -75,7 +76,7 @@ class StartUp:
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             # res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
-            if teamName1 != "" or teamName2 != "":  # 战斗中
+            if "等级" in teamName1 or "等级" in teamName2:
                 # 大暴走战斗中
                 if 功能开关["大暴走开关"] == 1 and 功能开关["暴走进入战斗后启动"] == 1:
                     Toast("进入暴走战斗成功 - 开始战斗")
@@ -147,7 +148,7 @@ class StartUp:
 
         # if ifRestart == 1:
         #     system.reboot()  # 重启应用让配置生效
-
+        sleep(0.5)
         # 判断是否在角色切换页
         login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
         login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")

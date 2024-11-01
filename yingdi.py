@@ -27,13 +27,16 @@ class YingDiTask:
         self.yingDiShop()
 
     def yingdiTask2(self):
+        # 露营打卡点
+        self.luYingDaKa()
+
+        # 舞会签到簿
+        self.wuHuiQianDaoBu()
+
         if 功能开关["营地总开关"] == 0:
             return
 
         self.dailyTask.homePage(needQuitTeam=True)
-
-        # 露营打卡点
-        self.luYingDaKa()
 
         # 月签到
         self.yueqiandao()
@@ -259,6 +262,51 @@ class YingDiTask:
             tapSleep(36, 1123)  # 点击空白处关闭
         return
 
+    # 舞会签到簿
+    def wuHuiQianDaoBu(self):
+        if 功能开关["舞会签到簿"] == 0:
+            return
+
+        if 任务记录["舞会签到簿-完成"] == 1:
+            return
+        Toast('营地任务 - 舞会签到簿 - 开始')
+
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+        # 判断是否在营地页面
+        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
+        if hd1 == False and hd2 == False:
+            return
+
+        isFind = TomatoOcrFindRangeClick('舞会签到簿')
+        if not isFind:
+            # -- 返回活动最后一屏
+            swipe(680, 804, 680, 251)
+            sleep(2)
+            swipe(680, 804, 680, 251)
+            sleep(2)
+            swipe(680, 804, 680, 251)
+            sleep(2)
+            swipe(680, 804, 680, 251)
+            sleep(2)
+            swipe(680, 804, 680, 251)
+            sleep(2)
+
+            for i in range(1, 5):
+                # 上翻第二屏，继续识别
+                swipe(680, 451, 680, 804)
+                sleep(3)
+                isFind = TomatoOcrFindRangeClick('舞会签到簿')
+                if isFind:
+                    break
+        if isFind:
+            for i in range(3):
+                res = TomatoOcrFindRangeClick('领取',x1=457,y1=538,x2=618,y2=875,sleep1=0.7)
+                if res:
+                    tapSleep(342,1145)  # 点击空白处关闭
+            任务记录["舞会签到簿-完成"] = 1
+            TomatoOcrTap(94,1186,126,1220,'回')
+
     # 露营打卡点
     def luYingDaKa(self):
         if 功能开关["露营打卡点"] == 0:
@@ -318,7 +366,7 @@ class YingDiTask:
         if not res:
             # 返回首页
             self.dailyTask.homePage()
-            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.5)
             # 判断是否在营地页面
             hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
             hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
@@ -357,6 +405,7 @@ class YingDiTask:
             findNL = False
             findNum = 0
             for i in range(1, 3):
+                Toast('寻找秘宝能量')
                 re, x, y = imageFind('秘宝能量', 0.8)
                 if re:
                     findNL = True
@@ -475,6 +524,7 @@ class YingDiTask:
                     if res:
                         return
 
+                    sleep(0.5)
                     while True:
                         res, _ = TomatoOcrText(93, 1184, 127, 1220, "回")  # 寻宝页，返回按钮
                         if res:  # 识别到返回按钮，确认寻宝结束，退出
@@ -612,12 +662,18 @@ class YingDiTask:
         swipe(360, 805, 360, 965)
         sleep(1)
 
+        # 判断是否已购买完成
+        re = CompareColors.compare("145,714,#E1DBD1|420,718,#E6E1D8|557,718,#E6E1D8|146,916,#E6E1D8|282,913,#E6E1D8|420,915,#E6E1D8")
+        if re:
+            Toast('营地任务 - 仓鼠百货 - 已购买完成')
+            return
+
         for i in range(2):
             # 免费金币箱
             res, _ = TomatoOcrText(122, 694, 184, 718, "已售罄")
             if not res:
                 tapSleep(145, 630)  # 金币箱
-                tapSleep(360, 825)  # 购买
+                tapSleep(360, 825,0.6)  # 购买
                 tapSleep(360, 1100, 1)  # 点击空白处关闭
 
             # 原材料
@@ -639,7 +695,7 @@ class YingDiTask:
                 if not re1:
                     re2, x, y = imageFind('商店购买')
                 if re1 or re2:
-                    tapSleep(360, 825)  # 购买
+                    tapSleep(360, 825,0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
 
             if 功能开关['商店全价兽粮'] == 1:
@@ -649,7 +705,7 @@ class YingDiTask:
                 if not re1:
                     re2, x, y = imageFind('商店购买')
                 if re1 or re2:
-                    tapSleep(360, 855)  # 购买
+                    tapSleep(360, 855,0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
 
             if 功能开关['商店超级成长零食三折'] == 1:
@@ -659,7 +715,7 @@ class YingDiTask:
                 if not re1:
                     re2, x, y = imageFind('商店购买')
                 if re1 or re2:
-                    tapSleep(360, 820)  # 购买
+                    tapSleep(360, 820,0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
 
             if 功能开关['商店黑烬突破石五折'] == 1:
@@ -669,7 +725,7 @@ class YingDiTask:
                 if not re1:
                     re2, x, y = imageFind('商店购买')
                 if re1 or re2:
-                    tapSleep(360, 820)  # 购买
+                    tapSleep(360, 820,0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
 
             if 功能开关['商店经验补剂五折'] == 1:
@@ -679,7 +735,7 @@ class YingDiTask:
                 if not re1:
                     re2, x, y = imageFind('商店购买')
                 if re1 or re2:
-                    tapSleep(360, 855)  # 购买
+                    tapSleep(360, 855,0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
 
         # 返回营地
