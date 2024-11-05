@@ -218,27 +218,27 @@ def daBaoZouShenLinBoss():
     bossColor = ''
 
     if bossColor == '':
-        res = CompareColors.compare("358,385,#96EBB6|363,377,#F9FEF6|347,364,#9FDFAA|355,375,#CBFCD2", diff=0.93)
+        res = CompareColors.compare("358,385,#96EBB6|363,377,#F9FEF6|347,364,#9FDFAA|355,375,#CBFCD2", diff=0.83)
         if res:
             bossColor = '木'
         if not res:
-            res = CompareColors.compare("355,366,#B985D6|363,366,#AECEF6|366,366,#B66EB5|366,377,#AF78CB|352,378,#A56BBA", diff=0.93)
+            res = CompareColors.compare("355,366,#B985D6|363,366,#AECEF6|366,366,#B66EB5|366,377,#AF78CB|352,378,#A56BBA", diff=0.83)
             if res:
                 bossColor = '蒸汽'
         if not res:
-            res = CompareColors.compare("352,370,#FDEBD1|358,370,#FEF4E3|356,375,#BFCB75|364,378,#FEE2C8", diff=0.93)
+            res = CompareColors.compare("352,370,#FDEBD1|358,370,#FEF4E3|356,375,#BFCB75|364,378,#FEE2C8", diff=0.83)
             if res:
                 bossColor = '篝火'
         if not res:
-            res = CompareColors.compare("353,366,#CFF9FD|352,375,#9BD5FB|360,372,#A7E3FC|360,380,#90D3FA|364,372,#E9FCFE", diff=0.93)
+            res = CompareColors.compare("353,366,#CFF9FD|352,375,#9BD5FB|360,372,#A7E3FC|360,380,#90D3FA|364,372,#E9FCFE", diff=0.83)
             if res:
                 bossColor = '水'
         if not res:
-            res = CompareColors.compare("360,381,#FE9565|356,370,#FEEDE3|355,377,#FEE3D3|360,380,#FE9B6B|358,381,#FE9363", diff=0.93)
+            res = CompareColors.compare("360,381,#FE9565|356,370,#FEEDE3|355,377,#FEE3D3|360,380,#FE9B6B|358,381,#FE9363", diff=0.83)
             if res:
                 bossColor = '火'
         if not res:
-            res = CompareColors.compare("355,372,#DAFBF9|358,369,#A6F6E6|358,386,#83DBA4|361,383,#B0EED2|366,380,#8FE8BB", diff=0.93)
+            res = CompareColors.compare("355,372,#DAFBF9|358,369,#A6F6E6|358,386,#83DBA4|361,383,#B0EED2|366,380,#8FE8BB", diff=0.83)
             if res:
                 bossColor = '开花'
 

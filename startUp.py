@@ -16,6 +16,9 @@ import os
 import sys
 from ascript.android import system
 from ascript.android.screen import FindColors
+import sys
+import traceback
+
 
 class StartUp:
     # 构造器
@@ -59,7 +62,7 @@ class StartUp:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
             if res2 or shou_ye1 or shou_ye2:
                 # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
-                return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
+                return3 = TomatoOcrTap(93,1186,126,1220, '回', 10, 10)
                 if return3:
                     Toast('返回首页')
 
@@ -92,11 +95,28 @@ class StartUp:
         功能开关["needHome"] = 0
         sleep(1.5)
         # 开始冒险之旅
-        login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
-        # login1 = ldE.element_exist('登录页-开始冒险之旅')
-        # if login1:
-        #     login1.click_element().execute(sleep=1)
+        login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
+        if login1:
+            # 切换区服
+            if 功能开关['选择启动区服'] != "":
+                启动区服 = safe_int_v2(功能开关['选择启动区服'])
+                if 启动区服 > 0:
+                    Toast(f'切换启动区服-{启动区服}区')
+                    tapSleep(358, 958, 0.7)
+                    for k in range(10):
+                        res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=146, y1=340, x2=183, y2=535, sleep1=0.7)
+                        if res:
+                            break
+                        if k < 5:
+                            swipe(228, 552 + k, 228, 440)  # 下翻
+                        if k > 5:
+                            swipe(228, 430 + k, 228, 552)  # 上翻
+                        sleep(1.5)
+                        if k == 9:
+                            Toast(f'未找到，{启动区服}区角色')
+                            tapSleep(325, 1117, 1)  # 关闭选区界面
 
+        login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅", sleep1=0.8)
         # 开始冒险
         login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
         if login2:
@@ -135,10 +155,14 @@ class StartUp:
         return shou_ye
 
     def switchRole(self, ifRestart=1, selectRole=''):
-        if 功能开关['选择启动角色'] == "false" and 功能开关['角色1开关'] == "false" and 功能开关['角色2开关'] == "false" and 功能开关['角色3开关'] == "false" and 功能开关['角色4开关'] == "false" and 功能开关['角色5开关'] == "false":
+        if (功能开关['选择启动角色'] == "false" and 功能开关['角色1开关'] == "false" and
+                功能开关['角色2开关'] == "false" and 功能开关['角色3开关'] == "false" and
+                功能开关['角色4开关'] == "false" and \
+                功能开关['角色5开关'] == "false"):
             Toast('未配置角色切换')
             return
-        if 功能开关['选择启动角色'] == 0 and 功能开关['角色1开关'] == 0 and 功能开关['角色2开关'] == 0 and 功能开关['角色3开关'] == 0 and 功能开关['角色4开关'] == 0 and 功能开关['角色5开关'] == 0:
+        if (功能开关['选择启动角色'] == 0 and 功能开关['角色1开关'] == 0 and 功能开关['角色2开关'] == 0 and
+                功能开关['角色3开关'] == 0 and 功能开关['角色4开关'] == 0 and 功能开关['角色5开关'] == 0):
             Toast('未配置角色切换')
             return
 
@@ -202,7 +226,7 @@ class StartUp:
             sleep(3)
             x = 190 + (下一角色 - 1) * 157  # 从第一个角色 190，依次往右加 165 至下一角色
             y = 1090
-            tapSleep(x, y)
+            tapSleep(x, y, 1.5)
             res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
             if res:
                 # 无该角色，退出
@@ -217,7 +241,7 @@ class StartUp:
             sleep(3)
             x = 540 - (5 - 下一角色) * 165  # 从第五个角色 540，依次往左减 165 至下一角色
             y = 1090
-            tapSleep(x, y)
+            tapSleep(x, y, 1.5)
             res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
             if res:
                 # 无该角色，退出
@@ -231,15 +255,15 @@ class StartUp:
         功能开关["needHome"] = 0
         if 任务记录['当前任务账号'] != "":
             tmpAccount = safe_int(任务记录['当前任务账号'])
-            tmpAccount = tmpAccount + 1 # 切换下一账号
-            for i in range (tmpAccount,6):
+            tmpAccount = tmpAccount + 1  # 切换下一账号
+            for i in range(tmpAccount, 6):
                 if 功能开关['账号' + str(i) + '开关'] == 1 or 功能开关['账号' + str(i) + '开关'] == "true":
                     任务记录['当前任务账号'] = i
                     return self.loadAccount(i)
 
             # 循环一遍后，重新执行
-            for i in range (1,6):
-                if 功能开关['账号' + str(i) + '开关'] ==  1 or 功能开关['账号' + str(i) + '开关'] == "true":
+            for i in range(1, 6):
+                if 功能开关['账号' + str(i) + '开关'] == 1 or 功能开关['账号' + str(i) + '开关'] == "true":
                     任务记录['当前任务账号'] = i
                     return self.loadAccount(i)
 
@@ -264,39 +288,51 @@ class StartUp:
             self.loadAccount(功能开关['选择启动账号'])
 
     def loadAccount(self, account_name):
-        account_name = str(account_name)
-        Toast('加载账号' + account_name)
-        # 结束应用
-        r = system.shell(f"am kill com.xd.cfbmf")
-        r = system.shell(f"am force-stop com.xd.cfbmf")
-        print(r)
-        oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
-        # 删除文件夹
-        r = system.shell(f"rm -rf {oldPath1} 2>/dev/null")
-
-        new_path1 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/"
-        flag1 = system.shell(f"cp -r -a {new_path1} {oldPath1}")
-
-        oldPath2 = "/data/data/com.xd.cfbmf/"
-        new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
-        flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}")
-        print(flag1)
-        global 功能开关
-        configNum = 功能开关['账号' + str(account_name) + '配置']
-        if configNum != 0 and configNum != '' and configNum != '0':
-            Toast(f'加载账号{account_name} + 加载配置{configNum}')
-            功能开关 = loadConfig(configNum)
-            print(功能开关)
-        sleep(0.5)
-        # system.open("com.xd.cfbmf")
-        # r = system.shell(f"am start -n com.xd.cfbmf")
-        # r = system.shell(f"am kill com.xd.cfbmf")
-        # r = system.shell(f"am force-stop com.xd.cfbmf")
-        # system.open("com.xd.cfbmf")
-        # r = system.shell(f"am start -a com.xd.cfbmf")
-        # r = system.shell(f"am start -a com.xd.cfbmf")
-        # system.open("com.xd.cfbmf")
-        system.open("出发吧麦芬")
+        try:
+            account_name = str(account_name)
+            Toast('加载账号' + account_name)
+            # 结束应用
+            r = system.shell(f"am kill com.xd.cfbmf")
+            sleep(0.5)
+            r = system.shell(f"am force-stop com.xd.cfbmf")
+            print(r)
+            sleep(1)
+            oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
+            # 删除文件夹
+            r = system.shell(f"rm -rf {oldPath1} 2>/dev/null")
+            sleep(1)
+            new_path1 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/"
+            flag1 = system.shell(f"cp -r -a {new_path1} {oldPath1}")
+            sleep(1)
+            oldPath2 = "/data/data/com.xd.cfbmf/"
+            new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
+            flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}")
+            print(flag1)
+            global 功能开关
+            configNum = 功能开关['账号' + str(account_name) + '配置']
+            if configNum != 0 and configNum != '' and configNum != '0':
+                Toast(f'加载账号{account_name} + 加载配置{configNum}')
+                功能开关 = loadConfig(configNum)
+                print(功能开关)
+            sleep(0.5)
+            # system.open("com.xd.cfbmf")
+            # r = system.shell(f"am start -n com.xd.cfbmf")
+            # r = system.shell(f"am kill com.xd.cfbmf")
+            # r = system.shell(f"am force-stop com.xd.cfbmf")
+            # system.open("com.xd.cfbmf")
+            # r = system.shell(f"am start -a com.xd.cfbmf")
+            # r = system.shell(f"am start -a com.xd.cfbmf")
+            # system.open("com.xd.cfbmf")
+            system.open("出发吧麦芬")
+        except Exception as e:
+            # 处理异常
+            # 获取异常信息
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            # 输出异常信息和行号
+            file_name, line_number, _, _ = traceback.extract_tb(exc_traceback)[-1]
+            error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
+            # 显示对话框
+            print(error_message)
 
     def saveAccount(self, account_name):
         account_name = str(account_name)

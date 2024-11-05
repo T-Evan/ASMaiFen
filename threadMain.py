@@ -7,9 +7,9 @@ from java.lang import Runnable, Thread
 from java import dynamic_proxy
 
 # 子协程处理弹窗
-threadMain = threading.Thread(target=mainTask, daemon=True)
-threadMijingTeam = threading.Thread(target=mijing_team, daemon=True)
-threadAnotherLogin = threading.Thread(target=another_login, daemon=True)
+# threadMain = threading.Thread(target=mainTask, daemon=True)
+# threadMijingTeam = threading.Thread(target=mijing_team, daemon=True)
+# threadAnotherLogin = threading.Thread(target=another_login, daemon=True)
 
 class RunThreadMijingTeam(dynamic_proxy(Runnable)):
     def __init__(self):
@@ -24,13 +24,20 @@ class RunThreadAnotherLogin(dynamic_proxy(Runnable)):
     def run(self):
         print("启动顶号等待处理线程")
         another_login()
+#
+# class RunThreadCheckBlock(dynamic_proxy(Runnable)):
+#     def __init__(self):
+#         super().__init__()
+#     def run(self):
+#         print("启动卡死检测线程")
+#         check_block()
 
-def runThreadMain():
-    try:
-        if not threadMain.is_alive():
-            threadMain.start()
-    except RuntimeError as e:
-        print(f"ThreadMain Error: {e}")
+# def runThreadMain():
+#     try:
+#         if not threadMain.is_alive():
+#             threadMain.start()
+#     except RuntimeError as e:
+#         print(f"ThreadMain Error: {e}")
 
 
 def runThreadMijingTeam():
@@ -60,3 +67,11 @@ def runThreadAnotherLogin():
         #         threadAnotherLogin.start()
         # except RuntimeError as e:
         #     print(f"ThreadAnotherLogin Error: {e}")
+
+# def runThreadCheckBlock():
+#     try:
+#         r = RunThreadCheckBlock()
+#         t = Thread(r)
+#         t.start()
+#     except RuntimeError as e:
+#         print(f"卡死检测线程 Error: {e}")

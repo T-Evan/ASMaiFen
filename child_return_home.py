@@ -75,4 +75,11 @@ def returnHome():
                 Toast('已返回首页')
                 return True
 
+        # 兜底
+        if i == 3:
+            # 开始冒险之旅
+            login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
+            # 开始冒险
+            login2 = TomatoOcrTap(302, 1199, 414, 1231, "开始冒险")
+
     return

@@ -64,8 +64,8 @@ class LvTuanTask:
             else:
                 # 重新进入调查队，重新选择队友；避免队友不足
                 for i in range(1, 3):
-                    res = TomatoOcrFindRangeClick("调查队", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20,
-                                                  sleep1=0.7)
+                    res = TomatoOcrFindRangeClick("调查队", x1=634, y1=602, x2=701, y2=1033, offsetX=20,
+                                                  offsetY=-20,sleep1=0.7)
                     if not res:
                         res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                         if not res:
@@ -74,8 +74,8 @@ class LvTuanTask:
                             # 退出组队
                             self.dailyTask.quitTeam()
                         else:
-                            res = TomatoOcrFindRangeClick("调查队", x1=626, y1=648, x2=709, y2=986, offsetX=20,
-                                                          offsetY=-20)
+                            res = TomatoOcrFindRangeClick("调查队", x1=634, y1=602, x2=701, y2=1033, offsetX=20,
+                                                          offsetY=-20,sleep1=0.7)
                             if res:
                                 break
                     else:
@@ -183,6 +183,14 @@ class LvTuanTask:
             return
 
         sleep(3)  # 等待跳转动画
+
+        # 检查剩余叶子
+        res, availableCount = TomatoOcrText(607,82,669,102, "叶子")
+        availableCount = safe_int_v2(availableCount)
+        if availableCount < 100:
+            Toast("旅团 - 商店兑换 - 剩余叶子不足")
+            tapSleep(90,1202) # 返回
+            return
 
         # 翻页（先返回上面）
         swipe(360, 750, 360, 850)

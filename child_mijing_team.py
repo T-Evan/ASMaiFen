@@ -159,8 +159,9 @@ def waitInvite():
 
     waitFight = False
     findDoneStatus = False
-    for i in range(1, 25):
-        waitTime = (i - 1) * 2
+    waitTime = 0
+    for i in range(25):
+        waitTime = waitTime + 2
         Toast(f'等待队长开始{waitTime}/50s')
 
         # 未进入房间兜底
@@ -168,6 +169,8 @@ def waitInvite():
         if res1:
             # 判断体力用尽提示
             res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
+
+        sleep(1.5)
 
         # 房间 - 特殊状态识别
         if fight_type == '梦魇带队' and not findDoneStatus:
@@ -181,6 +184,9 @@ def waitInvite():
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
         # 返回房间
         res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
+        if res1:
+            功能开关["fighting"] = 1
+            功能开关["needHome"] = 0
         if not res1:
             shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
             if shou_ye1:
@@ -198,7 +204,7 @@ def waitInvite():
                 Toast('恶龙 - 已完成挑战 - 进入战斗后自动留影')
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
-            break
+            waitTime = 0
         # 判断队友全部离队，退出房间
         allQuit, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
         if allQuit:
@@ -207,7 +213,7 @@ def waitInvite():
             sleep(1)
             break
         sleep(2)
-    if not waitFight:
+    if waitTime > 50:
         Toast(f'等待进入战斗超时，退出组队')
 
     if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:

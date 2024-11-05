@@ -4,7 +4,7 @@ import traceback
 import json
 
 # 导入动作模块
-from .res.ui.ui import 功能开关,loadConfig
+from .res.ui.ui import 功能开关, loadConfig
 from .shilian import ShiLianTask
 from .lvtuan import LvTuanTask
 from .lvren import LvRenTask
@@ -257,6 +257,7 @@ def main():
         runThreadBaoZouBoss()
         runThreadMijingTeam()
         runThreadAnotherLogin()
+        # runThreadCheckBlock()
         counter = 0
         while True:
             try:
@@ -295,10 +296,18 @@ def main():
                         if not res:
                             break
 
+                # 首页卡死检测（通过点击行李判断能否跳转成功）
+                status = dailyTask.checkGameStatus()
+                if not status:
+                    continue # 重启游戏，重新执行登录流程
+
                 # 营地活动（优先领取）
                 yingdiTask.yingdiTask()
                 # 日常（优先领取）
                 dailyTask.dailyTask()
+
+                # 检查背包是否已满
+                lvrenTask.deleteEquip(needDelete = True)
 
                 # 试炼
                 shilianTask.shilian()
@@ -343,7 +352,7 @@ def main():
                 # 判断执行时间超过4小时（重置每日任务）
                 if current_time - start_time > 60 * 60 * 4:
                     Toast(f"执行时间超过4小时，重置每日任务")
-                    初始化任务记录()
+                    初始化任务记录(False)
                     nextStartTime = int(time.time())
 
                 if total_wait != 0 and current_time - start_time >= total_wait:
@@ -351,7 +360,7 @@ def main():
                     功能开关["fighting"] = 0
                     功能开关["needHome"] = 0
                     action.Key.home()
-                    初始化任务记录()
+                    初始化任务记录(False)
                     sleep(need_wait_minute * 60)
                     nextStartTime = int(time.time())
 
@@ -361,12 +370,12 @@ def main():
                         Toast(f"运行 {need_switch_role_minute} 分钟，准备切换角色")
                         功能开关["fighting"] = 0
                         功能开关["needHome"] = 0
-                        初始化任务记录()
+                        初始化任务记录(False)
                         start_up.switchRole()
                         nextStartTime = int(time.time())
                     else:
                         tmpMinute = round((current_time - start_time) / 60, 2)
-                        tmpDiffMinute = round(total_switch_role_minute - ((current_time - start_time) / 60), 2)
+                        tmpDiffMinute = round(need_switch_role_minute - ((current_time - start_time) / 60), 2)
                         Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换角色")
 
                 # 定时切账号
@@ -374,7 +383,7 @@ def main():
                 if total_switch_account_minute != 0:
                     if current_time - start_time >= total_switch_account_minute:
                         Toast(f"运行 {need_switch_account_minute} 分钟，准备切换账号")
-                        初始化任务记录()
+                        初始化任务记录(False)
                         start_up.switchAccount()
                         print(功能开关)
                         nextStartTime = int(time.time())

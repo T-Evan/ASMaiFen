@@ -9,6 +9,7 @@ import time
 from .res.ui.ui import switch_lock
 from .res.ui.ui import TimeoutLock
 
+
 def swipe(x1, y1, x2, y2, dur=500):
     # print(x1, y1, x2, y2)
     action.slide(x1, y1, x2, y2, dur)
@@ -37,7 +38,7 @@ def compareColors(colorStr, diff=0.9):
 
 def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
     try:
-        lock =  TimeoutLock(timeLock)
+        lock = TimeoutLock(timeLock)
         try:
             with lock:
                 path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
@@ -62,9 +63,10 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
         print(f"imageFind发生异常: {e}")
         return False, 0, 0
 
+
 def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
     try:
-        lock =  TimeoutLock(timeLock)
+        lock = TimeoutLock(timeLock)
         try:
             with lock:
                 path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
@@ -84,9 +86,9 @@ def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10
         return False, []
 
 
-def imageFindClick(name, sleep1=1, confidence1=0.7, x1=0, y1=0, x2=720, y2=1280):
+def imageFindClick(name, sleep1=1, confidence1=0.7, x1=0, y1=0, x2=720, y2=1280, offsetX=0, offsetY=0):
     try:
-        lock =  TimeoutLock()
+        lock = TimeoutLock()
         try:
             with lock:
                 path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
@@ -98,7 +100,7 @@ def imageFindClick(name, sleep1=1, confidence1=0.7, x1=0, y1=0, x2=720, y2=1280)
             # 检查 res 中是否有 center_x 和 center_y 键
             if "center_x" in res and "center_y" in res:
                 x, y = res["center_x"], res["center_y"]
-                click(x, y)
+                click(x + offsetX, y + offsetY)
                 sleep(sleep1)
                 print(f"imageFindClick识别成功: {name}")
                 return True
