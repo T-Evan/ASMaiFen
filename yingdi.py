@@ -92,6 +92,9 @@ class YingDiTask:
                 Toast('星辰同行 - 已完成')
                 任务记录['星辰同行-完成'] = 1
                 TomatoOcrTap(94, 1186, 125, 1217, "回")  # 返回活动首页
+                res = TomatoOcrTap(232, 1093, 283, 1124, "领取")  # 一键领取
+                if res:
+                    tapSleep(232, 1093)  # 点击空白处
                 return
 
             TomatoOcrTap(255, 1076, 350, 1104, "每日任务")
@@ -155,6 +158,9 @@ class YingDiTask:
             res, _ = TomatoOcrText(549,282,625,303,'100/100')
             if res:
                 Toast('纸翼大作战 - 已完成')
+                res = TomatoOcrTap(359, 1056, 409, 1087, "领取")  # 一键领取
+                tapSleep(345, 1058)  # 点击空白处关闭
+                res = TomatoOcrTap(94, 1186, 125, 1217, "回")  # 返回活动首页
                 任务记录['纸飞机-完成'] = 1
                 return
 

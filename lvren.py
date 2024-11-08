@@ -96,10 +96,13 @@ class LvRenTask:
                     break
                 res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动烘焙")
                 if not res:
-                    # 开启自动升温
-                    tapSleep(515, 1030)
+                    res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动升温")
+                    if not res:
+                        # 开启自动升温
+                        tapSleep(515, 1030)
                 res = TomatoOcrTap(320, 1006, 399, 1033, "自动烘焙")
-
+                if not res:
+                    res = TomatoOcrTap(320, 1006, 399, 1033, "自动升温")
                 if res:
                     for i in range(1, 5):
                         res = TomatoOcrTap(326, 1017, 389, 1047, "出炉")

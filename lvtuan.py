@@ -81,7 +81,7 @@ class LvTuanTask:
                     else:
                         break
 
-            sleep(0.5)
+            sleep(1)
             res = TomatoOcrTap(307, 964, 412, 1002, "开启调查",sleep1=0.7)
             if res:
                 tapSleep(205, 760, 0.5)  # 添加队友
@@ -90,7 +90,7 @@ class LvTuanTask:
                 tapSleep(531, 674, 1)  # 添加队友3
                 tapSleep(532, 794, 1)  # 添加队友4
                 tapSleep(530, 910, 1)  # 添加队友5
-                res = TomatoOcrTap(70, 1200, 123, 1231, "返回", 10, 10, sleep1=0.5)
+                res = TomatoOcrTap(70, 1200, 123, 1231, "返回", 10, 10, sleep1=1)
                 res = TomatoOcrTap(331, 976, 386, 1005, "开始")
                 sleep(5)
                 if res:
@@ -201,7 +201,8 @@ class LvTuanTask:
                 rect=[78, 527, 639, 1104])
             if re:  # 有可购买商品时，继续判断
                 if 功能开关['旅团唤兽琴弦']:
-                    re = imageFindClick('旅团-唤兽琴弦', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '唤兽', 'match_mode': 'fuzzy'}], x1=93, y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团全价兽粮']:

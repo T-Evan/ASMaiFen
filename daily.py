@@ -1,5 +1,6 @@
 # 导包
 from PIL.ImageChops import offset
+from ascript.android.system import ShellListener
 
 from .特征库 import *
 from ascript.android.ui import Dialog
@@ -56,8 +57,8 @@ class DailyTask:
                 Toast('尝试返回游戏')
                 system.open("com.xd.cfbmf")
                 # 结束应用
-                # r = system.shell(f"am kill com.xd.cfbmf")
-                # r = system.shell(f"am force-stop com.xd.cfbmf")
+                # r = system.shell("am kill com.xd.cfbmf")
+                # r = system.shell("am force-stop com.xd.cfbmf")
                 # 重启游戏
                 # self.startupTask.start_app()
 
@@ -75,8 +76,8 @@ class DailyTask:
                     return
                 Toast('尝试重启游戏')
                 # 结束应用
-                r = system.shell(f"am kill com.xd.cfbmf")
-                r = system.shell(f"am force-stop com.xd.cfbmf")
+                # r = system.shell("am kill com.xd.cfbmf", L())
+                r = system.shell("am force-stop com.xd.cfbmf", L())
                 # 重启游戏
                 self.startupTask.start_app()
             if tryTimes > 23:
@@ -442,8 +443,8 @@ class DailyTask:
 
         if 任务记录["冒险手册-倒计时"] > 0:
             diffTime = time.time() - 任务记录["冒险手册-倒计时"]
-            if diffTime < 10 * 60:
-                Toast(f'日常 - 冒险手册 - 倒计时{round((10 * 60 - diffTime) / 60, 2)}min')
+            if diffTime < 3 * 60:
+                Toast(f'日常 - 冒险手册 - 倒计时{round((3 * 60 - diffTime) / 60, 2)}min')
                 sleep(1.5)
                 return
 
@@ -501,6 +502,12 @@ class DailyTask:
                 tapSleep(410, 390)
                 tapSleep(330, 390)
                 tapSleep(250, 390)
+            else:
+                # 点击宝箱（最右）
+                tapSleep(570, 390)
+                tapSleep(490, 390)
+                tapSleep(410, 390)
+                tapSleep(330, 390)
 
             if 功能开关['冒险手册完成后停止'] == 1:
                 # 判断是否完成日常
@@ -679,10 +686,12 @@ class DailyTask:
             if not res:
                 res = TomatoOcrTap(548, 548, 626, 568, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
                 if not res:
-                    res = TomatoOcrTap(546,628,630,653, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
+                    res = TomatoOcrTap(546, 628, 630, 653, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
                     if not res:
-                        Toast('日常 - 派对大师 - 未找到入口')
-                        return
+                        res = TomatoOcrTap(550, 713, 569, 734, "派", 30, -20)  # 适配新手试炼 - 下方入口
+                        if not res:
+                            Toast('日常 - 派对大师 - 未找到入口')
+                            return
         sleep(1)
 
         # 识别是否已完成
@@ -1327,22 +1336,46 @@ class DailyTask:
         if 功能开关["摸鱼时间到"] == 0:
             return
 
+        if 任务记录["日常-摸鱼时间到-完成"] == 1:
+            return
+
         Toast('日常 - 摸鱼时间到 - 开始')
+
         needCount = safe_int(功能开关["摸鱼重复次数"])
+        onlyDaily = False
         if needCount == '':
+            onlyDaily = True
+            # 默认摸鱼5次，领取每日奖励
             needCount = 5
+
         for i in range(needCount):
             # res = TomatoOcrTap(566, 379, 609, 404, "摸鱼")
             res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
             res2 = TomatoOcrTap(551, 462, 622, 488, "摸鱼", 15, -20)
             res3 = TomatoOcrTap(553, 546, 620, 570, "摸鱼", 15, -20)
-            res4 = TomatoOcrTap(325, 1095, 427, 1128, "开始匹配")
+            res4,_ = TomatoOcrText(325, 1095, 427, 1128, "开始匹配")
             if not res1 and not res2 and not res3 and not res4:
                 self.homePage()
                 res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
                 res2 = TomatoOcrTap(551, 462, 622, 488, "摸鱼", 15, -20)
                 res3 = TomatoOcrTap(553, 546, 620, 570, "摸鱼", 15, -20)
                 if not res1 and not res2 and not res3:
+                    return
+
+            # 检查是否已完成每日
+            if onlyDaily or 功能开关["摸鱼重复次数"] == '':
+                re, count = TomatoOcrText(126, 1011, 198, 1035, '摸鱼条数')  # 最后一格奖励
+                count = count.replace('条', '')
+                count = safe_int_v2(count)
+                if count > 15:
+                    Toast('摸鱼时间到 - 已完成每日奖励')
+                    任务记录["日常-摸鱼时间到-完成"] = 1
+                    TomatoOcrTap(317, 738, 388, 778, '喂鱼')
+                    point = FindColors.find("278,236,#F56142|280,236,#F56042|280,242,#F1593E|278,241,#F15B41",
+                                            rect=[208, 227, 611, 317])
+                    if point:
+                        tapSleep(point.x - 20, point.y + 30, 1)
+                        tapSleep(102, 1074)
                     return
 
             res1 = TomatoOcrTap(325, 1095, 427, 1128, "开始匹配")
@@ -1789,7 +1822,7 @@ class DailyTask:
             if 任务记录["首页卡死检测-倒计时"] > 0:
                 diffTime = time.time() - 任务记录["首页卡死检测-倒计时"]
                 if diffTime < 2 * 60:
-                    print(f'首页卡死检测 - 倒计时{round((2 * 60 - diffTime) / 60, 2)}min')
+                    print(f'游戏卡死检测 - 倒计时{round((2 * 60 - diffTime) / 60, 2)}min')
                     return True
 
             # 检测游戏是否卡死
@@ -1798,8 +1831,8 @@ class DailyTask:
 
             # 首页卡死检测（通过点击行李判断能否跳转成功）
             failCount = 0
-            for i in range(5):
-                return3 = TomatoOcrTap(93,1186,126,1220, '回', 10, 10)
+            for i in range(10):
+                return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)
                 res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                 if res:
                     re, _ = TomatoOcrText(156, 1046, 203, 1073, '熔炼')
@@ -1810,8 +1843,8 @@ class DailyTask:
                         break
                     if not re:
                         system.open("com.xd.cfbmf")
-                        sleep(10)
-                        Toast(f'游戏卡死，等待{i * 10}/50s')
+                        sleep(5)
+                        Toast(f'游戏卡死，等待{i * 5}/50s')
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         if res:
@@ -1820,15 +1853,15 @@ class DailyTask:
                                 # 切换页面成功，返回首页
                                 tapSleep(356, 1205)
                                 tapSleep(356, 1205)
+                                break
                             if not re:
                                 failCount = failCount + 1
-            if failCount > 3:
+            if failCount > 4:
                 # 切换页面失败，重启游戏
                 Toast('游戏进程卡死，尝试重启游戏')
                 # 结束应用
-                r = system.shell(f"am kill com.xd.cfbmf")
-                sleep(0.5)
-                r = system.shell(f"am force-stop com.xd.cfbmf")
+                # r = system.shell("am kill com.xd.cfbmf", L())
+                r = system.shell("am force-stop com.xd.cfbmf", L())
                 system.open("com.xd.cfbmf")
                 return False
             return True
@@ -1841,3 +1874,14 @@ class DailyTask:
             error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
             # 显示对话框
             print(error_message)
+
+
+class L(ShellListener):
+    def commandOutput(self, i: int, s: str):
+        print('?', s)
+
+    def commandTerminated(self, i: int, s: str):
+        pass
+
+    def commandCompleted(self, i: int, i1: int):
+        pass

@@ -5,6 +5,7 @@ import json
 
 # 导入动作模块
 from .res.ui.ui import 功能开关, loadConfig
+from .res.ui.ui import 任务记录
 from .shilian import ShiLianTask
 from .lvtuan import LvTuanTask
 from .lvren import LvRenTask
@@ -247,7 +248,10 @@ def main():
         total_switch_account_minute = need_switch_account_minute * 60
         total_switch_role_minute = need_switch_role_minute * 60
 
-        start_time = int(time.time())
+        任务记录["切换角色-倒计时"] = time.time()
+        任务记录["切换账号-倒计时"] = time.time()
+        任务记录["定时休息-倒计时"] = time.time()
+        任务记录["任务重置-倒计时"] = time.time()
 
         # 多账号处理
         start_up.multiAccount()
@@ -260,162 +264,142 @@ def main():
         # runThreadCheckBlock()
         counter = 0
         while True:
-            try:
-                if 功能开关["fighting"] == 1:
-                    Toast('战斗中 - 主进程暂停')
-                    sleep(20)
-                    continue
+            if 功能开关["fighting"] == 1:
+                Toast('战斗中 - 主进程暂停')
+                sleep(20)
+                continue
 
-                # 获取当前设备运行的APP信息
-                # info = Device.memory()
-                # # 返回单位是字节
-                # total_memory_mb = info[2] / (1024 ** 2)
-                # used_memory_mb = info[1] / (1024 ** 2)
-                # free_memory_mb = info[0] / (1024 ** 2)
-                # print(f"剩余内存:{free_memory_mb},已用内存{used_memory_mb},总共内存{total_memory_mb}")
-                # counter += 1
-                # if counter % 3 == 0:
-                #     runThreadNotice()
-                #     runThreadReturnHome()
-                #     runThreadBaoZouBoss()
-                #     runThreadMijingTeam()
-                #     runThreadAnotherLogin()
-                #     counter = 0  # 重置计数器
+            # 获取当前设备运行的APP信息
+            # info = Device.memory()
+            # # 返回单位是字节
+            # total_memory_mb = info[2] / (1024 ** 2)
+            # used_memory_mb = info[1] / (1024 ** 2)
+            # free_memory_mb = info[0] / (1024 ** 2)
+            # print(f"剩余内存:{free_memory_mb},已用内存{used_memory_mb},总共内存{total_memory_mb}")
+            # counter += 1
+            # if counter % 3 == 0:
+            #     runThreadNotice()
+            #     runThreadReturnHome()
+            #     runThreadBaoZouBoss()
+            #     runThreadMijingTeam()
+            #     runThreadAnotherLogin()
+            #     counter = 0  # 重置计数器
 
-                # 启动app
-                start_up.start_app()
-                if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and \
-                        功能开关['冒险总开关'] == 0:
-                    Toast('未开启功能，请检查功能配置')
-                    sleep(3)
+            # 启动app
+            start_up.start_app()
+            if 功能开关["营地总开关"] == 0 and 功能开关["日常总开关"] == 0 and 功能开关["旅团总开关"] == 0 and \
+                    功能开关['冒险总开关'] == 0:
+                Toast('未开启功能，请检查功能配置')
+                sleep(3)
 
-                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
-                    for i in range(5):
-                        Toast(f'重复推图到最新关卡 第{i + 1}次')
-                        res = dailyTask.newMap()
-                        if not res:
-                            break
+            if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                for i in range(5):
+                    Toast(f'重复推图到最新关卡 第{i + 1}次')
+                    res = dailyTask.newMap()
+                    if not res:
+                        break
 
-                # 首页卡死检测（通过点击行李判断能否跳转成功）
-                status = dailyTask.checkGameStatus()
-                if not status:
-                    continue # 重启游戏，重新执行登录流程
+            # 首页卡死检测（通过点击行李判断能否跳转成功）
+            status = dailyTask.checkGameStatus()
+            if not status:
+                continue # 重启游戏，重新执行登录流程
 
-                # 营地活动（优先领取）
-                yingdiTask.yingdiTask()
-                # 日常（优先领取）
-                dailyTask.dailyTask()
+            # 营地活动（优先领取）
+            yingdiTask.yingdiTask()
+            # 日常（优先领取）
+            dailyTask.dailyTask()
 
-                # 检查背包是否已满
-                lvrenTask.deleteEquip(needDelete = True)
+            # 检查背包是否已满
+            lvrenTask.deleteEquip(needDelete = True)
 
-                # 试炼
-                shilianTask.shilian()
+            # 试炼
+            shilianTask.shilian()
 
-                # 旅团相关
-                lvtuanTask.lvtuanTask()
+            # 旅团相关
+            lvtuanTask.lvtuanTask()
 
-                # 旅人相关
-                lvrenTask.lvrenTask()
+            # 旅人相关
+            lvrenTask.lvrenTask()
 
-                # 日常2
-                dailyTask.dailyTask2()
+            # 日常2
+            dailyTask.dailyTask2()
 
-                # 日常（最后领取）
-                dailyTask.dailyTaskEnd()
+            # 日常（最后领取）
+            dailyTask.dailyTaskEnd()
 
-                # 营地活动（优先领取）
-                yingdiTask.yingdiTask2()
+            # 营地活动（优先领取）
+            yingdiTask.yingdiTask2()
 
-                # 营地活动（最后领取）
-                yingdiTask.yingdiTaskEnd()
+            # 营地活动（最后领取）
+            yingdiTask.yingdiTaskEnd()
 
-                # 日常（最后领取一次冒险手册）
-                dailyTask.maoXianShouCe()
+            # 日常（最后领取一次冒险手册）
+            dailyTask.maoXianShouCe()
 
-                # 定时休息
-                current_time = int(time.time())
+            # 定时休息
+            current_time = int(time.time())
 
-                # 将时间戳转换为 datetime 对象
-                start_time_dt = datetime.fromtimestamp(start_time)
-                current_time_dt = datetime.fromtimestamp(current_time)
-                nextStartTime = 0
+            # 将时间戳转换为 datetime 对象
+            # 判断执行时间超过4小时（重置每日任务）
+            if current_time - 任务记录["任务重置-倒计时"] > 60 * 60 * 4:
+                Toast(f"执行时间超过4小时，重置每日任务")
+                sleep(1.5)
+                初始化任务记录(False)
+                任务记录["任务重置-倒计时"] = int(time.time())
 
-                # 判断是否跨天（重置每日任务）
-                if start_time_dt.date() != current_time_dt.date():
-                    # 判断当前时间是否大于凌晨5点
-                    if current_time_dt.time() > datetime.min.time().replace(hour=5):
-                        Toast(f"5点重置每日任务")
-                        初始化任务记录()
-                        nextStartTime = int(time.time())
+            if total_wait != 0 and current_time - 任务记录["定时休息-倒计时"] >= total_wait:
+                Toast(f"休息 {need_wait_minute} 分钟")
+                sleep(1.5)
+                功能开关["fighting"] = 0
+                功能开关["needHome"] = 0
+                action.Key.home()
+                初始化任务记录(False)
+                sleep(need_wait_minute * 60)
+                任务记录["定时休息-倒计时"] = int(time.time())
 
-                # 判断执行时间超过4小时（重置每日任务）
-                if current_time - start_time > 60 * 60 * 4:
-                    Toast(f"执行时间超过4小时，重置每日任务")
-                    初始化任务记录(False)
-                    nextStartTime = int(time.time())
-
-                if total_wait != 0 and current_time - start_time >= total_wait:
-                    Toast(f"休息 {need_wait_minute} 分钟")
+            # 定时切角色
+            if total_switch_role_minute != 0:
+                if current_time - 任务记录["切换角色-倒计时"] >= total_switch_role_minute:
+                    Toast(f"运行 {need_switch_role_minute} 分钟，准备切换角色")
+                    sleep(1.5)
                     功能开关["fighting"] = 0
                     功能开关["needHome"] = 0
-                    action.Key.home()
                     初始化任务记录(False)
-                    sleep(need_wait_minute * 60)
-                    nextStartTime = int(time.time())
+                    start_up.switchRole()
+                    任务记录["切换角色-倒计时"] = int(time.time())
+                else:
+                    tmpMinute = round((current_time - 任务记录["切换角色-倒计时"]) / 60, 2)
+                    tmpDiffMinute = round(need_switch_role_minute - ((current_time - 任务记录["切换角色-倒计时"]) / 60), 2)
+                    Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换角色")
+                    sleep(1.5)
 
-                # 定时切角色
-                if total_switch_role_minute != 0:
-                    if current_time - start_time >= total_switch_role_minute:
-                        Toast(f"运行 {need_switch_role_minute} 分钟，准备切换角色")
-                        功能开关["fighting"] = 0
-                        功能开关["needHome"] = 0
-                        初始化任务记录(False)
-                        start_up.switchRole()
-                        nextStartTime = int(time.time())
-                    else:
-                        tmpMinute = round((current_time - start_time) / 60, 2)
-                        tmpDiffMinute = round(need_switch_role_minute - ((current_time - start_time) / 60), 2)
-                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换角色")
+            # 定时切账号
+            current_time = int(time.time())
+            if total_switch_account_minute != 0:
+                if current_time - 任务记录["切换账号-倒计时"] >= total_switch_account_minute:
+                    Toast(f"运行 {need_switch_account_minute} 分钟，准备切换账号")
+                    sleep(1.5)
+                    初始化任务记录(False)
+                    start_up.switchAccount()
+                    print(功能开关)
+                    任务记录["切换账号-倒计时"] = int(time.time())
+                else:
+                    tmpMinute = round((current_time - 任务记录["切换账号-倒计时"]) / 60, 2)
+                    tmpDiffMinute = round(need_switch_account_minute - ((current_time - 任务记录["切换账号-倒计时"]) / 60), 2)
+                    Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换账号")
+                    sleep(1.5)
 
-                # 定时切账号
-                current_time = int(time.time())
-                if total_switch_account_minute != 0:
-                    if current_time - start_time >= total_switch_account_minute:
-                        Toast(f"运行 {need_switch_account_minute} 分钟，准备切换账号")
-                        初始化任务记录(False)
-                        start_up.switchAccount()
-                        print(功能开关)
-                        nextStartTime = int(time.time())
-                    else:
-                        tmpMinute = round((current_time - start_time) / 60, 2)
-                        tmpDiffMinute = round(need_switch_account_minute - ((current_time - start_time) / 60), 2)
-                        Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换账号")
-                if nextStartTime > 0:
-                    start_time = nextStartTime
-
-                # 定时重启脚本（3h）
-                # need_reboot_minute = 6 * 60
-                # need_reboot_minute = 0.1
-                # total_reboot_minute = need_reboot_minute * 60
-                # if current_time - start_time >= total_reboot_minute:
-                #     Toast(f"运行 {need_reboot_minute} 分钟,重启脚本")
-                #     system.reboot()
-                # else:
-                #     tmpMinute = round((current_time - start_time) / 60, 2)
-                #     tmpDiffMinute = round(need_reboot_minute - ((current_time - start_time) / 60), 2)
-                #     Toast(f"已运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后重启脚本")
-
-            except Exception as e:
-                # 处理异常
-                # 获取异常信息
-                exc_type, exc_value, exc_traceback = sys.exc_info()
-                # 输出异常信息和行号
-                file_name, line_number, _, _ = traceback.extract_tb(exc_traceback)[-1]
-                error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
-                # 显示对话框
-                print(error_message)
-                Dialog.confirm(error_message)
+            # 定时重启脚本（3h）
+            # need_reboot_minute = 6 * 60
+            # need_reboot_minute = 0.1
+            # total_reboot_minute = need_reboot_minute * 60
+            # if current_time - start_time >= total_reboot_minute:
+            #     Toast(f"运行 {need_reboot_minute} 分钟,重启脚本")
+            #     system.reboot()
+            # else:
+            #     tmpMinute = round((current_time - start_time) / 60, 2)
+            #     tmpDiffMinute = round(need_reboot_minute - ((current_time - start_time) / 60), 2)
+            #     Toast(f"已运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后重启脚本")
     except Exception as e:
         # 处理异常
         # 获取异常信息
@@ -425,7 +409,10 @@ def main():
         error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
         # 显示对话框
         print(error_message)
-        Dialog.confirm(error_message)
+        if error_message != '':
+            Dialog.confirm(error_message)
+        else:
+            Toast('检测到执行出现异常，请联系群主反馈')
     sys.exit()
 
 

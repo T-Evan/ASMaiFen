@@ -307,7 +307,7 @@ class ShiLianTask:
                 return self.elong()
 
         # 判断是否重复挑战（已开启过宝箱）
-        re1, x, y = imageFind('恶龙-宝箱金币')
+        re1, x, y = imageFind('恶龙-宝箱金币', confidence1=0.85)
         # re1 = TomatoOcrFindRange('最高', match_mode='fuzzy')
         if re1:
             if 功能开关["恶龙重复挑战"] == 0:
@@ -321,8 +321,11 @@ class ShiLianTask:
             re = imageFindClick('秘境-创建队伍', confidence1=0.8)
             if re:
                 tapSleep(551, 858)  # 点击 创建队伍 - 添加佣兵
-                res = TomatoOcrTap(311, 915, 407, 950, "创建队伍", 10, 10, sleep1=1)  # 创建队伍 - 创建队伍
-                res = TomatoOcrTap(326, 969, 390, 1000, "开始", 10, 10, sleep1=1)
+                res = TomatoOcrTap(311, 915, 407, 950, "创建队伍", 10, 10, sleep1=1.5)  # 创建队伍 - 创建队伍
+                res = TomatoOcrTap(326, 969, 390, 1000, "开始", 10, 10, sleep1=1.5)
+                if not res:
+                    res = TomatoOcrFindRangeClick("开始", x1=232, y1=885, x2=484, y2=1123, offsetX=10, offsetY=10,
+                                                  sleep1=1.5)
                 任务记录["试炼-恶龙-完成次数"] = 任务记录["试炼-恶龙-完成次数"] + 1
                 return self.fighting()
 
@@ -2153,8 +2156,8 @@ class ShiLianTask:
             if tryTimes > 10:
                 # Toast('尝试重启游戏')
                 # 结束应用
-                # r = system.shell(f"am kill com.xd.cfbmf")
-                # r = system.shell(f"am force-stop com.xd.cfbmf")
+                # r = system.shell("am kill com.xd.cfbmf")
+                # r = system.shell("am force-stop com.xd.cfbmf")
                 任务记录['试炼-秘境-体力消耗完成'] = 1
                 return
 

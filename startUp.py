@@ -1,6 +1,7 @@
 # 导包
 from ascript.android import system
 from six import print_
+from ascript.android.system import ShellListener
 
 from .特征库 import *
 from ascript.android.ui import Dialog
@@ -178,8 +179,8 @@ class StartUp:
         login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
         if not login1 and not login2:
             # 重启应用
-            r = system.shell(f"am kill com.xd.cfbmf")
-            r = system.shell(f"am force-stop com.xd.cfbmf")
+            # r = system.shell("am kill com.xd.cfbmf")
+            r = system.shell("am force-stop com.xd.cfbmf")
             system.open(self.app_name)
             sleep(5)
             for i in range(1, 6):
@@ -292,33 +293,28 @@ class StartUp:
             account_name = str(account_name)
             Toast('加载账号' + account_name)
             # 结束应用
-            r = system.shell(f"am kill com.xd.cfbmf")
-            sleep(0.5)
-            r = system.shell(f"am force-stop com.xd.cfbmf")
+            # r = system.shell("am kill com.xd.cfbmf", L())
+            r = system.shell("am force-stop com.xd.cfbmf", L())
             print(r)
-            sleep(1)
             oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
             # 删除文件夹
-            r = system.shell(f"rm -rf {oldPath1} 2>/dev/null")
-            sleep(1)
+            r = system.shell(f"rm -rf {oldPath1} 2>/dev/null", L())
             new_path1 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/"
-            flag1 = system.shell(f"cp -r -a {new_path1} {oldPath1}")
-            sleep(1)
-            oldPath2 = "/data/data/com.xd.cfbmf/"
-            new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
-            flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}")
-            print(flag1)
+            flag1 = system.shell(f"cp -r -a {new_path1} {oldPath1}", L())
+            # oldPath2 = "/data/data/com.xd.cfbmf/"
+            # new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
+            # flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}", L())
+            # print(flag1)
             global 功能开关
             configNum = 功能开关['账号' + str(account_name) + '配置']
             if configNum != 0 and configNum != '' and configNum != '0':
                 Toast(f'加载账号{account_name} + 加载配置{configNum}')
                 功能开关 = loadConfig(configNum)
                 print(功能开关)
-            sleep(0.5)
             # system.open("com.xd.cfbmf")
             # r = system.shell(f"am start -n com.xd.cfbmf")
-            # r = system.shell(f"am kill com.xd.cfbmf")
-            # r = system.shell(f"am force-stop com.xd.cfbmf")
+            # r = system.shell("am kill com.xd.cfbmf")
+            # r = system.shell("am force-stop com.xd.cfbmf")
             # system.open("com.xd.cfbmf")
             # r = system.shell(f"am start -a com.xd.cfbmf")
             # r = system.shell(f"am start -a com.xd.cfbmf")
@@ -369,3 +365,14 @@ class StartUp:
             Dialog.confirm("保存失败！请检查是否授予root权限")
         system.exit()
         return True
+
+class L(ShellListener):
+    def commandOutput(self, i: int, s: str):
+        print('?',s)
+
+    def commandTerminated(self, i: int, s: str):
+        pass
+
+    def commandCompleted(self, i: int, i1: int):
+        pass
+
