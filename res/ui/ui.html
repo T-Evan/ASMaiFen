@@ -317,8 +317,8 @@
                         刷赞配置推荐
                     </button>
                     <div class="flex-container">
-                        <input type="text" id="配置1名称" name="配置1" lay-verify="title" autocomplete="off"
-                               placeholder="配置1" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <label class="gray-text">1</label><input type="text" id="配置1名称" name="配置1" lay-verify="title" autocomplete="off"
+                               placeholder="配置1" class="layui-input" style="height: 30px;width: 75px;margin-right:5px;" >
                         <button onclick="saveConfigItems(1)"
                                 style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
                                 type="button">
@@ -330,7 +330,7 @@
                             读取
                         </button>
 
-                        <input type="text" id="配置2名称" name="配置2" lay-verify="title" autocomplete="off"
+                        <label class="gray-text">2</label><input type="text" id="配置2名称" name="配置2" lay-verify="title" autocomplete="off"
                                placeholder="配置2" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
                         <button onclick="saveConfigItems(2)"
                                 style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
@@ -344,8 +344,8 @@
                         </button>
                     </div>
                     <div class="flex-container">
-                        <input type="text" id="配置3名称" name="配置3" lay-verify="title" autocomplete="off"
-                               placeholder="配置3" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <label class="gray-text">3</label><input type="text" id="配置3名称" name="配置3" lay-verify="title" autocomplete="off"
+                               placeholder="配置3" class="layui-input" style="height: 30px;width: 75px;margin-right:5px;" >
                         <button onclick="saveConfigItems(3)"
                                 style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
                                 type="button">
@@ -357,7 +357,7 @@
                             读取
                         </button>
 
-                        <input type="text" id="配置4名称" name="配置4" lay-verify="title" autocomplete="off"
+                        <label class="gray-text">4</label><input type="text" id="配置4名称" name="配置4" lay-verify="title" autocomplete="off"
                                placeholder="配置4" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
                         <button onclick="saveConfigItems(4)"
                                 style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
@@ -371,8 +371,8 @@
                         </button>
                     </div>
                     <div class="flex-container">
-                        <input type="text" id="配置5名称" name="配置5" lay-verify="title" autocomplete="off"
-                               placeholder="配置5" class="layui-input" style="height: 30px;width: 80px;margin-right:5px;" >
+                        <label class="gray-text">5</label><input type="text" id="配置5名称" name="配置5" lay-verify="title" autocomplete="off"
+                               placeholder="配置5" class="layui-input" style="height: 30px;width: 75px;margin-right:5px;" >
                         <button onclick="saveConfigItems(5)"
                                 style="color: white; background-color: #1E9FFF;border: 2px solid #1E9FFF; border-radius: 5px;font-size: 12px;"
                                 type="button">
@@ -791,6 +791,9 @@
                         <div class="checkbox-item">
                             <input id="经验补剂五折" name="vehicle" type="checkbox" value="Bike">经验补剂五折<br>
                         </div>
+                        <div class="checkbox-item">
+                            <input id="金币箱五折" name="vehicle" type="checkbox" value="Bike">金币箱五折<br>
+                        </div>
                     </div>
                     <div class="flex-container">
                         <label for="秘宝地图">秘宝地图：</label>
@@ -805,6 +808,7 @@
                                     <option value="无夜城">无夜城</option>
                                     <option value="黄金穹顶">黄金穹顶</option>
                                     <option value="巨像的旷野">巨像的旷野</option>
+                                    <option value="白帆之都">白帆之都</option>
                                 </select>
                             </div>
                         </div>
@@ -856,7 +860,7 @@
                             <div class="layui-form">
                                 <div class="layui-input-inline">
                                     <select name="秘境地图" id="秘境地图" lay-filter="mijing1-filter">
-                                        <option value="">秘境地图</option>
+                                        <option value="最新地图">选择地图(默认最新)</option>
                                         <option value="原野">原野</option>
                                         <option value="森林">森林</option>
                                         <option value="沙漠">沙漠</option>
@@ -877,7 +881,7 @@
                                 <div class="layui-input-inline">
                                     <select name="秘境关卡" id="秘境关卡" lay-filter="mijing2-filter"
                                             lay-depend="mijing1-filter">
-                                        <option value="">秘境关卡</option>
+                                        <option value="最新关卡">选择关卡(默认最新)</option>
                                         <!-- 根据level1的选择动态加载的选项 -->
                                     </select>
                                 </div>
@@ -899,9 +903,9 @@
                             </div>
                         </div>
                         <div class="flex-container">
-                            <label for="队伍喊话">队伍喊话:</label>
+                            <label for="队伍喊话">队伍喊话:</label><label class="gray-text">(绝境/恶龙等均生效)</label>
                             <input type="text" id="队伍喊话" name="队伍喊话1" lay-verify="title" autocomplete="off"
-                                   placeholder="队伍喊话内容（留空不执行）" class="layui-input">
+                                   placeholder="喊话内容（留空不执行）" class="layui-input">
                         </div>
 <!--                        <input type="text" id="队伍喊话2" name="队伍喊话2" lay-verify="title" autocomplete="off"-->
 <!--                               placeholder="队伍喊话内容2（留空不执行）" class="layui-input">-->
@@ -958,6 +962,10 @@
                                 <input id="梦魇自动接收邀请" name="vehicle" type="checkbox"
                                        value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
                             </div>
+                            <div class="checkbox-item">
+                                <input id="梦魇无尽自动离队" name="vehicle" type="checkbox"
+                                       value="Bike">无尽模式自动离队<br>
+                            </div>
                         </div>
                         <div class="flex-container">
                             <label for="梦魇离队等待时间">自动离队等待时间:</label>
@@ -972,9 +980,9 @@
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input id="绝境自动接收邀请" name="vehicle" type="checkbox"
-                                       value="Bike">自动接收邀请<br>
-                                <input id="绝境不退出房间" name="vehicle" type="checkbox"
-                                       value="Bike">不退出房间（留在当前房间自动准备）<br>
+                                       value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
+<!--                                <input id="绝境不退出房间" name="vehicle" type="checkbox"-->
+<!--                                       value="Bike">不退出房间（留在当前房间自动准备）<br>-->
                             </div>
                         </div>
                         <div class="flex-container">
@@ -1132,12 +1140,6 @@
                             <input id="旅团任务" name="vehicle" type="checkbox" value="Bike">旅团任务<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="旅团调查队" name="vehicle" type="checkbox" value="Bike">旅团调查队<br>
-                        </div>
-                        <div class="checkbox-item">
-                            <input id="调查队自动接收邀请" name="vehicle" type="checkbox" value="Bike">调查队自动接收邀请<br>
-                        </div>
-                        <div class="checkbox-item">
                             <input id="旅团许愿墙" name="vehicle" type="checkbox" value="Bike">旅团许愿墙<br>
                         </div>
                     </div>
@@ -1146,6 +1148,18 @@
                         <input type="text" id="付费浇灌次数" name="付费浇灌次数" lay-verify="title"
                                autocomplete="off"
                                placeholder="付费浇灌次数" class="layui-input">
+                    </div>
+                    <legend>旅团调查队</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="旅团调查队" name="vehicle" type="checkbox" value="Bike">调查队挑战<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="调查队无钥匙继续" name="vehicle" type="checkbox" value="Bike">无钥匙继续挑战<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="调查队自动接收邀请" name="vehicle" type="checkbox" value="Bike">调查队自动接收邀请<br>
+                        </div>
                     </div>
                     <div class="flex-container">
                         <label for="调查队挑战次数">调查队挑战次数:</label>
@@ -1234,6 +1248,10 @@
                                 <input id="派对大师重复挑战" name="vehicle" type="checkbox" value="Bike">派对大师重复挑战<br>
                             </div>
                         </div>
+                        <div class="checkbox-item">
+                            <input id="其他签到活动" name="vehicle" type="checkbox" value="Bike">其他签到活动<br>
+                        </div>
+                        <label class="gray-text">(11.15："半周年庆典签到"、"大家的麦芬"、"盛大公演")</label><br>
                     </fieldset>
                     <fieldset>
                         <legend>摸鱼时间到</legend>
@@ -1272,7 +1290,6 @@
                     <legend>史莱姆大暴走</legend>
                     <label class="gray-text">(！游戏画质建议调整为高！)</label><br>
                     <input id="大暴走开关" name="vehicle" type="checkbox" value="Bike">大暴走开关<br>
-                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<label class="gray-text">(需手动进入战斗，战斗中自动走位)</label><br>
                     <div class="flex-container">
                         <label for="暴走目标阶段">目标阶段:</label>
                         <input type="text" id="暴走目标阶段" name="暴走目标阶段" lay-verify="title" autocomplete="off"
@@ -1291,6 +1308,7 @@
                             </div>
                         </div>
                     </div>
+                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<label class="gray-text">(需手动进入战斗，战斗中自动走位)</label><br>
                     <legend>自动入队设置</legend>
                     <input id="暴走自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
                     <div class="flex-container">
@@ -1405,7 +1423,7 @@
     }
 
     function dailyAllItems() {
-        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"绿洲","恶龙重复挑战":"false","营地总开关":"true","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"true","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"true","账号4配置":"0","秘境关卡":"白沙渊下的鼓动","账号4开关":"false","世界喊话间隔":"","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"","旅团任务":"true","自动升级技能":"true","旅团优秀经验":"false","升级1次麦乐兽":"true","摸鱼时间到":"false","宝藏湖":"true","旅团唤兽琴弦":"false","自动换图":"true","日常总开关":"true","旅团全价兽粮":"false","旅团总开关":"true","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"true","箱庭苗圃":"false","恶龙自动接收邀请":"false","秘宝钻石兑换次数":"3","旅团金币":"false","角色4开关":"false","月签到":"true","大暴走开关":"false","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"false","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","经验补剂五折":"true","配置3名称":"","秘宝地图":"艾特拉火山","配置5名称":"","秘宝收集":"true","原材料":"false","商店星星经验":"true","账号3配置":"0","邮件领取":"true","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"","恶龙宠物切换":"false","星星经验":"true","单飞后寻找结伴":"true","绝境自动接收邀请":"false","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"false","绝境开关":"false","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"false","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"3","暴走职能优先治疗":"false","钻石兑换门票次数":"3","自动更换装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"1","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"true","梦魇宠物名称":"光翼","商店超级成长零食三折":"true","账号5配置":"0","冒险手册领取":"true","角色1开关":"false","释放1次战术技能":"true","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"true","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"true","职能优先坦克":"false","暴走自动接收邀请":"false","秘境创建房间":"false","仓鼠百货":"true","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"true","钻石兑换卢恩次数":"3","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走雷电大王","招式创造":"true","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"false","队员不满足单飞":"true","不开宝箱":"false","星辰同行":"true","领取猫猫包果木":"true","登录好礼":"true","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"true","日礼包":"true","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"true","优先升级同一技能":"true","付费浇灌次数":"1","旅团浇树":"true","梦魇开关":"false","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"true","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"true","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"true","选择启动角色":"0","商店黑烬突破石五折":"true","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"true","优先升级同一技能至下一阶段":"false","喊话内容":"","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"true","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"true","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false"}';
+        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"最新地图","恶龙重复挑战":"false","营地总开关":"true","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"true","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"true","账号4配置":"0","秘境关卡":"最新关卡","账号4开关":"false","世界喊话间隔":"","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"","旅团任务":"true","自动升级技能":"true","旅团优秀经验":"false","升级1次麦乐兽":"true","摸鱼时间到":"false","宝藏湖":"true","旅团唤兽琴弦":"false","自动换图":"true","日常总开关":"true","旅团全价兽粮":"false","旅团总开关":"true","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"true","箱庭苗圃":"false","恶龙自动接收邀请":"false","秘宝钻石兑换次数":"3","旅团金币":"false","角色4开关":"false","月签到":"true","大暴走开关":"false","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"false","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","经验补剂五折":"true","配置3名称":"","秘宝地图":"艾特拉火山","配置5名称":"","秘宝收集":"true","原材料":"false","商店星星经验":"true","账号3配置":"0","邮件领取":"true","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"","恶龙宠物切换":"false","星星经验":"true","单飞后寻找结伴":"true","绝境自动接收邀请":"false","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"false","绝境开关":"false","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"false","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"3","暴走职能优先治疗":"false","钻石兑换门票次数":"3","自动更换装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"1","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"true","梦魇宠物名称":"光翼","商店超级成长零食三折":"true","账号5配置":"0","冒险手册领取":"true","角色1开关":"false","释放1次战术技能":"true","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"true","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"true","职能优先坦克":"false","暴走自动接收邀请":"false","秘境创建房间":"false","仓鼠百货":"true","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"true","钻石兑换卢恩次数":"3","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走雷电大王","招式创造":"true","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"false","队员不满足单飞":"true","不开宝箱":"false","星辰同行":"true","领取猫猫包果木":"true","登录好礼":"true","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"true","日礼包":"true","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"true","优先升级同一技能":"true","付费浇灌次数":"1","旅团浇树":"true","梦魇开关":"false","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"true","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"true","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"true","选择启动角色":"0","商店黑烬突破石五折":"true","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"true","优先升级同一技能至下一阶段":"false","喊话内容":"","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"true","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"true","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false"}';
         if (jsonString) {
             try {
                 console.log('读取的配置:', jsonString);
@@ -1639,6 +1657,7 @@
         setSwitchStatus("超级成长零食三折");
         setSwitchStatus("黑烬突破石五折");
         setSwitchStatus("经验补剂五折");
+        setSwitchStatus("金币箱五折");
 
         var 钻石兑换卢恩次数 = localStorage.getItem("钻石兑换卢恩次数");
         document.getElementById("钻石兑换卢恩次数").value = 钻石兑换卢恩次数;
@@ -1658,6 +1677,7 @@
         setSwitchStatus("箱庭苗圃");
         setSwitchStatus("派对大师");
         setSwitchStatus("派对大师重复挑战");
+        setSwitchStatus("其他签到活动");
         setSwitchStatus("露营打卡点");
         setSwitchStatus("舞会签到簿");
         setSwitchStatus("自动切换喊话频道");
@@ -1797,6 +1817,7 @@
         setSwitchStatus("梦魇开关");
         setSwitchStatus("梦魇添加佣兵");
         setSwitchStatus("梦魇自动接收邀请");
+        setSwitchStatus("梦魇无尽自动离队");
         var 梦魇自动离队时间 = localStorage.getItem("梦魇自动离队时间");
         document.getElementById("梦魇自动离队时间").value = 梦魇自动离队时间;
         setSwitchStatus("终末战开关");
@@ -1805,7 +1826,7 @@
         setSwitchStatus("绝境自动接收邀请");
         var 绝境自动离队时间 = localStorage.getItem("绝境自动离队时间");
         document.getElementById("绝境自动离队时间").value = 绝境自动离队时间;
-        setSwitchStatus("绝境不退出房间");
+<!--        setSwitchStatus("绝境不退出房间");-->
         setSwitchStatus("职能优先输出");
         setSwitchStatus("职能优先坦克");
         setSwitchStatus("职能优先治疗");
@@ -2079,6 +2100,7 @@
         箱庭苗圃 = saveSwitchStatus("箱庭苗圃");
         派对大师 = saveSwitchStatus("派对大师");
         派对大师重复挑战 = saveSwitchStatus("派对大师重复挑战");
+        其他签到活动 = saveSwitchStatus("其他签到活动");
         露营打卡点 = saveSwitchStatus("露营打卡点");
         舞会签到簿 = saveSwitchStatus("舞会签到簿");
         自动切换喊话频道 = saveSwitchStatus("自动切换喊话频道");
@@ -2108,6 +2130,7 @@
         超级成长零食三折 = saveSwitchStatus("超级成长零食三折");
         黑烬突破石五折 = saveSwitchStatus("黑烬突破石五折");
         经验补剂五折 = saveSwitchStatus("经验补剂五折");
+        金币箱五折 = saveSwitchStatus("金币箱五折");
 
         var 钻石兑换卢恩次数 = document.getElementById("钻石兑换卢恩次数").value;
         localStorage.setItem("钻石兑换卢恩次数", 钻石兑换卢恩次数);
@@ -2179,6 +2202,7 @@
         梦魇开关 = saveSwitchStatus("梦魇开关");
         梦魇添加佣兵 = saveSwitchStatus("梦魇添加佣兵");
         梦魇自动接收邀请 = saveSwitchStatus("梦魇自动接收邀请");
+        梦魇无尽自动离队 = saveSwitchStatus("梦魇无尽自动离队");
         var 梦魇自动离队时间 = document.getElementById("梦魇自动离队时间").value;
         localStorage.setItem("梦魇自动离队时间", 梦魇自动离队时间);
         var 绝境自动离队时间 = document.getElementById("绝境自动离队时间").value;
@@ -2187,7 +2211,7 @@
         终末战自动接收邀请 = saveSwitchStatus("终末战自动接收邀请");
         绝境开关 = saveSwitchStatus("绝境开关");
         绝境自动接收邀请 = saveSwitchStatus("绝境自动接收邀请");
-        绝境不退出房间 = saveSwitchStatus("绝境不退出房间");
+<!--        绝境不退出房间 = saveSwitchStatus("绝境不退出房间");-->
         职能优先输出 = saveSwitchStatus("职能优先输出");
         职能优先坦克 = saveSwitchStatus("职能优先坦克");
         职能优先治疗 = saveSwitchStatus("职能优先治疗");
@@ -2219,6 +2243,7 @@
         旅团任务 = saveSwitchStatus("旅团任务");
         旅团调查队 = saveSwitchStatus("旅团调查队");
         调查队自动接收邀请 = saveSwitchStatus("调查队自动接收邀请");
+        调查队无钥匙继续 = saveSwitchStatus("调查队无钥匙继续");
         旅团许愿墙 = saveSwitchStatus("旅团许愿墙");
 
         var 付费浇灌次数 = document.getElementById("付费浇灌次数").value;
@@ -2321,6 +2346,7 @@
             箱庭苗圃: 箱庭苗圃,
             派对大师: 派对大师,
             派对大师重复挑战: 派对大师重复挑战,
+            其他签到活动: 其他签到活动,
             露营打卡点: 露营打卡点,
             舞会签到簿: 舞会签到簿,
 
@@ -2343,6 +2369,7 @@
             商店超级成长零食三折: 超级成长零食三折,
             商店黑烬突破石五折: 黑烬突破石五折,
             商店经验补剂五折: 经验补剂五折,
+            商店金币箱五折: 金币箱五折,
 
             钻石兑换卢恩次数: 钻石兑换卢恩次数,
             讲述故事次数: 讲述故事次数,
@@ -2384,12 +2411,13 @@
             梦魇开关: 梦魇开关,
             梦魇添加佣兵: 梦魇添加佣兵,
             梦魇自动接收邀请: 梦魇自动接收邀请,
+            梦魇无尽自动离队: 梦魇无尽自动离队,
             梦魇自动离队时间: 梦魇自动离队时间,
             终末战开关: 终末战开关,
             终末战自动接收邀请: 终末战自动接收邀请,
             绝境开关: 绝境开关,
             绝境自动接收邀请: 绝境自动接收邀请,
-            绝境不退出房间: 绝境不退出房间,
+<!--            绝境不退出房间: 绝境不退出房间,-->
             绝境自动离队时间: 绝境自动离队时间,
             职能优先输出: 职能优先输出,
             职能优先坦克: 职能优先坦克,
@@ -2417,6 +2445,7 @@
             旅团浇树: 旅团浇树,
             旅团任务: 旅团任务,
             旅团调查队: 旅团调查队,
+            调查队无钥匙继续: 调查队无钥匙继续,
             调查队自动接收邀请: 调查队自动接收邀请,
             旅团许愿墙: 旅团许愿墙,
             付费浇灌次数: 付费浇灌次数,

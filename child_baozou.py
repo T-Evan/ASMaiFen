@@ -329,6 +329,12 @@ def daBaoZouLeiDianBoss():
 
 
 def daBaoZouLieYanBoss():
+    # 判断是否为史莱姆战斗中
+    res, _ = TomatoOcrText(380, 217, 429, 247, '大王')
+    if not res:
+        sleep(5)
+        return
+
     功能开关['bossColor'] = ''
     功能开关['bossNumber0'] = ''
     功能开关['bossNumber1'] = ''
@@ -350,7 +356,7 @@ def daBaoZouLieYanBoss():
 
     # if 功能开关['bossLastNumber1'] == '' and 功能开关['bossLastNumber2'] == '':
     prob = 0.8
-    for _ in range(5):
+    for _ in range(3):
         if bossColor == '' and (左1数字 == '' and 右1数字 == ''):
             prob = prob - 0.1
         bossColor = ''
@@ -493,3 +499,5 @@ def daBaoZouLieYanBoss():
 
     if 功能开关['bossNumber0'] != '' or 功能开关['bossNumber1'] != '' or 功能开关['bossNumber2'] != '':
         sleep(1)
+    sleep(0.3)
+

@@ -209,7 +209,8 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # lw.show() # 展示
 # print(功能开关['角色4开关'])
 # if 功能开关['角色4开关'] == 0 or 功能开关['角色4开关'] == False:
-# loadConfig(1)
+# loadConfig(5)
+# print(功能开关)
 # system.exit()
 
 def main():
@@ -266,8 +267,8 @@ def main():
         while True:
             try:
                 if 功能开关["fighting"] == 1:
-                    Toast('战斗中 - 主进程暂停')
-                    sleep(20)
+                    # Toast('战斗中 - 主进程暂停')
+                    sleep(5)
                     continue
 
                 # 获取当前设备运行的APP信息

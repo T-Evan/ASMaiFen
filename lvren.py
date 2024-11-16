@@ -51,7 +51,7 @@ class LvRenTask:
 
         Toast('旅人 - 猫猫包 - 开始')
         self.dailyTask.homePage()
-        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人")
+        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
         res = TomatoOcrTap(564, 238, 630, 263, "猫猫包")
         sleep(1)
         res = TomatoOcrTap(615, 1030, 696, 1055, "猫猫烤箱")
@@ -79,13 +79,17 @@ class LvRenTask:
             if res:
                 while 1:
                     # 钻石兑换果木
-                    res, buyCount = TomatoOcrText(378, 895, 389, 910, needCount)  # 1/9
+                    res, buyCount = TomatoOcrText(277,533,434,569, needCount)  # 1/9
+                    buyCount = (buyCount.replace("每日限购", "").replace("/9", "").
+                                replace("(", "").replace(")", "").replace("（", "").
+                                replace("）", "").replace("/", "").replace("9", "").replace(" ", ""))
                     buyCount = safe_int(buyCount)
                     if buyCount == "" or buyCount >= needCount:
                         tapSleep(155, 1020)  # 点击空白处关闭
                         tapSleep(155, 1020)  # 点击空白处关闭
                         break
-                    res = TomatoOcrTap(338, 832, 379, 854, "购买")
+                    tapSleep(420, 407)  # 点击+1
+                    res = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.8)
                     tapSleep(155, 1020)  # 点击空白处关闭
 
         if 功能开关['猫猫包自动升温'] == 1:
@@ -228,7 +232,7 @@ class LvRenTask:
         if 任务记录["分解装备-倒计时"] > 0:
             diffTime = time.time() - 任务记录["分解装备-倒计时"]
             if diffTime < 10 * 60:
-                Toast(f'日常 - 分解装备 - 倒计时{round((10 * 60 - diffTime) / 60, 2)}min')
+                print(f'日常 - 分解装备 - 倒计时{round((10 * 60 - diffTime) / 60, 2)}min')
                 sleep(1.5)
                 return
 

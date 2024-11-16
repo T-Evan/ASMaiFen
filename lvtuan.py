@@ -82,6 +82,14 @@ class LvTuanTask:
                         break
 
             sleep(1)
+
+            # 检查剩余钥匙
+            if 功能开关['调查队无钥匙继续'] == "" or 功能开关['调查队无钥匙继续'] == 0:
+                res1, _ = TomatoOcrText(618,83,651,101, "0/7")
+                if res1:
+                    Toast('调查队 - 钥匙用尽 - 结束挑战')
+                    return
+
             res = TomatoOcrTap(307, 964, 412, 1002, "开启调查",sleep1=0.7)
             if res:
                 tapSleep(205, 760, 0.5)  # 添加队友

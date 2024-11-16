@@ -31,10 +31,22 @@ class StartUp:
     def start_app(self):
         global 功能开关
         # r = system.shell(f"start -n com.xd.cfbmf")
-        功能开关["fighting"] = 0
+        tryTimes = 0
 
         max_attempt = 12
         for attempt in range(max_attempt):
+            tryTimes = tryTimes + 1
+            if 功能开关["fighting"] == 1:
+                if tryTimes < 5:
+                    res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
+                    if res:
+                        sleep(30)
+                        continue
+                    Toast(f'返回首页 - 等待任务结束{tryTimes * 10}/50')
+                    sleep(10)
+                    continue
+
+            功能开关["fighting"] = 0
             system.open(self.app_name)
 
             # 识别是否进入登录页

@@ -31,6 +31,11 @@ class DailyTask:
             tryTimes = tryTimes + 1
             if 功能开关["fighting"] == 1:
                 if tryTimes < 5:
+                    res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
+                    if res:
+                        sleep(30)
+                        continue
+
                     Toast(f'返回首页 - 等待战斗结束{tryTimes * 10}/50')
                     sleep(10)
                     continue
@@ -51,7 +56,8 @@ class DailyTask:
                 # 暂不处理战败页启动，提高执行效率
                 # 判断战败页面
                 self.shilianTask.fight_fail()
-                quitTeamRe = self.quitTeam()
+                self.shilianTask.quitTeamFighting()
+                self.quitTeam()
 
             if tryTimes > 15:
                 Toast('尝试返回游戏')
@@ -248,6 +254,14 @@ class DailyTask:
         if 功能开关['世界喊话'] == "":
             return 1
 
+        # 避免与自动入队识别冲突
+        if 功能开关["fighting"] == 1:
+            Toast("世界喊话 - 其他任务执行中 - 等待5s")
+            sleep(3)
+            if 功能开关["fighting"] == 1:
+                Toast("世界喊话 - 其他任务执行中 - 返回")
+                return
+
         Toast("世界喊话 - 开始")
 
         need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
@@ -283,7 +297,11 @@ class DailyTask:
         tapSleep(472, 771, 0.5)
 
         if 功能开关['自动切换喊话频道']:
-            for i in range(1, 10):
+            for i in range(5):
+                # 避免与自动入队识别冲突
+                if 功能开关["fighting"] == 1:
+                    return
+
                 # 关闭喊话窗口
                 for j in range(3):
                     point = FindColors.find(
@@ -304,7 +322,7 @@ class DailyTask:
                 # 点击世界频道
                 # TomatoOcrTap(205, 75, 281, 108, '世界', 10, 10)
                 tapSleep(236, 83, 0.4)
-                res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10)
+                res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10, sleep1=0.8)
                 if not res:
                     continue
 
@@ -326,11 +344,12 @@ class DailyTask:
                 else:
                     最大频道数字 = safe_int_v2(最大频道数字[0])
                     print('最大', 最大频道数字)
+                最大频道数字 = 5
 
                 下一频道数字 = 当前频道数字 - 1
                 findNext = False
                 if 下一频道数字 < 1:
-                    tapSleep(442, 632)  # 点击最后一个频道
+                    tapSleep(200, 754, 0.5)  # 点击最后一个频道
                     findNext = True
                 else:
                     # print(下一频道数字)
@@ -338,7 +357,11 @@ class DailyTask:
                     print('下一频道：' + 下一频道)
                     # 寻找下一频道
                     for k in range(8):
-                        res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880)
+                        # 避免与自动入队识别冲突
+                        if 功能开关["fighting"] == 1:
+                            return
+                        res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10, sleep1=0.8)
+                        res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880, offsetX=10, offsetY=10)
                         if not res:
                             if 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 40:
                                 swipe(236, 828, 210, 381, 300)  # 翻20
@@ -356,6 +379,7 @@ class DailyTask:
                                 swipe(225, 714, 225, 814, 300)  # 上翻5
                                 sleep(0.5)
                                 swipe(137, 699, 358, 634, 50)
+                        res, _ = TomatoOcrText(296, 129, 427, 176, 下一频道)
                         if res:
                             findNext = True
                             break
@@ -403,6 +427,8 @@ class DailyTask:
                             if point:
                                 tapSleep(point.x, point.y, 1)
                             break
+
+        功能开关["fighting"] = 0
         return 0
 
     def dailyTaskEnd(self):
@@ -410,6 +436,11 @@ class DailyTask:
         self.huoDongMoYu()
         # 派对大师
         self.PaiDuiDaShi()
+        # 箱庭苗圃
+        self.XiangTingMiaoPu()
+        # 箱庭苗圃
+        self.QiTaQianDao()
+
         if 功能开关["日常总开关"] == 0:
             return
 
@@ -427,8 +458,6 @@ class DailyTask:
         self.dengLuHaoLi()
         # 限时特惠
         self.XianShiTeHui()
-        # 箱庭苗圃
-        self.XiangTingMiaoPu()
 
         # 前往新地图
         self.newMap()
@@ -1041,6 +1070,71 @@ class DailyTask:
                         TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
         功能开关['fighting'] = 0
 
+    # 其他签到活动（简单活动合集）
+    def QiTaQianDao(self):
+        if 功能开关["其他签到活动"] == 0:
+            return
+        # 半周年庆典签到
+        if 任务记录["半周年庆典签到"] == 0:
+            self.homePage()
+            res = TomatoOcrFindRangeClick('周年', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                          sleep1=0.8, match_mode='fuzzy')
+            if res:
+                Toast('半周年庆典签到 - 任务开始')
+                任务记录["半周年庆典签到"] = 1
+                res = CompareColors.compare("592,505,#F55F42|595,505,#F45F42|595,509,#F15A41")  # 匹配红点
+                if res:
+                    TomatoOcrTap(456, 509, 565, 544, '庆典签到', sleep1=0.8)
+                    res = TomatoOcrFindRangeClick('领取', x1=7, y1=921, x2=701, y2=995, offsetX=30, offsetY=-20,
+                                                  sleep1=0.5)
+                    tapSleep(92, 1218)  # 返回
+                    tapSleep(92, 1218)
+                    tapSleep(92, 1218)
+
+        # 大家的麦芬
+        if 任务记录["大家的麦芬"] == 0:
+            self.homePage()
+            res = TomatoOcrFindRangeClick('大家的麦芬', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                          sleep1=0.5)
+            if res:
+                Toast('大家的麦芬 - 任务开始')
+                tapSleep(609, 1059)  # 铸造按钮
+                tapSleep(609, 1059)
+                tapSleep(345, 1208)  # 点击空白
+                tapSleep(345, 1208)  # 点击空白
+                tapSleep(213, 307)  # 点击宝箱
+                tapSleep(263, 304)  # 点击宝箱
+                tapSleep(377, 310)  # 点击宝箱
+                tapSleep(476, 307)  # 点击宝箱
+                tapSleep(584, 303)  # 点击宝箱
+                tapSleep(345, 1208)  # 点击空白
+                tapSleep(345, 1208)  # 点击空白
+                TomatoOcrTap(94, 1188, 126, 1218, '回')
+                任务记录["大家的麦芬"] = 1
+            else:
+                Toast('大家的麦芬 - 未找到入口')
+
+        # 盛大公演
+        if 任务记录["盛大公演"] == 0:
+            self.homePage()
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
+            # 判断是否在营地页面
+            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            if res:
+                res = TomatoOcrFindRangeClick('公演', match_mode='fuzzy', x1=7, y1=797, x2=96, y2=1144, offsetX=30,
+                                              offsetY=-20,
+                                              sleep1=0.8)
+                if res:
+                    Toast('盛大公演 - 任务开始')
+                    res = TomatoOcrTap(624, 895, 713, 921, "登录奖励", sleep1=0.5)
+                    res = TomatoOcrFindRangeClick('可领取', x1=101, y1=389, x2=622, y2=1068, offsetX=30, offsetY=-20,
+                                                  sleep1=0.5)
+                    tapSleep(90, 1204)  # 返回
+                    tapSleep(90, 1204)
+                    任务记录["盛大公演"] = 1
+                else:
+                    Toast('盛大公演 - 未找到入口')
+
     # 箱庭苗圃
     def XiangTingMiaoPu(self):
         if 功能开关["箱庭苗圃"] == 0:
@@ -1150,15 +1244,15 @@ class DailyTask:
         Toast('日常 - 限时特惠 - 开始')
 
         self.homePage()
-        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
         # 判断是否在营地页面
         res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
         if not res:
             return
 
-        res = TomatoOcrTap(98, 1026, 175, 1047, "限时特惠", 30, -20)
-        if not res:
-            res = TomatoOcrTap(99, 940, 175, 958, "限时特惠", 30, -20)
+        res = TomatoOcrFindRangeClick('限时', match_mode='fuzzy', x1=93, y1=732, x2=184, y2=1063, offsetX=30,
+                                      offsetY=-20,
+                                      sleep1=0.8)
         if res:
             Toast('限时特惠 - 领取')
             tapSleep(595, 153)  # 点击特惠宝箱
@@ -1286,6 +1380,9 @@ class DailyTask:
         if 功能开关["BBQ派对"] == 0:
             return
 
+        if 任务记录["BBQ派对"] == 1:
+            return
+
         Toast('日常 - BBQ派对 - 开始')
         self.homePage()
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
@@ -1302,12 +1399,22 @@ class DailyTask:
             res, availableCount = TomatoOcrText(615, 81, 653, 102, "烤刷数量")  # 1/9
             availableCount = safe_int(availableCount)
             if availableCount == "" or availableCount == 0:
-                res = TomatoOcrTap(96, 1200, 129, 1232, "回", 10, 10)  # 返回
                 break
-
             res = TomatoOcrTap(433, 1091, 533, 1122, "连续烧烤")
             sleep(5)
-            tapSleep(360, 1220)  # 点击空白处
+        tapSleep(271, 282)
+        tapSleep(271, 282)
+        tapSleep(347, 277)
+        tapSleep(347, 277)
+        tapSleep(424, 271)
+        tapSleep(424, 271)
+        tapSleep(502, 276)
+        tapSleep(502, 276)
+        tapSleep(571, 274)
+        tapSleep(571, 274)
+        tapSleep(360, 1220)  # 点击空白处
+        任务记录["BBQ派对"] = 1
+        res = TomatoOcrTap(96, 1200, 129, 1232, "回", 10, 10)  # 返回
 
     # 火力全开
     def huoLiQuanKai(self):
@@ -1353,7 +1460,7 @@ class DailyTask:
             res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
             res2 = TomatoOcrTap(551, 462, 622, 488, "摸鱼", 15, -20)
             res3 = TomatoOcrTap(553, 546, 620, 570, "摸鱼", 15, -20)
-            res4,_ = TomatoOcrText(325, 1095, 427, 1128, "开始匹配")
+            res4, _ = TomatoOcrText(325, 1095, 427, 1128, "开始匹配")
             if not res1 and not res2 and not res3 and not res4:
                 self.homePage()
                 res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
@@ -1540,7 +1647,7 @@ class DailyTask:
                         buyCount = ""
                         for p in range(5):
                             # res, buyCount = TomatoOcrText(379, 930, 394, 947, "每日限购次数")  # 1/9
-                            res, buyCount = TomatoOcrText(268, 921, 431, 970, "每日限购次数")  # 1/9
+                            res, buyCount = TomatoOcrText(276, 531, 434, 571, "每日限购次数")  # 1/9
                             buyCount = (buyCount.replace("每日限购", "").replace("/9", "").
                                         replace("(", "").replace(")", "").replace("（", "").
                                         replace("）", "").replace("/", "").replace("9", "").replace(" ", ""))
@@ -1553,11 +1660,12 @@ class DailyTask:
                         if buyCount != 0 and buyCount >= needCount:
                             if buyCount >= needCount:
                                 任务记录["日常-骑兽乐园-完成"] = 1
-                            TomatoOcrTap(70, 1202, 122, 1232, "返回", 10, 10, sleep1=0.5)  # 返回芙
+                            TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.5)  # 返回芙
                             break
-                        re = TomatoOcrTap(318, 863, 401, 883, "购买道具", 10, 10, sleep1=0.5)
+                        tapSleep(420, 407)  # 点击+1
+                        re = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.9)
                         if not re:
-                            TomatoOcrFindRangeClick('购买道具', x1=211, y1=850, x2=532, y2=1035, sleep1=0.5)
+                            re = TomatoOcrFindRangeClick('购买', x1=123, y1=181, x2=623, y2=519, sleep1=0.9)
                         if re:
                             tapSleep(550, 1080, 0.5)  # 点击空白处关闭
                 else:
@@ -1638,11 +1746,11 @@ class DailyTask:
                 needCount = 0
             if needCount > 0:
                 for i in range(1, 5):
-                    res = TomatoOcrTap(571, 261, 645, 287, "兑换卢恩", 10, 10, sleep1=0.5)
+                    res = TomatoOcrTap(571, 261, 645, 287, "兑换卢恩", 10, 10, sleep1=0.8)
                     buyCount = ""
                     for p in range(1, 5):
                         # res, buyCount = TomatoOcrText(375, 944, 387, 960, "已购买次数")  # 1/9
-                        res, buyCount = TomatoOcrText(284, 935, 425, 968, "已购买次数")  # 1/9
+                        res, buyCount = TomatoOcrText(276, 531, 434, 571, "已购买次数")  # 1/9
                         buyCount = (buyCount.replace("每日限购", "").replace("/15", "").replace("（", "").
                                     replace("）", "").replace("(", "").replace(")", "").
                                     replace("/", "").replace("15", "").replace(" ", ""))
@@ -1651,12 +1759,13 @@ class DailyTask:
                         if buyCount != "":
                             break
                     if buyCount != 0 and (buyCount == "" or buyCount >= needCount):
-                        res = TomatoOcrTap(70, 1202, 122, 1232, "返回", 10, 10, sleep1=0.5)  # 返回芙芙小铺，继续
+                        res = TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.5)  # 返回芙芙小铺，继续
                         任务记录["日常-招式创造-完成"] = 1
                         break
-                    res = TomatoOcrTap(318, 876, 398, 898, "购买道具", 10, 10, sleep1=0.5)
+                    tapSleep(420, 407)  # 点击+1
+                    res = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.9)
                     if not res:
-                        TomatoOcrFindRangeClick('购买道具', x1=211, y1=850, x2=532, y2=1035, sleep1=0.5)
+                        res = TomatoOcrFindRangeClick('购买', x1=123, y1=181, x2=623, y2=519, sleep1=0.9)
                     if res:
                         tapSleep(185, 1024)  # 点击空白处关闭
                         任务记录["日常-招式创造-完成"] = 1
@@ -1821,21 +1930,32 @@ class DailyTask:
 
             if 任务记录["首页卡死检测-倒计时"] > 0:
                 diffTime = time.time() - 任务记录["首页卡死检测-倒计时"]
-                if diffTime < 2 * 60:
-                    print(f'游戏卡死检测 - 倒计时{round((2 * 60 - diffTime) / 60, 2)}min')
+                if diffTime < 3 * 60:
+                    print(f'游戏卡死检测 - 倒计时{round((3 * 60 - diffTime) / 60, 2)}min')
                     return True
+
+            # 匹配行李图标亮着，新号为灰色，不处理
+            re = CompareColors.compare("287,1224,#AC8B62|285,1218,#AC8B62|285,1199,#9F7C55|287,1210,#9F7C55")
+            if not re:
+                return True
 
             # 检测游戏是否卡死
             Toast('检测游戏是否卡死')
             任务记录["首页卡死检测-倒计时"] = time.time()
 
+            # 避免与自动入队冲突
+            功能开关["fighting"] = 1
+
             # 首页卡死检测（通过点击行李判断能否跳转成功）
             failCount = 0
             for i in range(10):
-                return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)
-                res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
+                return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)  # 简单尝试返回首页
+                res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击战斗失败确认
+                TomatoOcrFindRangeClick('准备')  # 避免点击开始瞬间队友离队，错误点击了开始匹配，兜底准备按钮
+                res = TomatoOcrTap(233, 1205, 281, 1234, "行李", sleep1=0.7)
                 if res:
-                    re, _ = TomatoOcrText(156, 1046, 203, 1073, '熔炼')
+                    re = CompareColors.compare(
+                        "598,511,#6584B9|598,497,#6584B9|598,506,#6584B9|598,512,#6584B9|600,503,#6283B8")  # 匹配衣柜按钮
                     if re:
                         # 切换页面成功，返回首页
                         tapSleep(356, 1205)
@@ -1848,7 +1968,8 @@ class DailyTask:
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         if res:
-                            re, _ = TomatoOcrText(156, 1046, 203, 1073, '熔炼')
+                            re = CompareColors.compare(
+                                "598,511,#6584B9|598,497,#6584B9|598,506,#6584B9|598,512,#6584B9|600,503,#6283B8")  # 匹配衣柜按钮
                             if re:
                                 # 切换页面成功，返回首页
                                 tapSleep(356, 1205)
@@ -1863,9 +1984,12 @@ class DailyTask:
                 # r = system.shell("am kill com.xd.cfbmf", L())
                 r = system.shell("am force-stop com.xd.cfbmf", L())
                 system.open("com.xd.cfbmf")
+                功能开关["fighting"] = 0
                 return False
+            功能开关["fighting"] = 0
             return True
         except Exception as e:
+            功能开关["fighting"] = 0
             # 处理异常
             # 获取异常信息
             exc_type, exc_value, exc_traceback = sys.exc_info()

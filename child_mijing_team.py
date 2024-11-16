@@ -28,7 +28,6 @@ def main():
 
 
 def waitInvite():
-    功能开关["fighting"] = 1
     tmpBx = 功能开关["秘境不开宝箱"]
     功能开关["秘境不开宝箱"] = 1
 
@@ -47,11 +46,11 @@ def waitInvite():
             Toast('不退出房间')
         else:
             quitTeamRe = shilianTask.quitTeam()
-            功能开关["fighting"] = 0
             功能开关["秘境不开宝箱"] = tmpBx
             return
 
     if res1:
+        功能开关["fighting"] = 1
         if fight_type == '':
             for i in range(1, 4):
                 resMengYan1, _ = TomatoOcrText(404, 587, 480, 611, "梦魇狂潮")  # 梦魇邀请
@@ -167,6 +166,8 @@ def waitInvite():
         # 未进入房间兜底
         res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
         if res1:
+            功能开关["fighting"] = 1
+            功能开关["needHome"] = 0
             # 判断体力用尽提示
             res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 
@@ -176,7 +177,7 @@ def waitInvite():
         if fight_type == '梦魇带队' and not findDoneStatus:
             re1, _ = TomatoOcrText(445, 375, 500, 402, "24/24")
             re2, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
-            if not re1 or re2:
+            if not re1 or (re2 and 功能开关['梦魇无尽自动离队'] == 1):
                 Toast('梦魇 - 未完成挑战 - 进入战斗后等待战斗结束')
                 fight_type = '梦魇挑战'
             else:
@@ -207,6 +208,19 @@ def waitInvite():
             waitTime = 0
         # 判断队友全部离队，退出房间
         allQuit, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
+        if not allQuit:
+            # 判断队友是否全为镜像
+            team1, _ = TomatoOcrText(187,810,218,826, "镜像")
+            if not team1:
+                team1, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
+            team2, _ = TomatoOcrText(344,809,377,827, "镜像")
+            if not team2:
+                team2, _ = TomatoOcrText(328,806,391,828, "等待加入")
+            team3, _ = TomatoOcrText(501,810,535,826, "镜像")
+            if not team3:
+                team3, _ = TomatoOcrText(483,806,549,828, "等待加入")
+            if team1 and team2 and team3:
+                allQuit = True
         if allQuit:
             Toast('队友全部离队')
             quitTeamRe = shilianTask.quitTeam()
@@ -216,10 +230,10 @@ def waitInvite():
     if waitTime > 50:
         Toast(f'等待进入战斗超时，退出组队')
 
-    if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
-        Toast('不退出房间')
-    else:
-        quitTeamRe = shilianTask.quitTeam()
+    # if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
+    #     Toast('不退出房间')
+    # else:
+    quitTeamRe = shilianTask.quitTeam()
     功能开关["fighting"] = 0
     功能开关["秘境不开宝箱"] = tmpBx
 
