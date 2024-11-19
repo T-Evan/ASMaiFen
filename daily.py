@@ -44,20 +44,16 @@ class DailyTask:
             # res6 = self.shilianTask.WaitFight()
 
             if tryTimes > 3:
-                point = FindColors.find(
-                    "95,88,#6483B8|104,87,#F6EFDC|109,88,#F0EBDC|112,91,#6582B8|112,94,#F9ECE0|106,100,#F4EEDE",
-                    rect=[61, 34, 322, 623], diff=0.93)
-                if point:
-                    Toast('收起喊话窗口')
-                    tapSleep(point.x, point.y)
+                self.closeLiaoTian()
 
             if tryTimes > 10:
                 system.open("com.xd.cfbmf")
                 # 暂不处理战败页启动，提高执行效率
                 # 判断战败页面
-                self.shilianTask.fight_fail()
-                self.shilianTask.quitTeamFighting()
-                self.quitTeam()
+                if 功能开关["fighting"] == 0:
+                    self.shilianTask.fight_fail()
+                    self.shilianTask.quitTeamFighting()
+                    self.quitTeam()
 
             if tryTimes > 15:
                 Toast('尝试返回游戏')
@@ -119,7 +115,7 @@ class DailyTask:
                 # TimeoutLock(switch_lock).release_lock()
                 Toast('已返回首页')
                 # sleep(0.5)
-                if needQuitTeam:
+                if 功能开关["fighting"] == 0 and needQuitTeam:
                     quitTeamRe = self.quitTeam()
 
                 status = self.checkGameStatus()
@@ -297,7 +293,7 @@ class DailyTask:
         tapSleep(472, 771, 0.5)
 
         if 功能开关['自动切换喊话频道']:
-            for i in range(5):
+            for i in range(3):
                 # 避免与自动入队识别冲突
                 if 功能开关["fighting"] == 1:
                     return
@@ -322,7 +318,7 @@ class DailyTask:
                 # 点击世界频道
                 # TomatoOcrTap(205, 75, 281, 108, '世界', 10, 10)
                 tapSleep(236, 83, 0.4)
-                res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10, sleep1=0.8)
+                res = TomatoOcrTap(546, 138, 625, 165, '切换频道', -20, 10, sleep1=0.8)
                 if not res:
                     continue
 
@@ -349,9 +345,10 @@ class DailyTask:
                 下一频道数字 = 当前频道数字 - 1
                 findNext = False
                 if 下一频道数字 < 1:
-                    tapSleep(200, 754, 0.5)  # 点击最后一个频道
-                    findNext = True
-                else:
+                    # tapSleep(200, 754, 0.5)  # 点击最后一个频道
+                    # findNext = True
+                    下一频道数字 = 5  # 尝试仍按指定频道切换，避免固定位置点击偶尔失效导致的刷屏
+                if 下一频道数字 > 0:
                     # print(下一频道数字)
                     下一频道 = '简体中文' + str(下一频道数字)
                     print('下一频道：' + 下一频道)
@@ -360,8 +357,11 @@ class DailyTask:
                         # 避免与自动入队识别冲突
                         if 功能开关["fighting"] == 1:
                             return
-                        res = TomatoOcrTap(546, 138, 625, 165, '切换频道', 10, 10, sleep1=0.8)
+                        re, _ = TomatoOcrText(318, 359, 397, 386, '选择频道')
+                        if not re:
+                            res = TomatoOcrTap(546, 138, 625, 165, '切换频道', -20, 10, sleep1=0.8)
                         res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880, offsetX=10, offsetY=10)
+                        sleep(0.8)
                         if not res:
                             if 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 40:
                                 swipe(236, 828, 210, 381, 300)  # 翻20
@@ -380,11 +380,19 @@ class DailyTask:
                                 sleep(0.5)
                                 swipe(137, 699, 358, 634, 50)
                         res, _ = TomatoOcrText(296, 129, 427, 176, 下一频道)
+                        if not res:
+                            res, name = TomatoOcrText(296, 129, 427, 176, 下一频道)
+                            if not res:
+                                name = name.replace('简体中文', '')
+                                res = name == str(下一频道数字)
                         if res:
                             findNext = True
                             break
                 if findNext:
                     for q in range(3):
+                        # 避免与自动入队识别冲突
+                        if 功能开关["fighting"] == 1:
+                            return
                         shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
                         shuru2 = False
                         if not shuru1:
@@ -428,6 +436,12 @@ class DailyTask:
                                 tapSleep(point.x, point.y, 1)
                             break
 
+        # 关闭喊话窗口
+        point = FindColors.find(
+            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+            rect=[11, 26, 364, 489])
+        if point:
+            tapSleep(point.x, point.y, 1)
         功能开关["fighting"] = 0
         return 0
 
@@ -1094,21 +1108,26 @@ class DailyTask:
         # 大家的麦芬
         if 任务记录["大家的麦芬"] == 0:
             self.homePage()
-            res = TomatoOcrFindRangeClick('大家的麦芬', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
-                                          sleep1=0.5)
+            res = TomatoOcrFindRangeClick('大家', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                          sleep1=0.5, match_mode='fuzzy')
             if res:
                 Toast('大家的麦芬 - 任务开始')
-                tapSleep(609, 1059)  # 铸造按钮
-                tapSleep(609, 1059)
+                tapSleep(609, 1059, 0.8)  # 铸造按钮
+                TomatoOcrTap(328, 751, 390, 781, '铸造', sleep1=0.6)
                 tapSleep(345, 1208)  # 点击空白
                 tapSleep(345, 1208)  # 点击空白
-                tapSleep(213, 307)  # 点击宝箱
-                tapSleep(263, 304)  # 点击宝箱
-                tapSleep(377, 310)  # 点击宝箱
-                tapSleep(476, 307)  # 点击宝箱
-                tapSleep(584, 303)  # 点击宝箱
-                tapSleep(345, 1208)  # 点击空白
-                tapSleep(345, 1208)  # 点击空白
+                res = FindColors.find("235,295,#F85949|231,293,#F46042|232,292,#F56043", rect=[80, 243, 641, 369],
+                                      diff=0.85)
+                if res:
+                    tapSleep(res.x, res.y + 10)
+                    tapSleep(345, 1208)  # 点击空白
+                    tapSleep(345, 1208)  # 点击空白
+                re = CompareColors.compare("691,803,#F25E41|691,798,#F96245|693,806,#FF5B49", diff=0.85)  # 里程碑
+                if re:
+                    tapSleep(669, 815)
+                    res = TomatoOcrFindRangeClick('领取', x1=435, y1=235, x2=606, y2=958, offsetX=30, offsetY=-20,
+                                                  sleep1=0.5)
+                    TomatoOcrTap(94, 1188, 126, 1218, '回')
                 TomatoOcrTap(94, 1188, 126, 1218, '回')
                 任务记录["大家的麦芬"] = 1
             else:
@@ -1171,7 +1190,7 @@ class DailyTask:
             tapSleep(473, 1076)  # 点击空白处
             tapSleep(473, 1076, 0.3)  # 点击空白处
 
-        for i in range(1, 5):
+        for i in range(4):
             res = TomatoOcrTap(595, 1025, 642, 1052, '浇水')
             sleep(2)
 
@@ -1217,15 +1236,23 @@ class DailyTask:
                 TomatoOcrTap(595, 1025, 642, 1052, '浇水')
                 sleep(2)
 
+            # 判断当前土地状态，判断是否继续翻页
+            res3 = TomatoOcrFindRangeClick('开放', 0.9, 14, 114, 482, 575, 1010, offsetY=-20, match_mode='fuzzy')
+            if res3:
+                break
             tapSleep(660, 689, 3)  # 翻下一页
 
         # 拜访
-        for i in range(1, 5):
+        for i in range(4):
             tapSleep(617, 1139, 2)  # 点击拜访
             res = TomatoOcrTap(246, 348, 287, 374, '旅团')
             if res:
                 tapSleep(527, 455 + 120 * i, 2)  # 点击拜访
-                available, _ = TomatoOcrText(643, 1062, 672, 1080, '0/2')
+                available, _ = TomatoOcrText(643, 1062, 672, 1080, '0/1')
+                if not available:
+                    available, _ = TomatoOcrText(643, 1062, 672, 1080, '0/2')
+                if not available:
+                    available, _ = TomatoOcrText(643, 1062, 672, 1080, '0/3')
                 if available:
                     Toast('箱庭苗圃-旅团浇水完成')
                     break
@@ -1955,7 +1982,7 @@ class DailyTask:
                 res = TomatoOcrTap(233, 1205, 281, 1234, "行李", sleep1=0.7)
                 if res:
                     re = CompareColors.compare(
-                        "598,511,#6584B9|598,497,#6584B9|598,506,#6584B9|598,512,#6584B9|600,503,#6283B8")  # 匹配衣柜按钮
+                        "565,486,#6584B9|570,486,#6584B9|576,484,#6584B9|582,484,#6584B9|585,487,#6583B8")  # 匹配衣柜按钮
                     if re:
                         # 切换页面成功，返回首页
                         tapSleep(356, 1205)
@@ -1963,14 +1990,17 @@ class DailyTask:
                         break
                     if not re:
                         system.open("com.xd.cfbmf")
+                        self.closeLiaoTian()
                         sleep(5)
                         Toast(f'游戏卡死，等待{i * 5}/50s')
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         if res:
-                            re = CompareColors.compare(
+                            re1 = CompareColors.compare(
                                 "598,511,#6584B9|598,497,#6584B9|598,506,#6584B9|598,512,#6584B9|600,503,#6283B8")  # 匹配衣柜按钮
-                            if re:
+                            re2 = CompareColors.compare(
+                                "315,1104,#FBF7EC|320,1114,#F9F4E7|331,1114,#D0C8BA|331,1114,#D0C8BA|341,1114,#F6F1E4")
+                            if re1 or re2:
                                 # 切换页面成功，返回首页
                                 tapSleep(356, 1205)
                                 tapSleep(356, 1205)
@@ -1998,6 +2028,20 @@ class DailyTask:
             error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
             # 显示对话框
             print(error_message)
+
+    def closeLiaoTian(self):
+        point = FindColors.find(
+            "95,88,#6483B8|104,87,#F6EFDC|109,88,#F0EBDC|112,91,#6582B8|112,94,#F9ECE0|106,100,#F4EEDE",
+            rect=[61, 34, 322, 623], diff=0.93)
+        if point:
+            Toast('收起喊话窗口')
+            tapSleep(point.x, point.y)
+
+        point = CompareColors.compare(
+            "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+        if point:
+            Toast('收起喊话窗口')
+            tapSleep(107, 93)
 
 
 class L(ShellListener):

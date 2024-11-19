@@ -38,10 +38,19 @@ class StartUp:
             tryTimes = tryTimes + 1
             if 功能开关["fighting"] == 1:
                 if tryTimes < 5:
+                    res, _ = TomatoOcrText(502, 187, 582, 213, '离开队伍')
+                    if res:
+                        return
                     res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
                     if res:
                         sleep(30)
                         continue
+
+                    point = CompareColors.compare(
+                        "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+                    if point:
+                        Toast('收起喊话窗口')
+                        tapSleep(107, 93)
                     Toast(f'返回首页 - 等待任务结束{tryTimes * 10}/50')
                     sleep(10)
                     continue
@@ -75,7 +84,7 @@ class StartUp:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
             if res2 or shou_ye1 or shou_ye2:
                 # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
-                return3 = TomatoOcrTap(93,1186,126,1220, '回', 10, 10)
+                return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)
                 if return3:
                     Toast('返回首页')
 
@@ -114,20 +123,23 @@ class StartUp:
             if 功能开关['选择启动区服'] != "":
                 启动区服 = safe_int_v2(功能开关['选择启动区服'])
                 if 启动区服 > 0:
-                    Toast(f'切换启动区服-{启动区服}区')
-                    tapSleep(358, 958, 0.7)
-                    for k in range(10):
-                        res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=146, y1=340, x2=183, y2=535, sleep1=0.7)
-                        if res:
-                            break
-                        if k < 5:
-                            swipe(228, 552 + k, 228, 440)  # 下翻
-                        if k > 5:
-                            swipe(228, 430 + k, 228, 552)  # 上翻
-                        sleep(1.5)
-                        if k == 9:
-                            Toast(f'未找到，{启动区服}区角色')
-                            tapSleep(325, 1117, 1)  # 关闭选区界面
+                    # 检查当前区服
+                    res, _ = TomatoOcrText(293, 948, 344, 976, f'{启动区服}服')
+                    if not res:
+                        Toast(f'切换启动区服-{启动区服}区')
+                        tapSleep(358, 958, 0.7)
+                        for k in range(10):
+                            res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=143, y1=187, x2=183, y2=541, sleep1=0.7)
+                            if res:
+                                break
+                            if k < 5:
+                                swipe(228, 552 + k, 228, 440)  # 下翻
+                            if k > 5:
+                                swipe(228, 430 + k, 228, 552)  # 上翻
+                            sleep(1.5)
+                            if k == 9:
+                                Toast(f'未找到，{启动区服}区角色')
+                                tapSleep(325, 1117, 1)  # 关闭选区界面
 
         login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅", sleep1=0.8)
         # 开始冒险
@@ -378,13 +390,13 @@ class StartUp:
         system.exit()
         return True
 
+
 class L(ShellListener):
     def commandOutput(self, i: int, s: str):
-        print('?',s)
+        print('?', s)
 
     def commandTerminated(self, i: int, s: str):
         pass
 
     def commandCompleted(self, i: int, i1: int):
         pass
-

@@ -4,7 +4,7 @@ from ascript.android import system
 from .特征库 import *
 from ascript.android.ui import Dialog
 from .baseUtils import *
-from .res.ui.ui import 功能开关
+from .res.ui.ui import 功能开关, 任务记录
 from .shilian import ShiLianTask
 from ascript.android.screen import FindColors
 
@@ -23,6 +23,11 @@ def main():
             #     Toast('已在房间中，跳过组队邀请识别')
             #     continue
             if 功能开关["fighting"] == 0:
+                # 识别角色名称，做特殊逻辑
+                if 任务记录["自动入队-AI发言"] == 0:
+                    res, name = TomatoOcrText(97, 80, 197, 102, '玩家名称')
+                    if name == '咸鱼搜麦乐芬':
+                        任务记录["自动入队-AI发言"] = 1
                 Toast('等待组队邀请')
                 waitInvite()
 
@@ -33,9 +38,10 @@ def waitInvite():
 
     res1, _ = TomatoOcrText(584, 651, 636, 678, "同意")
     res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
+    res3, _ = TomatoOcrText(450, 651, 506, 683, "准备")  # 恶龙准备
 
     fight_type = ''
-    if not res1 and not res2:
+    if not res1 and not res2 and not res3:
         res = TomatoOcrTap(615, 558, 686, 582, "正在组队")
         sleep(1)
         res, _ = TomatoOcrText(402, 337, 442, 361, "险境")
@@ -45,6 +51,11 @@ def waitInvite():
         if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
             Toast('不退出房间')
         else:
+            # 兜底结束战斗
+            res = TomatoOcrFindRangeClick('自动准备', x1=176, y1=1167, x2=517, y2=1257, offsetY=30, match_mode='fuzzy')
+            if res:
+                sleep(3)
+
             quitTeamRe = shilianTask.quitTeam()
             功能开关["秘境不开宝箱"] = tmpBx
             return
@@ -160,73 +171,104 @@ def waitInvite():
     findDoneStatus = False
     waitTime = 0
     for i in range(25):
-        waitTime = waitTime + 2
-        Toast(f'等待队长开始{waitTime}/50s')
+        waitTime = waitTime + 1
+        Toast(f'{fight_type}-等待队长开始{waitTime}/50s')
 
-        # 未进入房间兜底
-        res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
-        if res1:
-            功能开关["fighting"] = 1
-            功能开关["needHome"] = 0
-            # 判断体力用尽提示
-            res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
+        # 返回房间
+        failTeam = 0
+        for j in range(5):
+            res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+            res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+            if res6 or res7:
+                # 兜底，已在队伍中时，停止返回操作
+                功能开关["fighting"] = 1
+                功能开关["needHome"] = 0
+                break
 
-        sleep(1.5)
+            res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
+            res3, _ = TomatoOcrText(450, 651, 506, 683, "准备")  # 恶龙准备
+            if res2 or res3:
+                break
+
+            # 兜底结束战斗
+            res = TomatoOcrFindRangeClick('自动准备', x1=176, y1=1167, x2=517, y2=1257, offsetY=30, match_mode='fuzzy')
+            if res:
+                sleep(3)
+
+
+            res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
+            # 兜底入队失败
+            res2 = TomatoOcrTap(584, 651, 636, 678, "同意", sleep1=0.8)
+            if res2:
+                # 判断体力用尽提示
+                res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
+
+            if not res1 and not res2:
+                Toast(f'未进入房间{j}/ 5')
+                failTeam = failTeam + 1
+            sleep(0.5)
+        if failTeam > 3:
+            break
 
         # 房间 - 特殊状态识别
         if fight_type == '梦魇带队' and not findDoneStatus:
-            re1, _ = TomatoOcrText(445, 375, 500, 402, "24/24")
-            re2, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
-            if not re1 or (re2 and 功能开关['梦魇无尽自动离队'] == 1):
+            re1, _ = TomatoOcrText(427, 374, 489, 399, "24/24")
+            re2, _ = TomatoOcrText(431, 375, 486, 404, "24/24")
+            re3, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
+            if (not re1 and not re2) or (re3 and 功能开关['梦魇无尽自动离队'] == 1):
                 Toast('梦魇 - 未完成挑战 - 进入战斗后等待战斗结束')
                 fight_type = '梦魇挑战'
             else:
                 findDoneStatus = True
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
-        # 返回房间
-        res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
-        if res1:
-            功能开关["fighting"] = 1
-            功能开关["needHome"] = 0
-        if not res1:
-            shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
-            if shou_ye1:
-                Toast('未进入房间')
-                break
+
         if fight_type == '恶龙带队' and not findDoneStatus:
-            # 判断是否未开宝箱
-            re1 = CompareColors.compare("325,356,#F2A949|334,356,#F2A949|342,358,#F2A949")
-            # 未开宝箱，不退队
-            if not re1:
-                Toast('恶龙 - 未完成挑战 - 进入战斗后等待战斗结束')
-                fight_type = '恶龙挑战'
+            # 判断是否为当前等级地图
+            re, levelName1 = TomatoOcrText(365, 283, 440, 307, '建议职业')
+            re, levelName2 = TomatoOcrText(142, 602, 200, 621, '当前职业')
+            if levelName1 == levelName2:
+                # 判断是否未开宝箱
+                re1 = CompareColors.compare(
+                    "533,356,#DFB86D|533,348,#FAEAA8|536,339,#FFECB0|554,358,#EBC87E|552,350,#D79335")
+                # 未开宝箱，不退队
+                if not re1:
+                    Toast('恶龙 - 未完成挑战 - 进入战斗后等待战斗结束')
+                    fight_type = '恶龙挑战'
             else:
                 findDoneStatus = True
                 Toast('恶龙 - 已完成挑战 - 进入战斗后自动留影')
-        waitFight = shilianTask.WaitFight(fightType=fight_type)
-        if waitFight:
-            waitTime = 0
+
+        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+        res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+        if res6 or res7:
+            shilianTask.teamShoutAI(f'{fight_type}-等待开始~祝你游戏开心~', type='room')
+
         # 判断队友全部离队，退出房间
-        allQuit, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
-        if not allQuit:
-            # 判断队友是否全为镜像
-            team1, _ = TomatoOcrText(187,810,218,826, "镜像")
-            if not team1:
-                team1, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
-            team2, _ = TomatoOcrText(344,809,377,827, "镜像")
-            if not team2:
-                team2, _ = TomatoOcrText(328,806,391,828, "等待加入")
-            team3, _ = TomatoOcrText(501,810,535,826, "镜像")
-            if not team3:
-                team3, _ = TomatoOcrText(483,806,549,828, "等待加入")
-            if team1 and team2 and team3:
-                allQuit = True
+        if fight_type == '恶龙带队' or fight_type == '恶龙挑战':
+            allQuit, _ = TomatoOcrText(325, 558, 393, 585, "等待加入")
+            if not allQuit:
+                allQuit = CompareColors.compare(
+                    "186,405,#F2C173|189,405,#F2C173|192,405,#FFF5B4|194,405,#F4C376|192,399,#FCF1B3")  # 判断是否成为房主
+        else:
+            allQuit, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
+            if not allQuit:
+                team4 = CompareColors.compare(
+                    "217,280,#FDF3B6|221,279,#F2C274|224,280,#FFF6B5|221,276,#FFF7B6|230,287,#EBE3A7")  # 判断是否成为房主
+                team5 = CompareColors.compare(
+                    "187,404,#F2C174|189,404,#F3C379|191,400,#FFF7B6|192,405,#FFF5B4|198,400,#E9DAA2")  # 终末战 - 判断是否成为房主
+                if team4 or team5:
+                    allQuit = True
+
         if allQuit:
             Toast('队友全部离队')
             quitTeamRe = shilianTask.quitTeam()
             sleep(1)
             break
-        sleep(2)
+
+        waitFight = shilianTask.WaitFight(fightType=fight_type)
+        if waitFight:
+            waitTime = 0
+        sleep(1)
     if waitTime > 50:
         Toast(f'等待进入战斗超时，退出组队')
 

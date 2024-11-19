@@ -80,33 +80,33 @@ class YingDiTask:
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
-        res = TomatoOcrTap(500, 1201, 545, 1228, "同行")
+        res = TomatoOcrTap(500, 1201, 545, 1228, "同行", sleep1=0.8)
 
         if res:
             # 开启新生星辰
             TomatoOcrTap(292, 1086, 426, 1117, "开启新生星辰")
 
-            TomatoOcrTap(549, 313, 589, 336, "任务")
+            TomatoOcrTap(549, 313, 589, 336, "任务", sleep1=0.8)
             re, _ = TomatoOcrText(472, 301, 570, 336, '已领取')
             if re:
                 Toast('星辰同行 - 已完成')
                 任务记录['星辰同行-完成'] = 1
-                TomatoOcrTap(94, 1186, 125, 1217, "回")  # 返回活动首页
-                res = TomatoOcrTap(232, 1093, 283, 1124, "领取")  # 一键领取
+                TomatoOcrTap(94, 1186, 125, 1217, "回", sleep1=0.8)  # 返回活动首页
+                res = TomatoOcrTap(232, 1093, 283, 1124, "领取", sleep1=0.8)  # 一键领取
                 if res:
                     tapSleep(232, 1093)  # 点击空白处
                 return
 
-            TomatoOcrTap(255, 1076, 350, 1104, "每日任务")
-            TomatoOcrTap(496, 304, 547, 332, "领取")
+            TomatoOcrTap(255, 1076, 350, 1104, "每日任务", sleep1=0.8)
+            TomatoOcrTap(496, 304, 547, 332, "领取", sleep1=0.8)
             tapSleep(345, 1058)  # 点击空白处关闭
 
-            TomatoOcrTap(374, 1077, 472, 1106, "每周任务")
-            TomatoOcrTap(496, 304, 547, 332, "领取")
+            TomatoOcrTap(374, 1077, 472, 1106, "每周任务", sleep1=0.8)
+            TomatoOcrTap(496, 304, 547, 332, "领取", sleep1=0.8)
             tapSleep(345, 1058)  # 点击空白处关闭
 
-            TomatoOcrTap(94, 1186, 125, 1217, "回")  # 返回活动首页
-            res = TomatoOcrTap(232, 1093, 283, 1124, "领取")  # 一键领取
+            TomatoOcrTap(94, 1186, 125, 1217, "回", sleep1=0.8)  # 返回活动首页
+            res = TomatoOcrTap(232, 1093, 283, 1124, "领取", sleep1=0.8)  # 一键领取
             if res:
                 tapSleep(232, 1093)  # 点击空白处
 
@@ -220,7 +220,7 @@ class YingDiTask:
         Toast('营地任务 - 日礼包 - 开始')
         # 判断是否在营地页面
         res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
-        res2 = TomatoOcrTap(286, 1202, 340, 1229, "礼包")
+        res2 = TomatoOcrTap(286, 1202, 340, 1229, "礼包", sleep1=0.8)
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
@@ -231,13 +231,13 @@ class YingDiTask:
             if not hd1 and not hd2:
                 return
 
-        res = TomatoOcrTap(286, 1202, 340, 1229, "礼包")
+        res = TomatoOcrTap(286, 1202, 340, 1229, "礼包", sleep1=0.8)
         sleep(1)
         if res:
             任务记录["日礼包-完成"] = 1
-            res = TomatoOcrTap(148, 671, 198, 700, "免费")
+            res = TomatoOcrTap(148, 671, 198, 700, "免费", sleep1=0.8)
             if res:
-                res = TomatoOcrTap(339, 743, 379, 764, "免费")
+                res = TomatoOcrTap(339, 743, 379, 764, "免费", sleep1=0.8)
                 if res:
                     任务记录["日礼包-完成"] = 1
                     tapSleep(345, 1058)  # 点击空白处关闭
@@ -279,7 +279,7 @@ class YingDiTask:
                 # 上翻第二屏，继续识别
                 swipe(680, 451, 680, 804)
                 sleep(3)
-                isFind, x, y = imageFind('月签到',confidence1=0.7)
+                isFind, x, y = imageFind('月签到', confidence1=0.7)
                 if isFind:
                     break
         if isFind:
