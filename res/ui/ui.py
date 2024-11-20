@@ -116,6 +116,8 @@ def loadConfig(configNum):
 
     "自动入队-AI发言": 0,
     "AI发言-上一次发言": "",
+    "房主名称": "",
+    "带队次数": "",
 }
 
 def 初始化任务记录(initAll=True):

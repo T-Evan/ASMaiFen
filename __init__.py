@@ -23,6 +23,7 @@ from datetime import datetime
 from ascript.android.system import Device
 from ascript.android.ui import Loger
 from ascript.android import system
+from ascript.android.action import Path
 
 # ldE.set_log_level(10)  # Debug
 # ldE.set_log_level(20)  # Info
@@ -149,7 +150,7 @@ def kamiActive():
             now_device_id = Device.id()
             device_ids = json.loads(device_id)
             if now_device_id in device_id:
-                activeInfo = '当前设备已激活，' + '过期时间：' + formatted_date
+                activeInfo = '已激活，' + '过期时间：' + formatted_date
                 Toast(activeInfo, 3000)
                 sleep(2)
             else:
@@ -188,7 +189,6 @@ display = Device.display()
 if display.widthPixels != 720 or display.heightPixels != 1280:
     Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
     Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
-
 
 # debug
 # res = Ocr.mlkitocr_v2()
@@ -230,6 +230,7 @@ def main():
         功能开关["fighting"] = 0
         功能开关["fighting_baozou"] = 0
         功能开关["needHome"] = 0
+        功能开关["玩家名称"] = 0
 
         # 处理休息时间
         need_run_minute = safe_int(功能开关.get("定时运行", 0))  # 分钟
@@ -304,7 +305,7 @@ def main():
                 # 首页卡死检测（通过点击行李判断能否跳转成功）
                 status = dailyTask.checkGameStatus()
                 if not status:
-                    continue # 重启游戏，重新执行登录流程
+                    continue  # 重启游戏，重新执行登录流程
 
                 # 营地活动（优先领取）
                 yingdiTask.yingdiTask()
@@ -312,7 +313,7 @@ def main():
                 dailyTask.dailyTask()
 
                 # 检查背包是否已满
-                lvrenTask.deleteEquip(needDelete = True)
+                lvrenTask.deleteEquip(needDelete=True)
 
                 # 试炼
                 shilianTask.shilian()

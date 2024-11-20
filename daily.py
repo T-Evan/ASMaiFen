@@ -18,7 +18,7 @@ from ascript.android.action import Path
 from ascript.android import system
 import sys
 import traceback
-
+import random
 
 class DailyTask:
     def __init__(self):
@@ -29,6 +29,7 @@ class DailyTask:
         tryTimes = 0
         while True:
             tryTimes = tryTimes + 1
+            # 避免战斗中直接退出
             if 功能开关["fighting"] == 1:
                 if tryTimes < 5:
                     res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
@@ -39,9 +40,6 @@ class DailyTask:
                     Toast(f'返回首页 - 等待战斗结束{tryTimes * 10}/50')
                     sleep(10)
                     continue
-
-            # todo 区分是否进入的摸鱼活动
-            # res6 = self.shilianTask.WaitFight()
 
             if tryTimes > 3:
                 self.closeLiaoTian()
@@ -247,8 +245,18 @@ class DailyTask:
         任务记录["日常-释放1次战术技能-完成"] = 1
 
     def shijieShout(self):
-        if 功能开关['世界喊话'] == "":
+        if 功能开关['世界喊话'] == "" and 功能开关['世界喊话2'] == "" and 功能开关['世界喊话3'] == "":
             return 1
+
+        contentArr = []
+        if 功能开关['世界喊话'] != "":
+            contentArr.append(功能开关['世界喊话'])
+        if 功能开关['世界喊话2'] != "":
+            contentArr.append(功能开关['世界喊话2'])
+        if 功能开关['世界喊话3'] != "":
+            contentArr.append(功能开关['世界喊话3'])
+        if 功能开关['世界喊话4'] != "":
+            contentArr.append(功能开关['世界喊话4'])
 
         # 避免与自动入队识别冲突
         if 功能开关["fighting"] == 1:
@@ -269,28 +277,32 @@ class DailyTask:
                 Toast(f'日常 - 世界喊话 - 倒计时{round((need_dur_minute * 60 - diffTime) / 60, 2)}min')
                 return
 
-        self.homePage()
+        self.homePage(needQuitTeam=True)
 
-        res1 = TomatoOcrTap(18, 1098, 97, 1134, "点击输入", 10, 10)
-        res2 = False
-        if not res1:
-            res2 = TomatoOcrTap(17, 1103, 96, 1134, "点击输入", 10, 10)
-        if res1 or res2:
-            # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-            sleep(0.5)
-            # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
-            action.input(功能开关["世界喊话"])
-            tapSleep(360, 104, 0.5)  # 点击空白处确认输入
-            shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
-            if shuru:
-                action.input(功能开关["世界喊话"])
+        contents = random.choice(contentArr).split('|')
+        print(contents)
+        for content in contents:
+            print(content)
+            res1 = TomatoOcrTap(18, 1098, 97, 1134, "点击输入", 10, 10)
+            res2 = False
+            if not res1:
+                res2 = TomatoOcrTap(17, 1103, 96, 1134, "点击输入", 10, 10)
+            if res1 or res2:
+                # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
+                sleep(0.5)
+                # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
+                action.input(content)
                 tapSleep(360, 104, 0.5)  # 点击空白处确认输入
-            res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
-            if res:
-                任务记录["世界喊话-倒计时"] = time.time()
-                # tapSleep(472, 771, 0.5)
-        # 关闭喊话窗口
-        tapSleep(472, 771, 0.5)
+                shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
+                if shuru:
+                    action.input(content)
+                    tapSleep(360, 104, 0.5)  # 点击空白处确认输入
+                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
+                if res:
+                    任务记录["世界喊话-倒计时"] = time.time()
+                    # tapSleep(472, 771, 0.5)
+            # 关闭喊话窗口
+            tapSleep(472, 771, 0.8)
 
         if 功能开关['自动切换喊话频道']:
             for i in range(3):
@@ -340,7 +352,7 @@ class DailyTask:
                 else:
                     最大频道数字 = safe_int_v2(最大频道数字[0])
                     print('最大', 最大频道数字)
-                最大频道数字 = 5
+                最大频道数字 = 6
 
                 下一频道数字 = 当前频道数字 - 1
                 findNext = False
@@ -389,58 +401,61 @@ class DailyTask:
                             findNext = True
                             break
                 if findNext:
-                    for q in range(3):
-                        # 避免与自动入队识别冲突
-                        if 功能开关["fighting"] == 1:
-                            return
-                        shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
-                        shuru2 = False
-                        if not shuru1:
-                            shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
-                        if shuru1 or shuru2:
-                            # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-                            # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
-                            action.input(功能开关["世界喊话"])
-                            Toast('输入文字结束')
-                            sleep(0.5)
-                            # tapSleep(353, 427, 0.5)  # 点击空白处确认输入
-                            # re = TomatoOcrFindRangeClick('确定', 9, 591, 691, 1090)
+                    contents = random.choice(contentArr).split('|')
+                    for content in contents:
+                        for q in range(3):
+                            # 避免与自动入队识别冲突
+                            if 功能开关["fighting"] == 1:
+                                return
                             shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
                             shuru2 = False
                             if not shuru1:
                                 shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
                             if shuru1 or shuru2:
-                                continue
+                                # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
+                                # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
+                                action.input(content)
+                                Toast('输入文字结束')
+                                sleep(0.5)
+                                # tapSleep(353, 427, 0.5)  # 点击空白处确认输入
+                                # re = TomatoOcrFindRangeClick('确定', 9, 591, 691, 1090)
+                                shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
+                                shuru2 = False
+                                if not shuru1:
+                                    shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
+                                if shuru1 or shuru2:
+                                    continue
+                                else:
+                                    res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
+                                    if not res:
+                                        tapSleep(353, 427)  # 点击空白处确认输入
+                                        res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
+                                    if res:
+                                        tapSleep(333,792,0.5)
+                                        break
                             else:
                                 res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
                                 if not res:
                                     tapSleep(353, 427)  # 点击空白处确认输入
                                     res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
-                                # 关闭喊话窗口
-                                point = FindColors.find(
-                                    "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-                                    rect=[11, 26, 364, 489])
-                                if point:
-                                    tapSleep(point.x, point.y, 1)
-                                break
-                        else:
-                            res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
-                            if not res:
-                                tapSleep(353, 427)  # 点击空白处确认输入
-                                res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
-                            # 关闭喊话窗口
-                            point = FindColors.find(
-                                "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-                                rect=[11, 26, 364, 489])
-                            if point:
-                                tapSleep(point.x, point.y, 1)
-                            break
+                                if res:
+                                    tapSleep(333,792,0.5)
+                                    break
+                    # 关闭喊话窗口
+                    point = FindColors.find(
+                        "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                        rect=[11, 26, 364, 489])
+                    if point:
+                        Toast('关闭喊话窗口')
+                        tapSleep(point.x, point.y, 1)
+                    break
 
         # 关闭喊话窗口
         point = FindColors.find(
             "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
             rect=[11, 26, 364, 489])
         if point:
+            Toast('关闭喊话窗口')
             tapSleep(point.x, point.y, 1)
         功能开关["fighting"] = 0
         return 0
@@ -1204,9 +1219,15 @@ class DailyTask:
             res1 = TomatoOcrFindRangeClick('可种植', 0.9, 0.9, 114, 482, 575, 1010, offsetY=-20)
             sleep(1)
             if res1:
+                name = 功能开关['作物1']
+                Toast(f'种植{name}')
+                res, x, y = imageFind('箱庭-' + name, 0.9, 78, 1002, 634, 1128)
+                if not res:
+                    Toast(f'未找到{name}，种植默认作物')
+                    x, y = 129, 1046  # 默认前两个
                 line1 = Path(0, 3000)
                 # 移动初始点
-                line1.moveTo(129, 1046)
+                line1.moveTo(x, y)
                 # 使用二次贝塞尔曲线 从点(500,800) 到 (250,900)
                 line1.quadTo(129, 1046, 203, 891)
                 line1.quadTo(203, 891, 236, 565)
@@ -1218,9 +1239,15 @@ class DailyTask:
             res2 = TomatoOcrFindRangeClick('可种植', 0.9, 14, 114, 482, 575, 1010, offsetY=-20)
             sleep(1)
             if res2:
+                name = 功能开关['作物2']
+                Toast(f'种植{name}')
+                res, x, y = imageFind('箱庭-' + name, 0.9, 78, 1002, 634, 1128)
+                if not res:
+                    Toast(f'未找到{name}，种植默认作物')
+                    x, y = 219, 1040  # 默认前两个
                 line2 = Path(0, 5000)
                 # 移动初始点
-                line2.moveTo(219, 1040)
+                line2.moveTo(x, y)
                 # 拖动种子拖动到对应位置
                 line2.quadTo(219, 1040, 353, 890)
                 line2.quadTo(353, 890, 322, 691)
@@ -1689,6 +1716,10 @@ class DailyTask:
                                 任务记录["日常-骑兽乐园-完成"] = 1
                             TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.5)  # 返回芙
                             break
+                        re, ct = TomatoOcrText(336, 385, 396, 416, '准备购买次数')
+                        ct = safe_int(ct)
+                        if ct < needCount:
+                            tapSleep(420, 407)  # 点击+1
                         tapSleep(420, 407)  # 点击+1
                         re = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.9)
                         if not re:
@@ -1789,7 +1820,10 @@ class DailyTask:
                         res = TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.5)  # 返回芙芙小铺，继续
                         任务记录["日常-招式创造-完成"] = 1
                         break
-                    tapSleep(420, 407)  # 点击+1
+                    re,ct = TomatoOcrText(336,385,396,416,'准备购买次数')
+                    ct = safe_int(ct)
+                    if ct < needCount:
+                        tapSleep(420, 407)  # 点击+1
                     res = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.9)
                     if not res:
                         res = TomatoOcrFindRangeClick('购买', x1=123, y1=181, x2=623, y2=519, sleep1=0.9)
@@ -1883,6 +1917,7 @@ class DailyTask:
         res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
         if res1 or res2 or res3 or res4 or res5 or res6:
             功能开关["needHome"] = 0
+            功能开关["fighting"] = 1
             teamStatus = TomatoOcrTap(632, 570, 684, 598, "匹配中")
             if teamStatus:
                 Toast('取消匹配')
@@ -1894,11 +1929,13 @@ class DailyTask:
                 teamExist = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=105, y1=304, x2=631, y2=953)
                 if teamExist:
                     Toast('退出组队')
+                    功能开关["fighting"] = 0
                     return True
 
             res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
             if res4:
                 Toast("取消匹配")
+                功能开关["fighting"] = 0
                 return True
             res = TomatoOcrTap(501, 191, 581, 217, "离开队伍")
             if not res:
@@ -1908,7 +1945,9 @@ class DailyTask:
                 tapSleep(360, 740, 0.8)
             if res:
                 Toast("退出组队")
+                功能开关["fighting"] = 0
                 return True
+        功能开关["fighting"] = 0
         return False
 
     def moyuTeamShout(self, shoutText):

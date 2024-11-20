@@ -89,7 +89,9 @@ class StartUp:
                     Toast('返回首页')
 
                 功能开关["needHome"] = 0
-                Toast('已进入游戏')
+                res, name = TomatoOcrText(94,78,210,102, '玩家名称')
+                功能开关["玩家名称"] = name
+                Toast(f'{name}-已进入游戏')
                 return True
             else:
                 # 不在首页，尝试开始返回首页

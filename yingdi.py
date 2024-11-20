@@ -516,7 +516,10 @@ class YingDiTask:
                         TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.8)  # 返回芙
                         break
                     if buyCount != "":
-                        tapSleep(533, 565)  # 点击+1
+                        re, ct = TomatoOcrText(456,552,503,582, '准备购买次数')
+                        ct = safe_int(ct)
+                        if ct < needCount:
+                            tapSleep(533, 565)  # 点击+1
                         re = TomatoOcrTap(445, 642, 511, 669, "购买", 10, 10, sleep1=0.8)
         else:
             Toast('秘宝能量已满 - 跳过领取')

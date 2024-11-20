@@ -7,6 +7,7 @@ from .baseUtils import *
 from .res.ui.ui import 功能开关, 任务记录
 from .shilian import ShiLianTask
 from ascript.android.screen import FindColors
+import pymysql
 
 shilianTask = ShiLianTask()
 
@@ -25,8 +26,7 @@ def main():
             if 功能开关["fighting"] == 0:
                 # 识别角色名称，做特殊逻辑
                 if 任务记录["自动入队-AI发言"] == 0:
-                    res, name = TomatoOcrText(97, 80, 197, 102, '玩家名称')
-                    if name == '咸鱼搜麦乐芬':
+                    if 功能开关["玩家名称"] == '咸鱼搜麦乐芬':
                         任务记录["自动入队-AI发言"] = 1
                 Toast('等待组队邀请')
                 waitInvite()
@@ -51,11 +51,6 @@ def waitInvite():
         if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
             Toast('不退出房间')
         else:
-            # 兜底结束战斗
-            res = TomatoOcrFindRangeClick('自动准备', x1=176, y1=1167, x2=517, y2=1257, offsetY=30, match_mode='fuzzy')
-            if res:
-                sleep(3)
-
             quitTeamRe = shilianTask.quitTeam()
             功能开关["秘境不开宝箱"] = tmpBx
             return
@@ -79,7 +74,7 @@ def waitInvite():
             for i in range(1, 4):
                 resMiJing1, _ = TomatoOcrText(405, 588, 480, 611, "秘境之间")  # 秘境邀请
                 if resMiJing1:
-                    fight_type = "秘境"
+                    fight_type = "秘境带队"
                     break
         if fight_type == '':
             bitmap = screen.capture(380, 583, 510, 615)
@@ -134,7 +129,7 @@ def waitInvite():
             else:
                 Toast('同意暴走组队邀请')
 
-        if fight_type == '秘境':
+        if fight_type == '秘境带队':
             if 功能开关['秘境自动接收邀请'] == 0:
                 Toast('秘境带队未开启，拒绝秘境组队邀请')
                 功能开关["fighting"] = 0
@@ -169,14 +164,15 @@ def waitInvite():
 
     waitFight = False
     findDoneStatus = False
+    teamShout = False
     waitTime = 0
     for i in range(25):
-        waitTime = waitTime + 1
+        waitTime = waitTime + 2
         Toast(f'{fight_type}-等待队长开始{waitTime}/50s')
 
         # 返回房间
         failTeam = 0
-        for j in range(5):
+        for j in range(4):
             res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
             res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
             if res6 or res7:
@@ -190,12 +186,6 @@ def waitInvite():
             if res2 or res3:
                 break
 
-            # 兜底结束战斗
-            res = TomatoOcrFindRangeClick('自动准备', x1=176, y1=1167, x2=517, y2=1257, offsetY=30, match_mode='fuzzy')
-            if res:
-                sleep(3)
-
-
             res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
             # 兜底入队失败
             res2 = TomatoOcrTap(584, 651, 636, 678, "同意", sleep1=0.8)
@@ -204,10 +194,10 @@ def waitInvite():
                 res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 
             if not res1 and not res2:
-                Toast(f'未进入房间{j}/ 5')
+                Toast(f'未进入房间{j}/ 3')
                 failTeam = failTeam + 1
             sleep(0.5)
-        if failTeam > 3:
+        if failTeam >= 2:
             break
 
         # 房间 - 特殊状态识别
@@ -238,11 +228,6 @@ def waitInvite():
                 findDoneStatus = True
                 Toast('恶龙 - 已完成挑战 - 进入战斗后自动留影')
 
-        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
-        res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
-        if res6 or res7:
-            shilianTask.teamShoutAI(f'{fight_type}-等待开始~祝你游戏开心~', type='room')
-
         # 判断队友全部离队，退出房间
         if fight_type == '恶龙带队' or fight_type == '恶龙挑战':
             allQuit, _ = TomatoOcrText(325, 558, 393, 585, "等待加入")
@@ -265,10 +250,26 @@ def waitInvite():
             sleep(1)
             break
 
+        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+        res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+        if res6 or res7:
+            if not teamShout:
+                teamName, count, last_time = daiDuiCount(fight_type)
+                content = f'{fight_type}-等待开始~{teamName}'
+                if count < 3:
+                    shilianTask.teamShoutAI(f'{content}-初次相遇~给个关注叭', shoutType='room')
+                else:
+                    shilianTask.teamShoutAI(f'{content}-第{count}次相遇~祝你游戏开心',
+                                            shoutType='room')
+                teamShout = True
+                Toast(f'{content}-第{count}次相遇')
+                sleep(0.5)
+
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
             waitTime = 0
-        sleep(1)
+            teamShout = False
+        sleep(2)
     if waitTime > 50:
         Toast(f'等待进入战斗超时，退出组队')
 
@@ -280,3 +281,59 @@ def waitInvite():
     功能开关["秘境不开宝箱"] = tmpBx
 
     return
+
+
+def daiDuiCount(fightType='秘境'):
+    db = pymysql.connect(
+        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+        port=3307,  # 开发者后台,创建的数据库 “端口”
+        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+        password='233233',  # 开发者后台,创建的数据库 “初始密码”
+        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+        charset='utf8mb4'  ""
+    )  # 连接数据库
+
+    # 识别房主名称
+    if fightType == '恶龙带队' or fightType == '终末战带队':
+        res, teamName = TomatoOcrText(302, 580, 417, 602, "房主名称")
+        if teamName == "":
+            res, teamName = TomatoOcrText(306, 579, 413, 604, "房主名称")
+    else:
+        res, teamName = TomatoOcrText(153, 827, 254, 849, "房主名称")
+    count = 0
+    last_time = 0
+    now_time = int(time.time())
+
+    cursor = db.cursor()
+    sql = "SELECT * FROM daidui WHERE user_name	 = %s and team_name	= %s"
+    # 使用参数化查询
+    cursor.execute(sql, (功能开关['玩家名称'], teamName))
+    results = cursor.fetchall()
+    for row in results:
+        count = row[2]
+        last_time = row[3]
+
+    # 插入
+    if count == 0:
+        count = 1
+        # 构造 SQL 语句
+        sql = f"Insert into daidui (user_name,team_name,count,last_time) Values (%s,%s,%s,%s)"
+        # 使用参数化查询
+        cursor.execute(sql, (功能开关['玩家名称'], teamName, count, now_time))
+        db.commit()  # 不要忘了提交,不然数据上不去哦
+    else:
+        count = count + 1
+        # 构造 SQL 语句
+        sql = "UPDATE daidui SET count = %s, last_time = %s WHERE user_name = %s and team_name = %s"
+        # 使用参数化查询
+        cursor.execute(sql, (count, now_time, 功能开关['玩家名称'], teamName))
+        db.commit()  # 不要忘了提交,不然数据上不去哦
+
+    # 执行完之后要记得关闭游标和数据库连接
+    cursor.close()
+    # 执行完毕后记得关闭db,不然会并发连接失败哦
+    db.close()
+
+    任务记录['房主名称'] = teamName
+    任务记录['带队次数'] = count
+    return teamName, count, last_time
