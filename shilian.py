@@ -1583,7 +1583,7 @@ class ShiLianTask:
                     print(point.x, point.y)
                     tapSleep(point.x, point.y)
                 # 移动走位
-                if time.time() - 任务记录['战斗-上一次移动'] > 5:
+                if time.time() - 任务记录['战斗-上一次移动'] > 8:
                     imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
                     任务记录['战斗-上一次移动'] = time.time()
 
@@ -2507,9 +2507,22 @@ class ShiLianTask:
         contains_zan3 = any(zan in teamText3 for zan in moveList)
         if contains_zan1 or contains_zan2 or contains_zan3:
             # 移动走位
-            if time.time() - 任务记录['战斗-上一次移动'] > 5:
-                imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
-                任务记录['战斗-上一次移动'] = time.time()
+            imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+            任务记录['战斗-上一次移动'] = time.time()
+
+        # 判断当前时间，回复吉祥话
+        from datetime import datetime
+        now = datetime.now()
+        hour = now.hour
+        # 根据时间段选择吉祥话
+        if 5 <= hour < 12:
+            return "早上好，愿你今天元气满满！"
+        elif 12 <= hour < 18:
+            return "下午好，愿你此间战无不胜！"
+        elif 18 <= hour < 22:
+            return "晚上好，愿你开心顺利又一天！"
+        else:
+            return "夜深了，愿你今晚有个好梦！"
 
 
     # 判断角色死亡 & 队伍仅剩佣兵(名字长度均为2个)；离队
