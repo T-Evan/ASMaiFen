@@ -8,6 +8,7 @@ from .res.ui.ui import 功能开关, 任务记录
 from .shilian import ShiLianTask
 from ascript.android.screen import FindColors
 import pymysql
+import threading
 
 shilianTask = ShiLianTask()
 
@@ -26,7 +27,7 @@ def main():
             if 功能开关["fighting"] == 0:
                 # 识别角色名称，做特殊逻辑
                 if 任务记录["自动入队-AI发言"] == 0:
-                    if 功能开关["玩家名称"] == '咸鱼搜麦乐芬':
+                    if 功能开关["玩家名称"] == '咸鱼搜麦乐芬' or 功能开关["玩家名称"] == '养只狐狸':
                         任务记录["自动入队-AI发言"] = 1
                 Toast('等待组队邀请')
                 waitInvite()
@@ -194,8 +195,10 @@ def waitInvite():
                 res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 
             if not res1 and not res2:
-                Toast(f'未进入房间{j}/ 3')
-                failTeam = failTeam + 1
+                shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
+                if shou_ye1:
+                    Toast(f'未进入房间{j}/ 3')
+                    failTeam = failTeam + 1
             sleep(0.5)
         if failTeam >= 2:
             break
@@ -313,6 +316,35 @@ def daiDuiCount(fightType='秘境'):
         count = row[2]
         last_time = row[3]
 
+    # 执行完之后要记得关闭游标和数据库连接
+    cursor.close()
+    # 执行完毕后记得关闭db,不然会并发连接失败哦
+    db.close()
+
+    p = threading.Thread(target=daiDuiUpdate, args=(count, teamName, now_time))
+    p.start()
+
+    if count == 0:
+        count = 1
+    else:
+        count = count + 1
+
+    任务记录['房主名称'] = teamName
+    任务记录['带队次数'] = count
+    return teamName, count, last_time
+
+
+def daiDuiUpdate(count, teamName, now_time):
+    db = pymysql.connect(
+        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+        port=3307,  # 开发者后台,创建的数据库 “端口”
+        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+        password='233233',  # 开发者后台,创建的数据库 “初始密码”
+        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+        charset='utf8mb4'  ""
+    )  # 连接数据库
+    cursor = db.cursor()
+
     # 插入
     if count == 0:
         count = 1
@@ -333,7 +365,3 @@ def daiDuiCount(fightType='秘境'):
     cursor.close()
     # 执行完毕后记得关闭db,不然会并发连接失败哦
     db.close()
-
-    任务记录['房主名称'] = teamName
-    任务记录['带队次数'] = count
-    return teamName, count, last_time

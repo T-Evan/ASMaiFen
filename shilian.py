@@ -2288,7 +2288,8 @@ class ShiLianTask:
                 if point:
                     Toast('收起喊话窗口')
                     tapSleep(107, 93)
-                任务记录["队伍喊话-倒计时"] = time.time()
+                if content == "":
+                    任务记录["队伍喊话-倒计时"] = time.time()
 
                 return 1
 

@@ -1996,8 +1996,8 @@ class DailyTask:
 
             if 任务记录["首页卡死检测-倒计时"] > 0:
                 diffTime = time.time() - 任务记录["首页卡死检测-倒计时"]
-                if diffTime < 3 * 60:
-                    print(f'游戏卡死检测 - 倒计时{round((3 * 60 - diffTime) / 60, 2)}min')
+                if diffTime < 4 * 60:
+                    print(f'游戏卡死检测 - 倒计时{round((4 * 60 - diffTime) / 60, 2)}min')
                     return True
 
             # 匹配行李图标亮着，新号为灰色，不处理
