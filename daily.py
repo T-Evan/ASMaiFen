@@ -20,6 +20,7 @@ import sys
 import traceback
 import random
 
+
 class DailyTask:
     def __init__(self):
         self.shilianTask = ShiLianTask()
@@ -56,21 +57,6 @@ class DailyTask:
             if tryTimes > 15:
                 Toast('尝试返回游戏')
                 system.open("com.xd.cfbmf")
-                # 结束应用
-                # r = system.shell("am kill com.xd.cfbmf")
-                # r = system.shell("am force-stop com.xd.cfbmf")
-                # 重启游戏
-                # self.startupTask.start_app()
-
-                # system.open("com.xd.cfbmf")
-                # Toast('尝试退出待机状态')
-                # # 退出待机状态
-                # # reWait = CompareColors.compare(
-                # #     "63,1199,#EBEFA5|105,1197,#EBEFA5|180,1186,#EAEFA5|285,1193,#ECF0A6|331,1193,#ECF0A6|393,1182,#EBEEA4")
-                # # if reWait:
-                # swipe(213, 1104, 568, 1104)
-                # swipe(213, 1104, 568, 1104)
-                # tapSleep(666,1191)
             if tryTimes > 20:
                 if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
                     return
@@ -82,11 +68,6 @@ class DailyTask:
                 self.startupTask.start_app()
             if tryTimes > 23:
                 return
-
-            # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
-            # return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
-            # if return3:
-            #     Toast('返回首页')
 
             # 点击首页-冒险
             re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
@@ -102,11 +83,14 @@ class DailyTask:
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
-                # 暂不处理，提高执行效率
-                # if not shou_ye1:
-                #     shou_ye2 = TomatoOcrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
-                # shou_ye2 = TomatoOcrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
             if res2 or shou_ye1 or shou_ye2:
+                # 关闭喊话窗口
+                point = FindColors.find(
+                    "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                    rect=[11, 26, 364, 489])
+                if point:
+                    Toast('关闭喊话窗口')
+                    tapSleep(point.x, point.y, 1)
                 # if TimeoutLock(switch_lock).acquire_lock():
                 功能开关["needHome"] = 0
                 # 功能开关["fighting"] = 0
@@ -431,7 +415,7 @@ class DailyTask:
                                         tapSleep(353, 427)  # 点击空白处确认输入
                                         res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
                                     if res:
-                                        tapSleep(333,792,0.5)
+                                        tapSleep(333, 792, 0.5)
                                         break
                             else:
                                 res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
@@ -439,7 +423,7 @@ class DailyTask:
                                     tapSleep(353, 427)  # 点击空白处确认输入
                                     res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
                                 if res:
-                                    tapSleep(333,792,0.5)
+                                    tapSleep(333, 792, 0.5)
                                     break
                     # 关闭喊话窗口
                     point = FindColors.find(
@@ -1717,6 +1701,7 @@ class DailyTask:
                             TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.5)  # 返回芙
                             break
                         re, ct = TomatoOcrText(336, 385, 396, 416, '准备购买次数')
+                        Toast(f'准备购买{ct}次')
                         ct = safe_int(ct)
                         if ct < needCount:
                             tapSleep(420, 407)  # 点击+1
@@ -1820,7 +1805,8 @@ class DailyTask:
                         res = TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.5)  # 返回芙芙小铺，继续
                         任务记录["日常-招式创造-完成"] = 1
                         break
-                    re,ct = TomatoOcrText(336,385,396,416,'准备购买次数')
+                    re, ct = TomatoOcrText(336, 385, 396, 416, '准备购买次数')
+                    Toast(f'准备购买{ct}次')
                     ct = safe_int(ct)
                     if ct < needCount:
                         tapSleep(420, 407)  # 点击+1

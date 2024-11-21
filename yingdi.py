@@ -517,6 +517,7 @@ class YingDiTask:
                         break
                     if buyCount != "":
                         re, ct = TomatoOcrText(456,552,503,582, '准备购买次数')
+                        Toast(f'准备购买{ct}次')
                         ct = safe_int(ct)
                         if ct < needCount:
                             tapSleep(533, 565)  # 点击+1

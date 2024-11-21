@@ -89,6 +89,7 @@ class LvRenTask:
                         tapSleep(155, 1020)  # 点击空白处关闭
                         break
                     re, ct = TomatoOcrText(334, 389, 396, 416, '准备购买次数')
+                    Toast(f'准备购买{ct}次')
                     ct = safe_int(ct)
                     if ct < needCount:
                         tapSleep(533, 565)  # 点击+1

@@ -6,11 +6,13 @@ from ascript.android.ui import Dialog
 from .baseUtils import *
 from .res.ui.ui import 功能开关, 任务记录
 from .shilian import ShiLianTask
+from .daily import DailyTask
 from ascript.android.screen import FindColors
 import pymysql
 import threading
 
 shilianTask = ShiLianTask()
+dailyTask = DailyTask()
 
 
 # 实例方法
@@ -31,6 +33,7 @@ def main():
                         任务记录["自动入队-AI发言"] = 1
                 Toast('等待组队邀请')
                 waitInvite()
+                dailyTask.checkGameStatus()
 
 
 def waitInvite():
@@ -171,17 +174,13 @@ def waitInvite():
         waitTime = waitTime + 2
         Toast(f'{fight_type}-等待队长开始{waitTime}/50s')
 
+        # 兜底，已在队伍中时，停止返回操作
+        功能开关["fighting"] = 1
+        功能开关["needHome"] = 0
+
         # 返回房间
         failTeam = 0
         for j in range(4):
-            res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
-            res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
-            if res6 or res7:
-                # 兜底，已在队伍中时，停止返回操作
-                功能开关["fighting"] = 1
-                功能开关["needHome"] = 0
-                break
-
             res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
             res3, _ = TomatoOcrText(450, 651, 506, 683, "准备")  # 恶龙准备
             if res2 or res3:
@@ -270,6 +269,7 @@ def waitInvite():
 
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
+            任务记录['AI发言-上一次发言'] = []
             waitTime = 0
             teamShout = False
         sleep(2)
