@@ -1280,6 +1280,8 @@ class ShiLianTask:
                     teamCount = 任务记录['带队次数']
                     self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
                 self.AIContent()
+                # 自动锁敌走位
+                self.autoMove()
             else:
                 # 战斗结束
                 # 战斗结束
@@ -1346,6 +1348,8 @@ class ShiLianTask:
                     teamCount = 任务记录['带队次数']
                     self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
                 self.AIContent()
+                # 自动锁敌走位
+                self.autoMove()
             else:
                 # 战斗结束
                 res, _ = TomatoOcrText(303, 962, 412, 1002, "通关奖励")
@@ -1426,6 +1430,7 @@ class ShiLianTask:
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
                 self.AIContent()
+                self.autoMove()
             else:
                 # 战斗结束
                 # 兼容恶龙战斗结算页
@@ -1575,17 +1580,8 @@ class ShiLianTask:
                 if elapsed > 15 and fightType == '秘境带队':
                     self.teamShoutAI("秘境-战斗即将结束-期待下次相遇", shoutType="fight")
                 self.AIContent()
-                # 切换攻击目标
-                point = FindColors.find(
-                    "580,547,#7DA2E2|581,556,#7DA2E2|565,555,#7BA0E0|596,558,#7DA2E2|584,571,#7DA1E2",
-                    rect=[74, 273, 642, 729])
-                if point:
-                    print(point.x, point.y)
-                    tapSleep(point.x, point.y)
-                # 移动走位
-                if time.time() - 任务记录['战斗-上一次移动'] > 8:
-                    imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
-                    任务记录['战斗-上一次移动'] = time.time()
+                # 自动锁敌走位
+                self.autoMove()
 
                 # 切换手动操作
                 if 功能开关["主动释放技能"] == 1:
@@ -2278,15 +2274,15 @@ class ShiLianTask:
                 else:
                     break
 
-            res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
+            res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
             if not res:
                 sleep(0.5)
-                res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
+                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
             if res:
-                res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
+                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
                 if res:
-                    sleep(2)
-                    res = TomatoOcrTap(555, 1156, 603, 1188, "发送")
+                    sleep(0.8)
+                    res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
                 # 关闭喊话窗口
                 point = FindColors.find(
                     "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
@@ -2312,17 +2308,18 @@ class ShiLianTask:
                 return 1
 
         # 关闭喊话窗口
-        point = FindColors.find(
-            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-            rect=[11, 26, 364, 489])
-        if point:
-            Toast('收起喊话窗口')
-            tapSleep(point.x, point.y, 1)
+        for i in range(3):
+            point = FindColors.find(
+                "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                rect=[11, 26, 364, 489])
+            if point:
+                Toast('收起喊话窗口')
+                tapSleep(point.x, point.y, 1)
 
-        point = CompareColors.compare("108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
-        if point:
-            Toast('收起喊话窗口')
-            tapSleep(107, 93)
+            point = CompareColors.compare("108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+            if point:
+                Toast('收起喊话窗口')
+                tapSleep(107, 93)
         return 0
 
     # 战斗中退出组队
@@ -2474,7 +2471,7 @@ class ShiLianTask:
         return False
 
     def AIContent(self):
-        zanList = ['棒', '厉害', '谢', '哇', '牛', '6']
+        zanList = ['棒', '厉害', '谢', '哇', '牛', '6', '关注', '大佬']
         re, teamText1 = TomatoOcrText(62, 1023, 251, 1052, "队友发言")
         re, teamText2 = TomatoOcrText(58, 1049, 244, 1079, "队友发言")
         re, teamText3 = TomatoOcrText(63, 965, 252, 994, "队友发言")
@@ -2485,7 +2482,15 @@ class ShiLianTask:
             # 回复夸赞
             self.teamShoutAI("自动回复~蟹蟹")
 
-        wenList = ['脚本', '科技', '狠活', '高级', '群', '挂']
+        otherList = ['三', '多', '再', '把', '带']
+        contains_zan1 = any(zan in teamText1 for zan in otherList)
+        contains_zan2 = any(zan in teamText2 for zan in otherList)
+        contains_zan3 = any(zan in teamText3 for zan in otherList)
+        if contains_zan1 or contains_zan2 or contains_zan3:
+            # 回复夸赞
+            self.teamShoutAI("自动回复~当然可以 我会一直等你~")
+
+        wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么']
         contains_zan1 = any(zan in teamText1 for zan in wenList)
         contains_zan2 = any(zan in teamText2 for zan in wenList)
         contains_zan3 = any(zan in teamText3 for zan in wenList)
@@ -2501,7 +2506,7 @@ class ShiLianTask:
             # 回复夸赞
             self.teamShoutAI("自动回复~请文明发言哟")
 
-        moveList = ['动','左','右']
+        moveList = ['动', '左', '右']
         contains_zan1 = any(zan in teamText1 for zan in moveList)
         contains_zan2 = any(zan in teamText2 for zan in moveList)
         contains_zan3 = any(zan in teamText3 for zan in moveList)
@@ -2516,14 +2521,13 @@ class ShiLianTask:
         hour = now.hour
         # 根据时间段选择吉祥话
         if 5 <= hour < 12:
-            return "早上好，愿你今天元气满满！"
+            self.teamShoutAI("早上好，愿你今天也元气满满！")
         elif 12 <= hour < 18:
-            return "下午好，愿你此间战无不胜！"
+            self.teamShoutAI("下午好，愿你此间战无不胜！")
         elif 18 <= hour < 22:
-            return "晚上好，愿你开心顺利又一天！"
+            self.teamShoutAI("晚上好，愿你开心顺利又一天！")
         else:
-            return "夜深了，愿你今晚有个好梦！"
-
+            self.teamShoutAI("夜深了，愿你今晚有个好梦！")
 
     # 判断角色死亡 & 队伍仅剩佣兵(名字长度均为2个)；离队
     def allQuit(self):
@@ -2548,3 +2552,18 @@ class ShiLianTask:
                 self.quitTeamFighting()  # 退出队伍
                 return True
         return False
+
+    # 自动锁敌、自动走位
+    def autoMove(self):
+        # 切换攻击目标
+        point = FindColors.find("135,252,#7CA2E2|153,238,#7DA1E2|170,255,#85A7E1|164,265,#7DA1E2|150,271,#94B1E5",
+                                rect=[1, 175, 697, 836], diff=0.95)
+        if point:
+            Toast('切换攻击目标')
+            print(point.x, point.y)
+            tapSleep(point.x, point.y)
+        # 移动走位
+        if time.time() - 任务记录['战斗-上一次移动'] > 8:
+            Toast('自动走位')
+            imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+            任务记录['战斗-上一次移动'] = time.time()

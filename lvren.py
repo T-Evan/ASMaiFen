@@ -93,7 +93,6 @@ class LvRenTask:
                     ct = safe_int(ct)
                     if ct < needCount:
                         tapSleep(533, 565)  # 点击+1
-                    tapSleep(420, 407)  # 点击+1
                     res = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.8)
                     tapSleep(155, 1020)  # 点击空白处关闭
 

@@ -432,7 +432,7 @@ class YingDiTask:
         # 判断能量是否已满；能量已满暂不领取能源
         res, availableNengLiang = TomatoOcrText(607, 80, 661, 102, "剩余能量")  # 右上角剩余嫩俩
         availableNengLiang = safe_int(availableNengLiang)
-        if availableNengLiang != '' and availableNengLiang < 200:  # 识别剩余体力>200时，无需领取和补充能源
+        if availableNengLiang == '' or availableNengLiang < 200:  # 识别剩余体力>200时，无需领取和补充能源
             # 领取秘宝能量
             findNL = False
             findNum = 0

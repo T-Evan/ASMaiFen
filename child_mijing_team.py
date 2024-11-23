@@ -230,6 +230,13 @@ def waitInvite():
                 findDoneStatus = True
                 Toast('恶龙 - 已完成挑战 - 进入战斗后自动留影')
 
+        # 关闭喊话窗口
+        point = CompareColors.compare(
+            "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+        if point:
+            Toast('收起喊话窗口')
+            tapSleep(107, 93)
+
         # 判断队友全部离队，退出房间
         if fight_type == '恶龙带队' or fight_type == '恶龙挑战':
             allQuit, _ = TomatoOcrText(325, 558, 393, 585, "等待加入")
@@ -269,9 +276,17 @@ def waitInvite():
 
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
+            功能开关["fighting"] = 1
+            # 战斗结束后不立即返回，先处理队伍中的逻辑
+            功能开关["needHome"] = 0
             任务记录['AI发言-上一次发言'] = []
             waitTime = 0
             teamShout = False
+            # 恶龙/绝境/终末，仅挑战1次，可直接退队
+            if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队':
+                Toast('退出组队')
+                shilianTask.quitTeam()
+                break
         sleep(2)
     if waitTime > 50:
         Toast(f'等待进入战斗超时，退出组队')

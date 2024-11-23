@@ -318,7 +318,7 @@ class DailyTask:
                 if not res:
                     continue
 
-                res, 当前频道 = TomatoOcrText(148, 607, 266, 658, '当前频道')
+                res, 当前频道 = TomatoOcrText(154, 451, 263, 489, '当前频道')
                 print('当前频道：' + 当前频道)
                 当前频道数字 = rePattern.findall(r'\d+', 当前频道)
                 # 检查列表是否为空
@@ -329,86 +329,109 @@ class DailyTask:
                     continue
                 当前频道数字 = safe_int(当前频道数字[0])
 
-                res, 最大频道 = TomatoOcrText(405, 613, 517, 656, '最大频道')
-                最大频道数字 = rePattern.findall(r'\d+', 最大频道)
-                if not 最大频道数字 or 最大频道数字 == '':
-                    最大频道数字 = 0
-                else:
-                    最大频道数字 = safe_int_v2(最大频道数字[0])
-                    print('最大', 最大频道数字)
-                最大频道数字 = 6
+                # swipe(236, 828, 210, 381, 300)  # 下翻20
+                # res, 最大频道 = TomatoOcrText(408, 814, 510, 841, '最大频道')
+                # swipe(210, 381, 236, 828, 300)  # 上翻20
+                # 最大频道数字 = rePattern.findall(r'\d+', 最大频道)
+                # if not 最大频道数字 or 最大频道数字 == '':
+                #     最大频道数字 = 0
+                # else:
+                #     最大频道数字 = safe_int_v2(最大频道数字[0])
+                #     print('最大', 最大频道数字)
+                最大频道数字 = 15
 
-                下一频道数字 = 当前频道数字 - 1
-                findNext = False
-                if 下一频道数字 < 1:
-                    # tapSleep(200, 754, 0.5)  # 点击最后一个频道
-                    # findNext = True
-                    下一频道数字 = 5  # 尝试仍按指定频道切换，避免固定位置点击偶尔失效导致的刷屏
-                if 下一频道数字 > 0:
-                    # print(下一频道数字)
-                    下一频道 = '简体中文' + str(下一频道数字)
-                    print('下一频道：' + 下一频道)
-                    # 寻找下一频道
-                    for k in range(8):
-                        # 避免与自动入队识别冲突
-                        if 功能开关["fighting"] == 1:
-                            return
-                        re, _ = TomatoOcrText(318, 359, 397, 386, '选择频道')
-                        if not re:
-                            res = TomatoOcrTap(546, 138, 625, 165, '切换频道', -20, 10, sleep1=0.8)
-                        res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880, offsetX=10, offsetY=10)
-                        sleep(0.8)
-                        if not res:
-                            if 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 40:
-                                swipe(236, 828, 210, 381, 300)  # 翻20
-                                sleep(0.8)
-                                swipe(137, 699, 358, 634, 50)
-                            elif 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 20:
-                                swipe(236, 828, 222, 568, 300)  # 翻10
-                                sleep(0.5)
-                                swipe(137, 699, 358, 634, 50)
-                            elif 最大频道数字 - 当前频道数字 > 0:
-                                swipe(225, 814, 225, 714, 300)  # 翻5
-                                sleep(0.5)
-                                swipe(137, 699, 358, 634, 50)
-                            elif 最大频道数字 == 0 or 最大频道数字 - 当前频道数字 < 0:
-                                swipe(225, 714, 225, 814, 300)  # 上翻5
-                                sleep(0.5)
-                                swipe(137, 699, 358, 634, 50)
-                        res, _ = TomatoOcrText(296, 129, 427, 176, 下一频道)
-                        if not res:
-                            res, name = TomatoOcrText(296, 129, 427, 176, 下一频道)
-                            if not res:
-                                name = name.replace('简体中文', '')
-                                res = name == str(下一频道数字)
-                        if res:
-                            findNext = True
-                            break
-                if findNext:
-                    contents = random.choice(contentArr).split('|')
-                    for content in contents:
-                        for q in range(3):
+                # 每次喊话3个频道
+                for j in range(4):
+                    下一频道数字 = 当前频道数字 - 1
+                    findNext = False
+                    if 下一频道数字 < 1:
+                        for k in range(8):
+                            swipe(236, 828, 210, 381, 300)  # 翻20
+                            sleep(1)
+                            res, 最大频道 = TomatoOcrText(408, 814, 510, 841, '最大频道')  # 底部右侧频道
+                            if 最大频道 == '':
+                                res, 最大频道 = TomatoOcrText(161, 812, 262, 842, '最大频道')  # 底部左侧频道
+                            下一频道数字 = rePattern.findall(r'\d+', 最大频道)
+                            下一频道数字 = safe_int_v2(下一频道数字[0])
+                            最大频道数字 = 下一频道数字
+                            if 最大频道数字 > 0:
+                                break
+                            # findNext = True
+                            # 下一频道数字 = 5  # 尝试仍按指定频道切换，避免固定位置点击偶尔失效导致的刷屏
+                    if 下一频道数字 > 0:
+                        # print(下一频道数字)
+                        下一频道 = '简体中文' + str(下一频道数字)
+                        print('下一频道：' + 下一频道)
+                        # 寻找下一频道
+                        for k in range(8):
                             # 避免与自动入队识别冲突
                             if 功能开关["fighting"] == 1:
                                 return
-                            shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
-                            shuru2 = False
-                            if not shuru1:
-                                shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
-                            if shuru1 or shuru2:
-                                # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-                                # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
-                                action.input(content)
-                                Toast('输入文字结束')
-                                sleep(0.5)
-                                # tapSleep(353, 427, 0.5)  # 点击空白处确认输入
-                                # re = TomatoOcrFindRangeClick('确定', 9, 591, 691, 1090)
+                            re, _ = TomatoOcrText(318, 359, 397, 386, '选择频道')
+                            if not re:
+                                res = TomatoOcrTap(546, 138, 625, 165, '切换频道', -20, 10, sleep1=0.8)
+                            res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880, offsetX=10,
+                                                          offsetY=10)
+                            sleep(0.8)
+                            if not res:
+                                if 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 40:
+                                    swipe(236, 828, 210, 381, 300)  # 翻20
+                                    sleep(0.8)
+                                    swipe(137, 699, 358, 634, 50)
+                                elif 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 20:
+                                    swipe(236, 828, 222, 568, 300)  # 翻10
+                                    sleep(0.5)
+                                    swipe(137, 699, 358, 634, 50)
+                                elif 最大频道数字 - 当前频道数字 > 0:
+                                    swipe(225, 814, 225, 714, 300)  # 翻5
+                                    sleep(0.5)
+                                    swipe(137, 699, 358, 634, 50)
+                                elif 最大频道数字 == 0 or 最大频道数字 - 当前频道数字 < 0:
+                                    swipe(225, 714, 225, 814, 300)  # 上翻5
+                                    sleep(0.5)
+                                    swipe(137, 699, 358, 634, 50)
+                            res, _ = TomatoOcrText(296, 129, 427, 176, 下一频道)
+                            if not res:
+                                res, name = TomatoOcrText(296, 129, 427, 176, 下一频道)
+                                if not res:
+                                    name = name.replace('简体中文', '')
+                                    res = name == str(下一频道数字)
+                            if res:
+                                findNext = True
+                                break
+                    if findNext:
+                        contents = random.choice(contentArr).split('|')
+                        for content in contents:
+                            for q in range(3):
+                                # 避免与自动入队识别冲突
+                                if 功能开关["fighting"] == 1:
+                                    return
                                 shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
                                 shuru2 = False
                                 if not shuru1:
                                     shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
                                 if shuru1 or shuru2:
-                                    continue
+                                    # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
+                                    # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
+                                    action.input(content)
+                                    Toast('输入文字结束')
+                                    sleep(0.5)
+                                    # tapSleep(353, 427, 0.5)  # 点击空白处确认输入
+                                    # re = TomatoOcrFindRangeClick('确定', 9, 591, 691, 1090)
+                                    shuru1 = TomatoOcrTap(80, 1194, 118, 1226, '点击')
+                                    shuru2 = False
+                                    if not shuru1:
+                                        shuru2 = TomatoOcrTap(79, 1155, 118, 1191, '点击')
+                                    if shuru1 or shuru2:
+                                        continue
+                                    else:
+                                        res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
+                                        if not res:
+                                            tapSleep(353, 427)  # 点击空白处确认输入
+                                            res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
+                                        if res:
+                                            tapSleep(333, 792, 0.5)
+                                            break
                                 else:
                                     res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
                                     if not res:
@@ -417,22 +440,14 @@ class DailyTask:
                                     if res:
                                         tapSleep(333, 792, 0.5)
                                         break
-                            else:
-                                res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
-                                if not res:
-                                    tapSleep(353, 427)  # 点击空白处确认输入
-                                    res = TomatoOcrTap(554, 1160, 609, 1186, "发送", 10, 10)
-                                if res:
-                                    tapSleep(333, 792, 0.5)
-                                    break
-                    # 关闭喊话窗口
-                    point = FindColors.find(
-                        "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-                        rect=[11, 26, 364, 489])
-                    if point:
-                        Toast('关闭喊话窗口')
-                        tapSleep(point.x, point.y, 1)
-                    break
+                        # 关闭喊话窗口
+                        point = FindColors.find(
+                            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                            rect=[11, 26, 364, 489])
+                        if point:
+                            Toast('关闭喊话窗口')
+                            tapSleep(point.x, point.y, 1)
+                        break
 
         # 关闭喊话窗口
         point = FindColors.find(
@@ -463,6 +478,8 @@ class DailyTask:
         # 活动
         # 火力全开
         self.huoLiQuanKai()
+        # 紧急委托
+        self.jinJiWeiTuo()
         # BBQ派对
         self.BBQParty()
         # 宝藏湖
@@ -1174,8 +1191,9 @@ class DailyTask:
             return
 
         # res = TomatoOcrFindRangeClick('箱庭苗圃', 0.9, 14, 98,1025,180,1051, offsetX=30, offsetY=-20)
-        res = TomatoOcrTap(98, 1025, 180, 1051, '箱庭苗圃', offsetX=30, offsetY=-20)
-        if not res:
+        res1 = TomatoOcrTap(98, 1025, 180, 1051, '箱庭苗圃', offsetX=30, offsetY=-20)
+        res2 = TomatoOcrTap(96, 939, 178, 962, '箱庭苗圃', offsetX=30, offsetY=-20)
+        if not res1 and not res2:
             return
 
         sleep(3)  # 等待动画
@@ -1205,7 +1223,7 @@ class DailyTask:
             if res1:
                 name = 功能开关['作物1']
                 Toast(f'种植{name}')
-                res, x, y = imageFind('箱庭-' + name, 0.9, 78, 1002, 634, 1128)
+                res, x, y = imageFind('箱庭-' + name, 0.94, 78, 1002, 634, 1128)
                 if not res:
                     Toast(f'未找到{name}，种植默认作物')
                     x, y = 129, 1046  # 默认前两个
@@ -1288,9 +1306,13 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrFindRangeClick('限时', match_mode='fuzzy', x1=93, y1=732, x2=184, y2=1063, offsetX=30,
-                                      offsetY=-20,
-                                      sleep1=0.8)
+        res = TomatoOcrFindRangeClick('特惠', match_mode='fuzzy', x1=97, y1=544, x2=180, y2=1051, offsetX=40,
+                                      offsetY=-40)  # 进入紧急委托
+        if not res:
+            res = imageFindClick('营地-限时特惠', 0.9, 0.9, 94, 529, 182, 1053)
+            if not res:
+                Toast('限时特惠 - 未找到活动入口')
+                return
         if res:
             Toast('限时特惠 - 领取')
             tapSleep(595, 153)  # 点击特惠宝箱
@@ -1454,27 +1476,113 @@ class DailyTask:
         任务记录["BBQ派对"] = 1
         res = TomatoOcrTap(96, 1200, 129, 1232, "回", 10, 10)  # 返回
 
+    # 紧急委托
+    def jinJiWeiTuo(self):
+        if 功能开关["紧急委托"] == 0:
+            return
+
+        if 任务记录["紧急委托-完成"] == 1:
+            return
+
+        Toast('日常 - 紧急委托 - 开始')
+
+        self.homePage()
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
+        # 判断是否在营地页面
+        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        if not res:
+            Toast('进入营地失败')
+            return
+
+        res = TomatoOcrFindRangeClick("紧急委托", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40)  # 进入紧急委托
+        if not res:
+            Toast('紧急委托 - 未找到活动入口')
+            return
+
+        # 领取每日礼包
+        tapSleep(595, 162)  # 点击塔莎特惠
+        re = TomatoOcrTap(145, 643, 200, 675, '免费')
+        if re:
+            tapSleep(358, 744)  # 点击购买
+        TomatoOcrTap(91, 1188, 127, 1218, '回')  # 返回活动首页
+
+        # 选择追踪目标
+        sleep(0.5)
+        for i in range(3):
+            point = FindColors.find("238,580,#FCF8EE|243,580,#FCF8EE|241,585,#FCF8EE|244,585,#FCF8EE",
+                                    rect=[75, 511, 366, 610])
+            if point:
+                tapSleep(point.x, point.y)
+                tapSleep(353, 722)  # 点击宝藏
+                tapSleep(443, 724)  # 点击宝藏
+                tapSleep(527, 721)  # 点击宝藏
+                tapSleep(189, 801)  # 点击宝藏
+                TomatoOcrTap(325, 928, 391, 951, '确认')
+
+        # 前往下一层
+        sleep(0.5)
+        re1 = imageFindClick('塔莎委托-下一层', confidence1=0.7, x1=560, y1=992, x2=620, y2=1052)
+        re2 = imageFindClick('塔莎委托-下一层2', confidence1=0.7, x1=560, y1=992, x2=620, y2=1052)
+        if re1 or re2:
+            sleep(0.5)
+            TomatoOcrTap(452, 744, 510, 771, '确定')
+            sleep(3)
+
+        # 准备剪彩
+        res = TomatoOcrTap(457, 1141, 576, 1175, "准备剪彩", 10, 10)
+        if res:
+            Toast('准备剪彩')
+            sleep(5)
+
+        # 自动剪彩
+        res = TomatoOcrTap(457, 1142, 574, 1175, "自动剪彩", 10, 10)
+        if res:
+            Toast('开始剪彩')
+            sleep(10)
+
+        tapSleep(330, 1166)  # 点击空白处
+        tapSleep(330, 1166)  # 点击空白处
+
+        任务记录["紧急委托-完成"] = 1
+
     # 火力全开
     def huoLiQuanKai(self):
         if 功能开关["火力全开"] == 0:
             return
 
+        if 任务记录["火力全开-完成"] == 1:
+            return
+
         Toast('日常 - 火力全开 - 开始')
 
         self.homePage()
-        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
         # 判断是否在营地页面
         res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
         if not res:
             return
 
-        res = TomatoOcrTap(98, 1022, 177, 1048, "火力全开", 20, 20)  # 进入火力全开
+        res = TomatoOcrFindRangeClick("火力全开", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40)  # 进入紧急委托
         if not res:
-            res = TomatoOcrTap(96, 938, 178, 960, "火力全开", 20, 20)  # 进入火力全开
-            if not res:
-                return
-        # todo：找图领取按钮
-        tapSleep(480, 1100)  # 点击空白处
+            Toast('火力全开 - 未找到活动入口')
+            return
+
+        # 领取累计奖励
+        re = FindColors.find("273,929,#FF5E50|268,928,#F05D40|270,931,#F25539|270,928,#F05C40",
+                             rect=[75, 907, 633, 1035])
+        if re:
+            tapSleep(re.x, re.y)
+            tapSleep(344, 1204)  # 点击空白处
+
+        # 等待转盘动画完成
+        Toast('等待转盘动画')
+        tapSleep(479, 1096)  # 点击空白处
+        sleep(10)
+        tapSleep(344, 1204)  # 点击空白处
+        tapSleep(344, 1204)  # 点击空白处
+        TomatoOcrTap(92, 1186, 127, 1218, '回')
+
+        任务记录["火力全开-完成"] = 1
 
     # 活动 - 摸鱼
     def huoDongMoYu(self):
@@ -1703,9 +1811,8 @@ class DailyTask:
                         re, ct = TomatoOcrText(336, 385, 396, 416, '准备购买次数')
                         Toast(f'准备购买{ct}次')
                         ct = safe_int(ct)
-                        if ct < needCount:
+                        if ct != '' and ct < needCount:
                             tapSleep(420, 407)  # 点击+1
-                        tapSleep(420, 407)  # 点击+1
                         re = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.9)
                         if not re:
                             re = TomatoOcrFindRangeClick('购买', x1=123, y1=181, x2=623, y2=519, sleep1=0.9)
@@ -1808,7 +1915,7 @@ class DailyTask:
                     re, ct = TomatoOcrText(336, 385, 396, 416, '准备购买次数')
                     Toast(f'准备购买{ct}次')
                     ct = safe_int(ct)
-                    if ct < needCount:
+                    if ct != '' and  ct < needCount:
                         tapSleep(420, 407)  # 点击+1
                     res = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.9)
                     if not res:
