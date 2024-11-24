@@ -12,6 +12,7 @@ from ascript.android import plug
 from .res.ui.ui import TimeoutLock
 from ascript.android.screen import Ocr
 
+
 # plug.load("BDS_OcrText")
 # from BDS_OcrText import *
 
@@ -152,23 +153,23 @@ from ascript.android.screen import Ocr
 #
 
 def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
-                       match_mode='exact', bitmap='', keywords = None):
+                       match_mode='exact', bitmap='', keywords=None):
     try:
         if whiteList == '':
             whiteList = keyword
         if keywords is None:
             keywords = []
-        lock =  TimeoutLock(timeLock)
+        lock = TimeoutLock(timeLock)
         try:
             with lock:
                 if bitmap == '':
                     ocrRe = tomatoOcr.find_all(
-                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
                         capture=[x1, y1, x2, y2])
                 else:
                     ocrRe = tomatoOcr.find_all(
-                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
                         bitmap=bitmap)
                 # print(ocrRe)
@@ -217,8 +218,10 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
         print(f"TomatoOcrFindRange发生异常: {e}")
         return False
 
-def PaddleOcrFindRangeClick(keyword='T^&*', sleep1=0.9, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=5,
-                            match_mode='exact', offsetX=0, offsetY=0, keywords = None):
+
+def PaddleOcrFindRangeClick(keyword='T^&*', sleep1=0.9, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='',
+                            timeLock=5,
+                            match_mode='exact', offsetX=0, offsetY=0, keywords=None):
     try:
         if whiteList == '':
             whiteList = keyword
@@ -228,7 +231,7 @@ def PaddleOcrFindRangeClick(keyword='T^&*', sleep1=0.9, confidence1=0.9, x1=0, y
         # print(ocrRe)
         if ocrReJson is not None:
             for line in ocrReJson:
-                tapSleep(line.center_x +  offsetX, line.center_y + offsetY, sleep1)
+                tapSleep(line.center_x + offsetX, line.center_y + offsetY, sleep1)
                 print(f"PaddleOcrFindRangeClick识别成功-{keyword}-{keywords}|{line.center_x}|{line.center_y}")
                 return True
         else:
@@ -239,30 +242,32 @@ def PaddleOcrFindRangeClick(keyword='T^&*', sleep1=0.9, confidence1=0.9, x1=0, y
         print(f"PaddleOcrFindRangeClick发生异常: {e}")
         return False
 
-def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=5,
-                            match_mode='exact', offsetX=0, offsetY=0, bitmap='', keywords = None):
+
+def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='',
+                            timeLock=5,
+                            match_mode='exact', offsetX=0, offsetY=0, bitmap='', keywords=None):
     try:
         if whiteList == '':
             whiteList = keyword
         if keywords is None:
             keywords = []
-        lock =  TimeoutLock(timeLock)
+        lock = TimeoutLock(timeLock)
         try:
             with lock:
                 if bitmap == '':
                     ocrRe = tomatoOcr.find_all(
-                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
                         capture=[x1, y1, x2, y2])
                 else:
                     ocrRe = tomatoOcr.find_all(
-                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO",remark="挂机吧麦芬",
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
                         bitmap=bitmap)
                 # print(ocrRe)
         except RuntimeError as e:
-                print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
-                return False
+            print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
+            return False
         center_x = 0
         center_y = 0
         ocrReJson = json.loads(ocrRe)
@@ -298,6 +303,7 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
                 # 计算中心位置
                 center_x = (rx1 + rx2) / 2
                 center_y = (ry1 + ry2) / 2
+                break
         if center_x > 0 and center_y > 0:
             tapSleep(center_x + x1 + offsetX, center_y + y1 + offsetY, sleep1)
             print(f"TomatoOcrFindRangeClick识别成功-{keyword}-{keywords}|{center_x}|{center_y}")
@@ -315,7 +321,7 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
     try:
         # 传入图片路径或者Bitmap
         # res = ocr.ocrFile(R.img("logo.png"))
-        lock =  TimeoutLock()
+        lock = TimeoutLock()
         try:
             with lock:
                 bitmap = screen.capture(x1, y1, x2, y2)
@@ -344,7 +350,7 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
 
 def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
     try:
-        lock =  TimeoutLock()
+        lock = TimeoutLock()
         try:
             with lock:
                 bitmap = screen.capture(x1, y1, x2, y2)
@@ -400,7 +406,7 @@ def safe_int(value):
     """
     try:
         # 兜底子母o
-        if value == "o" or value == "O" or value == "c" or value == "C" :
+        if value == "o" or value == "O" or value == "c" or value == "C":
             return 0
         return int(value)
     except (TypeError, ValueError):

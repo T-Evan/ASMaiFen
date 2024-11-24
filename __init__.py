@@ -230,7 +230,6 @@ def main():
         功能开关["fighting"] = 0
         功能开关["fighting_baozou"] = 0
         功能开关["needHome"] = 0
-        功能开关["玩家名称"] = 0
 
         # 处理休息时间
         need_run_minute = safe_int(功能开关.get("定时运行", 0))  # 分钟

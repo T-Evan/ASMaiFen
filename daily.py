@@ -348,11 +348,16 @@ class DailyTask:
                         for k in range(8):
                             swipe(236, 828, 210, 381, 300)  # 翻20
                             sleep(1)
-                            res, 最大频道 = TomatoOcrText(408, 814, 510, 841, '最大频道')  # 底部右侧频道
-                            if 最大频道 == '':
-                                res, 最大频道 = TomatoOcrText(161, 812, 262, 842, '最大频道')  # 底部左侧频道
-                            下一频道数字 = rePattern.findall(r'\d+', 最大频道)
-                            下一频道数字 = safe_int_v2(下一频道数字[0])
+                            res, 最大频道右 = TomatoOcrText(408, 814, 510, 841, '最大频道')  # 底部右侧频道
+                            res, 最大频道左 = TomatoOcrText(161, 812, 262, 842, '最大频道')  # 底部左侧频道
+                            下一频道数字右 = rePattern.findall(r'\d+', 最大频道右)
+                            下一频道数字左 = rePattern.findall(r'\d+', 最大频道左)
+                            下一频道数字右 = safe_int_v2(下一频道数字右[0])
+                            下一频道数字左 = safe_int_v2(下一频道数字左[0])
+                            if 下一频道数字右 - 下一频道数字左 > 2:
+                                下一频道数字 = 下一频道数字左
+                            else:
+                                下一频道数字 = 下一频道数字右
                             最大频道数字 = 下一频道数字
                             if 最大频道数字 > 0:
                                 break
@@ -645,6 +650,10 @@ class DailyTask:
                         if res1:
                             Toast('主线挑战首领 - 失败')
                         Toast('主线挑战首领 - 完成')
+                        if 功能开关["优先推图到最新关卡"] == 1:
+                            res = TomatoOcrTap(428, 1073, 521, 1100, "下一关卡", 10, 10)
+                            if res:
+                                Toast('前往下一关')
                         sleep(5)
                         break
 
@@ -1223,7 +1232,7 @@ class DailyTask:
             if res1:
                 name = 功能开关['作物1']
                 Toast(f'种植{name}')
-                res, x, y = imageFind('箱庭-' + name, 0.94, 78, 1002, 634, 1128)
+                res, x, y = imageFind('箱庭-' + name, 0.87, 78, 1002, 634, 1128)
                 if not res:
                     Toast(f'未找到{name}，种植默认作物')
                     x, y = 129, 1046  # 默认前两个
@@ -1504,7 +1513,9 @@ class DailyTask:
         re = TomatoOcrTap(145, 643, 200, 675, '免费')
         if re:
             tapSleep(358, 744)  # 点击购买
-        TomatoOcrTap(91, 1188, 127, 1218, '回')  # 返回活动首页
+
+        tapSleep(352, 1169)  # 点击空白
+        tapSleep(352, 1169)  # 点击空白
 
         # 选择追踪目标
         sleep(0.5)
@@ -1518,19 +1529,40 @@ class DailyTask:
                 tapSleep(527, 721)  # 点击宝藏
                 tapSleep(189, 801)  # 点击宝藏
                 TomatoOcrTap(325, 928, 391, 951, '确认')
+                tapSleep(352, 1169)  # 点击空白
 
         # 前往下一层
         sleep(0.5)
-        re1 = imageFindClick('塔莎委托-下一层', confidence1=0.7, x1=560, y1=992, x2=620, y2=1052)
-        re2 = imageFindClick('塔莎委托-下一层2', confidence1=0.7, x1=560, y1=992, x2=620, y2=1052)
-        if re1 or re2:
+        re1 = imageFindClick('塔莎委托-下一层', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
+        re2 = imageFindClick('塔莎委托-下一层2', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
+        re3 = imageFindClick('塔莎委托-下一层3', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
+        if re1 or re2 or re3:
             sleep(0.5)
             TomatoOcrTap(452, 744, 510, 771, '确定')
             sleep(3)
+            tapSleep(352, 1169)  # 点击空白
+
+            sleep(0.5)
+
+            # 选择追踪目标
+            for i in range(3):
+                point = FindColors.find("238,580,#FCF8EE|243,580,#FCF8EE|241,585,#FCF8EE|244,585,#FCF8EE",
+                                        rect=[75, 511, 366, 610])
+                if point:
+                    tapSleep(point.x, point.y)
+                    tapSleep(353, 722)  # 点击宝藏
+                    tapSleep(443, 724)  # 点击宝藏
+                    tapSleep(527, 721)  # 点击宝藏
+                    tapSleep(189, 801)  # 点击宝藏
+                    TomatoOcrTap(325, 928, 391, 951, '确认')
+                    tapSleep(352, 1169)  # 点击空白
+
 
         # 准备剪彩
         res = TomatoOcrTap(457, 1141, 576, 1175, "准备剪彩", 10, 10)
         if res:
+            res = TomatoOcrTap(457, 1141, 576, 1175, "准备剪彩", 10, 10)
+            res = TomatoOcrTap(457, 1141, 576, 1175, "准备剪彩", 10, 10)
             Toast('准备剪彩')
             sleep(5)
 
@@ -1562,7 +1594,11 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrFindRangeClick("火力全开", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40)  # 进入紧急委托
+        res = TomatoOcrFindRangeClick(x1=97, y1=544, x2=180, y2=1051, offsetX=40,
+                                      offsetY=-40, keywords=[{'keyword': '火力全开', 'match_mode': 'exact'},
+                                                             {'keyword': '火力', 'match_mode': 'exact'},
+                                                             {'keyword': '火', 'match_mode': 'exact'},
+                                                             {'keyword': '全开', 'match_mode': 'exact'}])  # 进入火力全开
         if not res:
             Toast('火力全开 - 未找到活动入口')
             return
@@ -1581,6 +1617,13 @@ class DailyTask:
         tapSleep(344, 1204)  # 点击空白处
         tapSleep(344, 1204)  # 点击空白处
         TomatoOcrTap(92, 1186, 127, 1218, '回')
+
+        # 领取累计奖励
+        re = FindColors.find("273,929,#FF5E50|268,928,#F05D40|270,931,#F25539|270,928,#F05C40",
+                             rect=[75, 907, 633, 1035])
+        if re:
+            tapSleep(re.x, re.y)
+            tapSleep(344, 1204)  # 点击空白处
 
         任务记录["火力全开-完成"] = 1
 
@@ -1915,7 +1958,7 @@ class DailyTask:
                     re, ct = TomatoOcrText(336, 385, 396, 416, '准备购买次数')
                     Toast(f'准备购买{ct}次')
                     ct = safe_int(ct)
-                    if ct != '' and  ct < needCount:
+                    if ct != '' and ct < needCount:
                         tapSleep(420, 407)  # 点击+1
                     res = TomatoOcrTap(334, 462, 383, 487, "购买", 10, 10, sleep1=0.9)
                     if not res:

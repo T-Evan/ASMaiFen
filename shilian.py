@@ -451,7 +451,9 @@ class ShiLianTask:
 
         # 判断是否已在当前地图
         if selectMap != '最新地图':
-            res = TomatoOcrFindRange(selectMap, x1=80, y1=214, x2=637, y2=599, match_mode='fuzzy')
+            res, mapText = TomatoOcrText(329, 223, 388, 253, selectMap)
+            if not res:
+                res = TomatoOcrFindRange(selectMap, x1=80, y1=214, x2=637, y2=599)
             if not res:
                 res = self.changeMap(selectMap, selectStage)
                 if not res:
@@ -870,7 +872,9 @@ class ShiLianTask:
         bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
         res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
                                   bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
-                                                           {'keyword': '开启', 'match_mode': 'fuzzy'}])  # 战斗结束页。宝箱提示
+                                                           {'keyword': '开启', 'match_mode': 'fuzzy'},
+                                                           {'keyword': '体力不足',
+                                                            'match_mode': 'fuzzy'}])  # 战斗结束页。宝箱提示
         # if not res1:
         # res2, _ = TomatoOcrText(267, 755, 313, 783, "开启")  # 战斗结束页。宝箱提示
         # res2 = TomatoOcrFindRange("开启", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy',
@@ -1137,11 +1141,11 @@ class ShiLianTask:
                 功能开关["fighting_baozou"] = 1
                 Toast(f'暴走战斗中,战斗时长{elapsed}/{totalWait}秒')
                 if teamShoutDone == 0:
-                    teamShoutDone = self.teamShout()
-                    self.teamShoutAI(f'大暴走-开始战斗-留镜像后离队,0/{totalWait}秒~祝你武运昌隆~', shoutType="fight")
-                    teamName = 任务记录['房主名称']
+                    self.teamShoutAI(f'大暴走-{任务记录["战斗-关卡名称"]}-留镜像后离队~祝你武运昌隆', shoutType="fight")
+                    teamName = 任务记录['战斗-房主名称']
                     teamCount = 任务记录['带队次数']
                     self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
+                    teamShoutDone = self.teamShout()
 
                 # 战斗逻辑
                 for i in range(1, 10):
@@ -1274,11 +1278,11 @@ class ShiLianTask:
                 功能开关["needHome"] = 0
                 Toast(f'绝境战斗中,战斗时长{elapsed}/{totalWait}秒')
                 if teamShoutDone == 0:
-                    teamShoutDone = self.teamShout()
-                    self.teamShoutAI(f'绝境-开始战斗~祝你武运昌隆~', shoutType="fight")
-                    teamName = 任务记录['房主名称']
+                    self.teamShoutAI(f'绝境-{任务记录["战斗-关卡名称"]}-开始战斗~祝你武运昌隆~', shoutType="fight")
+                    teamName = 任务记录['战斗-房主名称']
                     teamCount = 任务记录['带队次数']
                     self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
+                    teamShoutDone = self.teamShout()
                 self.AIContent()
                 # 自动锁敌走位
                 self.autoMove()
@@ -1299,9 +1303,9 @@ class ShiLianTask:
             if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2):
                 Toast(f"绝境战斗中状态 - 识别失败 - 次数 {failNum}/5")
                 failNum = failNum + 1
-                if failNum > 3:
+                if failNum > 4:
                     Toast(f"绝境战斗中状态 - 识别失败 - 退出战斗")
-                if failNum > 5:
+                if failNum > 6:
                     self.fight_fail()
                     功能开关["fighting"] = 0
                     break
@@ -1342,11 +1346,11 @@ class ShiLianTask:
                 功能开关["needHome"] = 0
                 Toast(f'终末战战斗中,战斗时长{elapsed}/{totalWait}秒')
                 if teamShoutDone == 0:
-                    teamShoutDone = self.teamShout()
-                    self.teamShoutAI(f'终末战-开始战斗~祝你武运昌隆~', shoutType="fight")
-                    teamName = 任务记录['房主名称']
+                    self.teamShoutAI(f'终末战-{任务记录["战斗-关卡名称"]}-开始战斗~祝你武运昌隆~', shoutType="fight")
+                    teamName = 任务记录['战斗-房主名称']
                     teamCount = 任务记录['带队次数']
                     self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
+                    teamShoutDone = self.teamShout()
                 self.AIContent()
                 # 自动锁敌走位
                 self.autoMove()
@@ -1418,17 +1422,19 @@ class ShiLianTask:
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
                 if teamShoutDone == 0:
-                    teamShoutDone = self.teamShout()
                     if fightType == '恶龙挑战':
-                        self.teamShoutAI(f'恶龙-开始战斗-等待战斗结束,0/{totalWait}秒~祝你武运昌隆~', shoutType="fight")
-                        teamName = 任务记录['房主名称']
+                        self.teamShoutAI(f'恶龙-{任务记录["战斗-关卡名称"]}-等待战斗结束~祝你武运昌隆',
+                                         shoutType="fight")
+                        teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
                     else:
-                        self.teamShoutAI(f'恶龙-开始战斗-留镜像后离队,0/{totalWait}秒~祝你武运昌隆~', shoutType="fight")
-                        teamName = 任务记录['房主名称']
+                        self.teamShoutAI(f'恶龙-{任务记录["战斗-关卡名称"]}-留镜像后离队~祝你武运昌隆',
+                                         shoutType="fight")
+                        teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
+                    teamShoutDone = self.teamShout()
                 self.AIContent()
                 self.autoMove()
             else:
@@ -1502,17 +1508,19 @@ class ShiLianTask:
                 功能开关["needHome"] = 0
                 Toast(f'梦魇战斗中,战斗时长{elapsed}/{totalWait}秒')
                 if teamShoutDone == 0:
-                    teamShoutDone = self.teamShout()
                     if fightType == '梦魇挑战':
-                        self.teamShoutAI(f'梦魇-开始战斗-等待战斗结束,0/{totalWait}秒~祝你武运昌隆~', shoutType="fight")
-                        teamName = 任务记录['房主名称']
+                        self.teamShoutAI(f'梦魇-{任务记录["战斗-关卡名称"]}-等待战斗结束~祝你武运昌隆',
+                                         shoutType="fight")
+                        teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
                     else:
-                        self.teamShoutAI(f'梦魇-开始战斗-留镜像后离队,0/{totalWait}秒~祝你武运昌隆~', shoutType="fight")
-                        teamName = 任务记录['房主名称']
+                        self.teamShoutAI(f'梦魇-{任务记录["战斗-关卡名称"]}-留镜像后离队~祝你武运昌隆',
+                                         shoutType="fight")
+                        teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
+                    teamShoutDone = self.teamShout()
                 self.AIContent()
             else:
                 # 战斗结束
@@ -1571,12 +1579,12 @@ class ShiLianTask:
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
                 if teamShoutDone == 0:
-                    teamShoutDone = self.teamShout()
                     if fightType == '秘境带队':
-                        self.teamShoutAI(f'秘境-开始战斗-~祝你武运昌隆~', shoutType="fight")
-                        teamName = 任务记录['房主名称']
+                        self.teamShoutAI(f'秘境-{任务记录["战斗-关卡名称"]}-开始战斗~祝你武运昌隆~', shoutType="fight")
+                        teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
+                    teamShoutDone = self.teamShout()
                 if elapsed > 15 and fightType == '秘境带队':
                     self.teamShoutAI("秘境-战斗即将结束-期待下次相遇", shoutType="fight")
                 self.AIContent()
@@ -2274,15 +2282,15 @@ class ShiLianTask:
                 else:
                     break
 
-            res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
+            res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=55)
             if not res:
                 sleep(0.5)
-                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
+                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=55)
             if res:
-                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
+                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=55)
                 if res:
                     sleep(0.8)
-                    res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=40)
+                    res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=55)
                 # 关闭喊话窗口
                 point = FindColors.find(
                     "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
@@ -2490,13 +2498,14 @@ class ShiLianTask:
             # 回复夸赞
             self.teamShoutAI("自动回复~当然可以 我会一直等你~")
 
-        wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么']
-        contains_zan1 = any(zan in teamText1 for zan in wenList)
-        contains_zan2 = any(zan in teamText2 for zan in wenList)
-        contains_zan3 = any(zan in teamText3 for zan in wenList)
-        if contains_zan1 or contains_zan2 or contains_zan3:
-            # 回复夸赞
-            self.teamShoutAI("自动回复~欢迎加鹅了解喔~372~270~534")
+        if 任务记录['自动入队-AI发言'] == 1:
+            wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么']
+            contains_zan1 = any(zan in teamText1 for zan in wenList)
+            contains_zan2 = any(zan in teamText2 for zan in wenList)
+            contains_zan3 = any(zan in teamText3 for zan in wenList)
+            if contains_zan1 or contains_zan2 or contains_zan3:
+                # 回复夸赞
+                self.teamShoutAI("自动回复~欢迎加鹅了解喔~372~270~534")
 
         blackList = ['*']
         contains_zan1 = any(zan in teamText1 for zan in blackList)
@@ -2515,19 +2524,56 @@ class ShiLianTask:
             imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
             任务记录['战斗-上一次移动'] = time.time()
 
+        # 判断战力差距，提醒队友
+
+        # 识别当前地图，提醒队友攻略
+        if "无法无天章鱼帮" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:boss大招后，集火攻击一只鹦鹉喔！")
+        elif "云涌风雷王座" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:一阶段上风区可加攻、二阶段要远离上风区喔！")
+            self.teamShoutAI("大招时分别站两个区域、大招后正负极要集合在一起！")
+        elif "骑士游猎场" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:boss四周护盾会降伤，大招后暂时消散")
+            self.teamShoutAI("提示:坦克可往左跑两格引开boss，其他人不动~")
+        elif "傲慢者赫朗格尼" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:boss大招时请前往坦克位置协助击破或屏障~")
+        elif "薄纱笑" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:月球掉落时需要至少1人接到伤害~")
+        elif "世界万象其中" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:光阶段走位暗场地、暗阶段走位光场地~")
+            self.teamShoutAI("大招期间掉落光球需要走位躲避或使用光明屏障")
+        elif "巨像思维首脑" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:boss召唤模块后需集火清理模块~")
+        elif "决战黄金穹顶" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:坦克请远离人群避免飞弹波及，可各自站一格~")
+        elif "金色歌剧院" in 任务记录["战斗-关卡名称"]:
+            self.teamShoutAI("提示:boss大招后，集火机器人喔~")
+
         # 判断当前时间，回复吉祥话
         from datetime import datetime
         now = datetime.now()
         hour = now.hour
         # 根据时间段选择吉祥话
+        import requests
         if 5 <= hour < 12:
-            self.teamShoutAI("早上好，愿你今天也元气满满！")
+            self.teamShoutAI("早安，愿你今天也元气满满！")
         elif 12 <= hour < 18:
-            self.teamShoutAI("下午好，愿你此间战无不胜！")
+            self.teamShoutAI("午安，愿你此间战无不胜！")
         elif 18 <= hour < 22:
-            self.teamShoutAI("晚上好，愿你开心顺利又一天！")
+            self.teamShoutAI("晚好，愿你度过愉快的夜晚！")
         else:
-            self.teamShoutAI("夜深了，愿你今晚有个好梦！")
+            # r = requests.get("https://api.kuleu.com/api/getGreetingMessage?type=json")
+            # # 打印状态Code
+            # # 进行转码
+            # r.encoding = r.apparent_encoding
+            # # 转换为json对象
+            # obj = r.json()
+            # print(obj['code'])
+            # if obj != "" and obj['code'] == 200:
+            #     greet = obj['data']['greeting']
+            #     tip = obj['data']['tip']
+            #     self.teamShoutAI(f"{greet}~{tip}")
+            self.teamShoutAI("夜深了，愿你今晚好梦！")
 
     # 判断角色死亡 & 队伍仅剩佣兵(名字长度均为2个)；离队
     def allQuit(self):

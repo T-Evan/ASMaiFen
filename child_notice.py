@@ -43,6 +43,11 @@ def noticeCancel():
         # if res:
         #     Toast('关闭弹窗')
 
+        if 功能开关["优先推图到最新关卡"] == 1:
+            res = TomatoOcrTap(428,1073,521,1100, "下一关卡", 10, 10)
+            if res:
+                Toast('前往下一关')
+
         res = TomatoOcrTap(214, 1071, 274, 1098, "确定", 10, 10)
         if res:
             Toast('战斗结算弹窗确认')

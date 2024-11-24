@@ -29,7 +29,7 @@ def main():
             if 功能开关["fighting"] == 0:
                 # 识别角色名称，做特殊逻辑
                 if 任务记录["自动入队-AI发言"] == 0:
-                    if 功能开关["玩家名称"] == '咸鱼搜麦乐芬' or 功能开关["玩家名称"] == '养只狐狸':
+                    if 任务记录["玩家名称"] == '咸鱼搜麦乐芬' or 任务记录["玩家名称"] == '养只狐狸':
                         任务记录["自动入队-AI发言"] = 1
                 Toast('等待组队邀请')
                 waitInvite()
@@ -61,6 +61,10 @@ def waitInvite():
 
     if res1:
         功能开关["fighting"] = 1
+        功能开关["needHome"] = 0
+        resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
+        resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 514, 650, 546, "房主名称")  # 房主名称
+
         if fight_type == '':
             for i in range(1, 4):
                 resMengYan1, _ = TomatoOcrText(404, 587, 480, 611, "梦魇狂潮")  # 梦魇邀请
@@ -263,8 +267,8 @@ def waitInvite():
         res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
         if res6 or res7:
             if not teamShout:
-                teamName, count, last_time = daiDuiCount(fight_type)
-                content = f'{fight_type}-等待开始~{teamName}'
+                count, last_time = daiDuiCount(fight_type)
+                content = f'{fight_type}-等待开始~{任务记录["战斗-房主名称"]}'
                 if count < 3:
                     shilianTask.teamShoutAI(f'{content}-初次相遇~给个关注叭', shoutType='room')
                 else:
@@ -276,10 +280,11 @@ def waitInvite():
 
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
-            功能开关["fighting"] = 1
             # 战斗结束后不立即返回，先处理队伍中的逻辑
+            功能开关["fighting"] = 1
             功能开关["needHome"] = 0
             任务记录['AI发言-上一次发言'] = []
+            任务记录["战斗-推荐战力"] = 0
             waitTime = 0
             teamShout = False
             # 恶龙/绝境/终末，仅挑战1次，可直接退队
@@ -311,13 +316,6 @@ def daiDuiCount(fightType='秘境'):
         charset='utf8mb4'  ""
     )  # 连接数据库
 
-    # 识别房主名称
-    if fightType == '恶龙带队' or fightType == '终末战带队':
-        res, teamName = TomatoOcrText(302, 580, 417, 602, "房主名称")
-        if teamName == "":
-            res, teamName = TomatoOcrText(306, 579, 413, 604, "房主名称")
-    else:
-        res, teamName = TomatoOcrText(153, 827, 254, 849, "房主名称")
     count = 0
     last_time = 0
     now_time = int(time.time())
@@ -325,7 +323,7 @@ def daiDuiCount(fightType='秘境'):
     cursor = db.cursor()
     sql = "SELECT * FROM daidui WHERE user_name	 = %s and team_name	= %s"
     # 使用参数化查询
-    cursor.execute(sql, (功能开关['玩家名称'], teamName))
+    cursor.execute(sql, (任务记录['玩家名称'], 任务记录["战斗-房主名称"]))
     results = cursor.fetchall()
     for row in results:
         count = row[2]
@@ -336,7 +334,7 @@ def daiDuiCount(fightType='秘境'):
     # 执行完毕后记得关闭db,不然会并发连接失败哦
     db.close()
 
-    p = threading.Thread(target=daiDuiUpdate, args=(count, teamName, now_time))
+    p = threading.Thread(target=daiDuiUpdate, args=(count, 任务记录["战斗-房主名称"], now_time))
     p.start()
 
     if count == 0:
@@ -344,9 +342,8 @@ def daiDuiCount(fightType='秘境'):
     else:
         count = count + 1
 
-    任务记录['房主名称'] = teamName
     任务记录['带队次数'] = count
-    return teamName, count, last_time
+    return count, last_time
 
 
 def daiDuiUpdate(count, teamName, now_time):
@@ -366,14 +363,14 @@ def daiDuiUpdate(count, teamName, now_time):
         # 构造 SQL 语句
         sql = f"Insert into daidui (user_name,team_name,count,last_time) Values (%s,%s,%s,%s)"
         # 使用参数化查询
-        cursor.execute(sql, (功能开关['玩家名称'], teamName, count, now_time))
+        cursor.execute(sql, (任务记录["玩家名称"], teamName, count, now_time))
         db.commit()  # 不要忘了提交,不然数据上不去哦
     else:
         count = count + 1
         # 构造 SQL 语句
         sql = "UPDATE daidui SET count = %s, last_time = %s WHERE user_name = %s and team_name = %s"
         # 使用参数化查询
-        cursor.execute(sql, (count, now_time, 功能开关['玩家名称'], teamName))
+        cursor.execute(sql, (count, now_time, 任务记录["玩家名称"], teamName))
         db.commit()  # 不要忘了提交,不然数据上不去哦
 
     # 执行完之后要记得关闭游标和数据库连接
