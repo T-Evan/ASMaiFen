@@ -43,6 +43,8 @@ class ShiLianTask:
             "傲慢者赫朗格尼": [303, 567, 423, 596],
             "悲恸骑士游猎场": [303, 373, 447, 401],
             "云涌风雷王座": [303, 567, 423, 596],
+            "无法无天章鱼帮": [303, 373, 447, 401],
+            "长夜明灯之孤塔": [303, 567, 423, 596],
         }
 
         self.SkillChongWuFlag = False
@@ -1232,7 +1234,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 240 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 200 or ("等级" not in teamName1 and "等级" not in teamName2):
                 Toast(f"调查队战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1553,7 +1555,7 @@ class ShiLianTask:
             elapsed = elapsed + 4
 
     def fighting(self, fightType='秘境'):
-        totalWait = 240  # 30000 毫秒 = 30 秒
+        totalWait = 200  # 30000 毫秒 = 30 秒
         elapsed = 0
         teamShoutDone = 0
 
@@ -2193,7 +2195,7 @@ class ShiLianTask:
 
     def teamShoutAI(self, content="", shoutType=""):
         sleep(0.5)
-        if 任务记录["自动入队-AI发言"] == 0:
+        if 功能开关["队伍AI发言"] == 0:
             return
 
         if content in 任务记录['AI发言-上一次发言']:
@@ -2367,7 +2369,7 @@ class ShiLianTask:
                     Toast('收起喊话窗口')
                     tapSleep(point.x, point.y)
             if tryTimes > 5:
-                system.open("com.xd.cfbmf")
+                system.open(f"{功能开关['游戏包名']}")
                 # 暂不处理战败页启动，提高执行效率
                 # 判断战败页面
                 self.fight_fail()
@@ -2498,7 +2500,7 @@ class ShiLianTask:
             # 回复夸赞
             self.teamShoutAI("自动回复~当然可以 我会一直等你~")
 
-        if 任务记录['自动入队-AI发言'] == 1:
+        if 任务记录["AI发言-广告开关"] == 1:
             wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么']
             contains_zan1 = any(zan in teamText1 for zan in wenList)
             contains_zan2 = any(zan in teamText2 for zan in wenList)
@@ -2527,26 +2529,26 @@ class ShiLianTask:
         # 判断战力差距，提醒队友
 
         # 识别当前地图，提醒队友攻略
-        if "无法无天章鱼帮" in 任务记录["战斗-关卡名称"]:
+        if "无法无" in 任务记录["战斗-关卡名称"]:  # 无法无天章鱼帮
             self.teamShoutAI("提示:boss大招后，集火攻击一只鹦鹉喔！")
-        elif "云涌风雷王座" in 任务记录["战斗-关卡名称"]:
+        elif "云涌风" in 任务记录["战斗-关卡名称"]:  # 云涌风雷王座
             self.teamShoutAI("提示:一阶段上风区可加攻、二阶段要远离上风区喔！")
             self.teamShoutAI("大招时分别站两个区域、大招后正负极要集合在一起！")
-        elif "骑士游猎场" in 任务记录["战斗-关卡名称"]:
+        elif "骑士游" in 任务记录["战斗-关卡名称"]:  # 骑士游猎场
             self.teamShoutAI("提示:boss四周护盾会降伤，大招后暂时消散")
             self.teamShoutAI("提示:坦克可往左跑两格引开boss，其他人不动~")
-        elif "傲慢者赫朗格尼" in 任务记录["战斗-关卡名称"]:
+        elif "傲慢者" in 任务记录["战斗-关卡名称"]:  # 傲慢者赫朗格尼
             self.teamShoutAI("提示:boss大招时请前往坦克位置协助击破或屏障~")
         elif "薄纱笑" in 任务记录["战斗-关卡名称"]:
             self.teamShoutAI("提示:月球掉落时需要至少1人接到伤害~")
-        elif "世界万象其中" in 任务记录["战斗-关卡名称"]:
+        elif "世界万" in 任务记录["战斗-关卡名称"]:  # 世界万象其中
             self.teamShoutAI("提示:光阶段走位暗场地、暗阶段走位光场地~")
             self.teamShoutAI("大招期间掉落光球需要走位躲避或使用光明屏障")
-        elif "巨像思维首脑" in 任务记录["战斗-关卡名称"]:
+        elif "巨像思维首脑" in 任务记录["战斗-关卡名称"]:  # 巨像思维首脑
             self.teamShoutAI("提示:boss召唤模块后需集火清理模块~")
-        elif "决战黄金穹顶" in 任务记录["战斗-关卡名称"]:
+        elif "决战黄" in 任务记录["战斗-关卡名称"]:  # 决战黄金穹顶
             self.teamShoutAI("提示:坦克请远离人群避免飞弹波及，可各自站一格~")
-        elif "金色歌剧院" in 任务记录["战斗-关卡名称"]:
+        elif "金色歌" in 任务记录["战斗-关卡名称"]:  # 金色歌剧院
             self.teamShoutAI("提示:boss大招后，集火机器人喔~")
 
         # 判断当前时间，回复吉祥话
@@ -2609,7 +2611,8 @@ class ShiLianTask:
             print(point.x, point.y)
             tapSleep(point.x, point.y)
         # 移动走位
-        if time.time() - 任务记录['战斗-上一次移动'] > 8:
-            Toast('自动走位')
-            imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+        if time.time() - 任务记录['战斗-上一次移动'] > 7:
+            re = imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+            if re:
+                Toast('自动走位')
             任务记录['战斗-上一次移动'] = time.time()

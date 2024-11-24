@@ -304,7 +304,7 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
                 center_x = (rx1 + rx2) / 2
                 center_y = (ry1 + ry2) / 2
                 break
-        if center_x > 0 and center_y > 0:
+        if center_x > 0 or center_y > 0:
             tapSleep(center_x + x1 + offsetX, center_y + y1 + offsetY, sleep1)
             print(f"TomatoOcrFindRangeClick识别成功-{keyword}-{keywords}|{center_x}|{center_y}")
             return True

@@ -34,6 +34,6 @@ def checkBlock():
         Toast("识别到屏幕卡死，重启脚本")
         # 结束应用
         # r = system.shell("am kill com.xd.cfbmf")
-        r = system.shell("am force-stop com.xd.cfbmf")
-        system.open("com.xd.cfbmf")
+        r = system.shell(f"am force-stop {功能开关['游戏包名']}")
+        system.open(f"{功能开关['游戏包名']}")
         failTimes = 0

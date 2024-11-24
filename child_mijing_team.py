@@ -28,9 +28,9 @@ def main():
             #     continue
             if 功能开关["fighting"] == 0:
                 # 识别角色名称，做特殊逻辑
-                if 任务记录["自动入队-AI发言"] == 0:
+                if 任务记录["AI发言-广告开关"] == 0:
                     if 任务记录["玩家名称"] == '咸鱼搜麦乐芬' or 任务记录["玩家名称"] == '养只狐狸':
-                        任务记录["自动入队-AI发言"] = 1
+                        任务记录["AI发言-广告开关"] = 1
                 Toast('等待组队邀请')
                 waitInvite()
                 dailyTask.checkGameStatus()

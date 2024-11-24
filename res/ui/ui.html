@@ -395,6 +395,18 @@
                         </button>
                     </div>
                     <div id="toast" class="toast">保存成功</div>
+                    <div class="flex-container">
+                        <label for="选择游戏版本">游戏版本:</label>
+                        <div class="layui-form">
+                            <div class="layui-input-inline">
+                                <select name="选择游戏版本" id="选择游戏版本" lay-filter="mijing1-filter">
+                                    <option value="国服">国服</option>
+                                    <option value="台服">台服</option>
+                                    <option value="国际服">国际服</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
             <form action="">
@@ -898,6 +910,7 @@
                                         <option value="万象">万象</option>
                                         <option value="旷野">旷野</option>
                                         <option value="悬崖">悬崖</option>
+                                        <option value="群岛">群岛</option>
                                     </select>
                                 </div>
                                 <div class="layui-input-inline">
@@ -933,6 +946,13 @@
                         <!--                               placeholder="队伍喊话内容2（留空不执行）" class="layui-input">-->
                         <input type="text" id="队伍喊话间隔" name="队伍喊话间隔" lay-verify="title" autocomplete="off"
                                placeholder="队伍喊话间隔（分钟）(留空每局都喊话)" class="layui-input">
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input id="队伍AI发言" name="vehicle" type="checkbox"
+                                       value="Bike">对局AI
+                                <label class="gray-text">(战斗中自动发送「对局状态、攻略提示、问候语」)</label><br>
+                            </div>
+                        </div>
                         <legend>自动入队设置</legend>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
@@ -1337,24 +1357,24 @@
                                        style="height: 30px;width: 130px;margin-left:5px;margin-top:15;">
                                 <br>
                             </div>
-<!--                            <div class="checkbox-item">-->
-<!--                                <div class="layui-form">-->
-<!--                                    <div class="layui-input-inline">-->
-<!--                                        <select name="作物3" id="作物3" lay-filter="mijing1-filter">-->
-<!--                                            <option value="默认">选择作物(默认前两个)</option>-->
-<!--                                            <option value="花椰子">花椰子</option>-->
-<!--                                            <option value="长耳萝卜">长耳萝卜</option>-->
-<!--                                            <option value="魔女南瓜">魔女南瓜</option>-->
-<!--                                            <option value="小熊辣椒">小熊辣椒</option>-->
-<!--                                            <option value="多笋">多笋</option>-->
-<!--                                        </select>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <input type="text" id="作物3数量" name="作物3数量" lay-verify="title" autocomplete="off"-->
-<!--                                       placeholder="目标数量(暂未生效)" class="layui-input"-->
-<!--                                       style="height: 30px;width: 130px;margin-left:5px;margin-top:15;">-->
-<!--                                <br>-->
-<!--                            </div>-->
+                            <!--                            <div class="checkbox-item">-->
+                            <!--                                <div class="layui-form">-->
+                            <!--                                    <div class="layui-input-inline">-->
+                            <!--                                        <select name="作物3" id="作物3" lay-filter="mijing1-filter">-->
+                            <!--                                            <option value="默认">选择作物(默认前两个)</option>-->
+                            <!--                                            <option value="花椰子">花椰子</option>-->
+                            <!--                                            <option value="长耳萝卜">长耳萝卜</option>-->
+                            <!--                                            <option value="魔女南瓜">魔女南瓜</option>-->
+                            <!--                                            <option value="小熊辣椒">小熊辣椒</option>-->
+                            <!--                                            <option value="多笋">多笋</option>-->
+                            <!--                                        </select>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <input type="text" id="作物3数量" name="作物3数量" lay-verify="title" autocomplete="off"-->
+                            <!--                                       placeholder="目标数量(暂未生效)" class="layui-input"-->
+                            <!--                                       style="height: 30px;width: 130px;margin-left:5px;margin-top:15;">-->
+                            <!--                                <br>-->
+                            <!--                            </div>-->
                         </div>
                     </fieldset>
                 </fieldset>
@@ -1931,6 +1951,15 @@
             }
         }
 
+        var defaultValue = localStorage.getItem('选择游戏版本');
+        var selectElement = document.getElementById('选择游戏版本');
+        for (var i = 0; i < selectElement.options.length; i++) {
+            if (selectElement.options[i].value === defaultValue) {
+                selectElement.options[i].selected = true;
+                break;
+            }
+        }
+
         // 重新渲染 select 元素
         layui.form.render('select');
 
@@ -1938,6 +1967,8 @@
         document.getElementById("队伍喊话").value = 队伍喊话;
         var 队伍喊话间隔 = localStorage.getItem("队伍喊话间隔");
         document.getElementById("队伍喊话间隔").value = 队伍喊话间隔;
+
+        setSwitchStatus("队伍AI发言");
 
         setSwitchStatus("恶龙开关");
         setSwitchStatus("恶龙添加佣兵");
@@ -2087,6 +2118,10 @@
           $mjgqSelect.html('<option value="悲恸骑士游猎场">悲恸骑士游猎场</option><option value="云涌风雷王座">云涌风雷王座</option>');
         }
 
+        if(mjId === '群岛') {
+          $mjgqSelect.html('<option value="无法无天章鱼帮">无法无天章鱼帮</option><option value="长夜明灯之孤塔">长夜明灯之孤塔</option>');
+        }
+
         form.render('select'); // 更新城市选择框的UI
       });
     });
@@ -2182,6 +2217,9 @@
 
         var 选择启动角色 = document.getElementById("选择启动角色").value;
         localStorage.setItem("选择启动角色", 选择启动角色);
+
+        var 选择游戏版本 = document.getElementById("选择游戏版本").value;
+        localStorage.setItem("选择游戏版本", 选择游戏版本);
 
         var 选择启动区服 = document.getElementById("选择启动区服").value;
         localStorage.setItem("选择启动区服", 选择启动区服);
@@ -2339,6 +2377,7 @@
         localStorage.setItem("队伍喊话", 队伍喊话);
         var 队伍喊话间隔 = document.getElementById("队伍喊话间隔").value;
         localStorage.setItem("队伍喊话间隔", 队伍喊话间隔);
+        队伍AI发言 = saveSwitchStatus("队伍AI发言");
 
         恶龙开关 = saveSwitchStatus("恶龙开关");
         恶龙添加佣兵 = saveSwitchStatus("恶龙添加佣兵");
@@ -2445,6 +2484,7 @@
 
             选择启动区服: 选择启动区服,
             选择启动角色: 选择启动角色,
+            选择游戏版本: 选择游戏版本,
             角色1开关: 角色1开关,
             角色2开关: 角色2开关,
             角色3开关: 角色3开关,
@@ -2558,6 +2598,7 @@
             史莱姆选择: 史莱姆选择,
             喊话内容: 队伍喊话,
             队伍喊话间隔: 队伍喊话间隔,
+            队伍AI发言: 队伍AI发言,
 
             恶龙开关: 恶龙开关,
             恶龙添加佣兵: 恶龙添加佣兵,

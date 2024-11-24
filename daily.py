@@ -24,7 +24,7 @@ import random
 class DailyTask:
     def __init__(self):
         self.shilianTask = ShiLianTask()
-        self.startupTask = StartUp("com.xd.cfbmf")
+        self.startupTask = StartUp(f"{功能开关['游戏包名']}")
 
     def homePage(self, needQuitTeam=False):
         tryTimes = 0
@@ -46,7 +46,7 @@ class DailyTask:
                 self.closeLiaoTian()
 
             if tryTimes > 10:
-                system.open("com.xd.cfbmf")
+                system.open(f"{功能开关['游戏包名']}")
                 # 暂不处理战败页启动，提高执行效率
                 # 判断战败页面
                 if 功能开关["fighting"] == 0:
@@ -56,14 +56,14 @@ class DailyTask:
 
             if tryTimes > 15:
                 Toast('尝试返回游戏')
-                system.open("com.xd.cfbmf")
+                system.open(f"{功能开关['游戏包名']}")
             if tryTimes > 20:
                 if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
                     return
                 Toast('尝试重启游戏')
                 # 结束应用
                 # r = system.shell("am kill com.xd.cfbmf", L())
-                r = system.shell("am force-stop com.xd.cfbmf", L())
+                r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
                 # 重启游戏
                 self.startupTask.start_app()
             if tryTimes > 23:
@@ -375,6 +375,13 @@ class DailyTask:
                             re, _ = TomatoOcrText(318, 359, 397, 386, '选择频道')
                             if not re:
                                 res = TomatoOcrTap(546, 138, 625, 165, '切换频道', -20, 10, sleep1=0.8)
+
+                            re, _ = TomatoOcrText(161, 454, 258, 486, '下一频道')  # 判断当前频道是否已切换为下一频道
+                            if re:
+                                tapSleep(356, 1112)
+                                findNext = True
+                                break
+
                             res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880, offsetX=10,
                                                           offsetY=10)
                             sleep(0.8)
@@ -1557,7 +1564,6 @@ class DailyTask:
                     TomatoOcrTap(325, 928, 391, 951, '确认')
                     tapSleep(352, 1169)  # 点击空白
 
-
         # 准备剪彩
         res = TomatoOcrTap(457, 1141, 576, 1175, "准备剪彩", 10, 10)
         if res:
@@ -2164,7 +2170,7 @@ class DailyTask:
                         tapSleep(356, 1205)
                         break
                     if not re:
-                        system.open("com.xd.cfbmf")
+                        system.open(f"{功能开关['游戏包名']}")
                         self.closeLiaoTian()
                         sleep(5)
                         Toast(f'游戏卡死，等待{i * 5}/50s')
@@ -2187,8 +2193,8 @@ class DailyTask:
                 Toast('游戏进程卡死，尝试重启游戏')
                 # 结束应用
                 # r = system.shell("am kill com.xd.cfbmf", L())
-                r = system.shell("am force-stop com.xd.cfbmf", L())
-                system.open("com.xd.cfbmf")
+                r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
+                system.open(f"{功能开关['游戏包名']}")
                 功能开关["fighting"] = 0
                 return False
             功能开关["fighting"] = 0

@@ -86,6 +86,10 @@ switch_ocr_apk_lock = Lock()
 功能开关 = config
 功能配置 = {'配置1': config['配置1'], '配置2': config['配置2'], '配置3': config['配置3'], '配置4': config['配置4'],
             '配置5': config['配置5']}
+if 功能开关['选择游戏版本'] == "国服":
+    功能开关['游戏包名'] = "com.xd.cfbmf"
+elif 功能开关['选择游戏版本'] == "台服":
+    功能开关['游戏包名'] = "com.xd.muffin.tw"
 
 def loadConfig(configNum):
     global 功能开关
@@ -114,7 +118,7 @@ def loadConfig(configNum):
     "定时休息-倒计时": 0,
     "任务重置-倒计时": 0,
 
-    "自动入队-AI发言": 0,
+    "AI发言-广告开关": 0,
     "AI发言-上一次发言": [],
     "战斗-上一次移动": 0,
     "战斗-推荐战力": 0,

@@ -213,7 +213,7 @@ class StartUp:
         if not login1 and not login2:
             # 重启应用
             # r = system.shell("am kill com.xd.cfbmf")
-            r = system.shell("am force-stop com.xd.cfbmf")
+            r = system.shell(f"am force-stop {功能开关['游戏包名']}")
             system.open(self.app_name)
             sleep(5)
             for i in range(1, 6):
@@ -323,22 +323,22 @@ class StartUp:
 
     def loadAccount(self, account_name):
         try:
+            global 功能开关
             account_name = str(account_name)
             Toast('加载账号' + account_name)
             # 结束应用
             # r = system.shell("am kill com.xd.cfbmf", L())
-            r = system.shell("am force-stop com.xd.cfbmf", L())
+            r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
             print(r)
-            oldPath1 = "/data/data/com.xd.cfbmf/shared_prefs/"
+            oldPath1 = f"/data/data/{功能开关['游戏包名']}/shared_prefs/"
             # 删除文件夹
             r = system.shell(f"rm -rf {oldPath1} 2>/dev/null", L())
-            new_path1 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/"
+            new_path1 = f"/data/data/{功能开关['游戏包名']}/accountConfig" + account_name + "_shared_prefs/"
             flag1 = system.shell(f"cp -r -a {new_path1} {oldPath1}", L())
             # oldPath2 = "/data/data/com.xd.cfbmf/"
             # new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs/shared_prefs"
             # flag1 = system.shell(f"cp -r -a {new_path2} {oldPath2}", L())
             # print(flag1)
-            global 功能开关
             configNum = 功能开关['账号' + str(account_name) + '配置']
             if configNum != 0 and configNum != '' and configNum != '0':
                 Toast(f'加载账号{account_name} + 加载配置{configNum}')
@@ -365,8 +365,8 @@ class StartUp:
 
     def saveAccount(self, account_name):
         account_name = str(account_name)
-        old_path1 = "/data/data/com.xd.cfbmf/shared_prefs"
-        new_path1 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_shared_prefs"
+        old_path1 = f"/data/data/{功能开关['游戏包名']}/shared_prefs"
+        new_path1 = f"/data/data/{功能开关['游戏包名']}/accountConfig" + account_name + "_shared_prefs"
 
         # 删除文件夹
         r = system.shell(f"rm -rf {new_path1} 2>/dev/null")
@@ -378,8 +378,8 @@ class StartUp:
         flag1 = system.shell(f"cp -r -a {old_path1} {new_path1}")
         # flag1 = shutil.copytree(old_path1, new_path1, dirs_exist_ok=True)
 
-        old_path2 = "/data/data/com.xd.cfbmf/app_webview"
-        new_path2 = "/data/data/com.xd.cfbmf/accountConfig" + account_name + "_app_webview"
+        old_path2 = f"/data/data/{功能开关['游戏包名']}/app_webview"
+        new_path2 = f"/data/data/{功能开关['游戏包名']}/accountConfig" + account_name + "_app_webview"
 
         # 删除文件夹
         r = system.shell(f"rm -rf {new_path2} 2>/dev/null")

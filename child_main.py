@@ -21,7 +21,7 @@ import traceback
 
 
 def mainTask():
-    start_up = StartUp("com.xd.cfbmf")
+    start_up = StartUp(f"{功能开关['游戏包名']}")
     yingdiTask = YingDiTask()
     dailyTask = DailyTask()
     lvrenTask = LvRenTask()
