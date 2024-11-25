@@ -946,11 +946,19 @@
                         <!--                               placeholder="队伍喊话内容2（留空不执行）" class="layui-input">-->
                         <input type="text" id="队伍喊话间隔" name="队伍喊话间隔" lay-verify="title" autocomplete="off"
                                placeholder="队伍喊话间隔（分钟）(留空每局都喊话)" class="layui-input">
+                        <legend>对局AI设置</legend>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input id="队伍AI发言" name="vehicle" type="checkbox"
-                                       value="Bike">对局AI
-                                <label class="gray-text">(战斗中自动发送「对局状态、攻略提示、问候语」)</label><br>
+                                       value="Bike">AI发言<label class="gray-text">(自动发送「对局状态、攻略提示、问候语」)</label><br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="队伍AI走位" name="vehicle" type="checkbox"
+                                       value="Bike">AI走位<label class="gray-text">(自动走位，部分地图支持识别机制走位)</label><br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="队伍AI锁敌" name="vehicle" type="checkbox"
+                                       value="Bike">AI锁敌<label class="gray-text">(自动锁敌，部分地图支持识别机制锁敌)</label><br>
                             </div>
                         </div>
                         <legend>自动入队设置</legend>
@@ -1969,6 +1977,8 @@
         document.getElementById("队伍喊话间隔").value = 队伍喊话间隔;
 
         setSwitchStatus("队伍AI发言");
+        setSwitchStatus("队伍AI走位");
+        setSwitchStatus("队伍AI锁敌");
 
         setSwitchStatus("恶龙开关");
         setSwitchStatus("恶龙添加佣兵");
@@ -2378,6 +2388,8 @@
         var 队伍喊话间隔 = document.getElementById("队伍喊话间隔").value;
         localStorage.setItem("队伍喊话间隔", 队伍喊话间隔);
         队伍AI发言 = saveSwitchStatus("队伍AI发言");
+        队伍AI走位 = saveSwitchStatus("队伍AI走位");
+        队伍AI锁敌 = saveSwitchStatus("队伍AI锁敌");
 
         恶龙开关 = saveSwitchStatus("恶龙开关");
         恶龙添加佣兵 = saveSwitchStatus("恶龙添加佣兵");
@@ -2599,6 +2611,8 @@
             喊话内容: 队伍喊话,
             队伍喊话间隔: 队伍喊话间隔,
             队伍AI发言: 队伍AI发言,
+            队伍AI走位: 队伍AI走位,
+            队伍AI锁敌: 队伍AI锁敌,
 
             恶龙开关: 恶龙开关,
             恶龙添加佣兵: 恶龙添加佣兵,

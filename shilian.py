@@ -9,6 +9,7 @@ from ascript.android import action
 from ascript.android.screen import CompareColors
 from .thread import *
 from ascript.android.screen import FindColors
+import pymysql
 
 
 class ShiLianTask:
@@ -594,6 +595,11 @@ class ShiLianTask:
                         self.quitTeamFighting()
                         break
                     Toast(f"秘境任务 - 创建房间 - 等待队友{elapsed}/120s")
+                    # 识别队友及关卡名称
+                    if 任务记录['战斗-房主名称'] == '':
+                        res, 任务记录['战斗-房主名称'] = TomatoOcrText(153, 827, 260, 850, "队友名称")
+                        res, 任务记录['战斗-关卡名称'] = TomatoOcrText(352, 284, 601, 318, "关卡名称")
+                        任务记录['带队次数'], last_time = self.daiDuiCount()
                     # 检查是否队友全为佣兵
                     if elapsed < 20:
                         # 等待队友结算完成
@@ -681,6 +687,8 @@ class ShiLianTask:
                                 功能开关["fighting"] = 0
                                 elapsed = 0  # 初始化等待队员时间
                                 fightDone = 1
+                                任务记录['AI发言-上一次发言'] = []
+                                任务记录['战斗-房主名称'] = ""
                                 break
                     # 等待队员
                     sleep(2)
@@ -1581,11 +1589,10 @@ class ShiLianTask:
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
                 if teamShoutDone == 0:
-                    if fightType == '秘境带队':
-                        self.teamShoutAI(f'秘境-{任务记录["战斗-关卡名称"]}-开始战斗~祝你武运昌隆~', shoutType="fight")
-                        teamName = 任务记录['战斗-房主名称']
-                        teamCount = 任务记录['带队次数']
-                        self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
+                    self.teamShoutAI(f'秘境-{任务记录["战斗-关卡名称"]}-开始战斗~祝你武运昌隆~', shoutType="fight")
+                    teamName = 任务记录['战斗-房主名称']
+                    teamCount = 任务记录['带队次数']
+                    self.teamShoutAI(f'{teamName}-第{teamCount}次相遇~祝你游戏开心~', shoutType="fight")
                     teamShoutDone = self.teamShout()
                 if elapsed > 15 and fightType == '秘境带队':
                     self.teamShoutAI("秘境-战斗即将结束-期待下次相遇", shoutType="fight")
@@ -2231,6 +2238,11 @@ class ShiLianTask:
             Toast('收起喊话窗口')
             tapSleep(107, 93)
 
+        # 判断已进入待准备页，提前返回
+        res, _ = TomatoOcrText(451, 607, 505, 631, '准备')
+        if res:
+            return
+
         Toast("队伍发言")
         # print(contentTemp)
 
@@ -2529,6 +2541,7 @@ class ShiLianTask:
         # 判断战力差距，提醒队友
 
         # 识别当前地图，提醒队友攻略
+        # 秘境
         if "无法无" in 任务记录["战斗-关卡名称"]:  # 无法无天章鱼帮
             self.teamShoutAI("提示:boss大招后，集火攻击一只鹦鹉喔！")
         elif "云涌风" in 任务记录["战斗-关卡名称"]:  # 云涌风雷王座
@@ -2539,7 +2552,7 @@ class ShiLianTask:
             self.teamShoutAI("提示:坦克可往左跑两格引开boss，其他人不动~")
         elif "傲慢者" in 任务记录["战斗-关卡名称"]:  # 傲慢者赫朗格尼
             self.teamShoutAI("提示:boss大招时请前往坦克位置协助击破或屏障~")
-        elif "薄纱笑" in 任务记录["战斗-关卡名称"]:
+        elif "薄纱笑" in 任务记录["战斗-关卡名称"]:  # 薄纱笑靥舞
             self.teamShoutAI("提示:月球掉落时需要至少1人接到伤害~")
         elif "世界万" in 任务记录["战斗-关卡名称"]:  # 世界万象其中
             self.teamShoutAI("提示:光阶段走位暗场地、暗阶段走位光场地~")
@@ -2550,6 +2563,28 @@ class ShiLianTask:
             self.teamShoutAI("提示:坦克请远离人群避免飞弹波及，可各自站一格~")
         elif "金色歌" in 任务记录["战斗-关卡名称"]:  # 金色歌剧院
             self.teamShoutAI("提示:boss大招后，集火机器人喔~")
+
+        # 绝境
+        if "下锚白帆" in 任务记录["战斗-关卡名称"]:  # 绝境26：下锚白帆登陆战
+            self.teamShoutAI("提示:boss大招后，集火攻击一只鹦鹉喔！")
+        elif "雷神之锤" in 任务记录["战斗-关卡名称"]:  # 绝境25：雷神之锤抢夺战
+            self.teamShoutAI("提示:一阶段上风区可加攻、二阶段要远离上风区喔！")
+            self.teamShoutAI("大招时分别站两个区域、大招后正负极要集合在一起！")
+        elif "空心骑士" in 任务记录["战斗-关卡名称"]:  # 绝境24：空心骑士追猎战
+            self.teamShoutAI("提示:boss四周护盾会降伤，大招后暂时消散")
+            self.teamShoutAI("提示:坦克可往左跑两格引开boss，其他人不动~")
+        elif "夜蝶" in 任务记录["战斗-关卡名称"]:  # 绝境23：夜蝶遗迹破关战
+            self.teamShoutAI("提示:boss大招时请前往坦克位置协助击破或屏障~")
+        elif "控制中" in 任务记录["战斗-关卡名称"]:  # 绝境22：控制中枢搜寻战
+            self.teamShoutAI("提示:boss召唤模块后需集火清理模块~")
+        elif "黄金穹顶击破战" in 任务记录["战斗-关卡名称"]:  # 绝境21：黄金穹顶击破战
+            self.teamShoutAI("提示:坦克请远离人群避免飞弹波及，可各自站一格~")
+        elif "血色剧院" in 任务记录["战斗-关卡名称"]:  # 绝境20：血色剧院安可战
+            self.teamShoutAI("提示:留存两个喇叭，可在谢幕阶段提供减伤")
+        elif "无夜底" in 任务记录["战斗-关卡名称"]:  # 绝境19：无夜底层灭鼠战
+            self.teamShoutAI("提示:注意躲避红圈~")
+        elif "下城" in 任务记录["战斗-关卡名称"]:  # 绝境18：下城械斗平定战
+            self.teamShoutAI("提示:boss和小怪需在12s内同时击杀~")
 
         # 判断当前时间，回复吉祥话
         from datetime import datetime
@@ -2603,16 +2638,124 @@ class ShiLianTask:
 
     # 自动锁敌、自动走位
     def autoMove(self):
-        # 切换攻击目标
-        point = FindColors.find("135,252,#7CA2E2|153,238,#7DA1E2|170,255,#85A7E1|164,265,#7DA1E2|150,271,#94B1E5",
-                                rect=[1, 175, 697, 836], diff=0.95)
-        if point:
-            Toast('切换攻击目标')
-            print(point.x, point.y)
-            tapSleep(point.x, point.y)
-        # 移动走位
-        if time.time() - 任务记录['战斗-上一次移动'] > 7:
-            re = imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+        # 识别当前职业
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-战士", 0.85, 4, 41, 72, 118)
             if re:
-                Toast('自动走位')
-            任务记录['战斗-上一次移动'] = time.time()
+                Toast('识别当前职业-战士')
+                功能开关['玩家-当前职业'] = '战士'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-服事", 0.85, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-服事')
+                功能开关['当前职业'] = '服事'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-刺客", 0.85, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-刺客')
+                任务记录['玩家-当前职业'] = '刺客'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-法师", 0.85, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-法师')
+                任务记录['玩家-当前职业'] = '法师'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-游侠", 0.85, 4, 41, 72, 118)
+            if re:
+                Toast('识别当前职业-游侠')
+                任务记录['玩家-当前职业'] = '游侠'
+
+        if 功能开关['队伍AI锁敌']:
+            # 切换攻击目标
+            point = FindColors.find("135,252,#7CA2E2|153,238,#7DA1E2|170,255,#85A7E1|164,265,#7DA1E2|150,271,#94B1E5",
+                                    rect=[1, 175, 697, 836], diff=0.95)
+            if point:
+                Toast('切换攻击目标')
+                print(point.x, point.y)
+                tapSleep(point.x, point.y)
+
+        if 功能开关['队伍AI走位']:
+            # 移动走位
+            # 部分地图根据机制走位
+            if 任务记录['玩家-当前职业'] == '战士':
+                if "云涌风雷王座" in 任务记录['玩家-当前关卡'] or "雷神之锤" in 任务记录['玩家-当前关卡']:
+                    # 不走位，避免移动引雷
+                    Toast('停止移动，避免引雷')
+                    return
+
+            if time.time() - 任务记录['战斗-上一次移动'] > 7:
+                re = imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+                if re:
+                    Toast('自动走位')
+                任务记录['战斗-上一次移动'] = time.time()
+
+    def daiDuiCount(self):
+        db = pymysql.connect(
+            host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+            port=3307,  # 开发者后台,创建的数据库 “端口”
+            user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+            password='233233',  # 开发者后台,创建的数据库 “初始密码”
+            database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+            charset='utf8mb4'  ""
+        )  # 连接数据库
+
+        count = 0
+        last_time = 0
+        now_time = int(time.time())
+
+        cursor = db.cursor()
+        sql = "SELECT * FROM daidui WHERE user_name	 = %s and team_name	= %s"
+        # 使用参数化查询
+        cursor.execute(sql, (任务记录['玩家名称'], 任务记录["战斗-房主名称"]))
+        results = cursor.fetchall()
+        for row in results:
+            count = row[2]
+            last_time = row[3]
+
+        # 执行完之后要记得关闭游标和数据库连接
+        cursor.close()
+        # 执行完毕后记得关闭db,不然会并发连接失败哦
+        db.close()
+
+        p = threading.Thread(target=self.daiDuiUpdate, args=(count, 任务记录["战斗-房主名称"], now_time))
+        p.start()
+
+        if count == 0:
+            count = 1
+        else:
+            count = count + 1
+
+        任务记录['带队次数'] = count
+        return count, last_time
+
+    def daiDuiUpdate(self, count, teamName, now_time):
+        db = pymysql.connect(
+            host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+            port=3307,  # 开发者后台,创建的数据库 “端口”
+            user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+            password='233233',  # 开发者后台,创建的数据库 “初始密码”
+            database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+            charset='utf8mb4'  ""
+        )  # 连接数据库
+        cursor = db.cursor()
+
+        # 插入
+        if count == 0:
+            count = 1
+            # 构造 SQL 语句
+            sql = f"Insert into daidui (user_name,team_name,count,last_time) Values (%s,%s,%s,%s)"
+            # 使用参数化查询
+            cursor.execute(sql, (任务记录["玩家名称"], teamName, count, now_time))
+            db.commit()  # 不要忘了提交,不然数据上不去哦
+        else:
+            count = count + 1
+            # 构造 SQL 语句
+            sql = "UPDATE daidui SET count = %s, last_time = %s WHERE user_name = %s and team_name = %s"
+            # 使用参数化查询
+            cursor.execute(sql, (count, now_time, 任务记录["玩家名称"], teamName))
+            db.commit()  # 不要忘了提交,不然数据上不去哦
+
+        # 执行完之后要记得关闭游标和数据库连接
+        cursor.close()
+        # 执行完毕后记得关闭db,不然会并发连接失败哦
+        db.close()

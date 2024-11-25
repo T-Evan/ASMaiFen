@@ -31,6 +31,43 @@ def main():
                 if 任务记录["AI发言-广告开关"] == 0:
                     if 任务记录["玩家名称"] == '咸鱼搜麦乐芬' or 任务记录["玩家名称"] == '养只狐狸':
                         任务记录["AI发言-广告开关"] = 1
+                # 识别玩家当前关卡，做特殊逻辑
+                if 任务记录["玩家-当前关卡"] == "":
+                    Toast('开始检测最新关卡')
+                    功能开关["fighting"] = 1
+                    功能开关["needHome"] = 0
+                    isFind = False
+                    for k in range(3):
+                        res = TomatoOcrTap(650, 522, 688, 544, "试炼", sleep1=0.8)
+                        if res:
+                            re = imageFindClick('秘境之间', x1=85, y1=53, x2=636, y2=700)
+                            if re:
+                                isFind = True
+                                break
+                            if not re:
+                                re = imageFindClick('秘境之间', x1=374, y1=101, x2=562, y2=156, confidence1=0.8)
+                            if not re:
+                                Toast("未找到试炼入口 - 重新尝试")
+                        else:
+                            Toast("未找到试炼入口 - 重新尝试")
+                    if isFind:
+                        tiliPoint = FindColors.find(
+                            "577,363,#F4DB77|577,358,#F3D76B|585,364,#888A93|585,356,#888992|592,356,#D9DADC|601,364,#F3F3F4",
+                            rect=[72, 205, 655, 1120], diff=0.9)
+                        if tiliPoint:
+                            print(tiliPoint)
+                            x1 = tiliPoint.x - 280
+                            y1 = tiliPoint.y - 25
+                            x2 = x1 + 175
+                            y2 = y1 + 30
+                            res, 任务记录['玩家-当前关卡'] = TomatoOcrText(x1, y1, x2, y2, "当前关卡")  # 关卡1
+                            Toast(f"识别最新关卡-{任务记录['玩家-当前关卡']}-带队时自动开启宝箱")
+                            tapSleep(98, 1212)  # 返回首页
+                            tapSleep(98, 1212)  # 返回首页
+                            tapSleep(98, 1212)  # 返回首页
+                            sleep(1)
+                    功能开关["fighting"] = 0
+
                 Toast('等待组队邀请')
                 waitInvite()
                 dailyTask.checkGameStatus()
@@ -64,6 +101,12 @@ def waitInvite():
         功能开关["needHome"] = 0
         resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
         resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 514, 650, 546, "房主名称")  # 房主名称
+        # 判断带队为最新关卡，默认开启宝箱
+        if 任务记录["玩家-当前关卡"] != "" and 任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"]:
+            Toast('带队最新关卡，战斗后开启宝箱')
+            print(f'{任务记录["玩家-当前关卡"]}-{任务记录["战斗-关卡名称"]}')
+            功能开关["秘境不开宝箱"] = 0
+            功能开关["补充体力次数"] = 3
 
         if fight_type == '':
             for i in range(1, 4):
@@ -267,7 +310,7 @@ def waitInvite():
         res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
         if res6 or res7:
             if not teamShout:
-                count, last_time = daiDuiCount(fight_type)
+                count, last_time = shilianTask.daiDuiCount()
                 content = f'{fight_type}-等待开始~{任务记录["战斗-房主名称"]}'
                 if count < 3:
                     shilianTask.teamShoutAI(f'{content}-初次相遇~给个关注叭', shoutType='room')
@@ -302,78 +345,6 @@ def waitInvite():
     quitTeamRe = shilianTask.quitTeam()
     功能开关["fighting"] = 0
     功能开关["秘境不开宝箱"] = tmpBx
+    功能开关["秘境不开宝箱"] = 1
 
     return
-
-
-def daiDuiCount(fightType='秘境'):
-    db = pymysql.connect(
-        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
-        port=3307,  # 开发者后台,创建的数据库 “端口”
-        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
-        password='233233',  # 开发者后台,创建的数据库 “初始密码”
-        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
-        charset='utf8mb4'  ""
-    )  # 连接数据库
-
-    count = 0
-    last_time = 0
-    now_time = int(time.time())
-
-    cursor = db.cursor()
-    sql = "SELECT * FROM daidui WHERE user_name	 = %s and team_name	= %s"
-    # 使用参数化查询
-    cursor.execute(sql, (任务记录['玩家名称'], 任务记录["战斗-房主名称"]))
-    results = cursor.fetchall()
-    for row in results:
-        count = row[2]
-        last_time = row[3]
-
-    # 执行完之后要记得关闭游标和数据库连接
-    cursor.close()
-    # 执行完毕后记得关闭db,不然会并发连接失败哦
-    db.close()
-
-    p = threading.Thread(target=daiDuiUpdate, args=(count, 任务记录["战斗-房主名称"], now_time))
-    p.start()
-
-    if count == 0:
-        count = 1
-    else:
-        count = count + 1
-
-    任务记录['带队次数'] = count
-    return count, last_time
-
-
-def daiDuiUpdate(count, teamName, now_time):
-    db = pymysql.connect(
-        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
-        port=3307,  # 开发者后台,创建的数据库 “端口”
-        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
-        password='233233',  # 开发者后台,创建的数据库 “初始密码”
-        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
-        charset='utf8mb4'  ""
-    )  # 连接数据库
-    cursor = db.cursor()
-
-    # 插入
-    if count == 0:
-        count = 1
-        # 构造 SQL 语句
-        sql = f"Insert into daidui (user_name,team_name,count,last_time) Values (%s,%s,%s,%s)"
-        # 使用参数化查询
-        cursor.execute(sql, (任务记录["玩家名称"], teamName, count, now_time))
-        db.commit()  # 不要忘了提交,不然数据上不去哦
-    else:
-        count = count + 1
-        # 构造 SQL 语句
-        sql = "UPDATE daidui SET count = %s, last_time = %s WHERE user_name = %s and team_name = %s"
-        # 使用参数化查询
-        cursor.execute(sql, (count, now_time, 任务记录["玩家名称"], teamName))
-        db.commit()  # 不要忘了提交,不然数据上不去哦
-
-    # 执行完之后要记得关闭游标和数据库连接
-    cursor.close()
-    # 执行完毕后记得关闭db,不然会并发连接失败哦
-    db.close()

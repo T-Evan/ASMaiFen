@@ -50,8 +50,9 @@ while True:
 
 import time
 
+
 class TimeoutLock:
-    def __init__(self, timeLock = 10):
+    def __init__(self, timeLock=10):
         self.lock = switch_lock
         self.timeout = timeLock
 
@@ -77,10 +78,11 @@ class TimeoutLock:
         self.release_lock()
         # print("锁已成功释放")
 
+
 # 初始化锁
 global switch_lock
 switch_lock = Lock()
-global switch_ocr_apk_lock # apk ocr 识别锁
+global switch_ocr_apk_lock  # apk ocr 识别锁
 switch_ocr_apk_lock = Lock()
 功能开关 = {}
 功能开关 = config
@@ -91,9 +93,10 @@ if 功能开关['选择游戏版本'] == "国服":
 elif 功能开关['选择游戏版本'] == "台服":
     功能开关['游戏包名'] = "com.xd.muffin.tw"
 
+
 def loadConfig(configNum):
     global 功能开关
-    configName = '配置'+ str(configNum)
+    configName = '配置' + str(configNum)
     new = json.loads(功能配置[configName])
     for index, value in new.items():
         if value == 'false':
@@ -105,6 +108,7 @@ def loadConfig(configNum):
     # 功能开关 = new
     print(功能开关)
     return 功能开关
+
 
 # thread_main_paused = False
 # thread_main_cond = threading.Condition()
@@ -127,7 +131,10 @@ def loadConfig(configNum):
     "带队次数": "",
     "玩家名称": "",
     "玩家战力": "",
+    "玩家-当前关卡": "",
+    "玩家-当前职业": "",
 }
+
 
 def 初始化任务记录(initAll=True):
     # 日常
@@ -181,7 +188,7 @@ def 初始化任务记录(initAll=True):
     })
 
     if initAll:
-        任务记录.update({"日常-洗练1次装备-完成": 0,})
+        任务记录.update({"日常-洗练1次装备-完成": 0, })
 
     # 营地
     任务记录.update({
