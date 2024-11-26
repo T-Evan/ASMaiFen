@@ -347,8 +347,9 @@ class ShiLianTask:
 
         # 判断是否重复挑战（已开启过宝箱）
         re1, x, y = imageFind('恶龙-宝箱金币')
+        re2, x, y = imageFind('恶龙-宝箱金币2', x1=129, y1=841, x2=213, y2=912)
         # re1 = TomatoOcrFindRange('最高', match_mode='fuzzy')
-        if re1:
+        if re1 or re2:
             if 功能开关["恶龙重复挑战"] == 0:
                 Toast("恶龙任务 - 已领取宝箱 - 退出挑战")
                 任务记录['恶龙任务'] = 1
@@ -463,6 +464,17 @@ class ShiLianTask:
                     return
         else:
             Toast('默认挑战最新关卡')
+
+        # 识别当前关卡
+        tiliPoint = FindColors.find(
+            "577,363,#F4DB77|577,358,#F3D76B|585,364,#888A93|585,356,#888992|592,356,#D9DADC|601,364,#F3F3F4",
+            rect=[72, 205, 655, 1120], diff=0.9)
+        if tiliPoint:
+            x1 = tiliPoint.x - 280
+            y1 = tiliPoint.y - 25
+            x2 = x1 + 175
+            y2 = y1 + 30
+            res, 任务记录['玩家-当前关卡'] = TomatoOcrText(x1, y1, x2, y2, "当前关卡")
         self.startFight()
 
     # 开始匹配
@@ -606,6 +618,7 @@ class ShiLianTask:
                         self.quitAi()
 
                     res = TomatoOcrTap(333, 974, 383, 1006, "开始")
+                    TomatoOcrTap(322, 970, 393, 995, "匹配中")  # 避免错误点击匹配，取消匹配中状态
                     if not res and elapsed >= 20:
                         # 判断是否已存在队友
                         re = CompareColors.compare("191,756,#B7D8F9|203,756,#B6D5F6|211,759,#B5D5F6|198,770,#8CA8D4")
@@ -641,7 +654,8 @@ class ShiLianTask:
                         # 等待进入战斗
                         for i in range(15):
                             wait1, _ = TomatoOcrText(309, 976, 408, 1006, '开始匹配')
-                            if wait1:
+                            wait2 = TomatoOcrTap(322, 970, 393, 995, "匹配中")  # 避免错误点击匹配，取消匹配中状态
+                            if wait1 or wait2:
                                 Toast('队友离开，重新等待')
                                 break
                             waitTime = 3 * i
@@ -2513,7 +2527,7 @@ class ShiLianTask:
             self.teamShoutAI("自动回复~当然可以 我会一直等你~")
 
         if 任务记录["AI发言-广告开关"] == 1:
-            wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么']
+            wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么', '托管']
             contains_zan1 = any(zan in teamText1 for zan in wenList)
             contains_zan2 = any(zan in teamText2 for zan in wenList)
             contains_zan3 = any(zan in teamText3 for zan in wenList)
@@ -2643,12 +2657,12 @@ class ShiLianTask:
             re, x, y = imageFind("职业-战士", 0.85, 4, 41, 72, 118)
             if re:
                 Toast('识别当前职业-战士')
-                功能开关['玩家-当前职业'] = '战士'
+                任务记录['玩家-当前职业'] = '战士'
         if 任务记录['玩家-当前职业'] == '':
             re, x, y = imageFind("职业-服事", 0.85, 4, 41, 72, 118)
             if re:
                 Toast('识别当前职业-服事')
-                功能开关['当前职业'] = '服事'
+                任务记录['当前职业'] = '服事'
         if 任务记录['玩家-当前职业'] == '':
             re, x, y = imageFind("职业-刺客", 0.85, 4, 41, 72, 118)
             if re:

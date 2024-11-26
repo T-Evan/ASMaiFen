@@ -106,8 +106,9 @@ class YingDiTask:
             tapSleep(345, 1058)  # 点击空白处关闭
 
             TomatoOcrTap(94, 1186, 125, 1217, "回", sleep1=0.8)  # 返回活动首页
-            res = TomatoOcrTap(232, 1093, 283, 1124, "领取", sleep1=0.8)  # 一键领取
-            if res:
+            res1 = TomatoOcrTap(232, 1093, 283, 1124, "领取", sleep1=0.8)  # 一键领取
+            res2 = TomatoOcrTap(358, 1096, 412, 1122, "领取", sleep1=0.8)  # 一键领取
+            if res1 or res2:
                 tapSleep(232, 1093)  # 点击空白处
 
     # 活动 - 纸飞机
@@ -261,7 +262,7 @@ class YingDiTask:
         if hd1 == False and hd2 == False:
             return
 
-        isFind, x, y = imageFind('月签到')
+        isFind = TomatoOcrFindRangeClick('月签到')
         if not isFind:
             # -- 返回活动最后一屏
             swipe(680, 804, 680, 251)
@@ -442,7 +443,7 @@ class YingDiTask:
                 swipe(361, 547, 380, 918)
                 sleep(1)
 
-            for i in range(2):
+            for i in range(3):
                 Toast('寻找秘宝能量')
                 re, x, y = imageFind('秘宝能量', 0.8)
                 if re:
@@ -469,7 +470,7 @@ class YingDiTask:
                 sleep(2.5)
 
             if not findNL:
-                for i in range(2):
+                for i in range(3):
                     re, x, y = imageFind('秘宝能量', 0.8)
                     if re:
                         tapSleep(x, y, 2)
@@ -516,7 +517,7 @@ class YingDiTask:
                         TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.8)  # 返回芙
                         break
                     if buyCount != "":
-                        re, ct = TomatoOcrText(456,552,503,582, '准备购买次数')
+                        re, ct = TomatoOcrText(456, 552, 503, 582, '准备购买次数')
                         Toast(f'准备购买{ct}次')
                         ct = safe_int(ct)
                         if ct < needCount:
@@ -561,7 +562,11 @@ class YingDiTask:
                             TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.8)  # 返回芙
                             break
                         if buyCount != "":
-                            tapSleep(533, 565)  # 点击+1
+                            re, ct = TomatoOcrText(454, 550, 503, 585, '准备购买次数')
+                            Toast(f'准备购买{ct}次')
+                            ct = safe_int(ct)
+                            if ct < needCount:
+                                tapSleep(527, 571)  # 点击+1
                             re = TomatoOcrTap(445, 642, 511, 669, "购买", 10, 10, sleep1=0.8)
                     res, availableNengLiang = TomatoOcrText(603, 80, 672, 101, "剩余能量")  # 210
                     availableNengLiang = safe_int(availableNengLiang)

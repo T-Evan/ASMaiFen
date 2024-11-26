@@ -1425,11 +1425,11 @@ class DailyTask:
         if not res:
             return
 
-        re = CompareColors.compare("438,1109,#D94F47|440,1107,#D94F47")
-        if re:
+        re = CompareColors.compare("547,1077,#F35E41|551,1079,#EF5C40|551,1076,#F46042")
+        if not re:
             Toast('宝藏湖 - 能量用尽')
             return
-        res = TomatoOcrTap(395, 1076, 496, 1100, "大容量充磁")
+        res = TomatoOcrTap(412, 1076, 511, 1101, "大容量充磁")
         sleep(8)  # 等待动画
         tapSleep(360, 1040)  # 点击空白处
         tapSleep(360, 1040)  # 点击空白处
