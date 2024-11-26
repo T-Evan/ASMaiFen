@@ -95,6 +95,14 @@ class DailyTask:
                 功能开关["needHome"] = 0
                 # 功能开关["fighting"] = 0
                 # TimeoutLock(switch_lock).release_lock()
+                if 任务记录["玩家名称"] == "":
+                    res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
+                    任务记录["玩家名称"] = name
+                    res, fightNum = TomatoOcrText(110, 99, 200, 118, '玩家战力')
+                    if "万" in fightNum:
+                        任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
+                    else:
+                        任务记录["玩家战力"] = float(fightNum.replace("万", ""))
                 Toast('已返回首页')
                 # sleep(0.5)
                 if 功能开关["fighting"] == 0 and needQuitTeam:

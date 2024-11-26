@@ -2507,7 +2507,7 @@ class ShiLianTask:
         return False
 
     def AIContent(self):
-        zanList = ['棒', '厉害', '谢', '哇', '牛', '6', '关注', '大佬']
+        zanList = ['棒', '厉害', '谢', '哇', '牛', '6', '关注', '佬']
         re, teamText1 = TomatoOcrText(62, 1023, 251, 1052, "队友发言")
         re, teamText2 = TomatoOcrText(58, 1049, 244, 1079, "队友发言")
         re, teamText3 = TomatoOcrText(63, 965, 252, 994, "队友发言")
@@ -2518,7 +2518,7 @@ class ShiLianTask:
             # 回复夸赞
             self.teamShoutAI("自动回复~蟹蟹")
 
-        otherList = ['三', '多', '再', '把', '带']
+        otherList = ['再', '把', '带']
         contains_zan1 = any(zan in teamText1 for zan in otherList)
         contains_zan2 = any(zan in teamText2 for zan in otherList)
         contains_zan3 = any(zan in teamText3 for zan in otherList)
@@ -2527,7 +2527,7 @@ class ShiLianTask:
             self.teamShoutAI("自动回复~当然可以 我会一直等你~")
 
         if 任务记录["AI发言-广告开关"] == 1:
-            wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么', '托管']
+            wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么', '托管', '人机']
             contains_zan1 = any(zan in teamText1 for zan in wenList)
             contains_zan2 = any(zan in teamText2 for zan in wenList)
             contains_zan3 = any(zan in teamText3 for zan in wenList)

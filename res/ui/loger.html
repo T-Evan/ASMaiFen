@@ -54,7 +54,7 @@
 
     #logcontains{
       /* 这里是日志样式 */
-      padding: 5px; 
+      padding: 5px;
       font-size: 15px;
 
     }
@@ -68,15 +68,15 @@
   <div class="board">
     <div class="b_header">
       <span id="log_title" class="log_title">日志（请及时收起）</span>
-      
+
       <div style="display: flex;">
         <img id="m_change" class="menu_img"  onclick="ntouch()" src="./img/ico_drag.png">
         <img id="n_chear" class="menu_img"  onclick="clearLog()" src="./img/ico_delete.png">
         <img id="m_close" class="menu_img"  onclick="lclose()" src="./img/ico_close.png">
       </div>
-      
+
     </div>
-      
+
     <div id="logcontains" class="b_body">
     </div>
   </div>
@@ -88,7 +88,7 @@
     var lastlogupdateTime = 0;
 
     $(document).ready(function () {
-      airscript.call('__ready', "1")
+      airscript.call('__ready', "初始化完毕")
 
     })
 

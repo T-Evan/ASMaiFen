@@ -371,7 +371,8 @@ def main():
                         任务记录["切换角色-倒计时"] = int(time.time())
                     else:
                         tmpMinute = round((current_time - 任务记录["切换角色-倒计时"]) / 60, 2)
-                        tmpDiffMinute = round(need_switch_role_minute - ((current_time - 任务记录["切换角色-倒计时"]) / 60), 2)
+                        tmpDiffMinute = round(
+                            need_switch_role_minute - ((current_time - 任务记录["切换角色-倒计时"]) / 60), 2)
                         Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换角色")
                         sleep(1.5)
 
@@ -387,7 +388,8 @@ def main():
                         任务记录["切换账号-倒计时"] = int(time.time())
                     else:
                         tmpMinute = round((current_time - 任务记录["切换账号-倒计时"]) / 60, 2)
-                        tmpDiffMinute = round(need_switch_account_minute - ((current_time - 任务记录["切换账号-倒计时"]) / 60), 2)
+                        tmpDiffMinute = round(
+                            need_switch_account_minute - ((current_time - 任务记录["切换账号-倒计时"]) / 60), 2)
                         Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换账号")
                         sleep(1.5)
 

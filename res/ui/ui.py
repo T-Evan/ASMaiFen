@@ -2,6 +2,7 @@
 # 导入-节点检索库
 import json
 import time
+import pymysql
 
 from ascript.android.system import R
 # 导入-屏幕检索库
@@ -10,6 +11,13 @@ from ascript.android.ui import Dialog
 import threading
 import sys
 from ascript.android import system
+# 向悬浮菜单中新增按钮
+from ascript.android.ui import FloatWindow
+from ascript.android.system import R
+# 导入-屏幕检索库
+from ascript.android.ui import WebWindow
+from ascript.android.ui import Loger
+from datetime import datetime, timedelta
 
 config = None
 
@@ -114,6 +122,9 @@ def loadConfig(configNum):
 # thread_main_cond = threading.Condition()
 
 任务记录 = {
+    "提示-并发锁": 0,
+    "启动时间": time.time(),
+
     "当前任务账号": 功能开关["选择启动账号"],
     "当前任务角色": 功能开关["选择启动角色"],
 
@@ -210,3 +221,107 @@ def 初始化任务记录(initAll=True):
         "队伍喊话-倒计时": 0,
         "世界喊话-倒计时": 0,
     })
+
+
+def tunner(k, v):
+    print(k, v)
+
+
+# loger 继承 Window ,因此 Window 中的方法,loger都可以使用
+lw = Loger(R.ui("loger.html"))
+lw.tunner(tunner)  # 设置消息通道
+
+
+# lw.show() # 展示
+# lw.close()
+
+def a():
+    totalTime = time.time() - 任务记录['启动时间']
+    # 计算小时和分钟
+    hours = int(totalTime // 3600)
+    minutes = int((totalTime % 3600) // 60)
+
+    # 任务记录['玩家名称'] = '咸鱼搜麦乐芬'
+
+    if 任务记录['玩家名称'] == "":
+        Dialog.toast(
+            f"数据加载中，请稍后再来查看吧~\nps:多次加载失败可尝试重启脚本",
+            3000, 3 | 48, 0, 0, "#666666", "#FFFFFF")
+        return
+
+    任务记录['提示-并发锁'] = 1
+    userTotalDaiDuiCount, userTodayDaiDuiCount, TodayDaiDuiPaiHang, UserDaiDuiPaiHang = daiDuiCount()
+
+    Dialog.toast(
+        f"已运行{hours}小时{minutes}分\n玩家：{任务记录['玩家名称']}\n总带队{userTotalDaiDuiCount}次，今日带队{userTodayDaiDuiCount}次\n今天带队排行:\n{TodayDaiDuiPaiHang}\n您带队玩家排行:\n{UserDaiDuiPaiHang}",
+        5000, 3 | 48, 0, 0, "#666666", "#FFFFFF")
+    sleep(5)
+    任务记录['提示-并发锁'] = 0
+
+
+FloatWindow.add_menu("10001", R.img("ico_rank.png"), a)
+
+
+def daiDuiCount():
+    db = pymysql.connect(
+        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+        port=3307,  # 开发者后台,创建的数据库 “端口”
+        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+        password='233233',  # 开发者后台,创建的数据库 “初始密码”
+        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+        charset='utf8mb4'  ""
+    )  # 连接数据库
+
+    # 获取当前时间
+    now = datetime.now()
+    # 获取今天的0点时间
+    today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    # 将今天的0点时间转换为Unix时间戳
+    today_start_timestamp = int(today_start.timestamp())
+
+    userTotalDaiDuiCount = 0
+    cursor = db.cursor()
+    sql = "SELECT count(distinct(team_name)) FROM daidui WHERE user_name = %s"
+    # 使用参数化查询
+    cursor.execute(sql, (任务记录['玩家名称']))
+    results = cursor.fetchall()
+    print(results)
+    for row in results:
+        userTotalDaiDuiCount = row[0]
+
+    userTodayDaiDuiCount = 0
+    sql = f"SELECT count(distinct(team_name)) FROM daidui WHERE user_name = %s and last_time > {today_start_timestamp}"
+    # 使用参数化查询
+    cursor.execute(sql, (任务记录['玩家名称']))
+    results = cursor.fetchall()
+    print(results)
+    for row in results:
+        userTodayDaiDuiCount = row[0]
+
+    TodayDaiDuiPaiHang = ""
+    sql = f"SELECT user_name,count(distinct(team_name)) as ct FROM daidui WHERE user_name not in ('','（','）') and last_time > {today_start_timestamp} group by user_name order by ct desc limit 10"
+    # 使用参数化查询
+    cursor.execute(sql)
+    results = cursor.fetchall()
+    print(results)
+    for row in results:
+        # userName = row[0][:-1] + '*'
+        userName = row[0]
+        TodayDaiDuiPaiHang += f"{userName}:{row[1]}次\n"
+
+    UserDaiDuiPaiHang = ""
+    sql = f"SELECT team_name,count FROM daidui WHERE  user_name = %s and team_name not in ('','（','）') group by team_name order by count desc limit 10"
+    # 使用参数化查询
+    cursor.execute(sql, (任务记录['玩家名称']))
+    results = cursor.fetchall()
+    print(results)
+    for row in results:
+        UserDaiDuiPaiHang += f"{row[0]}:{row[1]}次\n"
+    UserDaiDuiPaiHang = UserDaiDuiPaiHang.rstrip('\n')
+
+    # 执行完之后要记得关闭游标和数据库连接
+    cursor.close()
+    # 执行完毕后记得关闭db,不然会并发连接失败哦
+    db.close()
+
+    return userTotalDaiDuiCount, userTodayDaiDuiCount, TodayDaiDuiPaiHang, UserDaiDuiPaiHang

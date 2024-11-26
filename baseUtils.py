@@ -11,6 +11,7 @@ from ascript.android.system import R
 from ascript.android import plug
 from .res.ui.ui import TimeoutLock
 from ascript.android.screen import Ocr
+from .res.ui.ui import 任务记录
 
 
 # plug.load("BDS_OcrText")
@@ -383,6 +384,8 @@ lastToastTime = 0
 
 
 def Toast(content, tim=1000):
+    if 任务记录['提示-并发锁'] == 1:
+        return
     global lastToast
     global lastToastTime
     nowTime = time.time()

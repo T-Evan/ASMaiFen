@@ -79,7 +79,7 @@ class LvRenTask:
             if res:
                 while 1:
                     # 钻石兑换果木
-                    res, buyCount = TomatoOcrText(277,533,434,569, needCount)  # 1/9
+                    res, buyCount = TomatoOcrText(277, 533, 434, 569, needCount)  # 1/9
                     buyCount = (buyCount.replace("每日限购", "").replace("/9", "").
                                 replace("(", "").replace(")", "").replace("（", "").
                                 replace("）", "").replace("/", "").replace("9", "").replace(" ", ""))
@@ -150,8 +150,8 @@ class LvRenTask:
                 tapSleep(x, y)
                 tapSleep(168, 591)  # 装备第1个技能
                 tapSleep(358, 959)  # 确认装备
-                tapSleep(96,1065)  # 确认装备
-                tapSleep(96,1065)  # 确认装备
+                tapSleep(96, 1065)  # 确认装备
+                tapSleep(96, 1065)  # 确认装备
             else:
                 break
 
@@ -175,7 +175,6 @@ class LvRenTask:
                     tapSleep(365, 985)  # 点击升级按钮
                     tapSleep(317, 1134)
                     tapSleep(317, 1134)
-
 
         if 功能开关['优先升级同一技能'] == 1:
             skills = [
@@ -290,8 +289,8 @@ class LvRenTask:
 
         if 任务记录["更换装备-倒计时"] > 0:
             diffTime = time.time() - 任务记录["更换装备-倒计时"]
-            if diffTime < 10 * 60:
-                Toast(f'日常 - 更换装备 - 倒计时{round((10 * 60 - diffTime) / 60, 2)}min')
+            if diffTime < 5 * 60:
+                Toast(f'日常 - 更换装备 - 倒计时{round((5 * 60 - diffTime) / 60, 2)}min')
                 sleep(1.5)
                 return
 
