@@ -235,8 +235,11 @@ def waitInvite():
 
             res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
             # 兜底入队失败
-            res2 = TomatoOcrTap(584, 651, 636, 678, "同意", sleep1=0.8)
+            res2, _ = TomatoOcrText(584, 651, 636, 678, "同意")
             if res2:
+                resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
+                resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 514, 650, 546, "房主名称")  # 房主名称
+                res2 = TomatoOcrTap(584, 651, 636, 678, "同意", sleep1=0.8)
                 # 判断体力用尽提示
                 res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 

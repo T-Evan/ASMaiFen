@@ -154,6 +154,11 @@ class ShiLianTask:
                     return
         sleep(2)
 
+        # 关闭提示
+        return1 = TomatoOcrText(67, 1182, 121, 1221, '返回')
+        if not return1:
+            tapSleep(85,1201)
+
         # 结算前一次的宝箱（兜底）
         res = TomatoOcrTap(333, 715, 384, 745, "开启")  # 领取宝箱
         if not res:
@@ -344,6 +349,11 @@ class ShiLianTask:
             if not re:
                 Toast("秘境任务 - 未找到恶龙入口 - 重新尝试")
                 return self.elong()
+
+        # 关闭提示
+        return1 = TomatoOcrText(67, 1182, 121, 1221, '返回')
+        if not return1:
+            tapSleep(85,1201)
 
         # 判断是否重复挑战（已开启过宝箱）
         re1, x, y = imageFind('恶龙-宝箱金币')
@@ -1730,26 +1740,36 @@ class ShiLianTask:
                 # 退出战斗状态，重置技能时间
                 self.SkillTimeNeedInit = 1
 
-            if 功能开关["三技能自动释放"] == 1:
-                res = TomatoOcrTap(644, 878, 687, 902, "自动", 10, -10)
-                re1 = CompareColors.compare("284,273,#43F6FE|290,271,#4CF2FE|309,271,#6FEBFE")  # 彩色技能条
-                if re1:
-                    tapSleep(649, 953, 0.6)  # 3技能 # 打断技
-                    tapSleep(659, 942, 0.6)  # 3技能 # 打断技
-                re2 = CompareColors.compare("287,271,#756B6C|292,268,#7B7273|284,266,#706667")  # 灰色技能条
-                if re2:
-                    tapSleep(649, 953, 0.6)  # 3技能 # 护盾技
-                    tapSleep(659, 942, 0.6)  # 3技能 # 护盾技
-            if 功能开关["技能定时释放"] == 0 and 功能开关["三技能自动释放"] == 0:
-                res = TomatoOcrTap(644, 878, 687, 902, "自动", 10, -10)
-                tapSleep(511, 1076, 0.6)  # 1技能
-                tapSleep(521, 1070, 0.6)  # 1技能
-                tapSleep(543, 974, 0.6)  # 2技能
-                tapSleep(544, 962, 0.6)  # 2技能
-                tapSleep(659, 942, 0.6)  # 3技能
-                tapSleep(659, 942, 0.6)  # 3技能
-                tapSleep(421, 1077, 0.6)  # 宠物技能
-                tapSleep(426, 1067, 0.6)  # 宠物技能
+        if 功能开关["三技能自动释放"] == 1:
+            res = TomatoOcrTap(644, 878, 687, 902, "自动", 10, -10)
+            re1 = CompareColors.compare("284,273,#43F6FE|290,271,#4CF2FE|309,271,#6FEBFE")  # 彩色技能条
+            if re1:
+                Toast('释放三技能打断')
+                tapSleep(649, 953, 0.3)  # 3技能 # 打断技
+                tapSleep(659, 942, 0.3)  # 3技能 # 打断技
+            re2 = FindColors.find(
+                "283,271,#6D6D6D|284,269,#7A7172|286,269,#7A7172|283,272,#696969|286,272,#696969|285,270,#7C7173",
+                rect=[197, 200, 541, 333])  # 灰色技能条
+            if re2:
+                Toast('释放三技能护盾')
+                tapSleep(649, 953, 0.3)  # 3技能 # 护盾技
+                tapSleep(659, 942, 0.3)  # 3技能 # 护盾技
+            tapSleep(511, 1076, 0.1)  # 1技能
+            tapSleep(521, 1070, 0.1)  # 1技能
+            tapSleep(543, 974, 0.1)  # 2技能
+            tapSleep(544, 962, 0.1)  # 2技能
+            tapSleep(421, 1077, 0.1)  # 宠物技能
+            tapSleep(426, 1067, 0.1)  # 宠物技能
+        if 功能开关["技能定时释放"] == 0 and 功能开关["主动释放技能"] == 1:
+            res = TomatoOcrTap(644, 878, 687, 902, "自动", 10, -10)
+            tapSleep(511, 1076, 0.3)  # 1技能
+            tapSleep(521, 1070, 0.3)  # 1技能
+            tapSleep(543, 974, 0.3)  # 2技能
+            tapSleep(544, 962, 0.3)  # 2技能
+            tapSleep(659, 942, 0.3)  # 3技能
+            tapSleep(659, 942, 0.3)  # 3技能
+            tapSleep(421, 1077, 0.3)  # 宠物技能
+            tapSleep(426, 1067, 0.3)  # 宠物技能
 
     def fightingBaoZou(self):
         totalWait = 330 * 1000  # 30000 毫秒 = 30 秒
@@ -2049,6 +2069,8 @@ class ShiLianTask:
                     Toast('前往-火')
                     火()
                     sleep(1)
+
+        self.autoSkill()
 
     # 大暴走（深林大王）
     def daBaoZouShenLin(self):

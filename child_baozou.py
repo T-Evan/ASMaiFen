@@ -139,16 +139,19 @@ def daBaoZouShuiBoBoss():
 
     # 单-水；兜底
     if bossColor == '' and bossColor1 == '' and bossColor2 == '':
-        res = CompareColors.compare("360,378,#A0E4F3", diff=0.9)
-        if res:
+        res1 = CompareColors.compare("360,378,#A0E4F3", diff=0.9)
+        res2 = CompareColors.compare("360,377,#A3E5F3", diff=0.9)
+        if res1 or res2:
             bossColor = '水'
-        if not res:
-            res = CompareColors.compare("360,380,#FEB390", diff=0.93)
-            if res:
+        if not res1 and not res2:
+            res1 = CompareColors.compare("360,380,#FEB390", diff=0.93)
+            res2 = CompareColors.compare("358,386,#FEA270", diff=0.93)
+            if res1 or res2:
                 bossColor = '火'
-        if not res:
-            res = CompareColors.compare("356,387,#9CDD72", diff=0.9)
-            if res:
+        if not res1 and not res2:
+            res1 = CompareColors.compare("356,387,#9CDD72", diff=0.9)
+            res2 = CompareColors.compare("356,359,#AFE288", diff=0.9)
+            if res1 or res2:
                 bossColor = '木'
 
         # 识别双色
@@ -161,11 +164,11 @@ def daBaoZouShuiBoBoss():
             if res2:
                 bossColor2 = '蒸汽'
             if not res2:
-                res2, _, _ = imageFind('火焰大王-花', confidence1=0.87)
+                res2, _, _ = imageFind('火焰大王-花', 0.87, 434, 328, 516, 416)
                 if res2:
                     bossColor2 = '花'
             if not res2:
-                res2, _, _ = imageFind('火焰大王-水', confidence1=0.92)
+                res2, _, _ = imageFind('火焰大王-水', 0.92, 434, 328, 516, 416)
                 if res2:
                     bossColor2 = '水'
 
@@ -199,6 +202,19 @@ def daBaoZouShuiBoBoss():
     # print(counter.most_common(1))
     # bossColor, bossColor1, bossColor2 = counter.most_common(1)[0][0]
 
+    if bossColor == '' and bossColor1 == '' and bossColor2 == '':
+        res2, _, _ = imageFind('水波大王-水', 0.9, 168, 208, 558, 434)
+        if res2:
+            bossColor = '水'
+        if not res2:
+            res2, _, _ = imageFind('水波大王-火', 0.87, 168, 208, 558, 434)
+            if res2:
+                bossColor = '火'
+        if not res2:
+            res2, _, _ = imageFind('水波大王-木', 0.92, 168, 208, 558, 434)
+            if res2:
+                bossColor = '木'
+
     if bossColor != '':
         功能开关['bossColor'] = bossColor
     if bossColor1 != '':
@@ -211,6 +227,7 @@ def daBaoZouShuiBoBoss():
         sleep(0.5)
     sleep(0.3)
 
+
 def daBaoZouShenLinBoss():
     功能开关['bossColor'] = ''
 
@@ -222,7 +239,8 @@ def daBaoZouShenLinBoss():
         if res:
             bossColor = '木'
         if not res:
-            res = CompareColors.compare("355,366,#B985D6|363,366,#AECEF6|366,366,#B66EB5|366,377,#AF78CB|352,378,#A56BBA", diff=0.83)
+            res = CompareColors.compare(
+                "355,366,#B985D6|363,366,#AECEF6|366,366,#B66EB5|366,377,#AF78CB|352,378,#A56BBA", diff=0.83)
             if res:
                 bossColor = '蒸汽'
         if not res:
@@ -230,15 +248,18 @@ def daBaoZouShenLinBoss():
             if res:
                 bossColor = '篝火'
         if not res:
-            res = CompareColors.compare("353,366,#CFF9FD|352,375,#9BD5FB|360,372,#A7E3FC|360,380,#90D3FA|364,372,#E9FCFE", diff=0.83)
+            res = CompareColors.compare(
+                "353,366,#CFF9FD|352,375,#9BD5FB|360,372,#A7E3FC|360,380,#90D3FA|364,372,#E9FCFE", diff=0.83)
             if res:
                 bossColor = '水'
         if not res:
-            res = CompareColors.compare("360,381,#FE9565|356,370,#FEEDE3|355,377,#FEE3D3|360,380,#FE9B6B|358,381,#FE9363", diff=0.83)
+            res = CompareColors.compare(
+                "360,381,#FE9565|356,370,#FEEDE3|355,377,#FEE3D3|360,380,#FE9B6B|358,381,#FE9363", diff=0.83)
             if res:
                 bossColor = '火'
         if not res:
-            res = CompareColors.compare("355,372,#DAFBF9|358,369,#A6F6E6|358,386,#83DBA4|361,383,#B0EED2|366,380,#8FE8BB", diff=0.83)
+            res = CompareColors.compare(
+                "355,372,#DAFBF9|358,369,#A6F6E6|358,386,#83DBA4|361,383,#B0EED2|366,380,#8FE8BB", diff=0.83)
             if res:
                 bossColor = '开花'
 
@@ -253,6 +274,7 @@ def daBaoZouShenLinBoss():
         print(功能开关['bossColor'])
         sleep(0.5)
     sleep(0.3)
+
 
 def daBaoZouLeiDianBoss():
     功能开关['bossColor'] = ''
@@ -278,29 +300,35 @@ def daBaoZouLeiDianBoss():
 
         # 识别玩家
         if bossColor != '':
-            res2, _, _ = imageFind('雷电大王-蒸汽', 0.8, 164,639,524,1052)
+            res2, _, _ = imageFind('雷电大王-蒸汽', 0.8, 164, 639, 524, 1052)
             if res2:
                 userColor = '蒸汽'
             if not res2:
-                res2 = FindColors.find("311,711,#C15895|314,713,#B35EAE|318,710,#C171C6|322,713,#ACE7FC|325,710,#C3569D|323,716,#B58FE2|309,721,#D5F3FA",rect=[164,639,524,1052],diff=0.85)
+                res2 = FindColors.find(
+                    "311,711,#C15895|314,713,#B35EAE|318,710,#C171C6|322,713,#ACE7FC|325,710,#C3569D|323,716,#B58FE2|309,721,#D5F3FA",
+                    rect=[164, 639, 524, 1052], diff=0.85)
                 if res2:
                     userColor = '蒸汽'
 
             if not res2:
-                res2, _, _ = imageFind('雷电大王-篝火', 0.8,164,639,524,1052)
+                res2, _, _ = imageFind('雷电大王-篝火', 0.8, 164, 639, 524, 1052)
                 if res2:
                     userColor = '篝火'
                 if not res2:
-                    res2 = FindColors.find("352,710,#FDF9EE|355,710,#FDF9EF|361,710,#FDF9EF|364,711,#A4B87A|342,713,#54AB65|348,719,#FEE9D1|356,722,#F8C29B",rect=[164,639,524,1052],diff=0.85)
+                    res2 = FindColors.find(
+                        "352,710,#FDF9EE|355,710,#FDF9EF|361,710,#FDF9EF|364,711,#A4B87A|342,713,#54AB65|348,719,#FEE9D1|356,722,#F8C29B",
+                        rect=[164, 639, 524, 1052], diff=0.85)
                     if res2:
                         userColor = '篝火'
 
             if not res2:
-                res2, _, _ = imageFind('雷电大王-花', 0.8,164,639,524,1052)
+                res2, _, _ = imageFind('雷电大王-花', 0.8, 164, 639, 524, 1052)
                 if res2:
                     userColor = '开花'
                 if not res2:
-                    res2 = FindColors.find("344,727,#46A46D|350,713,#C3F9FB|358,713,#C6F9FB|363,714,#CDFAFD|363,719,#E7FBFC|363,724,#81E2B5|347,730,#3EA367",rect=[164,639,524,1052],diff=0.85)
+                    res2 = FindColors.find(
+                        "344,727,#46A46D|350,713,#C3F9FB|358,713,#C6F9FB|363,714,#CDFAFD|363,719,#E7FBFC|363,724,#81E2B5|347,730,#3EA367",
+                        rect=[164, 639, 524, 1052], diff=0.85)
                     if res2:
                         userColor = '开花'
 
@@ -500,4 +528,3 @@ def daBaoZouLieYanBoss():
     if 功能开关['bossNumber0'] != '' or 功能开关['bossNumber1'] != '' or 功能开关['bossNumber2'] != '':
         sleep(1)
     sleep(0.3)
-
