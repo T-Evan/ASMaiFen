@@ -274,7 +274,7 @@ class DailyTask:
         contents = random.choice(contentArr).split('|')
         print(contents)
         for content in contents:
-            print(content)
+            # print(content)
             res1 = TomatoOcrTap(18, 1098, 97, 1134, "点击输入", 10, 10)
             res2 = False
             if not res1:
@@ -360,12 +360,15 @@ class DailyTask:
                             res, 最大频道左 = TomatoOcrText(161, 812, 262, 842, '最大频道')  # 底部左侧频道
                             下一频道数字右 = rePattern.findall(r'\d+', 最大频道右)
                             下一频道数字左 = rePattern.findall(r'\d+', 最大频道左)
-                            下一频道数字右 = safe_int_v2(下一频道数字右[0])
-                            下一频道数字左 = safe_int_v2(下一频道数字左[0])
-                            if 下一频道数字右 - 下一频道数字左 > 2:
-                                下一频道数字 = 下一频道数字左
+                            if len(下一频道数字右) > 0 or len(下一频道数字左) > 0:
+                                下一频道数字右 = safe_int_v2(下一频道数字右[0])
+                                下一频道数字左 = safe_int_v2(下一频道数字左[0])
+                                if 下一频道数字左 > 0 and 下一频道数字右 - 下一频道数字左 > 2:
+                                    下一频道数字 = 下一频道数字左
+                                elif 下一频道数字右 > 0:
+                                    下一频道数字 = 下一频道数字右
                             else:
-                                下一频道数字 = 下一频道数字右
+                                下一频道数字 = 3  # 默认3个频道
                             最大频道数字 = 下一频道数字
                             if 最大频道数字 > 0:
                                 break
@@ -633,7 +636,7 @@ class DailyTask:
             Toast("日常 - 挑战首领 - 开始")
             self.homePage()
             sleep(1)
-            res1 = TomatoOcrTap(633, 766, 694, 788, "挑战首领")
+            res1 = TomatoOcrTap(626, 763, 702, 797, "挑战首领")
             res2 = False
             if not res1:
                 res2, x, y = imageFind('挑战首领')
@@ -717,12 +720,15 @@ class DailyTask:
                             res = TomatoOcrTap(321, 1022, 394, 1044, "前往地图")
                             res = TomatoOcrTap(330, 1027, 389, 1058, "前往")
 
-                            res = TomatoOcrTap(422, 622, 494, 646, "单人前往")
+                            # res = TomatoOcrTap(422, 622, 494, 646, "单人前往")
+                            res = TomatoOcrFindRangeClick("单人前往")
                             if res:
                                 if 功能开关["队员不满足单飞"] == 1:
-                                    res = TomatoOcrTap(187, 727, 284, 757, "离队前往")
+                                    # res = TomatoOcrTap(187, 727, 284, 757, "离队前往")
+                                    res = TomatoOcrFindRangeClick("离队前往")
                                 else:
-                                    res = TomatoOcrTap(435, 727, 529, 759, "留在队伍")
+                                    # res = TomatoOcrTap(435, 727, 529, 759, "留在队伍")
+                                    res = TomatoOcrFindRangeClick("留在队伍")
                                 break
                         else:
                             swipe(500, 800, 500, 300)
@@ -2117,7 +2123,7 @@ class DailyTask:
         if not res1 and not res2 and not res3:
             return 0
 
-        Toast("队伍发言")
+        Toast("摸鱼队伍发言")
 
         # res1 = TomatoOcrTap(19, 1101, 94, 1135, "点击输入", 10, 10)
         # if not res1:
@@ -2142,6 +2148,9 @@ class DailyTask:
     def checkGameStatus(self):
         try:
             if 功能开关["fighting"] == 1:
+                return
+
+            if 功能开关['技能进入战斗后启动'] == 1:
                 return
 
             if 任务记录["首页卡死检测-倒计时"] > 0:

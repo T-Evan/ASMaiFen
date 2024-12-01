@@ -102,7 +102,8 @@ def waitInvite():
         resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
         resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 514, 650, 546, "房主名称")  # 房主名称
         # 判断带队为最新关卡，默认开启宝箱
-        if 任务记录["玩家-当前关卡"] != "" and 任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"]:
+        if 任务记录["玩家-当前关卡"] != "" and 任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"] and tmpBx == 0:
+            # 若配置要求不开宝箱，则最新关卡也不开启
             Toast('带队最新关卡，战斗后开启宝箱')
             print(f'{任务记录["玩家-当前关卡"]}-{任务记录["战斗-关卡名称"]}')
             功能开关["秘境不开宝箱"] = 0
@@ -322,7 +323,6 @@ def waitInvite():
                                             shoutType='room')
                 teamShout = True
                 Toast(f'{content}-第{count}次相遇')
-                sleep(0.5)
 
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:

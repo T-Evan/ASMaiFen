@@ -222,9 +222,6 @@ def main():
         lvtuanTask = LvTuanTask()
         shilianTask = ShiLianTask()
 
-        # debug
-        # dailyTask.PaiDuiDaShiFighting()
-        # system.exit()
 
         功能开关["breakChild"] = 0
         功能开关["fighting"] = 0
@@ -257,16 +254,31 @@ def main():
         # 多账号处理
         start_up.multiAccount()
 
-        runThreadNotice()
-        runThreadReturnHome()
-        runThreadBaoZouBoss()
-        runThreadMijingTeam()
-        runThreadAnotherLogin()
+        if 功能开关['技能进入战斗后启动'] == 1:
+            runThreadAutoSkill()
+            runThreadAutoSkill2()
+            runThreadAutoSkill3()
+        else:
+            runThreadNotice()
+            runThreadReturnHome()
+            runThreadBaoZouBoss()
+            runThreadMijingTeam()
+            runThreadAnotherLogin()
+            runThreadAutoSkill()
+            runThreadAutoSkill2()
+            runThreadAutoSkill3()
         # runThreadCheckBlock()
         counter = 0
+
+        # debug
+        # while 1:
+        #     功能开关["fighting"] = 1
+        #     sleep(1)
+        # system.exit()
+
         while True:
             try:
-                if 功能开关["fighting"] == 1:
+                if 功能开关["fighting"] == 1 or 功能开关['技能进入战斗后启动'] == 1:
                     # Toast('战斗中 - 主进程暂停')
                     sleep(5)
                     continue

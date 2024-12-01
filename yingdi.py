@@ -255,7 +255,7 @@ class YingDiTask:
         # 返回首页
         self.dailyTask.homePage()
 
-        res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1)
         # 判断是否在营地页面
         hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
         hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
@@ -280,12 +280,12 @@ class YingDiTask:
                 # 上翻第二屏，继续识别
                 swipe(680, 451, 680, 804)
                 sleep(3)
-                isFind, x, y = imageFind('月签到', confidence1=0.7)
+                isFind = TomatoOcrFindRangeClick('月签到')
                 if isFind:
                     break
         if isFind:
-            tapSleep(x, y, 1)
-            TomatoOcrTap(310, 977, 408, 1009, "点击签到")
+            sleep(1.5)
+            TomatoOcrTap(315, 980, 407, 1010, "点击签到")
             # re, x, y = imageFind('月签到-累计奖励', confidence1=0.7)
             point = FindColors.find("361,232,#E65638|361,225,#F46042|366,224,#F55E42", rect=[91, 200, 622, 355])
             if point:
@@ -488,7 +488,7 @@ class YingDiTask:
             # 返回下半屏地图
             if 功能开关["秘宝地图"] == "白帆之都":
                 Toast("返回下半屏")
-                swipe(361, 547, 380, 918, 200)
+                swipe(380, 918, 361, 547)
                 sleep(1)
 
             # 购买秘宝能量
@@ -606,17 +606,33 @@ class YingDiTask:
         # 抽取秘宝
         selectMap = 功能开关["秘宝地图"]
         findMap = False
+
+        if selectMap == "白帆之都":
+            Toast("返回下半屏")
+            swipe(380, 918, 361, 547)
+            sleep(1)
+
         # 先找右侧
         if left == 0 and 0 < right < 4:
-            swipe(420, 200, 420, 600)
-            sleep(2)
+            if selectMap == "白帆之都":
+                Toast("返回下半屏")
+                swipe(380, 918, 361, 547)
+                sleep(1)
+            else:
+                swipe(420, 200, 420, 600)
+                sleep(2)
             swipe(600, 1070, 100, 1070)
             sleep(2)
 
         # 再找左侧
         if left < 4 and right == 4:
-            swipe(420, 200, 420, 600)
-            sleep(2)
+            if selectMap == "白帆之都":
+                Toast("返回下半屏")
+                swipe(380, 918, 361, 547)
+                sleep(1)
+            else:
+                swipe(420, 200, 420, 600)
+                sleep(2)
             swipe(100, 1070, 600, 1070)
             sleep(2)
 
