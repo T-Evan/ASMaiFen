@@ -57,7 +57,8 @@ class AutoSkill:
 
             # 间隔2s检查战斗中状态
             if self.fighting == 0 or time.time() - self.lastCheckFighting > 5:
-                re1 = CompareColors.compare("657,324,#F3EDDD|659,324,#F3EDDD|664,331,#F3EDDD|676,329,#F3EDDD|681,337,#F3EDDD|687,334,#F3EDDD") # 战斗内队伍图标
+                re1 = CompareColors.compare(
+                    "657,324,#F3EDDD|659,324,#F3EDDD|664,331,#F3EDDD|676,329,#F3EDDD|681,337,#F3EDDD|687,334,#F3EDDD")  # 战斗内队伍图标
                 if re1:
                     res3, _ = TomatoOcrText(647, 879, 686, 904, '自动')  # 辅助施法-识别战斗状态
                     res4, _ = TomatoOcrText(647, 879, 686, 904, '手动')  # 辅助施法-识别战斗状态
@@ -244,7 +245,7 @@ class AutoSkill:
     def autoSkill2(self):
         while 1:
             if self.fighting == 0:
-                print(f'辅助施法-技能2-等待中{self.fighting}')
+                # print(f'辅助施法-技能2-等待中{self.fighting}')
                 sleep(1)
                 continue
 
@@ -285,12 +286,36 @@ class AutoSkill:
                                     flag = True
 
                                 # 判断1技能冷却大于2
+                                # 1技能 1
+                                skill1CoolTime = 0
+                                re = CompareColors.compare(
+                                    "513,1068,#F9F9F9|514,1068,#FFFFFF|517,1068,#FFFFFF|520,1072,#9D9D9D|520,1080,#9F9F9F|517,1085,#FFFFFF",
+                                    diff=0.95)
+                                if re:
+                                    skill1CoolTime = 1
+
+                                if not re:
+                                    # 1技能 2
+                                    re = CompareColors.compare(
+                                        "511,1069,#FEFEFE|514,1068,#FFFFFF|521,1071,#FFFFFF|518,1078,#FFFFFF|512,1085,#FFFFFF|522,1085,#FAFAFA",
+                                        diff=0.95)
+                                    if re:
+                                        skill1CoolTime = 2
+
+                                if not re:
+                                    # 1技能 3
+                                    re = CompareColors.compare(
+                                        "511,1068,#FFFFFF|514,1067,#FFFFFF|519,1070,#FFFFFF|514,1075,#FFFFFF|519,1079,#FFFFFF|516,1084,#FEFEFE|511,1085,#FFFFFF",
+                                        diff=0.95)
+                                    if re:
+                                        skill1CoolTime = 3
+                                print(f'1技能冷却-{skill1CoolTime}')
                                 # re, skill2CoolTime = TomatoOcrText(495, 1056, 537, 1095, '1技能冷却')  # 1技能冷却时间
-                                # 误识别修正
+                                # # 误识别修正
                                 # skill2CoolTime = self.coolTimeFix(skill2CoolTime)
                                 # skill2CoolTime = safe_int_v2(skill2CoolTime)
-                                # if 0 < skill2CoolTime < 3:  # 等待1技能重新进入冷却，避免在1技能还有1秒时释放2技能，导致的先后顺序错位
-                                #     flag = False
+                                if 0 < skill1CoolTime < 4:  # 等待1技能重新进入冷却，避免在1技能还有1秒时释放2技能，导致的先后顺序错位
+                                    flag = False
 
                             # if 功能开关['技能2释放依赖'] == '3技能后释放':
                             #     gray = FindColors.find("524,953,#1D1D1D|521,953,#1B1B1B",
@@ -446,7 +471,7 @@ class AutoSkill:
                     # 误识别修正
                     # skill2CoolTime = self.coolTimeFix(skill2CoolTime)
                     # skill2CoolTime = safe_int_v2(skill2CoolTime)
-                    print(f'2技能冷却-{skill2CoolTime}')
+                    # print(f'2技能冷却-{skill2CoolTime}')
                     if skill2CoolTime > 0 and skill2CoolTime >= needCoolTime:
                         flag2 = True
 
@@ -464,7 +489,7 @@ class AutoSkill:
     def autoSkill3(self):
         while 1:
             if self.fighting == 0:
-                print(f'辅助施法-技能3-等待中{self.fighting}')
+                # print(f'辅助施法-技能3-等待中{self.fighting}')
                 sleep(1)
                 continue
 

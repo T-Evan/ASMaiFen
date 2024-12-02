@@ -720,15 +720,12 @@ class DailyTask:
                             res = TomatoOcrTap(321, 1022, 394, 1044, "前往地图")
                             res = TomatoOcrTap(330, 1027, 389, 1058, "前往")
 
-                            # res = TomatoOcrTap(422, 622, 494, 646, "单人前往")
-                            res = TomatoOcrFindRangeClick("单人前往")
+                            res, _ = TomatoOcrText(432, 729, 530, 760, "留在队伍")
                             if res:
                                 if 功能开关["队员不满足单飞"] == 1:
-                                    # res = TomatoOcrTap(187, 727, 284, 757, "离队前往")
-                                    res = TomatoOcrFindRangeClick("离队前往")
+                                    res = TomatoOcrTap(187, 730, 282, 756, "离队前往")
                                 else:
-                                    # res = TomatoOcrTap(435, 727, 529, 759, "留在队伍")
-                                    res = TomatoOcrFindRangeClick("留在队伍")
+                                    res = TomatoOcrTap(435, 729, 532, 759, "留在队伍")
                                 break
                         else:
                             swipe(500, 800, 500, 300)

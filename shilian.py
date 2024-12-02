@@ -127,9 +127,7 @@ class ShiLianTask:
         sleep(2)
 
         # 关闭提示
-        return1 = TomatoOcrText(67, 1182, 121, 1221, '返回')
-        if not return1:
-            tapSleep(85, 1201)
+        return4 = imageFindClick('返回_2', x1=9, y1=1092, x2=172, y2=1261)
 
         # 结算前一次的宝箱（兜底）
         res = TomatoOcrTap(333, 715, 384, 745, "开启")  # 领取宝箱
@@ -193,24 +191,24 @@ class ShiLianTask:
             res = TomatoOcrTap(332, 754, 387, 789, "确定")
 
         # 判断正在匹配中 - 循环等待300s
-        totalWait = 150 * 1000  # 30000 毫秒 = 30 秒
+        totalWait = 150  # 30000 毫秒 = 30 秒
         elapsed = 0
         while 1:
             if elapsed > totalWait:
                 # 超时取消匹配
                 res = TomatoOcrTap(311, 1156, 407, 1182, "匹配中", 40, -40)
-                if res == False:
+                if not res:
                     res = TomatoOcrTap(325, 1156, 390, 1182, "匹配中", 40, -40)
-                    if res == False:
+                    if not res:
                         res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
                 break
 
-            Toast(f"大暴走任务 - 匹配中 - 等待{elapsed // 1000}/150s")
+            Toast(f"大暴走任务 - 匹配中 - 等待{elapsed}/150s")
             # 判断无合适队伍，重新开始匹配
-            res, _ = TomatoOcrText(231, 624, 305, 645, "匹配超时")
+            res, _ = TomatoOcrText(230, 625, 306, 648, "匹配超时")
             if res:
                 Toast("大暴走 - 匹配超时 - 无合适队伍 - 重新匹配")
-                res = TomatoOcrTap(451, 727, 510, 757, "确定")
+                res = TomatoOcrTap(455, 729, 512, 758, "确定")
                 # if res:
                 # elapsed = 0
 
@@ -233,7 +231,7 @@ class ShiLianTask:
                 break
 
             sleep(5)
-            elapsed = elapsed + 5 * 1000
+            elapsed = elapsed + 5
 
     # 梦魇狂潮
     def mengYan(self):
@@ -323,9 +321,7 @@ class ShiLianTask:
                 return self.elong()
 
         # 关闭提示
-        return1 = TomatoOcrText(67, 1182, 121, 1221, '返回')
-        if not return1:
-            tapSleep(85, 1201)
+        return4 = imageFindClick('返回_2', x1=9, y1=1092, x2=172, y2=1261)
 
         # 判断是否重复挑战（已开启过宝箱）
         re1, x, y = imageFind('恶龙-宝箱金币')
@@ -2292,11 +2288,12 @@ class ShiLianTask:
         任务记录["喊话-并发锁"] = 0
 
     def fight_fail(self):
-        res1, _ = TomatoOcrText(246, 459, 327, 482, "你被击败了")
+        res1, _ = TomatoOcrText(459, 853, 546, 881, "你被击败了")
         res2, _ = TomatoOcrText(475, 1038, 527, 1065, "放弃")
+        res3, _ = TomatoOcrText(459, 853, 546, 881, "发起重开")
         res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
         res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-        if res1 or res2 or ("等级" not in teamName1 and "等级" not in teamName2):  # 战败提示 or 队友全部离队
+        if res1 or res2 or res3 or ("等级" not in teamName1 and "等级" not in teamName2):  # 战败提示 or 队友全部离队
             # Toast("战斗结束 - 战斗失败")
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
             self.quitTeamFighting()  # 退出队伍
@@ -2448,13 +2445,14 @@ class ShiLianTask:
 
         if 任务记录["AI发言-广告开关"] == 1:
             wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么', '托管', '人机',
-                       '机器']
+                       '机器', '功能']
             contains_zan1 = any(zan in teamText1 for zan in wenList)
             contains_zan2 = any(zan in teamText2 for zan in wenList)
             contains_zan3 = any(zan in teamText3 for zan in wenList)
             if contains_zan1 or contains_zan2 or contains_zan3:
                 # 回复夸赞
                 self.teamShoutAI("自动回复~欢迎加鹅了解喔~372~270~534")
+                # self.teamShoutAI("全自动日常、一键刷赞、AI带队、智能走位施法、摸鱼种菜，欢迎来鹅了解~372~270~534")
 
         blackList = ['*']
         contains_zan1 = any(zan in teamText1 for zan in blackList)
@@ -2547,7 +2545,8 @@ class ShiLianTask:
         res1, _ = TomatoOcrText(246, 459, 327, 482, "你被击败了")
         res2, _ = TomatoOcrText(475, 1038, 527, 1065, "放弃")
         res3, _ = TomatoOcrText(451, 959, 551, 989, "再次挑战")
-        if res1 or res2 or res3:
+        res4, _ = TomatoOcrText(459, 853, 546, 881, "发起重开")
+        if res1 or res2 or res3 or res4:
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
             self.teamShoutAI(f'战斗失败QAQ~期待下次相遇~', shoutType="fight")
             self.teamShoutAI(f'提示~可以提醒我进行移动哟~', shoutType="fight")
