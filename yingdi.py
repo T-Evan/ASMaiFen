@@ -126,14 +126,15 @@ class YingDiTask:
         if not res:
             # 返回首页
             self.dailyTask.homePage()
-            res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
             # 判断是否在营地页面
             hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
+                Toast('营地任务 - 纸飞机 - 未找到活动入口')
                 return
 
-        isFind = TomatoOcrFindRangeClick('纸翼大作战')
+        isFind = TomatoOcrFindRangeClick('纸翼大作战', sleep1=1)
         if not isFind:
             # -- 返回活动最后一屏
             swipe(680, 804, 680, 251)
@@ -151,7 +152,7 @@ class YingDiTask:
                 # 上翻第二屏，继续识别
                 swipe(680, 451, 680, 804)
                 sleep(3)
-                isFind = TomatoOcrFindRangeClick('纸翼大作战')
+                isFind = TomatoOcrFindRangeClick('纸翼大作战', sleep1=1)
                 if isFind:
                     break
         if isFind:
@@ -165,7 +166,9 @@ class YingDiTask:
                 任务记录['纸飞机-完成'] = 1
                 return
 
-            res = TomatoOcrTap(566, 228, 604, 250, "任务")
+            res, _ = TomatoOcrText(554, 233, 595, 254, "任务")
+            if res:
+                tapSleep(575, 226, 0.8)
             res = TomatoOcrTap(496, 304, 547, 332, "领取")
             tapSleep(345, 1058)  # 点击空白处关闭
             res = TomatoOcrTap(94, 1186, 125, 1217, "回")  # 返回纸飞机首页

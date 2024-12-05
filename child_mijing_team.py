@@ -336,7 +336,11 @@ def waitInvite():
             # 恶龙/绝境/终末，仅挑战1次，可直接退队
             if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队':
                 Toast('退出组队')
-                shilianTask.quitTeam()
+                for z in range(3):
+                    quitRes = shilianTask.quitTeam()
+                    if quitRes:
+                        break
+                    sleep(3)
                 break
         sleep(2)
     if waitTime > 50:

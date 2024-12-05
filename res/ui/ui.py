@@ -100,6 +100,8 @@ if 功能开关['选择游戏版本'] == "国服":
     功能开关['游戏包名'] = "com.xd.cfbmf"
 elif 功能开关['选择游戏版本'] == "台服":
     功能开关['游戏包名'] = "com.xd.muffin.tw"
+elif 功能开关['选择游戏版本'] == "国际服":
+    功能开关['游戏包名'] = "com.xd.muffin.tap.global"
 
 
 def loadConfig(configNum):

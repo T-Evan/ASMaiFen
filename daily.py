@@ -240,6 +240,10 @@ class DailyTask:
         if 功能开关['世界喊话'] == "" and 功能开关['世界喊话2'] == "" and 功能开关['世界喊话3'] == "":
             return 1
 
+        if 功能开关['世界喊话开关'] == "" or 功能开关['世界喊话开关'] == 0:
+            Toast('世界喊话 - 开关关闭')
+            return 1
+
         contentArr = []
         if 功能开关['世界喊话'] != "":
             contentArr.append(功能开关['世界喊话'])
@@ -766,16 +770,21 @@ class DailyTask:
         self.homePage()
         self.quitTeam()
         # 开始派对大师
-        res = TomatoOcrTap(556, 380, 618, 404, "派对大师", 30, -10)
-        if not res:
-            res = TomatoOcrTap(554, 464, 622, 487, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-            if not res:
-                res = TomatoOcrTap(548, 548, 626, 568, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-                if not res:
-                    res = TomatoOcrTap(546, 628, 630, 653, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-                    if not res:
-                        res = TomatoOcrTap(550, 713, 569, 734, "派", 30, -20)  # 适配新手试炼 - 下方入口
-                        if not res:
+        res1 = TomatoOcrTap(556, 380, 618, 404, "派对大师", 30, -10)
+        res2 = TomatoOcrTap(556, 380, 618, 404, "舞会在即", 30, -10)
+        if not res1 and not res2:
+            res1 = TomatoOcrTap(554, 464, 622, 487, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
+            res2 = TomatoOcrTap(554, 464, 622, 487, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
+            if not res1 and not res2:
+                res1 = TomatoOcrTap(548, 548, 626, 568, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
+                res2 = TomatoOcrTap(548, 548, 626, 568, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
+                if not res1 and not res2:
+                    res1 = TomatoOcrTap(546, 628, 630, 653, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
+                    res2 = TomatoOcrTap(546, 628, 630, 653, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
+                    if not res1 and not res2:
+                        res1 = TomatoOcrTap(550, 713, 569, 734, "派", 30, -20)  # 适配新手试炼 - 下方入口
+                        res2 = TomatoOcrTap(550, 713, 569, 734, "舞", 30, -20)  # 适配新手试炼 - 下方入口
+                        if not res1 and not res2:
                             Toast('日常 - 派对大师 - 未找到入口')
                             return
         sleep(1)
@@ -840,6 +849,41 @@ class DailyTask:
             attempt2 = 0
             for i in range(15):
                 object = ''
+
+                re, x, y = imageFind('派对大师-绿人', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '绿人'
+                    Toast(f'本轮目标-{object}')
+                    break
+                re, x, y = imageFind('派对大师-橙人', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '橙人'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-蓝人', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '蓝人'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-红人', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '红人'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-紫人', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '紫人'
+                    Toast(f'本轮目标-{object}')
+                    break
+
+                re, x, y = imageFind('派对大师-糖果', 0.8, 78, 211, 192, 347)
+                if re:
+                    object = '糖果'
+                    Toast(f'本轮目标-{object}')
+                    break
                 re, x, y = imageFind('派对大师-猫咪', 0.8, 78, 211, 192, 347)
                 if re:
                     object = '猫咪'
@@ -895,7 +939,17 @@ class DailyTask:
                     tmpSwipeArr = []
                     # 识别卡牌
                     if not find:
-                        if object == '猫咪':
+                        if object == '绿人':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-绿人', 0.9, 82, 222, 674, 1112)
+                        elif object == '蓝人':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-蓝人', 0.9, 82, 222, 674, 1112)
+                        elif object == '橙人':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-橙人', 0.9, 82, 222, 674, 1112)
+                        elif object == '红人':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-红人', 0.9, 82, 222, 674, 1112)
+                        elif object == '紫人':
+                            re, tmpPoints = imageFindAll('派对大师-卡牌-紫人', 0.9, 82, 222, 674, 1112)
+                        elif object == '猫咪':
                             re, tmpPoints = imageFindAll('派对大师-卡牌-猫咪', 0.9, 82, 222, 674, 1112)
                         elif object == '帽子':
                             re, tmpPoints = imageFindAll('派对大师-卡牌-帽子', 0.9, 82, 222, 674, 1112)
@@ -917,7 +971,8 @@ class DailyTask:
                             Toast(f'已寻找到{object}')
 
                     re2, tmpPoints = imageFindAll('派对大师-卡牌-猫咪', 0.9, 82, 222, 674, 1112)
-                    if not isSwipe and not re2:
+                    re3, tmpPoints = imageFindAll('派对大师-卡牌-绿人', 0.9, 82, 222, 674, 1112)
+                    if not isSwipe and not re2 and not re3:
                         sleep(2)
                         if 轮次 == '第5轮':
                             Toast('等待旋转')
@@ -2149,6 +2204,12 @@ class DailyTask:
 
             if 功能开关['技能进入战斗后启动'] == 1:
                 return
+
+            # re1 = CompareColors.compare(
+            #     "657,324,#F3EDDD|659,324,#F3EDDD|664,331,#F3EDDD|676,329,#F3EDDD|681,337,#F3EDDD|687,334,#F3EDDD")  # 战斗内队伍图标
+            # if re1:
+            #     Toast('战斗中-不检测游戏是否卡死')
+            #     return
 
             if 任务记录["首页卡死检测-倒计时"] > 0:
                 diffTime = time.time() - 任务记录["首页卡死检测-倒计时"]

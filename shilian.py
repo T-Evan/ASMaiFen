@@ -1355,7 +1355,7 @@ class ShiLianTask:
                     teamName = 任务记录['战斗-房主名称']
                     teamCount = 任务记录['带队次数']
                     self.teamShoutAI(
-                        f'终末战-{任务记录["战斗-关卡名称"]}-开始战斗~祝你武运昌隆~{teamName}-第{teamCount}次相遇~祝你游戏开心~',
+                        f'终末战-{任务记录["战斗-关卡名称"]}-开始战斗{teamName}-第{teamCount}次相遇~祝你武运昌隆~',
                         shoutType="fight")
                     teamShoutDone = self.teamShout()
                 self.AIContent()
@@ -1526,7 +1526,7 @@ class ShiLianTask:
                         teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(
-                            f'梦魇-{任务记录["战斗-关卡名称"]}-等待战斗结束~留镜像后离队~{teamName}-第{teamCount}次相遇~祝你游戏开心~',
+                            f'梦魇-{任务记录["战斗-关卡名称"]}-留镜像后离队~祝你武运昌隆~{teamName}-第{teamCount}次相遇~祝你游戏开心~',
                             shoutType="fight")
                     teamShoutDone = self.teamShout()
                 self.AIContent()
@@ -2180,7 +2180,7 @@ class ShiLianTask:
             if not res4:
                 res4, _ = TomatoOcrText(290, 972, 431, 1006, '等待队长开启')  # 房间内喊话
             if res4:
-                tapSleep(219, 986, 1)
+                tapSleep(219, 986, 0.8)
         else:
             res1 = TomatoOcrTap(19, 1104, 94, 1128, "点击输入", 10, 10, sleep1=0.6)
             if not res1:

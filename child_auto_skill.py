@@ -107,6 +107,12 @@ class AutoSkill:
                             flag = False
                             if 功能开关['技能1释放依赖'] == '冷却后立即释放':
                                 flag = True
+                            if 功能开关['技能1释放依赖'] == '宠物技能后释放':
+                                gray = CompareColors.compare("400,1054,#FFFFC7|444,1051,#FFFFCC")  # 宠物技能能量条满
+                                if not gray:
+                                    # 宠物技能能量条不为满，说明在等待宠物技能冷却 or 宠物技能未释放
+                                    # Toast('等待宠物技能冷却')
+                                    flag = True
                             if 功能开关['技能1释放依赖'] == '2技能后释放':
                                 gray = FindColors.find("527,1002,#121219|528,1001,#030303|528,1002,#0A0A0F",
                                                        rect=[509, 938, 573, 1003], diff=0.9)  # 2技能灰色
