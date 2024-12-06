@@ -105,7 +105,7 @@ class ShiLianTask:
                 res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                 fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
                 fightStatu2, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
-                if "等级" in teamName1 or "等级" in teamName2 or fightStatus or fightStatu2:
+                if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2 or fightStatus or fightStatu2:
                     Toast("进入战斗成功 - 开始战斗")
                     self.fightingBaoZou()
                     return True
@@ -670,7 +670,7 @@ class ShiLianTask:
                             # fightStatus, x, y = imageFind('战斗-喊话', 0.9, 360, 0, 720, 1280)
                             # fightStatu2, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
                             # if "等级" in teamName1 or  "等级" in teamName2 or fightStatus or fightStatu2:
-                            if "等级" in teamName1 or "等级" in teamName2:
+                            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                                 Toast("秘境任务 - 匹配成功 - 进入战斗")
                                 self.fighting()
                                 sleep(2)
@@ -809,6 +809,12 @@ class ShiLianTask:
             else:
                 break
 
+        if 功能开关["秘境使用体力果实"] == 1:
+            re = TomatoOcrTap(220, 874, 263, 895, '使用', offsetX=20, offsetY=20)
+            re = TomatoOcrTap(220, 874, 263, 895, '使用', offsetX=20, offsetY=20)
+            if re:
+                Toast("体力购买 - 使用体力果实")
+
         Toast("体力购买 - 结束")
         tapSleep(61, 1187)  # 返回
 
@@ -835,7 +841,8 @@ class ShiLianTask:
                 swipe(150, 300, 150, 700)
                 sleep(2)
         res = TomatoOcrFindRangeClick(selectMap, 1, 0.8, 12, 160, 282, 1171)
-        # res = TomatoOcrTap(mapPoi[0], mapPoi[1], mapPoi[2], mapPoi[3], selectMap, 3, 3)
+        if not res:
+            res = TomatoOcrFindRangeClick(selectMap, 1, 0.8, 118, 230, 178, 1133)
 
         stagePoi = self.stagePoi[selectStage]
         res = TomatoOcrTap(stagePoi[0], stagePoi[1], stagePoi[2], stagePoi[3], selectStage)
@@ -1051,7 +1058,7 @@ class ShiLianTask:
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                 Toast("等待进入战斗")
-                if "等级" in teamName1 or "等级" in teamName2:
+                if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                     Toast("进入战斗成功 - 开始战斗", 500)
                     if fightType == "秘境" or fightType == "秘境带队":
                         self.fighting(fightType)
@@ -1137,7 +1144,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
                 功能开关["fighting_baozou"] = 1
@@ -1185,7 +1192,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认战败
-            if elapsed > 180 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 180 * 1000 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2 ):
                 Toast(f"暴走战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1219,7 +1226,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
                 Toast(f'调查队战斗中,战斗时长{elapsed}/{totalWait}秒')
@@ -1236,7 +1243,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 200 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 200 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"调查队战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1277,7 +1284,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
                 Toast(f'绝境战斗中,战斗时长{elapsed}/{totalWait}秒')
@@ -1306,7 +1313,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认战败
-            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"绝境战斗中状态 - 识别失败 - 次数 {failNum}/5")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1347,7 +1354,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
                 Toast(f'终末战战斗中,战斗时长{elapsed}/{totalWait}秒')
@@ -1374,7 +1381,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"终末战战斗中状态 - 识别失败 - 次数 {failNum}/8")
                 failNum = failNum + 1
                 if failNum > 7:
@@ -1424,7 +1431,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 Toast(f'恶龙战斗中,战斗时长{elapsed}/{totalWait}秒')
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
@@ -1467,7 +1474,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认战败
-            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"恶龙战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1509,7 +1516,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 # if teamShoutDone == 0:
                 #     teamShoutDone = self.teamShout()
                 功能开关["fighting"] = 1
@@ -1548,7 +1555,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 180 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"梦魇战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1580,7 +1587,7 @@ class ShiLianTask:
             # 识别战斗中状态
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 Toast(f'秘境战斗中,战斗时长{elapsed}/{totalWait}秒')
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
@@ -1624,7 +1631,7 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认战败
-            if elapsed > 200 or ("等级" not in teamName1 and "等级" not in teamName2):
+            if elapsed > 200 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if shou_ye1:
                     break
@@ -1661,7 +1668,7 @@ class ShiLianTask:
             res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
 
             # 大暴走可跟队友影子继续战斗，无需判断队友是否在队伍中
-            if res1 or ("等级" in teamName1 or "等级" in teamName2):
+            if res1 or ("等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2):
                 # Toast("战斗中")
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
@@ -2293,7 +2300,7 @@ class ShiLianTask:
         res3, _ = TomatoOcrText(459, 853, 546, 881, "发起重开")
         res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
         res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-        if res1 or res2 or res3 or ("等级" not in teamName1 and "等级" not in teamName2):  # 战败提示 or 队友全部离队
+        if res1 or res2 or res3 or ("等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):  # 战败提示 or 队友全部离队
             # Toast("战斗结束 - 战斗失败")
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
             self.quitTeamFighting()  # 退出队伍

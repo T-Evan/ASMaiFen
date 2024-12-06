@@ -933,6 +933,7 @@ class DailyTask:
                 isSwipe = False
                 swipeArr = []
                 points = ''
+                points2 = ''
                 attempt3 = 0
                 for i in range(20):
                     tmpPoints = ''
@@ -969,6 +970,14 @@ class DailyTask:
                             #     centerY = p['center_y']
                             #     centerArr.append({centerX, centerY})
                             Toast(f'已寻找到{object}')
+
+                        # v2版本，识别指示标记，直接锚定自己的目标
+                        tmpPoints2 = FindColors.find_all(
+                            "331,574,#6FCB5A|331,569,#6FCB5A|333,569,#6FCB5A|333,574,#6FCB5A|336,576,#6FCB5A",
+                            rect=[83, 227, 655, 1115])
+                        if tmpPoints2:
+                            find = True
+                            points2 = tmpPoints2
 
                     re2, tmpPoints = imageFindAll('派对大师-卡牌-猫咪', 0.9, 82, 222, 674, 1112)
                     re3, tmpPoints = imageFindAll('派对大师-卡牌-绿人', 0.9, 82, 222, 674, 1112)
@@ -1048,13 +1057,20 @@ class DailyTask:
                         if not re:
                             tmpSwipeArr.append({'x': 335, 'y': 1045})
 
+                        for p in points2:
+                            for swipe in tmpSwipeArr:
+                                if swipe['x'] - 55 < p.x < swipe['x'] + 65 and swipe['y'] - 55 < p.y < swipe['y'] + 65:
+                                    isSwipe = True
+                                    swipeArr = tmpSwipeArr
+                                    print('识别到卡牌交换')
+                                    break
+
                         for p in points:
                             for swipe in tmpSwipeArr:
                                 if swipe['x'] - 55 < p['center_x'] < swipe['x'] + 65 and swipe['y'] - 55 < p[
                                     'center_y'] < swipe['y'] + 65:
                                     isSwipe = True
                                     swipeArr = tmpSwipeArr
-                                    Toast('识别到卡牌交换')
                                     print('识别到卡牌交换')
                                     break
 
@@ -1078,82 +1094,92 @@ class DailyTask:
                     sleep(1)
                     for i in range(10):
                         if points:
-                            for p in points:
-                                # 检查队友是否提示卡牌
-                                pointsTeam = FindColors.find_all("421,776,#3AFF70|421,776,#3AFF70")
-                                if pointsTeam:
-                                    for j in pointsTeam:
-                                        Toast('选择队友提示的卡牌')
-                                        tapSleep(j.x + 30, j.y + 30, 0.3)
-                                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
-                                        tapSleep(j.x + 30, j.y - 30, 0.3)
-                                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
-                                        tapSleep(j.x - 30, j.y - 30, 0.3)
-                                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                            for k in range(2):
+                                tmpPoints = points
+                                # 先选择自己的目标，后续几轮检查选择其余目标
+                                if k == 0:
+                                    tmpPoints = points2
 
-                                # 选择记录的卡牌
-                                x = p['center_x']
-                                y = p['center_y']
-                                if 轮次 == '第1轮':
-                                    Toast('第一轮')
-                                if 轮次 == '第3轮':
-                                    if 95 < int(x) < 645 and 450 < int(y) < 885:
-                                        Toast('第三轮，交换中间坐标')
-                                        # 从左上开始计算
-                                        if 450 < int(y) < 560:
-                                            if 90 < int(x) < 210:
-                                                x = 580
-                                                y = 500
-                                            if 240 < int(x) < 355:
-                                                x = 570
-                                                y = 615
-                                            if 385 < int(x) < 500:
-                                                x = 570
-                                                y = 725
-                                            if 525 < int(x) < 640:
-                                                x = 565
-                                                y = 830
-                                        # 中间第二排
-                                        if 555 < int(y) < 660:
-                                            if 85 < int(x) < 210:
-                                                x = 435
-                                                y = 505
-                                            if 525 < int(x) < 640:
-                                                x = 420
-                                                y = 830
-                                        # 中间第三排
-                                        if 660 < int(y) < 775:
-                                            if 85 < int(x) < 210:
-                                                x = 295
-                                                y = 505
-                                            if 525 < int(x) < 640:
-                                                x = 280
-                                                y = 830
-                                        # 中间第四排
-                                        if 775 < int(y) < 880:
-                                            if 80 < int(x) < 195:
-                                                x = 150
-                                                y = 505
-                                            if 220 < int(x) < 340:
-                                                x = 145
-                                                y = 615
-                                            if 360 < int(x) < 485:
-                                                x = 135
-                                                y = 715
-                                            if 505 < int(x) < 630:
-                                                x = 130
-                                                y = 830
-                                if 轮次 == '第4轮':
-                                    Toast('第四轮，顺时针旋转180°')
-                                    x = 720 - x
-                                    y = 1280 - y
-                                if 轮次 == '第5轮':
-                                    Toast('第五轮，顺时针旋转180°')
-                                    x = 720 - x
-                                    y = 1280 - y
-                                Toast('选择卡牌')
-                                tapSleep(x, y, 0.3)
-                                TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                                for p in tmpPoints:
+                                    # 检查队友是否提示卡牌
+                                    pointsTeam = FindColors.find_all("421,776,#3AFF70|421,776,#3AFF70")
+                                    if pointsTeam:
+                                        for j in pointsTeam:
+                                            Toast('选择队友提示的卡牌')
+                                            tapSleep(j.x + 30, j.y + 30, 0.3)
+                                            TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                                            tapSleep(j.x + 30, j.y - 30, 0.3)
+                                            TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                                            tapSleep(j.x - 30, j.y - 30, 0.3)
+                                            TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+
+                                    # 选择记录的卡牌
+                                    if k == 0:
+                                        x = p.x
+                                        y = p.y
+                                    else:
+                                        x = p['center_x']
+                                        y = p['center_y']
+                                    if 轮次 == '第1轮':
+                                        Toast('第一轮')
+                                    if 轮次 == '第3轮':
+                                        if 95 < int(x) < 645 and 450 < int(y) < 885:
+                                            Toast('第三轮，交换中间坐标')
+                                            # 从左上开始计算
+                                            if 450 < int(y) < 560:
+                                                if 90 < int(x) < 210:
+                                                    x = 580
+                                                    y = 500
+                                                if 240 < int(x) < 355:
+                                                    x = 570
+                                                    y = 615
+                                                if 385 < int(x) < 500:
+                                                    x = 570
+                                                    y = 725
+                                                if 525 < int(x) < 640:
+                                                    x = 565
+                                                    y = 830
+                                            # 中间第二排
+                                            if 555 < int(y) < 660:
+                                                if 85 < int(x) < 210:
+                                                    x = 435
+                                                    y = 505
+                                                if 525 < int(x) < 640:
+                                                    x = 420
+                                                    y = 830
+                                            # 中间第三排
+                                            if 660 < int(y) < 775:
+                                                if 85 < int(x) < 210:
+                                                    x = 295
+                                                    y = 505
+                                                if 525 < int(x) < 640:
+                                                    x = 280
+                                                    y = 830
+                                            # 中间第四排
+                                            if 775 < int(y) < 880:
+                                                if 80 < int(x) < 195:
+                                                    x = 150
+                                                    y = 505
+                                                if 220 < int(x) < 340:
+                                                    x = 145
+                                                    y = 615
+                                                if 360 < int(x) < 485:
+                                                    x = 135
+                                                    y = 715
+                                                if 505 < int(x) < 630:
+                                                    x = 130
+                                                    y = 830
+                                    if 轮次 == '第4轮':
+                                        Toast('第四轮，顺时针旋转180°')
+                                        x = 720 - x
+                                        y = 1280 - y
+                                    if 轮次 == '第5轮':
+                                        Toast('第五轮，顺时针旋转180°')
+                                        x = 720 - x
+                                        y = 1280 - y
+                                    Toast('选择卡牌')
+                                    tapSleep(x, y, 0.3)
+                                    TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
 
                         # 检查队友是否提示卡牌
                         pointsTeam = FindColors.find_all("421,776,#3AFF70|421,776,#3AFF70")

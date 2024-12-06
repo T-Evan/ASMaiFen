@@ -211,7 +211,9 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # if 功能开关['角色4开关'] == 0 or 功能开关['角色4开关'] == False:
 # loadConfig(5)
 # print(功能开关)
+# res = TomatoOcrFindRangeClick('高原', 1, 0.8, 118,230,178,1133)
 # system.exit()
+
 
 def main():
     try:
@@ -221,7 +223,6 @@ def main():
         lvrenTask = LvRenTask()
         lvtuanTask = LvTuanTask()
         shilianTask = ShiLianTask()
-
 
         功能开关["breakChild"] = 0
         功能开关["fighting"] = 0

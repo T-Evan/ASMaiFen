@@ -934,8 +934,8 @@
 
                         <div class="flex-container">
                             <label for="补充体力次数">补充体力次数:</label>
-                            <div class="layui-form">
-                                <div class="layui-input-inline">
+                            <div class="layui-form" style="width: 80px" >
+                                <div class="layui-input-inline" >
                                     <select name="补充体力次数" id="补充体力次数" lay-filter="mijing1-filter">
                                         <option value="0">0</option>
                                         <option value="1">1</option>
@@ -944,6 +944,8 @@
                                     </select>
                                 </div>
                             </div>
+                            <input id="使用体力果实" name="vehicle" type="checkbox"
+                                   value="Bike" style="margin-left: 5px" >使用体力果实
                         </div>
                         <div class="flex-container">
                             <label for="队伍喊话">队伍喊话:</label><label class="gray-text">(绝境/恶龙等均生效)</label>
@@ -1967,6 +1969,7 @@
         setSwitchStatus("点赞队友");
         setSwitchStatus("秘境添加佣兵");
         setSwitchStatus("无体力继续");
+        setSwitchStatus("使用体力果实");
         setSwitchStatus("创建房间");
         setSwitchStatus("秘境自动接收邀请");
         var 建房重复挑战次数 = localStorage.getItem("建房重复挑战次数");
@@ -2485,6 +2488,7 @@
         点赞队友 = saveSwitchStatus("点赞队友");
         秘境添加佣兵 = saveSwitchStatus("秘境添加佣兵");
         无体力继续 = saveSwitchStatus("无体力继续");
+        使用体力果实 = saveSwitchStatus("使用体力果实");
         创建房间 = saveSwitchStatus("创建房间");
         秘境自动接收邀请 = saveSwitchStatus("秘境自动接收邀请");
         var 建房重复挑战次数 = document.getElementById("建房重复挑战次数").value;
@@ -2744,6 +2748,7 @@
             秘境点赞队友: 点赞队友,
             秘境添加佣兵: 秘境添加佣兵,
             秘境无体力继续: 无体力继续,
+            秘境使用体力果实: 使用体力果实,
             秘境创建房间: 创建房间,
             秘境自动接收邀请: 秘境自动接收邀请,
             秘境建房重复挑战次数: 建房重复挑战次数,

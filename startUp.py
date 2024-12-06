@@ -109,7 +109,7 @@ class StartUp:
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             # res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
-            if "等级" in teamName1 or "等级" in teamName2:
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
                 # 大暴走战斗中
                 if 功能开关["大暴走开关"] == 1 and 功能开关["暴走进入战斗后启动"] == 1:
                     Toast("进入暴走战斗成功 - 开始战斗")
@@ -137,7 +137,12 @@ class StartUp:
                         Toast(f'切换启动区服-{启动区服}区')
                         tapSleep(358, 958, 0.7)
                         for k in range(10):
-                            res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=143, y1=187, x2=183, y2=541, sleep1=0.7)
+                            res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=112, y1=337, x2=184, y2=604, sleep1=0.7,
+                                                          match_mode='fuzzy')
+                            if res:
+                                break
+                            sleep(0.5)
+                            res = TomatoOcrFindRangeClick(f'{启动区服}', x1=112, y1=337, x2=184, y2=604, sleep1=0.7)
                             if res:
                                 break
                             if k < 5:
