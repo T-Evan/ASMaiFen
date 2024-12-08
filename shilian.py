@@ -1362,7 +1362,7 @@ class ShiLianTask:
                     teamName = 任务记录['战斗-房主名称']
                     teamCount = 任务记录['带队次数']
                     self.teamShoutAI(
-                        f'终末战-{任务记录["战斗-关卡名称"]}-开始战斗{teamName}-第{teamCount}次相遇~祝你武运昌隆~',
+                        f'终末战-{任务记录["战斗-关卡名称"]}-开始战斗-{teamName}-第{teamCount}次相遇~祝你武运昌隆~',
                         shoutType="fight")
                     teamShoutDone = self.teamShout()
                 self.AIContent()

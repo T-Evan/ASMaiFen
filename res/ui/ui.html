@@ -934,8 +934,8 @@
 
                         <div class="flex-container">
                             <label for="补充体力次数">补充体力次数:</label>
-                            <div class="layui-form" style="width: 80px" >
-                                <div class="layui-input-inline" >
+                            <div class="layui-form" style="width: 80px">
+                                <div class="layui-input-inline">
                                     <select name="补充体力次数" id="补充体力次数" lay-filter="mijing1-filter">
                                         <option value="0">0</option>
                                         <option value="1">1</option>
@@ -945,7 +945,7 @@
                                 </div>
                             </div>
                             <input id="使用体力果实" name="vehicle" type="checkbox"
-                                   value="Bike" style="margin-left: 5px" >使用体力果实
+                                   value="Bike" style="margin-left: 5px">使用体力果实
                         </div>
                         <div class="flex-container">
                             <label for="队伍喊话">队伍喊话:</label><label class="gray-text">(绝境/恶龙等均生效)</label>
@@ -981,7 +981,13 @@
                                        value="Bike">自动接收邀请<label class="gray-text">(等待邀请，不会自动匹配)</label><br>
                             </div>
                         </div>
-                        <label class="gray-text">(默认仅带队最新关卡时会开启宝箱，可在上方配置均不开宝箱)</label>
+                        <div class="flex-container">
+                            <label for="秘境带队黑名单">黑名单:</label>
+                            <input type="text" id="秘境带队黑名单" name="秘境带队黑名单" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="不想带的玩家/地图名称，多个用|分隔" class="layui-input">
+                        </div>
+                        <label class="gray-text">(默认带队最新关卡时会开启宝箱，可在上方配置均不开宝箱)</label>
                     </fieldset>
                     <fieldset>
                         <legend>恶龙大通缉</legend>
@@ -1012,6 +1018,12 @@
                                    autocomplete="off"
                                    placeholder="默认进入战斗后30s离队" class="layui-input">
                         </div>
+                        <div class="flex-container">
+                            <label for="恶龙带队黑名单">黑名单:</label>
+                            <input type="text" id="恶龙带队黑名单" name="恶龙带队黑名单" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="不想带的玩家/地图名称，多个用|分隔" class="layui-input">
+                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>梦魇狂潮</legend>
@@ -1039,10 +1051,17 @@
                                    autocomplete="off"
                                    placeholder="默认进入战斗后30s离队" class="layui-input">
                         </div>
+                        <div class="flex-container">
+                            <label for="梦魇带队黑名单">黑名单:</label>
+                            <input type="text" id="梦魇带队黑名单" name="梦魇带队黑名单" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="不想带的玩家/地图名称，多个用|分隔" class="layui-input">
+                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>绝境挑战</legend>
                         <input id="绝境开关" name="vehicle" type="checkbox" value="Bike">绝境开关<br>
+                        <legend>自动入队设置</legend>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input id="绝境自动接收邀请" name="vehicle" type="checkbox"
@@ -1057,15 +1076,34 @@
                                    autocomplete="off"
                                    placeholder="默认进入战斗后90s离队" class="layui-input">
                         </div>
+                        <div class="flex-container">
+                            <label for="绝境带队黑名单">黑名单:</label>
+                            <input type="text" id="绝境带队黑名单" name="绝境带队黑名单" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="不想带的玩家/地图名称，多个用|分隔" class="layui-input">
+                        </div>
                     </fieldset>
                     <fieldset>
                         <legend>终末战追忆</legend>
                         <input id="终末战开关" name="vehicle" type="checkbox" value="Bike">终末战开关<br>
+                        <legend>自动入队设置</legend>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
                                 <input id="终末战自动接收邀请" name="vehicle" type="checkbox"
                                        value="Bike">自动接收邀请<br>
                             </div>
+                        </div>
+                        <div class="flex-container">
+                            <label for="终末离队等待时间">自动离队等待时间:</label>
+                            <input type="text" id="终末自动离队时间" name="终末自动离队时间" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="默认进入战斗后90s离队" class="layui-input">
+                        </div>
+                        <div class="flex-container">
+                            <label for="终末带队黑名单">黑名单:</label>
+                            <input type="text" id="终末带队黑名单" name="终末带队黑名单" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="不想带的玩家/地图名称，多个用|分隔" class="layui-input">
                         </div>
                     </fieldset>
                     <fieldset>
@@ -1185,8 +1223,8 @@
                                     <select name="技能1释放依赖" id="技能1释放依赖" lay-filter="mijing1-filter">
                                         <option value="冷却后立即释放">冷却后立即释放</option>
                                         <option value="宠物技能后释放">宠物技能后释放</option>
-<!--                                        <option value="2技能后释放">2技能后释放</option>-->
-<!--                                        <option value="3技能后释放">3技能后释放</option>-->
+                                        <!--                                        <option value="2技能后释放">2技能后释放</option>-->
+                                        <!--                                        <option value="3技能后释放">3技能后释放</option>-->
                                     </select>
                                 </div>
                             </div>
@@ -1200,9 +1238,9 @@
                                 <div class="layui-input-inline">
                                     <select name="技能2释放依赖" id="技能2释放依赖" lay-filter="mijing1-filter">
                                         <option value="冷却后立即释放">冷却后立即释放</option>
-<!--                                        <option value="宠物技能后释放">宠物技能后释放</option>-->
+                                        <!--                                        <option value="宠物技能后释放">宠物技能后释放</option>-->
                                         <option value="1技能后释放">1技能后释放</option>
-<!--                                        <option value="3技能后释放">3技能后释放</option>-->
+                                        <!--                                        <option value="3技能后释放">3技能后释放</option>-->
                                     </select>
                                 </div>
                             </div>
@@ -1216,9 +1254,9 @@
                                 <div class="layui-input-inline">
                                     <select name="技能3释放依赖" id="技能3释放依赖" lay-filter="mijing1-filter">
                                         <option value="冷却后立即释放">冷却后立即释放</option>
-<!--                                        <option value="宠物技能后释放">宠物技能后释放</option>-->
+                                        <!--                                        <option value="宠物技能后释放">宠物技能后释放</option>-->
                                         <option value="2技能后释放">2技能后释放</option>
-<!--                                        <option value="3技能后释放">3技能后释放</option>-->
+                                        <!--                                        <option value="3技能后释放">3技能后释放</option>-->
                                     </select>
                                 </div>
                             </div>
@@ -1616,7 +1654,7 @@
     }
 
     function daiDuiAllItems() {
-        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"最新地图","恶龙重复挑战":"false","营地总开关":"false","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"false","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"false","账号4配置":"0","秘境关卡":"最新关卡","账号4开关":"false","世界喊话间隔":"","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"66","旅团任务":"false","自动升级技能":"false","旅团优秀经验":"false","升级1次麦乐兽":"false","摸鱼时间到":"false","宝藏湖":"false","旅团唤兽琴弦":"false","自动换图":"false","日常总开关":"false","旅团全价兽粮":"false","旅团总开关":"false","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"false","箱庭苗圃":"false","恶龙自动接收邀请":"true","秘宝钻石兑换次数":"","旅团金币":"false","角色4开关":"false","月签到":"false","大暴走开关":"true","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"true","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","经验补剂五折":"false","配置3名称":"","秘宝地图":"艾特拉火山","配置5名称":"","秘宝收集":"false","原材料":"false","商店星星经验":"false","账号3配置":"0","邮件领取":"false","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"求赞","恶龙宠物切换":"false","星星经验":"false","单飞后寻找结伴":"false","绝境自动接收邀请":"true","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"true","绝境开关":"true","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"true","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"","暴走职能优先治疗":"false","钻石兑换门票次数":"","自动更换装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"false","梦魇宠物名称":"光翼","商店超级成长零食三折":"false","账号5配置":"0","冒险手册领取":"false","角色1开关":"false","释放1次战术技能":"false","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"false","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"false","紧急委托":"false","职能优先坦克":"false","暴走自动接收邀请":"true","秘境创建房间":"false","仓鼠百货":"false","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"false","钻石兑换卢恩次数":"","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"false","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"true","队员不满足单飞":"false","不开宝箱":"false","星辰同行":"false","领取猫猫包果木":"false","登录好礼":"false","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"false","日礼包":"false","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"false","优先升级同一技能":"false","付费浇灌次数":"","旅团浇树":"false","梦魇开关":"true","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"false","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"false","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"false","选择启动角色":"0","商店黑烬突破石五折":"false","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"false","优先升级同一技能至下一阶段":"false","喊话内容":"求赞","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"false","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"false","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"true","队伍AI走位":"true","队伍AI锁敌":"true","梦魇无尽自动离队":"true"}';
+        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"最新地图","恶龙重复挑战":"false","营地总开关":"false","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"false","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"false","账号4配置":"0","秘境关卡":"最新关卡","账号4开关":"false","世界喊话间隔":"5","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"66","旅团任务":"false","自动升级技能":"false","旅团优秀经验":"false","升级1次麦乐兽":"false","摸鱼时间到":"false","宝藏湖":"false","旅团唤兽琴弦":"false","自动换图":"false","日常总开关":"false","旅团全价兽粮":"false","旅团总开关":"false","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"false","箱庭苗圃":"false","恶龙自动接收邀请":"true","秘宝钻石兑换次数":"","旅团金币":"false","角色4开关":"false","月签到":"false","大暴走开关":"true","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"true","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","经验补剂五折":"false","配置3名称":"","秘宝地图":"艾特拉火山","配置5名称":"","秘宝收集":"false","原材料":"false","商店星星经验":"false","账号3配置":"0","邮件领取":"false","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"求赞","恶龙宠物切换":"false","星星经验":"false","单飞后寻找结伴":"false","绝境自动接收邀请":"true","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"true","绝境开关":"true","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"true","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"打工","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"","暴走职能优先治疗":"false","钻石兑换门票次数":"","自动更换装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"false","梦魇宠物名称":"光翼","商店超级成长零食三折":"false","账号5配置":"0","冒险手册领取":"false","角色1开关":"false","释放1次战术技能":"false","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"false","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"false","紧急委托":"false","职能优先坦克":"false","暴走自动接收邀请":"true","秘境创建房间":"false","仓鼠百货":"false","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"false","钻石兑换卢恩次数":"","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"false","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"true","队员不满足单飞":"false","不开宝箱":"false","星辰同行":"false","领取猫猫包果木":"false","登录好礼":"false","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"false","日礼包":"false","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"false","优先升级同一技能":"false","付费浇灌次数":"","旅团浇树":"false","梦魇开关":"true","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"false","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"false","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"false","选择启动角色":"0","商店黑烬突破石五折":"false","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"false","优先升级同一技能至下一阶段":"false","喊话内容":"求赞","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"false","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"false","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"true","队伍AI走位":"true","队伍AI锁敌":"true","梦魇无尽自动离队":"true"}';
         if (jsonString) {
             try {
                 console.log('读取的配置:', jsonString);
@@ -1696,7 +1734,7 @@
         const countdownElement = document.getElementById('countdown');
 
         if (button && countdownElement) {
-            let remainingTime = 120;
+            let remainingTime = 300;
             countdownElement.textContent = `${remainingTime}`;
 
             const intervalId = setInterval(() => {
@@ -2109,6 +2147,8 @@
         document.getElementById("队伍喊话").value = 队伍喊话;
         var 队伍喊话间隔 = localStorage.getItem("队伍喊话间隔");
         document.getElementById("队伍喊话间隔").value = 队伍喊话间隔;
+        var 秘境带队黑名单 = localStorage.getItem("秘境带队黑名单");
+        document.getElementById("秘境带队黑名单").value = 秘境带队黑名单;
 
         setSwitchStatus("队伍AI发言");
         setSwitchStatus("队伍AI走位");
@@ -2120,6 +2160,8 @@
         setSwitchStatus("恶龙自动接收邀请");
         var 恶龙自动离队时间 = localStorage.getItem("恶龙自动离队时间");
         document.getElementById("恶龙自动离队时间").value = 恶龙自动离队时间;
+        var 恶龙带队黑名单 = localStorage.getItem("恶龙带队黑名单");
+        document.getElementById("恶龙带队黑名单").value = 恶龙带队黑名单;
 
         setSwitchStatus("梦魇开关");
         setSwitchStatus("梦魇添加佣兵");
@@ -2127,12 +2169,21 @@
         setSwitchStatus("梦魇无尽自动离队");
         var 梦魇自动离队时间 = localStorage.getItem("梦魇自动离队时间");
         document.getElementById("梦魇自动离队时间").value = 梦魇自动离队时间;
+        var 梦魇带队黑名单 = localStorage.getItem("梦魇带队黑名单");
+        document.getElementById("梦魇带队黑名单").value = 梦魇带队黑名单;
+
         setSwitchStatus("终末战开关");
         setSwitchStatus("终末战自动接收邀请");
+        var 终末带队黑名单 = localStorage.getItem("终末带队黑名单");
+        document.getElementById("终末带队黑名单").value = 终末带队黑名单;
+
         setSwitchStatus("绝境开关");
         setSwitchStatus("绝境自动接收邀请");
         var 绝境自动离队时间 = localStorage.getItem("绝境自动离队时间");
         document.getElementById("绝境自动离队时间").value = 绝境自动离队时间;
+        var 绝境带队黑名单 = localStorage.getItem("绝境带队黑名单");
+        document.getElementById("绝境带队黑名单").value = 绝境带队黑名单;
+
 <!--        setSwitchStatus("绝境不退出房间");-->
         setSwitchStatus("职能优先输出");
         setSwitchStatus("职能优先坦克");
@@ -2538,6 +2589,8 @@
         localStorage.setItem("队伍喊话", 队伍喊话);
         var 队伍喊话间隔 = document.getElementById("队伍喊话间隔").value;
         localStorage.setItem("队伍喊话间隔", 队伍喊话间隔);
+        var 秘境带队黑名单 = document.getElementById("秘境带队黑名单").value;
+        localStorage.setItem("秘境带队黑名单", 秘境带队黑名单);
         队伍AI发言 = saveSwitchStatus("队伍AI发言");
         队伍AI走位 = saveSwitchStatus("队伍AI走位");
         队伍AI锁敌 = saveSwitchStatus("队伍AI锁敌");
@@ -2548,6 +2601,8 @@
         恶龙自动接收邀请 = saveSwitchStatus("恶龙自动接收邀请");
         var 恶龙自动离队时间 = document.getElementById("恶龙自动离队时间").value;
         localStorage.setItem("恶龙自动离队时间", 恶龙自动离队时间);
+        var 恶龙带队黑名单 = document.getElementById("恶龙带队黑名单").value;
+        localStorage.setItem("恶龙带队黑名单", 恶龙带队黑名单);
 
         梦魇开关 = saveSwitchStatus("梦魇开关");
         梦魇添加佣兵 = saveSwitchStatus("梦魇添加佣兵");
@@ -2555,10 +2610,19 @@
         梦魇无尽自动离队 = saveSwitchStatus("梦魇无尽自动离队");
         var 梦魇自动离队时间 = document.getElementById("梦魇自动离队时间").value;
         localStorage.setItem("梦魇自动离队时间", 梦魇自动离队时间);
+        var 梦魇带队黑名单 = document.getElementById("梦魇带队黑名单").value;
+        localStorage.setItem("梦魇带队黑名单", 梦魇带队黑名单);
+
         var 绝境自动离队时间 = document.getElementById("绝境自动离队时间").value;
         localStorage.setItem("绝境自动离队时间", 绝境自动离队时间);
+        var 绝境带队黑名单 = document.getElementById("绝境带队黑名单").value;
+        localStorage.setItem("绝境带队黑名单", 绝境带队黑名单);
+
         终末战开关 = saveSwitchStatus("终末战开关");
         终末战自动接收邀请 = saveSwitchStatus("终末战自动接收邀请");
+        var 终末带队黑名单 = document.getElementById("终末带队黑名单").value;
+        localStorage.setItem("终末带队黑名单", 终末带队黑名单);
+
         绝境开关 = saveSwitchStatus("绝境开关");
         绝境自动接收邀请 = saveSwitchStatus("绝境自动接收邀请");
 <!--        绝境不退出房间 = saveSwitchStatus("绝境不退出房间");-->
@@ -2766,6 +2830,7 @@
             史莱姆选择: 史莱姆选择,
             喊话内容: 队伍喊话,
             队伍喊话间隔: 队伍喊话间隔,
+            秘境带队黑名单: 秘境带队黑名单,
             队伍AI发言: 队伍AI发言,
             队伍AI走位: 队伍AI走位,
             队伍AI锁敌: 队伍AI锁敌,
@@ -2775,17 +2840,21 @@
             恶龙重复挑战: 恶龙重复挑战,
             恶龙自动接收邀请: 恶龙自动接收邀请,
             恶龙自动离队时间: 恶龙自动离队时间,
+            恶龙带队黑名单: 恶龙带队黑名单,
             梦魇开关: 梦魇开关,
             梦魇添加佣兵: 梦魇添加佣兵,
             梦魇自动接收邀请: 梦魇自动接收邀请,
             梦魇无尽自动离队: 梦魇无尽自动离队,
             梦魇自动离队时间: 梦魇自动离队时间,
+            梦魇带队黑名单: 梦魇带队黑名单,
             终末战开关: 终末战开关,
             终末战自动接收邀请: 终末战自动接收邀请,
+            终末带队黑名单: 终末带队黑名单,
             绝境开关: 绝境开关,
             绝境自动接收邀请: 绝境自动接收邀请,
 <!--            绝境不退出房间: 绝境不退出房间,-->
             绝境自动离队时间: 绝境自动离队时间,
+            绝境带队黑名单: 绝境带队黑名单,
             职能优先输出: 职能优先输出,
             职能优先坦克: 职能优先坦克,
             职能优先治疗: 职能优先治疗,

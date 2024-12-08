@@ -3,7 +3,7 @@ from ascript.android import plug
 from ascript.android.ui import Dialog
 from ascript.android import system
 
-plug.load("TomatoOcr:1.0.6")
+plug.load("TomatoOcr:1.0.8")
 try:
     from TomatoOcr import TomatoOcr
 except Exception as e:
@@ -23,6 +23,7 @@ def init_tomatoOcr():
     ocr.setDetUnclipRatio(1.9)
     ocr.setRecScoreThreshold(0.3)
     ocr.setReturnType("text")
+    ocr.setRunMode("fast")
     # ocr.setBinaryThresh("0")
     global tomatoOcr
     tomatoOcr = ocr
