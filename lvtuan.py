@@ -110,14 +110,15 @@ class LvTuanTask:
     # 判断是否战斗中
     def fighting(self):
         attempts = 0  # 初始化尝试次数
-        maxAttempts = 30  # 设置最大尝试次数
-
+        maxAttempts = 60  # 设置最大尝试次数
+        totalWait = maxAttempts * 5
         while attempts < maxAttempts:
+            elapsed = attempts * 5
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
             if res1 or (teamName1 != "" or teamName2 != ""):
-                Toast("战斗中")
+                Toast(f'调查队战斗中,战斗时长{elapsed}/{totalWait}秒')
             else:
                 break  # 识别失败，退出循环
             attempts = attempts + 1

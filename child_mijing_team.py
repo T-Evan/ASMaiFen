@@ -100,7 +100,7 @@ def waitInvite():
         功能开关["fighting"] = 1
         功能开关["needHome"] = 0
         resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
-        resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456,517,570,542, "房主名称")  # 房主名称
+        resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 517, 570, 542, "房主名称")  # 房主名称
         # 判断带队为最新关卡，默认开启宝箱
         if 任务记录["玩家-当前关卡"] != "" and 任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"] and tmpBx == 0:
             # 若配置要求不开宝箱，则最新关卡也不开启
@@ -309,6 +309,7 @@ def waitInvite():
             功能开关["fighting"] = 1
             功能开关["needHome"] = 0
             任务记录['AI发言-上一次发言'] = []
+            任务记录['AI发言-检测队友关注'] = 0
             任务记录["战斗-推荐战力"] = 0
             waitTime = 0
             teamShout = False
@@ -334,6 +335,7 @@ def waitInvite():
     功能开关["秘境不开宝箱"] = 1
 
     return
+
 
 def checkFightType():
     fight_type = ''

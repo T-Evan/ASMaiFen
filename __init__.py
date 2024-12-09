@@ -256,10 +256,11 @@ def main():
         # 多账号处理
         start_up.multiAccount()
 
-        if 功能开关['技能进入战斗后启动'] == 1:
+        if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1:
             runThreadAutoSkill()
             runThreadAutoSkill2()
             runThreadAutoSkill3()
+            runThreadAutoMove()
         else:
             runThreadNotice()
             runThreadReturnHome()
@@ -270,6 +271,7 @@ def main():
             runThreadAutoSkill()
             runThreadAutoSkill2()
             runThreadAutoSkill3()
+            runThreadAutoMove()
         # runThreadCheckBlock()
         counter = 0
 
@@ -281,11 +283,14 @@ def main():
 
         while True:
             try:
-                if 功能开关["fighting"] == 1 or 功能开关['技能进入战斗后启动'] == 1:
+                if 功能开关["fighting"] == 1:
                     # Toast('战斗中 - 主进程暂停')
                     sleep(5)
                     continue
-
+                if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1:
+                    Toast('已开启进入战斗后启动，等待进入战斗')
+                    sleep(30)
+                    continue
                 # 获取当前设备运行的APP信息
                 # info = Device.memory()
                 # # 返回单位是字节

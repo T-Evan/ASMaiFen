@@ -4,13 +4,15 @@ from .child_return_home import main as return_home_main
 from .child_baozou import main as bao_zou_boss
 from .res.ui.ui import 功能开关
 from .child_auto_skill import AutoSkill
+from .child_auto_move import AutoMove
 import multiprocessing
 from java.lang import Runnable, Thread
 from java import dynamic_proxy
 
-
 # 子协程处理弹窗
 skillTask = AutoSkill()
+moveTask = AutoMove()
+
 
 class RunThreadNotice(dynamic_proxy(Runnable)):
     def __init__(self):
@@ -37,6 +39,15 @@ class RunThreadDaBaoZou(dynamic_proxy(Runnable)):
     def run(self):
         print("启动大暴走处理线程")
         bao_zou_boss()
+
+
+class RunThreadAutoMove(dynamic_proxy(Runnable)):
+    def __init__(self):
+        super().__init__()
+
+    def run(self):
+        print("启动辅助战斗AI处理线程")
+        moveTask.autoMove()
 
 
 class RunThreadAutoSkill(dynamic_proxy(Runnable)):
@@ -126,6 +137,16 @@ def runThreadAutoSkill():
             t.start()
         except RuntimeError as e:
             print(f"辅助施法处理线程 Error: {e}")
+
+
+def runThreadAutoMove():
+    if 功能开关['队伍AI走位'] == 1 or 功能开关['队伍AI锁敌'] == 1:
+        try:
+            r = RunThreadAutoMove()
+            t = Thread(r)
+            t.start()
+        except RuntimeError as e:
+            print(f"辅助战斗AI处理线程 Error: {e}")
 
 
 def runThreadAutoSkill2():

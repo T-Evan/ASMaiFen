@@ -355,8 +355,8 @@ class StartUp:
             # system.open("com.xd.cfbmf")
             # r = system.shell(f"am start -a com.xd.cfbmf")
             # r = system.shell(f"am start -a com.xd.cfbmf")
-            # system.open("com.xd.cfbmf")
-            system.open("出发吧麦芬")
+            system.open(f"{功能开关['游戏包名']}")
+            # system.open("出发吧麦芬")
         except Exception as e:
             # 处理异常
             # 获取异常信息
