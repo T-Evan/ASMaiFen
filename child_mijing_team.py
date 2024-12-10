@@ -385,5 +385,5 @@ def checkFightType():
                 break
 
     if fight_type == '':
-        fight_type = '暴走带队'
+        fight_type = '秘境带队'
     return fight_type

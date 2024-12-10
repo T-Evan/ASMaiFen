@@ -367,10 +367,11 @@ class LvTuanTask:
                 # res = TomatoOcrTap(97, 1200, 129, 1231, "回")  # 返回许愿墙首页
                 tapSleep(365, 1214)  # 点击空白处
             else:
-                re = TomatoOcrFindRangeClick('公共捐献', whiteList='公共捐献')
-                if re:
-                    res = TomatoOcrTap(328, 822, 389, 854, "捐献")
-                break
+                if 功能开关['旅团许愿墙不捐公共'] == 0:
+                    re = TomatoOcrFindRangeClick('公共捐献', whiteList='公共捐献')
+                    if re:
+                        res = TomatoOcrTap(328, 822, 389, 854, "捐献")
+                    break
 
         res = TomatoOcrTap(96, 1183, 132, 1223, "回")  # 返回旅团首页
         任务记录["旅团-许愿墙-完成"] = 1

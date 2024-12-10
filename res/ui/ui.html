@@ -1313,6 +1313,9 @@
                             <input id="旅团许愿墙" name="vehicle" type="checkbox" value="Bike">旅团许愿墙<br>
                         </div>
                     </div>
+                    <div class="checkbox-item">
+                        <input id="旅团许愿墙不捐公共" name="vehicle" type="checkbox" value="Bike">旅团许愿-不捐公共<br>
+                    </div>
                     <div class="flex-container">
                         <label for="付费浇灌次数">付费浇灌次数：</label>
                         <input type="text" id="付费浇灌次数" name="付费浇灌次数" lay-verify="title"
@@ -2234,6 +2237,7 @@
         setSwitchStatus("旅团调查队");
         setSwitchStatus("调查队自动接收邀请");
         setSwitchStatus("旅团许愿墙");
+        setSwitchStatus("旅团许愿墙不捐公共");
 
         var 付费浇灌次数 = localStorage.getItem("付费浇灌次数");
         document.getElementById("付费浇灌次数").value = 付费浇灌次数;
@@ -2676,6 +2680,7 @@
         调查队自动接收邀请 = saveSwitchStatus("调查队自动接收邀请");
         调查队无钥匙继续 = saveSwitchStatus("调查队无钥匙继续");
         旅团许愿墙 = saveSwitchStatus("旅团许愿墙");
+        旅团许愿墙不捐公共 = saveSwitchStatus("旅团许愿墙不捐公共");
 
         var 付费浇灌次数 = document.getElementById("付费浇灌次数").value;
         localStorage.setItem("付费浇灌次数", 付费浇灌次数);
@@ -2905,6 +2910,7 @@
             调查队无钥匙继续: 调查队无钥匙继续,
             调查队自动接收邀请: 调查队自动接收邀请,
             旅团许愿墙: 旅团许愿墙,
+            旅团许愿墙不捐公共: 旅团许愿墙不捐公共,
             付费浇灌次数: 付费浇灌次数,
             调查队挑战次数: 调查队挑战次数,
             旅团商店开关: 旅团商店开关,

@@ -2470,6 +2470,7 @@ class ShiLianTask:
                     content += "您还没有关注我喔,麻烦给个关注吧~"
 
                 re, teamName = TomatoOcrText(125, 822, 313, 856, '队友名称')
+                tapSleep(448, 1076, 0.3)  # 点击属性页
                 tapSleep(448, 1076, 0.5)  # 点击属性页
                 re, teamFightNum = TomatoOcrText(159, 596, 261, 629, '队友战力')
                 if "万" in teamFightNum:
@@ -2480,10 +2481,12 @@ class ShiLianTask:
                 if 任务记录['战斗-房主战力'] != 0 and 任务记录['战斗-房主战力'] != '' and teamFightNumDiff != 0:
                     diffHour = round((time.time() - 任务记录['战斗-房主上次相遇']) / 3600, 1)
                     content += f"距离上次相遇已{diffHour}h,您的战力提升了{teamFightNumDiff}万.恭喜!"
-                TomatoOcrTap(72, 1202, 121, 1231, '返回')
+                tapSleep(96, 1235)  # 返回
+                tapSleep(96, 1235)  # 返回
                 if content != "":
                     self.teamShoutAI(content)
-                self.daiDuiZhanLi(teamName, teamFightNum)
+                p = threading.Thread(target=self.daiDuiZhanLi, args=(teamName, teamFightNum))
+                p.start()
 
             zanList = ['棒', '厉害', '谢', '哇', '牛', '6', '关注', '佬']
             re, teamText1 = TomatoOcrText(62, 1023, 251, 1052, "队友发言")
