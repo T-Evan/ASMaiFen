@@ -110,7 +110,7 @@ class LvTuanTask:
     # 判断是否战斗中
     def fighting(self):
         attempts = 0  # 初始化尝试次数
-        maxAttempts = 60  # 设置最大尝试次数
+        maxAttempts = 66  # 设置最大尝试次数
         totalWait = maxAttempts * 5
         while attempts < maxAttempts:
             elapsed = attempts * 5

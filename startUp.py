@@ -142,7 +142,8 @@ class StartUp:
                             if res:
                                 break
                             sleep(0.5)
-                            res = TomatoOcrFindRangeClick(f'{启动区服}', x1=112, y1=337, x2=184, y2=604, sleep1=0.7)
+                            res = TomatoOcrFindRangeClick(f'{启动区服}', x1=112, y1=337, x2=184, y2=604, sleep1=0.7,
+                                                          match_mode='fuzzy')
                             if res:
                                 break
                             if k < 5:

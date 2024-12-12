@@ -286,15 +286,18 @@ def daBaoZouLeiDianBoss():
 
     # 单-水；兜底
     if bossColor == '':
-        res = CompareColors.compare("360,378,#A0E4F3", diff=0.9)
+        res, _, _ = imageFind('雷电大王-水', 0.8, 224,323,514,429)
+        # res = CompareColors.compare("360,378,#A0E4F3", diff=0.9)
         if res:
             bossColor = '水'
         if not res:
-            res = CompareColors.compare("360,380,#FEB390", diff=0.93)
+            res, _, _ = imageFind('雷电大王-火', 0.8, 224,323,514,429)
+            # res = CompareColors.compare("360,380,#FEB390", diff=0.93)
             if res:
                 bossColor = '火'
         if not res:
-            res = CompareColors.compare("356,387,#9CDD72", diff=0.9)
+            res, _, _ = imageFind('雷电大王-木', 0.8, 224,323,514,429)
+            # res = CompareColors.compare("356,387,#9CDD72", diff=0.9)
             if res:
                 bossColor = '木'
 

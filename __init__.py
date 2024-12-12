@@ -267,7 +267,7 @@ def main():
             runThreadBaoZouBoss()
             runThreadMijingTeam()
             runThreadAnotherLogin()
-            runThreadCheckKami()
+            # runThreadCheckKami()
             runThreadAutoSkill()
             runThreadAutoSkill2()
             runThreadAutoSkill3()

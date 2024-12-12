@@ -143,6 +143,26 @@ class ShiLianTask:
             tapSleep(125, 1050)  # 领取后，点击空白
             tapSleep(125, 1050)  # 领取后，点击空白
 
+        # 领取全服榜奖励
+        re = CompareColors.compare("168,204,#FFFFFF|170,205,#FFFFFF|171,205,#FFFFFF|172,205,#FFFFFF")
+        if re:
+            Toast('领取共享战利品')
+            tapSleep(145, 215, 0.8)
+            for k in range(6):
+                re = FindColors.find("584,321,#F25E41|581,323,#F05D40|585,325,#FF5438", rect=[480, 295, 614, 1030])
+                if re:
+                    tapSleep(re.x, re.y)
+                    tapSleep(427, 217)
+                    tapSleep(427, 217)
+            swipe(345, 935, 339, 337)
+            sleep(2)
+            for k in range(6):
+                re = FindColors.find("584,321,#F25E41|581,323,#F05D40|585,325,#FF5438", rect=[480, 295, 614, 1030])
+                if re:
+                    tapSleep(re.x, re.y)
+                    tapSleep(427, 217)
+                    tapSleep(427, 217)
+            tapSleep(93, 1213)  # 返回
         hdPage, _ = TomatoOcrText(279, 574, 440, 606, 功能开关['史莱姆选择'])
         if not hdPage:
             name = 功能开关['史莱姆选择']
@@ -1544,13 +1564,13 @@ class ShiLianTask:
                         teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(
-                            f'梦魇-{任务记录["战斗-关卡名称"]}-等待战斗结束~祝你武运昌隆~{teamName}-第{teamCount}次相遇~祝你游戏开心~',
+                            f'梦魇-{任务记录["战斗-关卡名称"]}-等待战斗结束~{teamName}-第{teamCount}次相遇~祝你武运昌隆~',
                             shoutType="fight")
                     else:
                         teamName = 任务记录['战斗-房主名称']
                         teamCount = 任务记录['带队次数']
                         self.teamShoutAI(
-                            f'梦魇-{任务记录["战斗-关卡名称"]}-留镜像后离队~祝你武运昌隆~{teamName}-第{teamCount}次相遇~祝你游戏开心~',
+                            f'梦魇-{任务记录["战斗-关卡名称"]}-留镜像后离队~{teamName}-第{teamCount}次相遇~祝你武运昌隆~',
                             shoutType="fight")
                     teamShoutDone = self.teamShout()
                 self.AIContent()
@@ -1586,7 +1606,7 @@ class ShiLianTask:
             elapsed = elapsed + 4
 
     def fighting(self, fightType='秘境'):
-        totalWait = 200  # 30000 毫秒 = 30 秒
+        totalWait = 330  # 30000 毫秒 = 30 秒
         elapsed = 0
         teamShoutDone = 0
 
@@ -1753,21 +1773,21 @@ class ShiLianTask:
         def 草():
             point = FindColors.find(
                 "145,673,#B9D6AB|153,672,#BFD7AD|159,672,#95B48C|151,680,#A1D8A1|138,681,#98D99D|148,688,#2D4645",
-                rect=[9, 637, 202, 803], diff=0.94)
+                rect=[9, 637, 202, 803], diff=0.92)
             if point:
                 tapSleep(point.x, point.y, 1)
 
         def 火():
             point = FindColors.find(
                 "137,683,#DF8768|138,675,#E1A482|146,677,#CF9677|156,683,#DF8768|157,677,#E29E7C|146,675,#E2A382",
-                rect=[9, 637, 202, 803], diff=0.94)
+                rect=[9, 637, 202, 803], diff=0.92)
             if point:
                 tapSleep(point.x, point.y, 1)
 
         def 水():
             point = FindColors.find(
                 "63,673,#91CFCE|69,667,#A5D4CE|75,672,#95D0CF|69,691,#57BACF|74,686,#5CBACE|77,686,#5AB9CF",
-                rect=[9, 637, 202, 803], diff=0.94)
+                rect=[9, 637, 202, 803], diff=0.92)
             if point:
                 tapSleep(point.x, point.y, 1)
 
@@ -2472,21 +2492,23 @@ class ShiLianTask:
                 re, teamName = TomatoOcrText(125, 822, 313, 856, '队友名称')
                 tapSleep(448, 1076, 0.3)  # 点击属性页
                 tapSleep(448, 1076, 0.5)  # 点击属性页
-                re, teamFightNum = TomatoOcrText(159, 596, 261, 629, '队友战力')
-                if "万" in teamFightNum:
-                    teamFightNum = float(teamFightNum.replace("万", "")) * 10000
-                else:
-                    teamFightNum = float(teamFightNum.replace("万", ""))
-                teamFightNumDiff = round(abs(teamFightNum - 任务记录['战斗-房主战力']) / 10000, 2)
-                if 任务记录['战斗-房主战力'] != 0 and 任务记录['战斗-房主战力'] != '' and teamFightNumDiff != 0:
+                re, teamFightText = TomatoOcrText(159, 596, 261, 629, '队友战力')
+                # 检查是否包含“万”
+                teamFightNum = 0
+                if "万" in teamFightText:
+                    teamFightNum = float(teamFightText.replace("万", "").replace("厰", "").replace("廠", "")) * 10000
+                tapSleep(96, 1235)  # 返回
+                tapSleep(96, 1235)  # 返回
+                任务记录['战斗-房主战力'] = safe_int_v2(任务记录['战斗-房主战力'])
+                if 任务记录['战斗-房主战力'] != 0 and teamFightNum != 0:
+                    teamFightNumDiff = round(abs(teamFightNum - 任务记录['战斗-房主战力']) / 10000, 2)
                     diffHour = round((time.time() - 任务记录['战斗-房主上次相遇']) / 3600, 1)
-                    content += f"距离上次相遇已{diffHour}h,您的战力提升了{teamFightNumDiff}万.恭喜!"
-                tapSleep(96, 1235)  # 返回
-                tapSleep(96, 1235)  # 返回
+                    if teamFightNumDiff != 0:
+                        content += f"距离上次相遇已{diffHour}h,您的战力提升了{teamFightNumDiff}万.恭喜!"
+                    p = threading.Thread(target=self.daiDuiZhanLi, args=(teamName, teamFightNum))
+                    p.start()
                 if content != "":
                     self.teamShoutAI(content)
-                p = threading.Thread(target=self.daiDuiZhanLi, args=(teamName, teamFightNum))
-                p.start()
 
             zanList = ['棒', '厉害', '谢', '哇', '牛', '6', '关注', '佬']
             re, teamText1 = TomatoOcrText(62, 1023, 251, 1052, "队友发言")
@@ -2611,7 +2633,7 @@ class ShiLianTask:
             file_name, line_number, _, _ = traceback.extract_tb(exc_traceback)[-1]
             error_message = f"发生错误: {e} 在文件 {file_name} 第 {line_number} 行"
             # 显示对话框
-            print(error_message)
+            Dialog.confirm(error_message)
 
     # 判断角色死亡 & 队伍仅剩佣兵(名字长度均为2个)；离队
     def allQuit(self):
