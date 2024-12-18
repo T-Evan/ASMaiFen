@@ -57,21 +57,15 @@ class RunThreadCheckKami(dynamic_proxy(Runnable)):
 
 
 def runThreadMijingTeam():
-    if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or \
-            功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or 功能开关[
-        '绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
-        try:
-            r = RunThreadMijingTeam()
-            t = Thread(r)
-            t.start()
-        except RuntimeError as e:
-            print(f"自动入队处理线程 Error: {e}")
-        # try:
-        #     if not threadMijingTeam.is_alive():
-        #         threadMijingTeam.start()
-        # except RuntimeError as e:
-        #     print(f"自动入队处理线程 Error: {e}")
-
+    # if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or \
+    #         功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or 功能开关[
+    #     '绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
+    try:
+        r = RunThreadMijingTeam()
+        t = Thread(r)
+        t.start()
+    except RuntimeError as e:
+        print(f"自动入队处理线程 Error: {e}")
 
 def runThreadAnotherLogin():
     if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":

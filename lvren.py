@@ -77,6 +77,7 @@ class LvRenTask:
             if needCount == '':
                 needCount = 0
             if res:
+                任务记录['旅人-猫猫果木-完成'] = 1
                 while 1:
                     # 钻石兑换果木
                     res, buyCount = TomatoOcrText(277, 533, 434, 569, needCount)  # 1/9
@@ -87,6 +88,7 @@ class LvRenTask:
                     if buyCount == "" or buyCount >= needCount:
                         tapSleep(155, 1020)  # 点击空白处关闭
                         tapSleep(155, 1020)  # 点击空白处关闭
+                        tapSleep(350, 1205)  # 点击空白处关闭
                         break
                     re, ct = TomatoOcrText(334, 389, 396, 416, '准备购买次数')
                     Toast(f'准备购买{ct}次')
@@ -112,7 +114,7 @@ class LvRenTask:
                 if not res:
                     res = TomatoOcrTap(320, 1006, 399, 1033, "自动升温")
                 if res:
-                    for i in range(1, 5):
+                    for k in range(1, 5):
                         res = TomatoOcrTap(326, 1017, 389, 1047, "出炉")
                         if res:
                             tapSleep(136, 1051)  # 点击空白处
@@ -121,7 +123,6 @@ class LvRenTask:
                             tapSleep(136, 1051)  # 点击空白处
                             break
                         sleep(3)
-        任务记录['旅人-猫猫果木-完成'] = 1
 
     # 自动升级技能
     def updateSkill(self):
@@ -216,7 +217,7 @@ class LvRenTask:
 
         for number in numbers:
             # 找到比 `number` 大的最近的30的倍数
-            next_multiple = math.ceil(number / 30) * 30
+            next_multiple = math.ceil(number / 10) * 10
             # 计算差距
             difference = next_multiple - number
 

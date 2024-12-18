@@ -75,14 +75,14 @@ class AutoMove:
                     rect=[1, 175, 697, 836], diff=0.95)
                 if point:
                     Toast('切换攻击目标')
-                    print(point.x, point.y)
+                    # print(point.x, point.y)
                     tapSleep(point.x, point.y)
 
             if 功能开关['队伍AI走位']:
                 # 移动走位
                 # 部分地图根据机制走位
                 if 任务记录['玩家-当前职业'] == '战士':
-                    if "云涌风雷王座" in 任务记录['玩家-当前关卡'] or "雷神之锤" in 任务记录['玩家-当前关卡']:
+                    if "云涌风雷王座" in 任务记录['战斗-关卡名称'] or "雷神之锤" in 任务记录['战斗-关卡名称']:
                         # 不走位，避免移动引雷
                         Toast('停止移动，避免引雷')
                         continue
@@ -115,10 +115,13 @@ class AutoMove:
                             re = imageFindClick('恶龙-太阳', x1=9, y1=632, x2=205, y2=797)
 
                         # 玩家头上为月亮
-                        re = FindColors.find(
+                        re1 = FindColors.find(
                             "337,666,#FCFEFE|334,677,#FCFEFE|334,689,#FCFEFE|336,681,#FDFEFE|350,703,#FAFEFE|356,711,#80B2FB",
                             rect=[x - 10, y - 130, x + 120, y])
-                        if re:
+                        re2 = FindColors.find(
+                            "347,669,#FEFEFE|350,675,#FDFEFE|360,677,#FCFEFE|363,678,#FCFEFE|363,686,#D0A9F4",
+                            rect=[x - 10, y - 130, x + 120, y])
+                        if re1 or re2:
                             Toast('恶龙黯蚀‌-月亮，自动走位')
                             re = imageFindClick('恶龙-月亮', x1=9, y1=632, x2=205, y2=797)
 
@@ -131,7 +134,10 @@ class AutoMove:
                         re3 = FindColors.find(
                             "475,676,#FEEE61|470,681,#FEF268|459,689,#FEF670|481,697,#FEF063|464,706,#FEF773",
                             rect=[205, 640, 522, 757])
-                        if re1 or re2 or re3:
+                        re4 = FindColors.find(
+                            "410,705,#FEEF63|401,708,#FEF46C|393,710,#FEF773|396,726,#FEF775|418,729,#FEF46B|420,729,#FEF36A",
+                            rect=[205, 640, 522, 757])
+                        if re1 or re2 or re3 or re4:
                             Toast('恶龙真炎-顺时针，自动走位')
                             tapSleep(63, 677)
                             for j in range(20):
@@ -151,7 +157,10 @@ class AutoMove:
                         re3 = FindColors.find(
                             "483,681,#FEF065|480,683,#FEF46B|448,688,#FEF268|470,699,#FEF773|456,710,#FEF56E",
                             rect=[205, 640, 509, 757])
-                        if re1 or re2 or re3:
+                        re4 = FindColors.find(
+                            "311,700,#FEEF62|315,702,#FEEF63|325,705,#FEF267|342,708,#FEF56E|322,721,#773930",
+                            rect=[205, 640, 509, 757])
+                        if re1 or re2 or re3 or re4:
                             Toast('恶龙真炎-逆时针，自动走位')
                             tapSleep(143, 675)
                             for j in range(20):
@@ -188,10 +197,12 @@ class AutoMove:
                 # 灾厄真体破界龙
                 if 任务记录['战斗-恶龙名称'] == '灾厄真体破':
                     for k in range(30):
-                        re = FindColors.find(
-                            "564,1030,#9AD3C6|566,1029,#9BD3C6|566,1027,#9FD5C9|571,1028,#98D3C6|577,1027,#569D91",
-                            rect=[11, 757, 690, 1114], diff=0.9)
-                        if re:
+                        re1 = FindColors.find("424,809,#F1F2E7|434,814,#E6EFE8|443,814,#E8EFEC|459,804,#F7F7F7",
+                                              rect=[12, 703, 678, 1093])
+                        re2 = FindColors.find(
+                            "566,512,#FBFEF8|570,512,#FBFEFB|572,514,#FCFEF9|576,519,#FBFEFA|576,526,#F2FEF8",
+                            rect=[12, 703, 678, 1093])
+                        if re1 or re2:
                             # 灾厄真体破界龙
                             Toast('恶龙技能，自动走位')
                             tapSleep(64, 672)

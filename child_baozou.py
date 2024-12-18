@@ -71,7 +71,10 @@ def main():
         elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走雷电大王":
             while 1:
                 if 功能开关["fighting"] == 1:
-                    daBaoZouLeiDianBoss()
+                    re = CompareColors.compare(
+                        "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF")  # 匹配boss名称包含大王
+                    if re:
+                        daBaoZouLeiDianBoss()
                 else:
                     sleep(3)
         elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走深林大王":
@@ -286,18 +289,21 @@ def daBaoZouLeiDianBoss():
 
     # 单-水；兜底
     if bossColor == '':
-        res, _, _ = imageFind('雷电大王-水', 0.8, 224,323,514,429)
-        # res = CompareColors.compare("360,378,#A0E4F3", diff=0.9)
+        res, _, _ = imageFind('雷电大王-水', 0.8, 224, 323, 514, 429)
+        if not res:
+            res = CompareColors.compare("360,378,#A0E4F3", diff=0.85)
         if res:
             bossColor = '水'
         if not res:
-            res, _, _ = imageFind('雷电大王-火', 0.8, 224,323,514,429)
-            # res = CompareColors.compare("360,380,#FEB390", diff=0.93)
+            res, _, _ = imageFind('雷电大王-火', 0.8, 224, 323, 514, 429)
+            if not res:
+                res = CompareColors.compare("360,380,#FEB390", diff=0.93)
             if res:
                 bossColor = '火'
         if not res:
-            res, _, _ = imageFind('雷电大王-木', 0.8, 224,323,514,429)
-            # res = CompareColors.compare("356,387,#9CDD72", diff=0.9)
+            res, _, _ = imageFind('雷电大王-木', 0.8, 224, 323, 514, 429)
+            if not res:
+                res = CompareColors.compare("356,387,#9CDD72", diff=0.9)
             if res:
                 bossColor = '木'
 

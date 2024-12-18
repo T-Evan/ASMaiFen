@@ -18,6 +18,7 @@ from ascript.android.system import R
 from ascript.android.ui import WebWindow
 from ascript.android.ui import Loger
 from datetime import datetime, timedelta
+from time import sleep
 
 config = None
 
@@ -60,8 +61,10 @@ import time
 
 
 class TimeoutLock:
-    def __init__(self, timeLock=10):
-        self.lock = switch_lock
+    def __init__(self, timeLock=10, lock = ''):
+        self.lock = lock
+        if lock == '':
+            self.lock = switch_lock
         self.timeout = timeLock
 
     def acquire_lock(self):
@@ -110,6 +113,8 @@ def loadConfig(configNum):
     global 功能开关
     configName = '配置' + str(configNum)
     new = json.loads(功能配置[configName])
+    if not new:
+        return False
     for index, value in new.items():
         if value == 'false':
             value = False
@@ -132,9 +137,11 @@ def loadConfig(configNum):
 
     "当前任务账号": 功能开关["选择启动账号"],
     "当前任务角色": 功能开关["选择启动角色"],
+    "当前任务配置": 0,
 
     "切换角色-倒计时": 0,
     "切换账号-倒计时": 0,
+    "切换配置-倒计时": 0,
     "定时休息-倒计时": 0,
     "任务重置-倒计时": 0,
 
@@ -145,6 +152,7 @@ def loadConfig(configNum):
     "战斗-推荐战力": 0,
     "战斗-关卡名称": '',
     "战斗-房主名称": '',
+    "战斗-房主旅团": '',
     "战斗-房主战力": 0,
     "战斗-房主上次相遇": 0,
     "战斗-恶龙名称": 0,
@@ -153,7 +161,10 @@ def loadConfig(configNum):
     "玩家名称": "",
     "玩家战力": "",
     "玩家-当前关卡": "",
+    "玩家-当前关卡-倒计时": 0,
     "玩家-当前职业": "",
+    "玩家-当前旅团": "",
+    "玩家-当前旅团-倒计时": 0,
 }
 
 
@@ -200,6 +211,7 @@ def 初始化任务记录(initAll=True):
         "日常-招式创造-完成": 0,
         "日常-骑兽乐园-完成": 0,
         "日常-释放1次战术技能-完成": 0,
+        "日常-洗练1次装备-完成": 0,
 
         "日常-升级1次麦乐兽-完成": 0,
         "试炼-秘境-体力消耗完成": 0,
@@ -208,8 +220,8 @@ def 初始化任务记录(initAll=True):
         "日常-摸鱼时间到-完成": 0,
     })
 
-    if initAll:
-        任务记录.update({"日常-洗练1次装备-完成": 0, })
+    # if initAll:
+    #     任务记录.update({"日常-洗练1次装备-完成": 0, })
 
     # 营地
     任务记录.update({

@@ -23,7 +23,7 @@ def main():
 
 
 def returnHome():
-    for i in range(3):
+    for i in range(4):
         return1 = False
         return2 = False
         return3 = False
@@ -31,9 +31,9 @@ def returnHome():
         return5 = False
         return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
         return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
-        if i == 3 and (return1 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0) or (return3 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0):
+        if i > 2 and (return1 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0) or (return3 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0):
             # 返回上级页面时二次确认入口通用处理
-            sleep(0.4)
+            sleep(0.2)
             re = TomatoOcrFindRangeClick(x1=39,y1=250,x2=674,y2=1205,keywords=[{'keyword': '确定', 'match_mode': 'exact'},{'keyword': '确认', 'match_mode': 'exact'}])
             Toast('返回首页')
 

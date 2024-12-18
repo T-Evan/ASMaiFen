@@ -120,7 +120,7 @@ class DailyTask:
             # TimeoutLock(switch_lock).release_lock()
 
             # 判断宝箱开启
-            self.shilianTask.openTreasure()
+            # self.shilianTask.openTreasure()
             sleep(0.5)
 
     # 日常任务聚合
@@ -195,6 +195,32 @@ class DailyTask:
         Toast("每日任务 - 洗练1次装备 - 开始")
         self.homePage()
 
+        # 判断是否已洗练状态
+        res = TomatoOcrTap(626, 379, 711, 405, "冒险手册", 30, -20, sleep1=1)
+        if not res:
+            Toast("识别冒险手册失败")
+            return
+
+        # 日常领取
+        res = TomatoOcrTap(274, 1102, 326, 1130, "每日", sleep1=0.9)
+        if res:
+            swipe(358, 527, 353, 1215, 250)  # 返回最上面
+            sleep(1.5)
+            for k in range(6):
+                # 识别黄色领取按钮
+                pointsTask = FindColors.find_all(
+                    "242,572,#F2A94A|303,573,#F2A94A|332,569,#FBFBFB|332,570,#F7F7F6|339,577,#F9F9F9|423,572,#F2A94A")
+                if pointsTask:
+                    for p in pointsTask:
+                        re, taskName = TomatoOcrText(p.x - 80, p.y - 80, p.x + 70, p.y - 45, "任务名称")
+                        if taskName == "洗练1次装备":
+                            任务记录["日常-洗练1次装备-完成"] = 1
+                            Toast('日常-洗练1次装备-完成')
+                            return
+                swipe(337, 860, 330, 648)
+                sleep(1.5)
+
+        self.homePage()
         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
 
         tapSleep(159, 680)  # 仓库第1件装备
@@ -577,6 +603,9 @@ class DailyTask:
         # if CompareColors.compare("355,1104,#EF5C3F|355,1100,#F45F42|352,1103,#EF5C3F"):
         res = TomatoOcrTap(274, 1102, 326, 1130, "每日", sleep1=0.9)
         if res:
+            swipe(358, 527, 353, 1215, 250)  # 返回最上面
+            sleep(1.5)
+
             # 识别黄色领取按钮
             re, x, y = imageFind('手册-领取')
             if re:
@@ -2225,10 +2254,7 @@ class DailyTask:
 
     def checkGameStatus(self):
         try:
-            if 功能开关["fighting"] == 1:
-                return
-
-            if 功能开关['技能进入战斗后启动'] == 1:
+            if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1:
                 return
 
             # re1 = CompareColors.compare(
@@ -2237,11 +2263,14 @@ class DailyTask:
             #     Toast('战斗中-不检测游戏是否卡死')
             #     return
 
-            if 任务记录["首页卡死检测-倒计时"] > 0:
-                diffTime = time.time() - 任务记录["首页卡死检测-倒计时"]
-                if diffTime < 4 * 60:
-                    print(f'游戏卡死检测 - 倒计时{round((4 * 60 - diffTime) / 60, 2)}min')
-                    return True
+            diffTime = time.time() - 任务记录["首页卡死检测-倒计时"]
+            if diffTime < 4 * 60:
+                print(f'游戏卡死检测 - 倒计时{round((4 * 60 - diffTime) / 60, 2)}min')
+                return True
+
+            # 战斗中6分钟，强制检查是否卡死
+            if 功能开关["fighting"] == 1 and diffTime < 6 * 60:
+                return
 
             # 匹配行李图标亮着，新号为灰色，不处理
             re = CompareColors.compare("287,1224,#AC8B62|285,1218,#AC8B62|285,1199,#9F7C55|287,1210,#9F7C55")

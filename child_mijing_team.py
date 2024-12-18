@@ -17,11 +17,11 @@ dailyTask = DailyTask()
 
 # 实例方法
 def main():
-    if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关['恶龙自动接收邀请'] == 1 or \
-            功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
-            功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
-        while True:
-            sleep(5)  # 等待 5 秒
+    while True:
+        if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关[
+            '恶龙自动接收邀请'] == 1 or \
+                功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
+                功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
             # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
@@ -31,8 +31,25 @@ def main():
                 if 任务记录["AI发言-广告开关"] == 0:
                     if 任务记录["玩家名称"] == '咸鱼搜麦乐芬' or 任务记录["玩家名称"] == '养只狐狸':
                         任务记录["AI发言-广告开关"] = 1
+
+                # 识别玩家所在旅团，做特殊逻辑
+                if 功能开关["仅接收旅团成员邀请"] == 1 and (
+                        任务记录["玩家-当前旅团"] == "" or time.time() - 任务记录["玩家-当前旅团-倒计时"] > 300):
+                    Toast('开始识别所在旅团')
+                    功能开关["fighting"] = 1
+                    功能开关["needHome"] = 0
+                    re = CompareColors.compare(
+                        "252,105,#FFFFFF|252,99,#FFFFFF|254,102,#FFFFFF|257,102,#FFFFFF|255,110,#7CA2E3")  # 玩家右侧效果加成图标
+                    if re:
+                        tapSleep(47, 97, 0.8)  # 点击玩家头像
+                        res, 任务记录["玩家-当前旅团"] = TomatoOcrText(415, 830, 584, 857, "旅团名称")
+                        tapSleep(69, 1216)  # 关闭玩家信息
+                        任务记录["玩家-当前旅团-倒计时"] = time.time()
+                    功能开关["fighting"] = 0
+
                 # 识别玩家当前关卡，做特殊逻辑
-                if 任务记录["玩家-当前关卡"] == "":
+                if (任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 300) and \
+                        功能开关["秘境不开宝箱"] == 0:
                     Toast('开始检测最新关卡')
                     功能开关["fighting"] = 1
                     功能开关["needHome"] = 0
@@ -55,13 +72,16 @@ def main():
                             "577,363,#F4DB77|577,358,#F3D76B|585,364,#888A93|585,356,#888992|592,356,#D9DADC|601,364,#F3F3F4",
                             rect=[72, 205, 655, 1120], diff=0.9)
                         if tiliPoint:
-                            print(tiliPoint)
+                            任务记录["玩家-当前关卡-倒计时"] = time.time()
+                            # print(tiliPoint)
                             x1 = tiliPoint.x - 280
                             y1 = tiliPoint.y - 25
                             x2 = x1 + 175
                             y2 = y1 + 30
-                            res, 任务记录['玩家-当前关卡'] = TomatoOcrText(x1, y1, x2, y2, "当前关卡")  # 关卡1
-                            Toast(f"识别最新关卡-{任务记录['玩家-当前关卡']}-带队时自动开启宝箱")
+                            res, tmp = TomatoOcrText(x1, y1, x2, y2, "当前关卡")  # 关卡
+                            if tmp != "":
+                                任务记录['玩家-当前关卡'] = tmp
+                                Toast(f"识别最新关卡-{任务记录['玩家-当前关卡']}-带队时自动开启宝箱")
                             tapSleep(98, 1212)  # 返回首页
                             tapSleep(98, 1212)  # 返回首页
                             tapSleep(98, 1212)  # 返回首页
@@ -71,6 +91,7 @@ def main():
                 Toast('等待组队邀请')
                 waitInvite()
                 dailyTask.checkGameStatus()
+        sleep(3)  # 等待 5 秒
 
 
 def waitInvite():
@@ -97,6 +118,15 @@ def waitInvite():
             return
 
     if res1:
+        if 功能开关["仅接收旅团成员邀请"] == 1:
+            Toast('判断是否为旅团成员邀请')
+            tapSleep(415, 544, 0.8)  # 点击右侧邀请玩家头像
+            res, 任务记录["战斗-房主旅团"] = TomatoOcrText(410, 828, 587, 862, "旅团名称")
+            if 任务记录["玩家-当前旅团"] != 任务记录["战斗-房主旅团"]:
+                Toast('非旅团成员，拒绝组队邀请')
+                res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                tapSleep(71, 1216)  # 点击返回
+
         功能开关["fighting"] = 1
         功能开关["needHome"] = 0
         resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
@@ -188,9 +218,11 @@ def waitInvite():
         res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
         if res1:
             # 体力用尽不再提醒
-
             # 判断体力用尽提示
-            res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
+            res, _ = TomatoOcrText(333, 744, 385, 771, "确定")
+            if res:
+                tapSleep(285, 710)  # 点击不再提醒
+            res = TomatoOcrTap(333, 744, 385, 771, "确定")
 
     waitFight = False
     findDoneStatus = False
@@ -332,7 +364,6 @@ def waitInvite():
     quitTeamRe = shilianTask.quitTeam()
     功能开关["fighting"] = 0
     功能开关["秘境不开宝箱"] = tmpBx
-    功能开关["秘境不开宝箱"] = 1
 
     return
 

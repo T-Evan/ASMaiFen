@@ -90,6 +90,16 @@ class LvTuanTask:
                     Toast('调查队 - 钥匙用尽 - 结束挑战')
                     return
 
+            # 领取累积奖励
+            for k in range(4):
+                re = FindColors.find("535,135,#F05D40|536,134,#F25E41|538,137,#FF5438")
+                if re:
+                    tapSleep(514, 172, 0.8)
+                    TomatoOcrTap(333, 719, 386, 752, '领取')
+                    tapSleep(175, 956)  # 返回
+                    tapSleep(175, 956)
+                    tapSleep(175, 956)
+
             res = TomatoOcrTap(307, 964, 412, 1002, "开启调查", sleep1=0.7)
             if res:
                 tapSleep(205, 760, 0.5)  # 添加队友
@@ -205,7 +215,7 @@ class LvTuanTask:
         # 翻页（先返回上面）
         swipe(360, 750, 360, 850)
         sleep(2.5)
-        for i in range(7):
+        for i in range(9):
             re = FindColors.find(
                 "120,703,#FEF396|131,705,#F5CE4F|140,708,#F2A94B|124,711,#F1D65A|129,714,#E8BA46|138,714,#F2A94B",
                 rect=[78, 527, 639, 1104])

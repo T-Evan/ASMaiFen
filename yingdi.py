@@ -156,6 +156,16 @@ class YingDiTask:
                 if isFind:
                     break
         if isFind:
+            # 判断限时特卖是否领取
+            re = CompareColors.compare("680,1122,#EE5C3F|683,1122,#F05C3F|680,1117,#F56043")
+            if re:
+                TomatoOcrTap(584, 1115, 677, 1145, "限时特卖", sleep1=0.8)
+                TomatoOcrTap(145, 587, 200, 620, "免费", sleep1=0.8)
+                TomatoOcrTap(339, 744, 381, 762, "免费", sleep1=0.8)
+                tapSleep(393, 1125)  # 关闭弹窗
+                tapSleep(393, 1125)  # 返回积分奖励页
+                tapSleep(393, 1125)
+
             # 判断是否完成
             res, _ = TomatoOcrText(549, 282, 625, 303, '100/100')
             if res:
@@ -238,7 +248,6 @@ class YingDiTask:
         res = TomatoOcrTap(286, 1202, 340, 1229, "礼包", sleep1=0.8)
         sleep(1)
         if res:
-            任务记录["日礼包-完成"] = 1
             res = TomatoOcrTap(148, 671, 198, 700, "免费", sleep1=0.8)
             if res:
                 res = TomatoOcrTap(339, 743, 379, 764, "免费", sleep1=0.8)

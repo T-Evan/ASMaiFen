@@ -212,7 +212,6 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 # if 功能开关['角色4开关'] == 0 or 功能开关['角色4开关'] == False:
 # loadConfig(5)
 # print(功能开关)
-# res = TomatoOcrFindRangeClick('高原', 1, 0.8, 118,230,178,1133)
 # system.exit()
 
 
@@ -250,11 +249,28 @@ def main():
 
         任务记录["切换角色-倒计时"] = time.time()
         任务记录["切换账号-倒计时"] = time.time()
+        任务记录["切换配置-倒计时"] = time.time()
         任务记录["定时休息-倒计时"] = time.time()
         任务记录["任务重置-倒计时"] = time.time()
 
         # 多账号处理
         start_up.multiAccount()
+
+        if 功能开关["选择启动配置"] != "0" and 任务记录['当前任务配置'] == 0:
+            configNum = safe_int(功能开关["选择启动配置"])
+            for k in range(5):
+                if 功能开关[f"配置{configNum}名称"] == "":
+                    continue
+                need_config_minute = safe_int(功能开关.get(f"配置{configNum}运行时长", 0))  # 分钟
+                Toast(
+                    f'加载配置{configNum}{功能开关[f"配置{configNum}名称"]} + 预计执行{need_config_minute}分后继续切换')
+                sleep(1.5)
+                res = loadConfig(configNum)
+                if not res:
+                    configNum = configNum + 1
+                    continue
+                任务记录['当前任务配置'] = configNum
+                break
 
         if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1:
             runThreadAutoSkill()
@@ -378,6 +394,42 @@ def main():
                     初始化任务记录(False)
                     sleep(need_wait_minute * 60)
                     任务记录["定时休息-倒计时"] = int(time.time())
+
+                # 定时切配置
+                if 功能开关["选择启动配置"] != "0":
+                    configNum = safe_int(任务记录["当前任务配置"])
+                    need_switch_config_minute = safe_int(功能开关.get(f"配置{configNum}运行时长", 0))  # 分钟
+                    if need_switch_config_minute == '':
+                        need_switch_config_minute = 0
+                    total_switch_config_minute = need_switch_config_minute * 60
+                    if total_switch_config_minute != 0:
+                        if current_time - 任务记录["切换配置-倒计时"] >= total_switch_config_minute:
+                            Toast(f"运行 {need_switch_config_minute} 分钟，准备切换配置")
+                            sleep(1.5)
+                            功能开关["fighting"] = 0
+                            功能开关["needHome"] = 0
+                            初始化任务记录(False)
+                            for k in range(5):
+                                configNum = configNum + 1
+                                if configNum > 5:
+                                    configNum = 1  # 从配置1重新切换
+                                if 功能开关[f"配置{configNum}名称"] == "":
+                                    continue
+                                need_config_minute = safe_int(功能开关.get(f"配置{configNum}运行时长", 0))  # 分钟
+                                Toast(
+                                    f'加载配置{configNum}{功能开关[f"配置{configNum}名称"]} + 预计执行{need_config_minute}分后继续切换')
+                                res = loadConfig(configNum)
+                                if not res:
+                                    continue
+                                任务记录["当前任务配置"] = configNum
+                                break
+                            任务记录["切换配置-倒计时"] = int(time.time())
+                        else:
+                            tmpMinute = round((current_time - 任务记录["切换配置-倒计时"]) / 60, 2)
+                            tmpDiffMinute = round(
+                                need_switch_config_minute - ((current_time - 任务记录["切换配置-倒计时"]) / 60), 2)
+                            Toast(f"运行 {tmpMinute} 分钟，{tmpDiffMinute} 分后切换配置")
+                            sleep(1.5)
 
                 # 定时切角色
                 if total_switch_role_minute != 0:

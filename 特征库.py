@@ -36,7 +36,7 @@ def compareColors(colorStr, diff=0.9):
         return False
 
 
-def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
+def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=3):
     try:
         lock = TimeoutLock(timeLock)
         try:
