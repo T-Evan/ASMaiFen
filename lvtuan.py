@@ -147,14 +147,14 @@ class LvTuanTask:
             attempts = attempts + 3
             # 调查队宝箱
             # 战斗结束页
-            res = TomatoOcrTap(330, 1024, 390, 1051, "开启", 10, 20)
+            res = TomatoOcrTap(336,1087,385,1115, "开启", 10, 20)
             if res:
                 sleep(2)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
             # 结算页
-            res = TomatoOcrTap(333, 752, 388, 781, "开启")
+            res = TomatoOcrTap(337,757,380,776, "开启")
             if res:
                 sleep(1)
                 tapSleep(340, 930)

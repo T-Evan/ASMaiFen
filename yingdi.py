@@ -105,6 +105,13 @@ class YingDiTask:
             TomatoOcrTap(496, 304, 547, 332, "领取", sleep1=0.8)
             tapSleep(345, 1058)  # 点击空白处关闭
 
+            # 赛季任务红点
+            re = CompareColors.compare("596,1076,#F66245|598,1079,#F45F42|596,1079,#F36042")
+            if re:
+                tapSleep(541, 1095, 0.8)
+                TomatoOcrTap(496, 304, 547, 332, "领取", sleep1=0.8)
+                tapSleep(345, 1058)  # 点击空白处关闭
+
             TomatoOcrTap(94, 1186, 125, 1217, "回", sleep1=0.8)  # 返回活动首页
             res1 = TomatoOcrTap(232, 1093, 283, 1124, "领取", sleep1=0.8)  # 一键领取
             res2 = TomatoOcrTap(358, 1096, 412, 1122, "领取", sleep1=0.8)  # 一键领取
@@ -442,6 +449,13 @@ class YingDiTask:
                     sleep(1)
                     return
 
+        # 识别最新地图
+        if 功能开关["秘宝地图"] == "最新地图":
+            res = TomatoOcrTap(527, 1212, 609, 1237, "秘宝产出", sleep1=2.5)
+            if res:
+                res, 功能开关["秘宝地图"] = TomatoOcrText(270, 1008, 475, 1055, '秘宝地图')
+                tapSleep(373, 1166)  # 返回
+
         # 判断能量是否已满；能量已满暂不领取能源
         res, availableNengLiang = TomatoOcrText(607, 80, 661, 102, "剩余能量")  # 右上角剩余嫩俩
         availableNengLiang = safe_int(availableNengLiang)
@@ -450,7 +464,8 @@ class YingDiTask:
             findNL = False
             findNum = 0
             # 返回上半屏
-            if 功能开关["秘宝地图"] == "巨像的旷野" or 功能开关["秘宝地图"] == "白帆之都":
+            if 功能开关["秘宝地图"] == "巨像的旷野" or 功能开关["秘宝地图"] == "白帆之都" or 功能开关[
+                "秘宝地图"] == "石松沼泽":
                 Toast("返回上半屏")
                 swipe(361, 547, 380, 918)
                 sleep(1)
@@ -498,7 +513,7 @@ class YingDiTask:
                             tapSleep(360, 1100)  # 点击空白处关闭
 
             # 返回下半屏地图
-            if 功能开关["秘宝地图"] == "白帆之都":
+            if 功能开关["秘宝地图"] == "白帆之都" or 功能开关["秘宝地图"] == "石松沼泽":
                 Toast("返回下半屏")
                 swipe(380, 918, 361, 547)
                 sleep(1)
@@ -619,14 +634,14 @@ class YingDiTask:
         selectMap = 功能开关["秘宝地图"]
         findMap = False
 
-        if selectMap == "白帆之都":
+        if selectMap == "白帆之都" or selectMap == "石松沼泽":
             Toast("返回下半屏")
             swipe(380, 918, 361, 547)
             sleep(1)
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
-            if selectMap == "白帆之都":
+            if selectMap == "白帆之都" or selectMap == "石松沼泽":
                 Toast("返回下半屏")
                 swipe(380, 918, 361, 547)
                 sleep(1)
@@ -638,7 +653,7 @@ class YingDiTask:
 
         # 再找左侧
         if left < 4 and right == 4:
-            if selectMap == "白帆之都":
+            if selectMap == "白帆之都" or selectMap == "石松沼泽":
                 Toast("返回下半屏")
                 swipe(380, 918, 361, 547)
                 sleep(1)
@@ -704,6 +719,11 @@ class YingDiTask:
                 if re:
                     findMap = True
 
+        if selectMap == "石松沼泽":
+            re = TomatoOcrFindRangeClick('石松沼泽', sleep1=2, whiteList='石松沼泽')
+            if re:
+                findMap = True
+
         if not findMap:
             # 左右均未找到
             if left >= 4 and right >= 4:
@@ -765,40 +785,92 @@ class YingDiTask:
             "145,714,#E1DBD1|420,718,#E6E1D8|557,718,#E6E1D8|146,916,#E6E1D8|282,913,#E6E1D8|420,915,#E6E1D8")
         if re:
             Toast('营地任务 - 仓鼠百货 - 已购买完成')
-            return
 
-        for i in range(2):
-            # 免费金币箱
-            res, _ = TomatoOcrText(122, 694, 184, 718, "已售罄")
-            if not res:
-                tapSleep(145, 630)  # 金币箱
-                tapSleep(360, 825, 0.6)  # 购买
-                tapSleep(360, 1100, 1)  # 点击空白处关闭
-
-            # 原材料
-            if 功能开关['商店原材料'] == 1:
-                imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
-                re2 = False
-                if not re1:
-                    re2, x, y = imageFind('商店购买')
-                if re1 or re2:
-                    TomatoOcrFindRangeClick('购买', whiteList='购买', x1=93, y1=643, x2=618, y2=1004)
-                    tapSleep(360, 1100, 1)  # 点击空白处关闭
-
-            # 星星经验
-            if 功能开关['商店星星经验'] == 1:
-                imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
-                re2 = False
-                if not re1:
-                    re2, x, y = imageFind('商店购买')
-                if re1 or re2:
+        if not re:
+            for i in range(2):
+                # 免费金币箱
+                res, _ = TomatoOcrText(122, 694, 184, 718, "已售罄")
+                if not res:
+                    tapSleep(145, 630)  # 金币箱
                     tapSleep(360, 825, 0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
 
-            if 功能开关['商店全价兽粮'] == 1:
-                imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                # 原材料
+                if 功能开关['商店原材料'] == 1:
+                    imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                    re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                    re2 = False
+                    if not re1:
+                        re2, x, y = imageFind('商店购买')
+                    if re1 or re2:
+                        TomatoOcrFindRangeClick('购买', whiteList='购买', x1=93, y1=643, x2=618, y2=1004)
+                        tapSleep(360, 1100, 1)  # 点击空白处关闭
+
+                # 星星经验
+                if 功能开关['商店星星经验'] == 1:
+                    imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                    re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                    re2 = False
+                    if not re1:
+                        re2, x, y = imageFind('商店购买')
+                    if re1 or re2:
+                        tapSleep(360, 825, 0.6)  # 购买
+                        tapSleep(360, 1100, 1)  # 点击空白处关闭
+
+                if 功能开关['商店全价兽粮'] == 1:
+                    imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                    re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                    re2 = False
+                    if not re1:
+                        re2, x, y = imageFind('商店购买')
+                    if re1 or re2:
+                        tapSleep(360, 855, 0.6)  # 购买
+                        tapSleep(360, 1100, 1)  # 点击空白处关闭
+
+                if 功能开关['商店超级成长零食三折'] == 1:
+                    imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                    re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                    re2 = False
+                    if not re1:
+                        re2, x, y = imageFind('商店购买')
+                    if re1 or re2:
+                        tapSleep(360, 820, 0.6)  # 购买
+                        tapSleep(360, 1100, 1)  # 点击空白处关闭
+
+                if 功能开关['商店黑烬突破石五折'] == 1:
+                    imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                    re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                    re2 = False
+                    if not re1:
+                        re2, x, y = imageFind('商店购买')
+                    if re1 or re2:
+                        tapSleep(360, 820, 0.6)  # 购买
+                        tapSleep(360, 1100, 1)  # 点击空白处关闭
+
+                if 功能开关['商店经验补剂五折'] == 1:
+                    imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                    re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                    re2 = False
+                    if not re1:
+                        re2, x, y = imageFind('商店购买')
+                    if re1 or re2:
+                        tapSleep(360, 855, 0.6)  # 购买
+                        tapSleep(360, 1100, 1)  # 点击空白处关闭
+                if 功能开关['商店金币箱五折'] == 1:
+                    TomatoOcrFindRangeClick('金币箱', x1=78, y1=751, x2=637, y2=961, match_mode='fuzzy')
+                    re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                    re2 = False
+                    if not re1:
+                        re2, x, y = imageFind('商店购买')
+                    if re1 or re2:
+                        tapSleep(360, 855, 0.6)  # 购买
+                        tapSleep(360, 1100, 1)  # 点击空白处关闭
+
+        # 秘境补给
+        if 功能开关['秘境补给'] == 1:
+            TomatoOcrTap(377, 1211, 469, 1235, "秘境补给", sleep1=0.8)
+            if 功能开关['秘境补给星钻'] == 1:
+                TomatoOcrFindRangeClick('星钻', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                 re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 re2 = False
                 if not re1:
@@ -806,29 +878,17 @@ class YingDiTask:
                 if re1 or re2:
                     tapSleep(360, 855, 0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
-
-            if 功能开关['商店超级成长零食三折'] == 1:
-                imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+            if 功能开关['秘境补给群星自选包'] == 1:
+                TomatoOcrFindRangeClick('群星自选', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                 re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 re2 = False
                 if not re1:
                     re2, x, y = imageFind('商店购买')
                 if re1 or re2:
-                    tapSleep(360, 820, 0.6)  # 购买
+                    tapSleep(360, 909, 0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
-
-            if 功能开关['商店黑烬突破石五折'] == 1:
-                imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
-                re2 = False
-                if not re1:
-                    re2, x, y = imageFind('商店购买')
-                if re1 or re2:
-                    tapSleep(360, 820, 0.6)  # 购买
-                    tapSleep(360, 1100, 1)  # 点击空白处关闭
-
-            if 功能开关['商店经验补剂五折'] == 1:
-                imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+            if 功能开关['秘境补给史诗经验'] == 1:
+                TomatoOcrFindRangeClick('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                 re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 re2 = False
                 if not re1:
@@ -836,8 +896,32 @@ class YingDiTask:
                 if re1 or re2:
                     tapSleep(360, 855, 0.6)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
-            if 功能开关['商店金币箱五折'] == 1:
-                TomatoOcrFindRangeClick('金币箱', x1=78, y1=751, x2=637, y2=961, match_mode='fuzzy')
+            if 功能开关['秘境补给绮想妙成真'] == 1:
+                swipe(356, 954, 352, 511)  # 下滑
+                sleep(0.5)
+                TomatoOcrFindRangeClick('妙成真', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                re2 = False
+                if not re1:
+                    re2, x, y = imageFind('商店购买')
+                if re1 or re2:
+                    tapSleep(360, 855, 0.6)  # 购买
+                    tapSleep(360, 1100, 1)  # 点击空白处关闭
+            if 功能开关['秘境补给黑烬突破石'] == 1:
+                swipe(356, 954, 352, 511)  # 下滑
+                sleep(0.5)
+                TomatoOcrFindRangeClick('突破石', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
+                re2 = False
+                if not re1:
+                    re2, x, y = imageFind('商店购买')
+                if re1 or re2:
+                    tapSleep(360, 855, 0.6)  # 购买
+                    tapSleep(360, 1100, 1)  # 点击空白处关闭
+            if 功能开关['秘境补给星星经验'] == 1:
+                swipe(356, 954, 352, 511)  # 下滑
+                sleep(0.5)
+                TomatoOcrFindRangeClick('星星经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                 re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                 re2 = False
                 if not re1:

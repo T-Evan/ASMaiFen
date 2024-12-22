@@ -79,6 +79,10 @@ class AutoSkill:
                 self.lastCheckFighting = time.time()
 
             if self.fighting == 0:
+                self.initAutoSkill()
+                continue
+
+            if self.SkillCount >= self.SkillNeedCount:
                 continue
 
             if 功能开关["技能定时释放"] == 1:
@@ -139,6 +143,7 @@ class AutoSkill:
                                     self.Skill2 = time.time()
                                 self.Skill1Flag = True
                                 self.Skill1 = time.time()
+                                self.SkillNeedCount = self.SkillNeedCount +1
                         else:
                             a = 1  # debug
                             # text = self.Skill1Time - (time.time() - self.Skill1)
@@ -247,6 +252,7 @@ class AutoSkill:
                 tapSleep(659, 942, 0.3)  # 3技能
                 tapSleep(421, 1077, 0.3)  # 宠物技能
                 tapSleep(426, 1067, 0.3)  # 宠物技能
+                self.SkillNeedCount = self.SkillNeedCount + 1
 
     def autoSkill2(self):
         while 1:

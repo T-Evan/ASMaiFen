@@ -131,31 +131,37 @@ class StartUp:
             if 功能开关['选择启动区服'] != "":
                 启动区服 = safe_int_v2(功能开关['选择启动区服'])
                 if 启动区服 > 0:
+                    Toast(f'准备切换区服-{启动区服}区')
                     # 检查当前区服
-                    res, _ = TomatoOcrText(293, 948, 344, 976, f'{启动区服}服')
-                    if not res:
-                        Toast(f'切换启动区服-{启动区服}区')
-                        tapSleep(358, 958, 0.7)
-                        for k in range(10):
-                            res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=112, y1=337, x2=184, y2=604, sleep1=0.7,
-                                                          match_mode='fuzzy')
-                            if res:
-                                break
-                            sleep(0.5)
-                            res = TomatoOcrFindRangeClick(f'{启动区服}', x1=112, y1=337, x2=184, y2=604, sleep1=0.7,
-                                                          match_mode='fuzzy')
-                            if res:
-                                break
-                            if k < 5:
-                                swipe(228, 552 + k, 228, 440)  # 下翻
-                            if k > 5:
-                                swipe(228, 430 + k, 228, 552)  # 上翻
-                            sleep(1.5)
-                            if k == 9:
-                                Toast(f'未找到，{启动区服}区角色')
-                                tapSleep(325, 1117, 1)  # 关闭选区界面
+                    for l in range(2):
+                        res, _ = TomatoOcrText(282, 1017, 437, 10516, f'{启动区服}服')
+                        if res:
+                            Toast(f'当前选择区服-{启动区服}区')
+                            break
+                        if not res:
+                            Toast(f'切换启动区服-{启动区服}区')
+                            tapSleep(358, 958, 0.7)
+                            for k in range(10):
+                                res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=112, y1=337, x2=184, y2=604,
+                                                              sleep1=0.7,
+                                                              match_mode='fuzzy')
+                                if res:
+                                    break
+                                sleep(0.5)
+                                res = TomatoOcrFindRangeClick(f'{启动区服}', x1=112, y1=337, x2=184, y2=604, sleep1=0.7,
+                                                              match_mode='fuzzy')
+                                if res:
+                                    break
+                                if k < 5:
+                                    swipe(228, 552 + k, 228, 440)  # 下翻
+                                if k > 5:
+                                    swipe(228, 430 + k, 228, 552)  # 上翻
+                                sleep(1.5)
+                                if k == 9:
+                                    Toast(f'未找到，{启动区服}区角色')
+                                    tapSleep(325, 1117, 1)  # 关闭选区界面
 
-        login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅", sleep1=0.8)
+        login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅", sleep1=1)
         # 开始冒险
         login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
         if login2:
@@ -194,15 +200,16 @@ class StartUp:
         return shou_ye
 
     def switchRole(self, ifRestart=1, selectRole=''):
-        if (功能开关['选择启动角色'] == "false" and 功能开关['角色1开关'] == "false" and
-                功能开关['角色2开关'] == "false" and 功能开关['角色3开关'] == "false" and
-                功能开关['角色4开关'] == "false" and \
+        if (功能开关['选择启动角色'] == "false" and 功能开关['角色1开关'] == "false" and 功能开关[
+            '角色2开关'] == "false" and 功能开关['角色3开关'] == "false" and 功能开关['角色4开关'] == "false" and
                 功能开关['角色5开关'] == "false"):
             Toast('未配置角色切换')
+            sleep(0.5)
             return
         if (功能开关['选择启动角色'] == 0 and 功能开关['角色1开关'] == 0 and 功能开关['角色2开关'] == 0 and
                 功能开关['角色3开关'] == 0 and 功能开关['角色4开关'] == 0 and 功能开关['角色5开关'] == 0):
             Toast('未配置角色切换')
+            sleep(0.5)
             return
 
         功能开关['fighting'] = 0
@@ -246,6 +253,7 @@ class StartUp:
         # print(角色开关 + 功能开关[角色开关])
         if 功能开关[角色开关] == 0 or 功能开关[角色开关] == "false":
             Toast(角色开关 + '-未开启')
+            sleep(0.3)
             任务记录['当前任务角色'] = 下一角色
             return self.switchRole(2)
 
@@ -259,25 +267,30 @@ class StartUp:
         res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
         # dialog(下一角色)
         if 下一角色 <= 3:
-            swipe(190, 1090, 555, 1090)  # 翻到最左
-            swipe(150, 1090, 535, 1090)  # 翻到最左
-            swipe(210, 1090, 575, 1090)  # 翻到最左
-            sleep(3)
+            swipe(190, 1090, 555, 1090, 300)  # 翻到最左
+            sleep(1.5)
+            swipe(150, 1090, 535, 1090, 300)  # 翻到最左
+            sleep(1.5)
+            swipe(210, 1090, 575, 1090, 300)  # 翻到最左
+            sleep(2)
             x = 190 + (下一角色 - 1) * 157  # 从第一个角色 190，依次往右加 165 至下一角色
             y = 1090
             tapSleep(x, y, 1.5)
             res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
             if res:
                 # 无该角色，退出
+                Toast('未创建角色')
                 res = TomatoOcrTap(70, 1198, 125, 1232, "返回")
                 任务记录['当前任务角色'] = 0
                 return self.switchRole(2)
 
         if 下一角色 > 3:
-            swipe(555, 1090, 190, 1090)  # 翻到最右
-            swipe(535, 1090, 170, 1090)  # 翻到最右
-            swipe(575, 1090, 210, 1090)  # 翻到最右
-            sleep(3)
+            swipe(555, 1090, 190, 1090, 300)  # 翻到最右
+            sleep(1.5)
+            swipe(535, 1090, 170, 1090, 300)  # 翻到最右
+            sleep(1.5)
+            swipe(575, 1090, 210, 1090, 300)  # 翻到最右
+            sleep(2)
             x = 540 - (5 - 下一角色) * 165  # 从第五个角色 540，依次往左减 165 至下一角色
             y = 1090
             tapSleep(x, y, 1.5)

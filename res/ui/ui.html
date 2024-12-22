@@ -283,6 +283,7 @@
     </label>
     <ul style="margin:0px 3px;padding: 0px;width:100%;">
         <div style="height: 35px; width: 100%;background-color: white;"></div>
+        <div id="toast" class="toast">保存成功</div>
         <li class="shouye_content">
             <h3>公告：Have Fun ！</h3>
             <h4> 任务按以下顺序检查并执行
@@ -459,7 +460,6 @@
                         </div>
                     </div>
                     <label class="gray-text">！配置定时切换不可与多账号自动切换同时使用！</label>
-                    <div id="toast" class="toast">保存成功</div>
                     <div class="flex-container">
                         <label for="选择游戏版本">游戏版本:</label>
                         <div class="layui-form">
@@ -732,10 +732,16 @@
                             <input id="自动更换装备" name="vehicle" type="checkbox" value="Bike">自动更换装备<br>
                         </div>
                         <div class="checkbox-item">
+                            <input id="自动进阶装备" name="vehicle" type="checkbox" value="Bike">自动进阶装备<br>
+                        </div>
+                        <div class="checkbox-item">
                             <input id="满包裹分解装备" name="vehicle" type="checkbox" value="Bike">满包裹分解装备<br>
                         </div>
                         <div class="checkbox-item">
                             <input id="自动升级技能" name="vehicle" type="checkbox" value="Bike">自动升级技能<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="自动升星秘宝" name="vehicle" type="checkbox" value="Bike">自动升星秘宝<br>
                         </div>
                     </div>
 
@@ -852,6 +858,9 @@
                             <input id="仓鼠百货" name="vehicle" type="checkbox" value="Bike">仓鼠百货<br>
                         </div>
                         <div class="checkbox-item">
+                            <input id="秘境补给" name="vehicle" type="checkbox" value="Bike">秘境补给<br>
+                        </div>
+                        <div class="checkbox-item">
                             <input id="月签到" name="vehicle" type="checkbox" value="Bike">月签到<br>
                         </div>
                         <div class="checkbox-item">
@@ -897,12 +906,35 @@
                             <input id="金币箱五折" name="vehicle" type="checkbox" value="Bike">金币箱五折<br>
                         </div>
                     </div>
+                    <legend>秘境补给兑换</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="秘境补给星钻" name="vehicle" type="checkbox" value="Bike">星钻<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="秘境补给群星自选包" name="vehicle" type="checkbox" value="Bike">群星自选包<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="秘境补给史诗经验" name="vehicle" type="checkbox" value="Bike">史诗经验<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="秘境补给绮想妙成真" name="vehicle" type="checkbox"
+                                   value="Bike">绮想妙成真<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="秘境补给黑烬突破石" name="vehicle" type="checkbox"
+                                   value="Bike">黑烬突破石<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="秘境补给星星经验" name="vehicle" type="checkbox" value="Bike">星星经验<br>
+                        </div>
+                    </div>
                     <div class="flex-container">
                         <label for="秘宝地图">秘宝地图：</label>
                         <div class="layui-form">
                             <div class="layui-input-inline">
                                 <select name="秘宝地图" id="秘宝地图" lay-filter="category">
-                                    <option value=""></option>
+                                    <option value="最新地图">选择地图(默认最新)</option>
                                     <option value="暗月深林">暗月深林</option>
                                     <option value="艾特拉火山">艾特拉火山</option>
                                     <option value="鲁尔绿洲">鲁尔绿洲</option>
@@ -911,6 +943,7 @@
                                     <option value="黄金穹顶">黄金穹顶</option>
                                     <option value="巨像的旷野">巨像的旷野</option>
                                     <option value="白帆之都">白帆之都</option>
+                                    <option value="石松沼泽">石松沼泽</option>
                                 </select>
                             </div>
                         </div>
@@ -957,6 +990,12 @@
                                    autocomplete="off"
                                    placeholder="建房重复挑战次数" class="layui-input">
                         </div>
+                        <!--                        <div class="flex-container">-->
+                        <!--                            <label for="自动邀请好友">建房邀请好友:</label><label class="gray-text">(绝境/恶龙等均生效)</label>-->
+                        <!--                            <input type="text" id="自动邀请好友" name="自动邀请好友" lay-verify="title"-->
+                        <!--                                   autocomplete="off"-->
+                        <!--                                   placeholder="好友名称，多个用|分隔(留空随机邀请)" class="layui-input">-->
+                        <!--                        </div>-->
                         <div class="flex-container">
                             <label for="秘境关卡">秘境关卡:</label>
                             <div class="layui-form">
@@ -979,6 +1018,9 @@
                                         <option value="旷野">旷野</option>
                                         <option value="悬崖">悬崖</option>
                                         <option value="群岛">群岛</option>
+                                        <option value="沼泽">沼泽</option>
+                                        <option value="仙宫">仙宫</option>
+                                        <option value="迷梦">迷梦</option>
                                     </select>
                                 </div>
                                 <div class="layui-input-inline">
@@ -1033,6 +1075,12 @@
                             </div>
                         </div>
                         <div class="flex-container">
+                            <label for="自动离房等待时间">房间内等待时间:</label>
+                            <input type="text" id="自动离房等待时间" name="自动离房等待时间" lay-verify="title"
+                                   autocomplete="off"
+                                   placeholder="默认50s离开，恶龙/梦魇等也生效" class="layui-input">
+                        </div>
+                        <div class="flex-container">
                             <label for="秘境带队黑名单">黑名单:</label>
                             <input type="text" id="秘境带队黑名单" name="秘境带队黑名单" lay-verify="title"
                                    autocomplete="off"
@@ -1060,7 +1108,8 @@
                             </div>
                             <div class="checkbox-group">
                                 <div class="checkbox-item">
-                                    <input id="AI进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动
+                                    <input id="AI进入战斗后启动" name="vehicle" type="checkbox" value="Bike"
+                                           onclick="toggleAIStartToast()">进入战斗后启动
                                     <label class="gray-text">(开启后停止其他任务，仅在战斗时启用AI辅助)</label><br><br>
                                 </div>
                             </div>
@@ -1126,7 +1175,7 @@
                             <label for="梦魇离队等待时间">自动离队等待时间:</label>
                             <input type="text" id="梦魇自动离队时间" name="梦魇自动离队时间" lay-verify="title"
                                    autocomplete="off"
-                                   placeholder="默认进入战斗后30s离队" class="layui-input">
+                                   placeholder="默认进入战斗后25s离队" class="layui-input">
                         </div>
                         <div class="flex-container">
                             <label for="梦魇带队黑名单">黑名单:</label>
@@ -1174,7 +1223,7 @@
                             <label for="终末离队等待时间">自动离队等待时间:</label>
                             <input type="text" id="终末自动离队时间" name="终末自动离队时间" lay-verify="title"
                                    autocomplete="off"
-                                   placeholder="默认进入战斗后90s离队" class="layui-input">
+                                   placeholder="默认进入战斗后180s离队" class="layui-input">
                         </div>
                         <div class="flex-container">
                             <label for="终末带队黑名单">黑名单:</label>
@@ -1354,7 +1403,8 @@
                         </div>
                         <div class="checkbox-group">
                             <div class="checkbox-item">
-                                <input id="技能进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动
+                                <input id="技能进入战斗后启动" name="vehicle" type="checkbox" value="Bike"
+                                       onclick="toggleAIStartToast()">进入战斗后启动
                                 <label class="gray-text">(开启后停止其他任务，仅在战斗时辅助释放技能)</label><br><br>
                             </div>
                         </div>
@@ -1577,6 +1627,11 @@
                     <div class="checkbox-item">
                         <input id="世界喊话开关" name="vehicle" type="checkbox" value="Bike">世界喊话开关<br>
                     </div>
+                    <div class="checkbox-item">
+                        <input id="世界AI发言" name="vehicle" type="checkbox"
+                               value="Bike">世界AI发言<label
+                            class="gray-text">(自动回复寻找带队消息)</label><br>
+                    </div>
                     <label for="世界喊话">世界喊话:</label><label class="gray-text">(配置多组时随机发送)</label><br>
                     <input type="text" id="世界喊话" name="世界喊话" lay-verify="title" autocomplete="off"
                            placeholder="输入喊话内容（同时发送多条用 | 分隔）" class="layui-input">
@@ -1591,8 +1646,14 @@
                         <input type="text" id="世界喊话间隔" name="世界喊话间隔" lay-verify="title" autocomplete="off"
                                placeholder="世界喊话间隔（分钟）(留空无间隔)" class="layui-input">
                     </div>
-                    <div class="checkbox-item">
-                        <input id="自动切换喊话频道" name="vehicle" type="checkbox" value="Bike">自动切换世界频道<br>
+                    <div class="flex-container">
+                        <div class="checkbox-item">
+                            <input id="自动切换喊话频道" name="vehicle" type="checkbox"
+                                   value="Bike">自动切换世界频道<br>
+                        </div>
+                        <div style="margin-left:5px;" class="checkbox-item">
+                            <input id="世界喊话热点频道" name="vehicle" type="checkbox" value="Bike">仅喊话热点频道<br>
+                        </div>
                     </div>
                 </fieldset>
                 <fieldset>
@@ -1617,8 +1678,9 @@
                             </div>
                         </div>
                     </div>
-                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike">进入战斗后启动<label
-                        class="gray-text">(需手动进入战斗，战斗中自动走位)</label><br>
+                    <input id="暴走进入战斗后启动" name="vehicle" type="checkbox" value="Bike"
+                           onclick="toggleAIStartToast()">进入战斗后启动
+                    <label class="gray-text">(需手动进入战斗，战斗中自动走位)</label><br>
                     <legend>自动入队设置</legend>
                     <input id="暴走自动接收邀请" name="vehicle" type="checkbox" value="Bike">自动接收邀请<label
                         class="gray-text">(等待邀请，不会自动匹配)</label><br>
@@ -1708,8 +1770,17 @@
         }, 2000); // 3秒后自动隐藏
     }
 
+    function toggleAIStartToast() {
+        var isChecked = document.getElementById('AI进入战斗后启动').checked;
+        var isChecked2 = document.getElementById('暴走进入战斗后启动').checked;
+        var isChecked3 = document.getElementById('技能进入战斗后启动').checked;
+        if (isChecked || isChecked2 || isChecked3) {
+            showToast('开启进入战斗后启动，自动任务将暂停执行');
+        }
+    }
+
     function shuaZanAllItems() {
-        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"绿洲","恶龙重复挑战":"false","营地总开关":"false","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"false","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"false","账号4配置":"0","秘境关卡":"白沙渊下的鼓动","账号4开关":"false","世界喊话间隔":"","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"true","建房重复挑战次数":"66","旅团任务":"false","自动升级技能":"false","旅团优秀经验":"false","升级1次麦乐兽":"false","摸鱼时间到":"false","宝藏湖":"false","旅团唤兽琴弦":"false","自动换图":"false","日常总开关":"false","旅团全价兽粮":"false","旅团总开关":"false","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"false","箱庭苗圃":"false","恶龙自动接收邀请":"false","秘宝钻石兑换次数":"","旅团金币":"false","角色4开关":"false","月签到":"false","大暴走开关":"false","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"true","终末战开关":"false","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","经验补剂五折":"false","配置3名称":"","秘宝地图":"艾特拉火山","配置5名称":"","秘宝收集":"false","原材料":"false","商店星星经验":"false","账号3配置":"0","邮件领取":"false","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"求赞","恶龙宠物切换":"false","星星经验":"false","单飞后寻找结伴":"false","绝境自动接收邀请":"false","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"true","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"false","绝境开关":"false","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"false","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"false","暴走目标阶段":"10","创建房间":"true","世界喊话":"","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"","暴走职能优先治疗":"false","钻石兑换门票次数":"","自动更换装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"false","梦魇宠物名称":"光翼","商店超级成长零食三折":"false","账号5配置":"0","冒险手册领取":"false","角色1开关":"false","释放1次战术技能":"false","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"false","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"false","紧急委托":"true","职能优先坦克":"false","暴走自动接收邀请":"false","秘境创建房间":"true","仓鼠百货":"false","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"false","钻石兑换卢恩次数":"","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"false","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"false","队员不满足单飞":"false","不开宝箱":"true","星辰同行":"false","领取猫猫包果木":"false","登录好礼":"false","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"false","日礼包":"false","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"false","优先升级同一技能":"false","付费浇灌次数":"","旅团浇树":"false","梦魇开关":"false","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"false","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"false","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"false","选择启动角色":"0","商店黑烬突破石五折":"false","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"false","优先升级同一技能至下一阶段":"false","队伍喊话":"求赞","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"false","讲述故事次数":"","秘境建房重复挑战次数":"66","骑兽乐园":"false","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"true","队伍AI走位":"true","队伍AI锁敌":"true","其他签到活动":"false"}';
+        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"绿洲","恶龙重复挑战":"false","营地总开关":"false","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"false","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"false","账号4配置":"0","秘境关卡":"白沙渊下的鼓动","账号4开关":"false","世界喊话开关":"false","世界AI发言":"false","世界喊话间隔":"","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"true","建房重复挑战次数":"66","旅团任务":"false","自动升级技能":"false","自动升星秘宝":"false","旅团优秀经验":"false","升级1次麦乐兽":"false","摸鱼时间到":"false","宝藏湖":"false","旅团唤兽琴弦":"false","自动换图":"false","日常总开关":"false","旅团全价兽粮":"false","旅团总开关":"false","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"false","箱庭苗圃":"false","恶龙自动接收邀请":"false","秘宝钻石兑换次数":"","旅团金币":"false","角色4开关":"false","月签到":"false","大暴走开关":"false","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"true","终末战开关":"false","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","自动离房等待时间":"","经验补剂五折":"false","配置3名称":"","秘宝地图":"最新地图","配置5名称":"","秘宝收集":"false","原材料":"false","商店星星经验":"false","账号3配置":"0","邮件领取":"false","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"求赞","恶龙宠物切换":"false","星星经验":"false","单飞后寻找结伴":"false","绝境自动接收邀请":"false","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"true","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"false","绝境开关":"false","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"false","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"false","暴走目标阶段":"10","创建房间":"true","世界喊话":"","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"","暴走职能优先治疗":"false","钻石兑换门票次数":"","自动更换装备":"false","自动进阶装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"false","梦魇宠物名称":"光翼","商店超级成长零食三折":"false","账号5配置":"0","冒险手册领取":"false","角色1开关":"false","释放1次战术技能":"false","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"false","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"false","紧急委托":"true","职能优先坦克":"false","暴走自动接收邀请":"false","秘境创建房间":"true","仓鼠百货":"false","秘境补给":"false","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"false","钻石兑换卢恩次数":"","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"false","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"false","队员不满足单飞":"false","不开宝箱":"true","星辰同行":"false","领取猫猫包果木":"false","登录好礼":"false","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"false","日礼包":"false","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"false","优先升级同一技能":"false","付费浇灌次数":"","旅团浇树":"false","梦魇开关":"false","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"false","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"false","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"false","选择启动角色":"0","商店黑烬突破石五折":"false","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"false","优先升级同一技能至下一阶段":"false","队伍喊话":"求赞","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"false","讲述故事次数":"","秘境建房重复挑战次数":"66","骑兽乐园":"false","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","终末自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"true","队伍AI走位":"true","队伍AI锁敌":"true","其他签到活动":"false"}';
         if (jsonString) {
             try {
                 console.log('读取的配置:', jsonString);
@@ -1734,7 +1805,7 @@
     }
 
     function daiDuiAllItems() {
-        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"最新地图","恶龙重复挑战":"false","营地总开关":"false","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"false","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"false","账号4配置":"0","秘境关卡":"最新关卡","账号4开关":"false","世界喊话间隔":"5","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"66","旅团任务":"false","自动升级技能":"false","旅团优秀经验":"false","升级1次麦乐兽":"false","摸鱼时间到":"false","宝藏湖":"false","旅团唤兽琴弦":"false","自动换图":"false","日常总开关":"false","旅团全价兽粮":"false","旅团总开关":"false","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"false","箱庭苗圃":"false","恶龙自动接收邀请":"true","秘宝钻石兑换次数":"","旅团金币":"false","角色4开关":"false","月签到":"false","大暴走开关":"true","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"true","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","经验补剂五折":"false","配置3名称":"","秘宝地图":"艾特拉火山","配置5名称":"","秘宝收集":"false","原材料":"false","商店星星经验":"false","账号3配置":"0","邮件领取":"false","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"求赞","恶龙宠物切换":"false","星星经验":"false","单飞后寻找结伴":"false","绝境自动接收邀请":"true","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"true","绝境开关":"true","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"true","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"打工","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"","暴走职能优先治疗":"false","钻石兑换门票次数":"","自动更换装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"false","梦魇宠物名称":"光翼","商店超级成长零食三折":"false","账号5配置":"0","冒险手册领取":"false","角色1开关":"false","释放1次战术技能":"false","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"false","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"false","紧急委托":"false","职能优先坦克":"false","暴走自动接收邀请":"true","秘境创建房间":"false","仓鼠百货":"false","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"false","钻石兑换卢恩次数":"","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"false","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"true","队员不满足单飞":"false","不开宝箱":"false","星辰同行":"false","领取猫猫包果木":"false","登录好礼":"false","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"false","日礼包":"false","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"false","优先升级同一技能":"false","付费浇灌次数":"","旅团浇树":"false","梦魇开关":"true","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"false","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"false","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"false","选择启动角色":"0","商店黑烬突破石五折":"false","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"false","优先升级同一技能至下一阶段":"false","队伍喊话":"求赞","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"false","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"false","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"true","队伍AI走位":"true","队伍AI锁敌":"true","梦魇无尽自动离队":"true","其他签到活动":"false"}';
+        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"最新地图","恶龙重复挑战":"false","营地总开关":"false","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"false","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"false","账号4配置":"0","秘境关卡":"最新关卡","账号4开关":"false","世界喊话开关":"false","世界AI发言":"false","世界喊话间隔":"5","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"66","旅团任务":"false","自动升级技能":"false","自动升星秘宝":"false","旅团优秀经验":"false","升级1次麦乐兽":"false","摸鱼时间到":"false","宝藏湖":"false","旅团唤兽琴弦":"false","自动换图":"false","日常总开关":"false","旅团全价兽粮":"false","旅团总开关":"false","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"false","箱庭苗圃":"false","恶龙自动接收邀请":"true","秘宝钻石兑换次数":"","旅团金币":"false","角色4开关":"false","月签到":"false","大暴走开关":"true","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"true","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","自动离房等待时间":"","经验补剂五折":"false","配置3名称":"","秘宝地图":"最新地图","配置5名称":"","秘宝收集":"false","原材料":"false","商店星星经验":"false","账号3配置":"0","邮件领取":"false","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"求赞","恶龙宠物切换":"false","星星经验":"false","单飞后寻找结伴":"false","绝境自动接收邀请":"true","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"true","绝境开关":"true","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"true","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"打工","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"","暴走职能优先治疗":"false","钻石兑换门票次数":"","自动更换装备":"false","自动进阶装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"false","梦魇宠物名称":"光翼","商店超级成长零食三折":"false","账号5配置":"0","冒险手册领取":"false","角色1开关":"false","释放1次战术技能":"false","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"false","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"false","紧急委托":"false","职能优先坦克":"false","暴走自动接收邀请":"true","秘境创建房间":"false","仓鼠百货":"false","秘境补给":"false","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"false","钻石兑换卢恩次数":"","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"false","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"true","队员不满足单飞":"false","不开宝箱":"false","星辰同行":"false","领取猫猫包果木":"false","登录好礼":"false","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"false","日礼包":"false","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"false","优先升级同一技能":"false","付费浇灌次数":"","旅团浇树":"false","梦魇开关":"true","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"false","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"false","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"false","选择启动角色":"0","商店黑烬突破石五折":"false","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"false","优先升级同一技能至下一阶段":"false","队伍喊话":"求赞","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"false","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"false","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","终末自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"true","队伍AI走位":"true","队伍AI锁敌":"true","梦魇无尽自动离队":"true","其他签到活动":"false"}';
         if (jsonString) {
             try {
                 console.log('读取的配置:', jsonString);
@@ -1759,7 +1830,7 @@
     }
 
     function dailyAllItems() {
-        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"最新地图","恶龙重复挑战":"false","营地总开关":"true","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"true","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"true","账号4配置":"0","秘境关卡":"最新关卡","账号4开关":"false","世界喊话间隔":"","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"","旅团任务":"true","自动升级技能":"true","旅团优秀经验":"false","升级1次麦乐兽":"true","摸鱼时间到":"false","宝藏湖":"true","旅团唤兽琴弦":"false","自动换图":"true","日常总开关":"true","旅团全价兽粮":"false","旅团总开关":"true","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"true","箱庭苗圃":"false","恶龙自动接收邀请":"false","秘宝钻石兑换次数":"3","旅团金币":"false","角色4开关":"false","月签到":"true","大暴走开关":"false","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"false","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","经验补剂五折":"true","配置3名称":"","秘宝地图":"艾特拉火山","配置5名称":"","秘宝收集":"true","原材料":"false","商店星星经验":"true","账号3配置":"0","邮件领取":"true","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"","恶龙宠物切换":"false","星星经验":"true","单飞后寻找结伴":"true","绝境自动接收邀请":"false","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"false","绝境开关":"false","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"false","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"3","暴走职能优先治疗":"false","钻石兑换门票次数":"3","自动更换装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"1","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"true","梦魇宠物名称":"光翼","商店超级成长零食三折":"true","账号5配置":"0","冒险手册领取":"true","角色1开关":"false","释放1次战术技能":"true","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"true","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"true","紧急委托":"true","职能优先坦克":"false","暴走自动接收邀请":"false","秘境创建房间":"false","仓鼠百货":"true","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"true","钻石兑换卢恩次数":"3","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"true","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"false","队员不满足单飞":"true","不开宝箱":"false","星辰同行":"true","领取猫猫包果木":"true","登录好礼":"true","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"true","日礼包":"true","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"true","优先升级同一技能":"true","付费浇灌次数":"1","旅团浇树":"true","梦魇开关":"false","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"true","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"true","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"true","选择启动角色":"0","商店黑烬突破石五折":"true","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"true","优先升级同一技能至下一阶段":"false","队伍喊话":"","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"true","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"true","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"false","队伍AI走位":"true","队伍AI锁敌":"true","其他签到活动":"true"}';
+        const jsonString = '{"梦魇添加佣兵":"false","秘境地图":"最新地图","恶龙重复挑战":"false","营地总开关":"true","冒险手册完成后停止":"false","恶龙添加佣兵":"false","自动强化装备":"true","露营打卡点":"false","账号1开关":"false","猫猫包自动升温":"false","旅团调查队":"true","账号4配置":"0","秘境关卡":"最新关卡","账号4开关":"false","世界喊话开关":"false","世界AI发言":"false","世界喊话间隔":"","调查队自动接收邀请":"false","绝境不退出房间":"false","自动切换喊话频道":"false","无体力继续":"false","建房重复挑战次数":"","旅团任务":"true","自动升级技能":"true","自动升星秘宝":"false","旅团优秀经验":"false","升级1次麦乐兽":"true","摸鱼时间到":"false","宝藏湖":"true","旅团唤兽琴弦":"false","自动换图":"true","日常总开关":"true","旅团全价兽粮":"false","旅团总开关":"true","账号2保存":"false","暴走职能优先输出":"false","商店全价兽粮":"true","箱庭苗圃":"false","恶龙自动接收邀请":"false","秘宝钻石兑换次数":"3","旅团金币":"false","角色4开关":"false","月签到":"true","大暴走开关":"false","技能3释放间隔":"","旅团史诗经验":"false","秘境无体力继续":"false","终末战开关":"false","秘境点赞队友":"false","秘境开关":"true","暴走自动离队时间":"","自动离房等待时间":"","经验补剂五折":"true","配置3名称":"","秘宝地图":"最新地图","配置5名称":"","秘宝收集":"true","原材料":"false","商店星星经验":"true","账号3配置":"0","邮件领取":"true","旅团许愿墙":"false","技能2释放间隔":"","队伍喊话":"","恶龙宠物切换":"false","星星经验":"true","单飞后寻找结伴":"true","绝境自动接收邀请":"false","账号2配置":"0","顶号等待":"","摸鱼重复次数":"","秘境不开宝箱":"false","账号2名称":"","冒险总开关":"true","秘境自动接收邀请":"false","绝境开关":"false","账号3名称":"","暴走职能优先坦克":"false","终末战自动接收邀请":"false","旅团超级成长零食":"false","账号1名称":"","恶龙开关":"true","暴走目标阶段":"10","创建房间":"false","世界喊话":"","点赞队友":"false","定时运行":"","角色3开关":"false","钻石兑换果木次数":"3","暴走职能优先治疗":"false","钻石兑换门票次数":"3","自动更换装备":"false","自动进阶装备":"false","职能优先输出":"false","技能1释放间隔":"","旅团原材料":"false","调查队挑战次数":"1","自动切换主战宠物":"false","职能优先治疗":"false","配置4名称":"","月卡":"true","梦魇宠物名称":"光翼","商店超级成长零食三折":"true","账号5配置":"0","冒险手册领取":"true","角色1开关":"false","释放1次战术技能":"true","三技能自动释放":"false","定时切角色":"","needHome":"0","洗练1次装备":"true","恶龙职能优先坦克":"false","定时切账号":"","火力全开":"true","紧急委托":"true","职能优先坦克":"false","暴走自动接收邀请":"false","秘境创建房间":"false","仓鼠百货":"true","秘境补给":"false","定时休息":"","优先推图到最新关卡":"false","恶龙职能优先治疗":"false","暴走进入战斗后启动":"false","骑兽探索次数":"","绝境自动离队时间":"","超级成长零食三折":"true","钻石兑换卢恩次数":"3","队伍喊话间隔":"","恶龙宠物名称":"光翼","史莱姆选择":"暴走水波大王","招式创造":"true","账号1保存":"false","账号5名称":"","梦魇自动接收邀请":"false","队员不满足单飞":"true","不开宝箱":"false","星辰同行":"true","领取猫猫包果木":"true","登录好礼":"true","摸鱼队伍喊话":"","恶龙自动离队时间":"","账号5开关":"false","限时特惠":"true","日礼包":"true","秘境添加佣兵":"false","账号4保存":"false","BBQ派对":"true","优先升级同一技能":"true","付费浇灌次数":"1","旅团浇树":"true","梦魇开关":"false","账号3保存":"false","仅强化武器戒指护腕":"false","账号4名称":"","补充体力次数":"3","角色5开关":"false","主动释放技能":"false","全价兽粮":"true","宠物技能释放间隔":"","账号5保存":"false","自动挑战首领":"true","旅团普通经验":"false","技能释放循环次数":"","纸飞机":"true","选择启动角色":"0","商店黑烬突破石五折":"true","fighting":"0","账号1配置":"0","账号2开关":"false","商店经验补剂五折":"true","优先升级同一技能至下一阶段":"false","队伍喊话":"","梦魇宠物切换":"false","账号3开关":"false","黑烬突破石五折":"true","讲述故事次数":"","秘境建房重复挑战次数":"","骑兽乐园":"true","旅团商店开关":"false","选择启动账号":"0","恶龙职能优先输出":"false","梦魇自动离队时间":"","终末自动离队时间":"","角色2开关":"false","技能定时释放":"false","商店原材料":"false","队伍AI发言":"false","队伍AI走位":"true","队伍AI锁敌":"true","其他签到活动":"true"}';
         if (jsonString) {
             try {
                 console.log('读取的配置:', jsonString);
@@ -1959,8 +2030,10 @@
         setSwitchStatus("日常总开关");
         setSwitchStatus("自动强化装备");
         setSwitchStatus("自动更换装备");
+        setSwitchStatus("自动进阶装备");
         setSwitchStatus("满包裹分解装备");
         setSwitchStatus("自动升级技能");
+        setSwitchStatus("自动升星秘宝");
         setSwitchStatus("领取猫猫包果木");
         setSwitchStatus("猫猫包自动升温");
 
@@ -1991,6 +2064,7 @@
         // 使用函数来设置不同的开关状态
         setSwitchStatus("营地总开关");
         setSwitchStatus("仓鼠百货");
+        setSwitchStatus("秘境补给");
         setSwitchStatus("月签到");
         setSwitchStatus("日礼包");
         setSwitchStatus("月卡");
@@ -2004,6 +2078,12 @@
         setSwitchStatus("黑烬突破石五折");
         setSwitchStatus("经验补剂五折");
         setSwitchStatus("金币箱五折");
+        setSwitchStatus("秘境补给星钻");
+        setSwitchStatus("秘境补给群星自选包");
+        setSwitchStatus("秘境补给史诗经验");
+        setSwitchStatus("秘境补给绮想妙成真");
+        setSwitchStatus("秘境补给黑烬突破石");
+        setSwitchStatus("秘境补给星星经验");
 
         var 钻石兑换卢恩次数 = localStorage.getItem("钻石兑换卢恩次数");
         document.getElementById("钻石兑换卢恩次数").value = 钻石兑换卢恩次数;
@@ -2057,6 +2137,8 @@
         setSwitchStatus("舞会签到簿");
         setSwitchStatus("自动切换喊话频道");
         setSwitchStatus("世界喊话开关");
+        setSwitchStatus("世界喊话热点频道");
+        setSwitchStatus("世界AI发言");
 
         var 摸鱼重复次数 = localStorage.getItem("摸鱼重复次数");
         document.getElementById("摸鱼重复次数").value = 摸鱼重复次数;
@@ -2249,6 +2331,8 @@
         document.getElementById("队伍喊话间隔").value = 队伍喊话间隔;
         var 秘境带队黑名单 = localStorage.getItem("秘境带队黑名单");
         document.getElementById("秘境带队黑名单").value = 秘境带队黑名单;
+        var 自动离房等待时间 = localStorage.getItem("自动离房等待时间");
+        document.getElementById("自动离房等待时间").value = 自动离房等待时间;
 
         setSwitchStatus("队伍AI发言");
         setSwitchStatus("队伍AI走位");
@@ -2277,6 +2361,8 @@
         setSwitchStatus("终末战自动接收邀请");
         var 终末带队黑名单 = localStorage.getItem("终末带队黑名单");
         document.getElementById("终末带队黑名单").value = 终末带队黑名单;
+        var 终末自动离队时间 = localStorage.getItem("终末自动离队时间");
+        document.getElementById("终末自动离队时间").value = 终末自动离队时间;
 
         setSwitchStatus("绝境开关");
         setSwitchStatus("绝境自动接收邀请");
@@ -2422,6 +2508,18 @@
           $mjgqSelect.html('<option value="无法无天章鱼帮">无法无天章鱼帮</option><option value="长夜明灯之孤塔">长夜明灯之孤塔</option>');
         }
 
+        if(mjId === '沼泽') {
+          $mjgqSelect.html('<option value="三头盘踞拦路关">三头盘踞拦路关</option><option value="上游泥沼的尽头">上游泥沼的尽头</option>');
+        }
+
+        if(mjId === '仙宫') {
+          $mjgqSelect.html('<option value="白网与织女">白网与织女</option><option value="香腐的行刑台">香腐的行刑台</option>');
+        }
+
+        if(mjId === '迷梦') {
+          $mjgqSelect.html('<option value="魇舞聚会厅">魇舞聚会厅</option><option value="黯淡冠冕的宝珠">黯淡冠冕的宝珠</option>');
+        }
+
         form.render('select'); // 更新城市选择框的UI
       });
     });
@@ -2547,8 +2645,10 @@
         日常总开关 = saveSwitchStatus("日常总开关");
         自动强化装备 = saveSwitchStatus("自动强化装备");
         自动更换装备 = saveSwitchStatus("自动更换装备");
+        自动进阶装备 = saveSwitchStatus("自动进阶装备");
         满包裹分解装备 = saveSwitchStatus("满包裹分解装备");
         自动升级技能 = saveSwitchStatus("自动升级技能");
+        自动升星秘宝 = saveSwitchStatus("自动升星秘宝");
         领取猫猫包果木 = saveSwitchStatus("领取猫猫包果木");
         猫猫包自动升温 = saveSwitchStatus("猫猫包自动升温");
 
@@ -2598,6 +2698,8 @@
         舞会签到簿 = saveSwitchStatus("舞会签到簿");
         自动切换喊话频道 = saveSwitchStatus("自动切换喊话频道");
         世界喊话开关 = saveSwitchStatus("世界喊话开关");
+        世界喊话热点频道 = saveSwitchStatus("世界喊话热点频道");
+        世界AI发言 = saveSwitchStatus("世界AI发言");
 
         var 摸鱼重复次数 = document.getElementById("摸鱼重复次数").value;
         localStorage.setItem("摸鱼重复次数", 摸鱼重复次数);
@@ -2618,6 +2720,7 @@
         <!--营地-->
         营地总开关 = saveSwitchStatus("营地总开关");
         仓鼠百货 = saveSwitchStatus("仓鼠百货");
+        秘境补给 = saveSwitchStatus("秘境补给");
         月签到 = saveSwitchStatus("月签到");
         日礼包 = saveSwitchStatus("日礼包");
         月卡 = saveSwitchStatus("月卡");
@@ -2631,6 +2734,12 @@
         黑烬突破石五折 = saveSwitchStatus("黑烬突破石五折");
         经验补剂五折 = saveSwitchStatus("经验补剂五折");
         金币箱五折 = saveSwitchStatus("金币箱五折");
+        秘境补给星钻 = saveSwitchStatus("秘境补给星钻");
+        秘境补给群星自选包 = saveSwitchStatus("秘境补给群星自选包");
+        秘境补给史诗经验 = saveSwitchStatus("秘境补给史诗经验");
+        秘境补给绮想妙成真 = saveSwitchStatus("秘境补给绮想妙成真");
+        秘境补给黑烬突破石 = saveSwitchStatus("秘境补给黑烬突破石");
+        秘境补给星星经验 = saveSwitchStatus("秘境补给星星经验");
 
         var 钻石兑换卢恩次数 = document.getElementById("钻石兑换卢恩次数").value;
         localStorage.setItem("钻石兑换卢恩次数", 钻石兑换卢恩次数);
@@ -2707,6 +2816,8 @@
         localStorage.setItem("队伍喊话间隔", 队伍喊话间隔);
         var 秘境带队黑名单 = document.getElementById("秘境带队黑名单").value;
         localStorage.setItem("秘境带队黑名单", 秘境带队黑名单);
+        var 自动离房等待时间 = document.getElementById("自动离房等待时间").value;
+        localStorage.setItem("自动离房等待时间", 自动离房等待时间);
         队伍AI发言 = saveSwitchStatus("队伍AI发言");
         队伍AI走位 = saveSwitchStatus("队伍AI走位");
         队伍AI锁敌 = saveSwitchStatus("队伍AI锁敌");
@@ -2739,6 +2850,8 @@
         终末战自动接收邀请 = saveSwitchStatus("终末战自动接收邀请");
         var 终末带队黑名单 = document.getElementById("终末带队黑名单").value;
         localStorage.setItem("终末带队黑名单", 终末带队黑名单);
+        var 终末自动离队时间 = document.getElementById("终末自动离队时间").value;
+        localStorage.setItem("终末自动离队时间", 终末自动离队时间);
 
         绝境开关 = saveSwitchStatus("绝境开关");
         绝境自动接收邀请 = saveSwitchStatus("绝境自动接收邀请");
@@ -2859,8 +2972,10 @@
             日常总开关: 日常总开关,
             自动强化装备: 自动强化装备,
             自动更换装备: 自动更换装备,
+            自动进阶装备: 自动进阶装备,
             满包裹分解装备: 满包裹分解装备,
             自动升级技能: 自动升级技能,
+            自动升星秘宝: 自动升星秘宝,
             领取猫猫包果木: 领取猫猫包果木,
             猫猫包自动升温: 猫猫包自动升温,
             钻石兑换果木次数: 钻石兑换果木次数,
@@ -2906,6 +3021,8 @@
 
             自动切换喊话频道: 自动切换喊话频道,
             世界喊话开关: 世界喊话开关,
+            世界喊话热点频道: 世界喊话热点频道,
+            世界AI发言: 世界AI发言,
             世界喊话: 世界喊话,
             世界喊话2: 世界喊话2,
             世界喊话3: 世界喊话3,
@@ -2915,6 +3032,7 @@
             <!--营地-->
             营地总开关: 营地总开关,
             仓鼠百货: 仓鼠百货,
+            秘境补给: 秘境补给,
             月签到: 月签到,
             日礼包: 日礼包,
             月卡: 月卡,
@@ -2928,6 +3046,12 @@
             商店黑烬突破石五折: 黑烬突破石五折,
             商店经验补剂五折: 经验补剂五折,
             商店金币箱五折: 金币箱五折,
+            秘境补给星钻: 秘境补给星钻,
+            秘境补给群星自选包: 秘境补给群星自选包,
+            秘境补给史诗经验: 秘境补给史诗经验,
+            秘境补给绮想妙成真: 秘境补给绮想妙成真,
+            秘境补给黑烬突破石: 秘境补给黑烬突破石,
+            秘境补给星星经验: 秘境补给星星经验,
 
             钻石兑换卢恩次数: 钻石兑换卢恩次数,
             讲述故事次数: 讲述故事次数,
@@ -2963,6 +3087,7 @@
             队伍喊话: 队伍喊话,
             队伍喊话间隔: 队伍喊话间隔,
             秘境带队黑名单: 秘境带队黑名单,
+            自动离房等待时间: 自动离房等待时间,
             队伍AI发言: 队伍AI发言,
             队伍AI走位: 队伍AI走位,
             队伍AI锁敌: 队伍AI锁敌,
@@ -2982,6 +3107,7 @@
             梦魇带队黑名单: 梦魇带队黑名单,
             终末战开关: 终末战开关,
             终末战自动接收邀请: 终末战自动接收邀请,
+            终末自动离队时间: 终末自动离队时间,
             终末带队黑名单: 终末带队黑名单,
             绝境开关: 绝境开关,
             绝境自动接收邀请: 绝境自动接收邀请,

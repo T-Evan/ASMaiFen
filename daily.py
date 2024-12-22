@@ -32,13 +32,13 @@ class DailyTask:
             tryTimes = tryTimes + 1
             # 避免战斗中直接退出
             if 功能开关["fighting"] == 1:
-                if tryTimes < 5:
+                if tryTimes < 10:
                     res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
                     if res:
                         sleep(30)
                         continue
 
-                    Toast(f'返回首页 - 等待战斗结束{tryTimes * 10}/50')
+                    Toast(f'返回首页 - 等待战斗结束{tryTimes * 10}/100')
                     sleep(10)
                     continue
 
@@ -171,14 +171,40 @@ class DailyTask:
         Toast("每日任务 - 升级1次麦乐兽 - 开始")
         self.homePage()
 
-        res = TomatoOcrTap(522, 1205, 598, 1235, "麦乐兽")
+        res = TomatoOcrTap(522, 1205, 598, 1235, "麦乐兽", sleep1=0.8)
 
-        tapSleep(551, 942)  # 仓库最后1个麦乐兽
+        # tapSleep(551, 942)  # 仓库最后1个麦乐兽
+        # res = TomatoOcrTap(333, 1027, 358, 1049, "升")
+        # if res:
+        #     tapSleep(138, 1051)  # 重置按钮
+        #     res = TomatoOcrTap(440, 787, 513, 820, "重置")
+        #     tapSleep(150, 1059)  # 点击空白处
+        #     任务记录["日常-升级1次麦乐兽-完成"] = 1
+        # else:
+        #     Toast("每日任务 - 升级1次麦乐兽 - 未找到升级入口")
 
+        # 升级主战麦乐兽
+        tapSleep(352, 356)
         res = TomatoOcrTap(333, 1027, 358, 1049, "升")
         if res:
-            tapSleep(138, 1051)  # 重置按钮
-            res = TomatoOcrTap(440, 787, 513, 820, "重置")
+            tapSleep(150, 1059)  # 点击空白处
+            任务记录["日常-升级1次麦乐兽-完成"] = 1
+        else:
+            Toast("每日任务 - 升级1次麦乐兽 - 未找到升级入口")
+
+        # 升级辅助麦乐兽左
+        tapSleep(241, 363)
+        res = TomatoOcrTap(333, 1027, 358, 1049, "升")
+        if res:
+            tapSleep(150, 1059)  # 点击空白处
+            任务记录["日常-升级1次麦乐兽-完成"] = 1
+        else:
+            Toast("每日任务 - 升级1次麦乐兽 - 未找到升级入口")
+
+        # 升级辅助麦乐兽右
+        tapSleep(473, 348)
+        res = TomatoOcrTap(333, 1027, 358, 1049, "升")
+        if res:
             tapSleep(150, 1059)  # 点击空白处
             任务记录["日常-升级1次麦乐兽-完成"] = 1
         else:
@@ -262,8 +288,16 @@ class DailyTask:
         res = TomatoOcrTap(645, 882, 690, 902, "手动", 10, -10)
         任务记录["日常-释放1次战术技能-完成"] = 1
 
-    def shijieShout(self):
-        if 功能开关['世界喊话'] == "" and 功能开关['世界喊话2'] == "" and 功能开关['世界喊话3'] == "":
+    def generate_random_color(self):
+        colors = ["#8869A5", "#C58ADE", "#B1BEEA", "#90C4E9", "#8095CE", "#FEA78C", "#FFA3A6", "#F583B4", "#CD69A7",
+                  "#ED7179",
+                  "#E49AAB", "#F3BDD7", "#FFDFA2", "#BFE4FF", "#A3B5FD", "#C3C5F8", "#60EFDB", "#BEF2E5", "#C5E7F1",
+                  "#79CEED", "#6F89A2"]
+        return random.choice(colors)
+
+    def shijieShout(self, contentAI=""):
+        if 功能开关['世界喊话'] == "" and 功能开关['世界喊话2'] == "" and 功能开关['世界喊话3'] == "" and 功能开关[
+            '世界喊话4'] == "" and contentAI == "":
             return 1
 
         if 功能开关['世界喊话开关'] == "" or 功能开关['世界喊话开关'] == 0:
@@ -271,14 +305,17 @@ class DailyTask:
             return 1
 
         contentArr = []
-        if 功能开关['世界喊话'] != "":
-            contentArr.append(功能开关['世界喊话'])
-        if 功能开关['世界喊话2'] != "":
-            contentArr.append(功能开关['世界喊话2'])
-        if 功能开关['世界喊话3'] != "":
-            contentArr.append(功能开关['世界喊话3'])
-        if 功能开关['世界喊话4'] != "":
-            contentArr.append(功能开关['世界喊话4'])
+        if contentAI != "":
+            contentArr.append(contentAI)
+        else:
+            if 功能开关['世界喊话'] != "":
+                contentArr.append(功能开关['世界喊话'])
+            if 功能开关['世界喊话2'] != "":
+                contentArr.append(功能开关['世界喊话2'])
+            if 功能开关['世界喊话3'] != "":
+                contentArr.append(功能开关['世界喊话3'])
+            if 功能开关['世界喊话4'] != "":
+                contentArr.append(功能开关['世界喊话4'])
 
         # 避免与自动入队识别冲突
         if 功能开关["fighting"] == 1:
@@ -290,13 +327,64 @@ class DailyTask:
 
         Toast("世界喊话 - 开始")
 
+        # 关闭喊话窗口
+        point = FindColors.find(
+            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+            rect=[11, 26, 364, 489])
+        if point:
+            Toast('关闭喊话窗口')
+            tapSleep(point.x, point.y, 1)
+
+        # AI回复世界频道发言
+        if 功能开关['世界AI发言'] == 1 and contentAI == "":
+            # 检查公屏发言关键词
+            re, teamText1 = TomatoOcrText(63, 1048, 248, 1079, "队友发言")
+            re, teamText2 = TomatoOcrText(61, 988, 314, 1019, "队友发言")
+            re, teamText3 = TomatoOcrText(61, 926, 301, 964, "队友发言")
+            re, teamText4 = TomatoOcrText(63, 868, 297, 901, "队友发言")
+            re, teamText5 = TomatoOcrText(64, 1049, 246, 1081, "队友发言")
+            re, teamText6 = TomatoOcrText(63, 962, 277, 994, "队友发言")
+            re, teamText7 = TomatoOcrText(64, 904, 268, 932, "队友发言")
+            team_texts = [teamText1, teamText2, teamText3, teamText4, teamText5, teamText6, teamText7]
+            team_texts = list(filter(lambda text: text not in ["晚安~", "早安~", "午安~"], team_texts))
+            colors = self.generate_random_color()
+            zanList3 = ['早安', '早上好']
+            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+            if contains_zan:
+                return self.shijieShout(f"<color={colors}>早安~</COLOR>")
+            zanList3 = ['晚安', '晚上好']
+            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+            if contains_zan:
+                return self.shijieShout(f"<color={colors}>晚安~</COLOR>")
+            zanList3 = ['午安', '中午好']
+            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+            if contains_zan:
+                return self.shijieShout(f"<color={colors}>午安~</COLOR>")
+            zanList3 = ['来一个', '来人', '求个', '来个', '来打工', '来黑工', '来奶', '来t', '来输出', '来打工']
+            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+            if contains_zan:
+                return self.shijieShout(f"<color={colors}>来了来了~</COLOR>")
+            zanList3 = ['有没有', '有人', '有打工', '有佬', '有帮忙', '还有', '有吗', '求佬']
+            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+            if contains_zan:
+                return self.shijieShout(f"<color={colors}>打工打工~</COLOR>")
+            zanList = ['影子', '求带', '大佬', '带个', '带带', '差个', '大哥', '帮忙', '求求']
+            contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
+            if contains_zan:
+                return self.shijieShout(f"<color={colors}>拉我拉我~</COLOR>")
+
         need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
         if need_dur_minute == '':
             need_dur_minute = 0
-        if need_dur_minute > 0 and 任务记录["世界喊话-倒计时"] > 0:
+        if contentAI == "" and need_dur_minute > 0 and 任务记录["世界喊话-倒计时"] > 0:
             diffTime = time.time() - 任务记录["世界喊话-倒计时"]
             if diffTime < need_dur_minute * 60:
                 Toast(f'日常 - 世界喊话 - 倒计时{round((need_dur_minute * 60 - diffTime) / 60, 2)}min')
+                return
+        if contentAI != "" and 任务记录["世界喊话-倒计时"] > 0:
+            diffTime = time.time() - 任务记录["世界喊话-倒计时"]
+            if diffTime < 60:
+                Toast(f'日常 - 世界喊话 - 倒计时{round((60 - diffTime) / 60, 2)}min')
                 return
 
         self.homePage(needQuitTeam=True)
@@ -326,7 +414,7 @@ class DailyTask:
             # 关闭喊话窗口
             tapSleep(472, 771, 0.8)
 
-        if 功能开关['自动切换喊话频道']:
+        if 功能开关['自动切换喊话频道'] == 1 and contentAI == "":
             for i in range(3):
                 # 避免与自动入队识别冲突
                 if 功能开关["fighting"] == 1:
@@ -382,76 +470,103 @@ class DailyTask:
                 for j in range(4):
                     下一频道数字 = 当前频道数字 - 1
                     findNext = False
-                    if 下一频道数字 < 1:
-                        for k in range(8):
-                            swipe(236, 828, 210, 381, 300)  # 翻20
-                            sleep(1)
-                            res, 最大频道右 = TomatoOcrText(408, 814, 510, 841, '最大频道')  # 底部右侧频道
-                            res, 最大频道左 = TomatoOcrText(161, 812, 262, 842, '最大频道')  # 底部左侧频道
-                            下一频道数字右 = rePattern.findall(r'\d+', 最大频道右)
-                            下一频道数字左 = rePattern.findall(r'\d+', 最大频道左)
-                            if len(下一频道数字右) > 0 or len(下一频道数字左) > 0:
-                                下一频道数字右 = safe_int_v2(下一频道数字右[0])
-                                下一频道数字左 = safe_int_v2(下一频道数字左[0])
-                                if 下一频道数字左 > 0 and 下一频道数字右 - 下一频道数字左 > 2:
-                                    下一频道数字 = 下一频道数字左
-                                elif 下一频道数字右 > 0:
-                                    下一频道数字 = 下一频道数字右
-                            else:
-                                下一频道数字 = 3  # 默认3个频道
-                            最大频道数字 = 下一频道数字
-                            if 最大频道数字 > 0:
-                                break
-                            # findNext = True
-                            # 下一频道数字 = 5  # 尝试仍按指定频道切换，避免固定位置点击偶尔失效导致的刷屏
-                    if 下一频道数字 > 0:
-                        # print(下一频道数字)
-                        下一频道 = '简体中文' + str(下一频道数字)
-                        print('下一频道：' + 下一频道)
-                        # 寻找下一频道
-                        for k in range(8):
-                            # 避免与自动入队识别冲突
-                            if 功能开关["fighting"] == 1:
-                                return
-                            re, _ = TomatoOcrText(318, 359, 397, 386, '选择频道')
-                            if not re:
-                                res = TomatoOcrTap(546, 138, 625, 165, '切换频道', -20, 10, sleep1=0.8)
+                    if 功能开关['世界喊话热点频道'] == 1:
+                        Toast('开始切换热点频道')
+                        for p in range(3):
+                            point = FindColors.find("179,908,#F09C2F|180,914,#EF9B30|184,917,#E8962C",
+                                                    rect=[104, 594, 610, 878])  # 黄色
+                            if point:
+                                re, _ = TomatoOcrText(point.x + 170, point.y - 30, point.x + 220, point.y, '当前')
+                                if not re:
+                                    Toast('切换热点频道')
+                                    findNext = True
+                                    tapSleep(point.x, point.y)
+                                    break
+                            point = FindColors.find(
+                                "383,471,#ED5B3E|388,467,#ED5B3E|391,475,#E2543A",
+                                rect=[104, 594, 610, 878])  # 红色
+                            if point:
+                                re, _ = TomatoOcrText(point.x + 170, point.y - 30, point.x + 220, point.y, '当前')
+                                if not re:
+                                    Toast('切换热点频道')
+                                    findNext = True
+                                    tapSleep(point.x, point.y)
+                                    break
+                        if not findNext:
+                            Toast('未识别到热点频道')
+                            tapSleep(101, 1200)  # 未切换频道，点击返回
+                            break
+                    else:
+                        if 下一频道数字 < 1:
+                            for k in range(8):
+                                swipe(236, 828, 210, 381, 300)  # 翻20
+                                sleep(1)
+                                res, 最大频道右 = TomatoOcrText(408, 814, 510, 841, '最大频道')  # 底部右侧频道
+                                res, 最大频道左 = TomatoOcrText(161, 812, 262, 842, '最大频道')  # 底部左侧频道
+                                下一频道数字右 = rePattern.findall(r'\d+', 最大频道右)
+                                下一频道数字左 = rePattern.findall(r'\d+', 最大频道左)
+                                if len(下一频道数字右) > 0 or len(下一频道数字左) > 0:
+                                    下一频道数字右 = safe_int_v2(下一频道数字右[0])
+                                    下一频道数字左 = safe_int_v2(下一频道数字左[0])
+                                    if 下一频道数字左 > 0 and 下一频道数字右 - 下一频道数字左 > 2:
+                                        下一频道数字 = 下一频道数字左
+                                    elif 下一频道数字右 > 0:
+                                        下一频道数字 = 下一频道数字右
+                                else:
+                                    下一频道数字 = 3  # 默认3个频道
+                                最大频道数字 = 下一频道数字
+                                if 最大频道数字 > 0:
+                                    break
+                                # findNext = True
+                                # 下一频道数字 = 5  # 尝试仍按指定频道切换，避免固定位置点击偶尔失效导致的刷屏
+                        if 下一频道数字 > 0:
+                            # print(下一频道数字)
+                            下一频道 = '简体中文' + str(下一频道数字)
+                            print('下一频道：' + 下一频道)
+                            # 寻找下一频道
+                            for k in range(8):
+                                # 避免与自动入队识别冲突
+                                if 功能开关["fighting"] == 1:
+                                    return
+                                re, _ = TomatoOcrText(318, 359, 397, 386, '选择频道')
+                                if not re:
+                                    res = TomatoOcrTap(546, 138, 625, 165, '切换频道', -20, 10, sleep1=0.8)
 
-                            re, _ = TomatoOcrText(161, 454, 258, 486, '下一频道')  # 判断当前频道是否已切换为下一频道
-                            if re:
-                                tapSleep(356, 1112)
-                                findNext = True
-                                break
+                                re, _ = TomatoOcrText(161, 454, 258, 486, '下一频道')  # 判断当前频道是否已切换为下一频道
+                                if re:
+                                    tapSleep(356, 1112)
+                                    findNext = True
+                                    break
 
-                            res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880, offsetX=10,
-                                                          offsetY=10)
-                            sleep(0.8)
-                            if not res:
-                                if 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 40:
-                                    swipe(236, 828, 210, 381, 300)  # 翻20
-                                    sleep(0.8)
-                                    swipe(137, 699, 358, 634, 50)
-                                elif 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 20:
-                                    swipe(236, 828, 222, 568, 300)  # 翻10
-                                    sleep(0.5)
-                                    swipe(137, 699, 358, 634, 50)
-                                elif 最大频道数字 - 当前频道数字 > 0:
-                                    swipe(225, 814, 225, 714, 300)  # 翻5
-                                    sleep(0.5)
-                                    swipe(137, 699, 358, 634, 50)
-                                elif 最大频道数字 == 0 or 最大频道数字 - 当前频道数字 < 0:
-                                    swipe(225, 714, 225, 814, 300)  # 上翻5
-                                    sleep(0.5)
-                                    swipe(137, 699, 358, 634, 50)
-                            res, _ = TomatoOcrText(296, 129, 427, 176, 下一频道)
-                            if not res:
-                                res, name = TomatoOcrText(296, 129, 427, 176, 下一频道)
+                                res = TomatoOcrFindRangeClick(下一频道, 0.9, 0.9, 101, 437, 617, 880, offsetX=10,
+                                                              offsetY=10)
+                                sleep(0.8)
                                 if not res:
-                                    name = name.replace('简体中文', '')
-                                    res = name == str(下一频道数字)
-                            if res:
-                                findNext = True
-                                break
+                                    if 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 40:
+                                        swipe(236, 828, 210, 381, 300)  # 翻20
+                                        sleep(0.8)
+                                        swipe(137, 699, 358, 634, 50)
+                                    elif 最大频道数字 > 0 and 最大频道数字 - 当前频道数字 > 20:
+                                        swipe(236, 828, 222, 568, 300)  # 翻10
+                                        sleep(0.5)
+                                        swipe(137, 699, 358, 634, 50)
+                                    elif 最大频道数字 - 当前频道数字 > 0:
+                                        swipe(225, 814, 225, 714, 300)  # 翻5
+                                        sleep(0.5)
+                                        swipe(137, 699, 358, 634, 50)
+                                    elif 最大频道数字 == 0 or 最大频道数字 - 当前频道数字 < 0:
+                                        swipe(225, 714, 225, 814, 300)  # 上翻5
+                                        sleep(0.5)
+                                        swipe(137, 699, 358, 634, 50)
+                                res, _ = TomatoOcrText(296, 129, 427, 176, 下一频道)
+                                if not res:
+                                    res, name = TomatoOcrText(296, 129, 427, 176, 下一频道)
+                                    if not res:
+                                        name = name.replace('简体中文', '')
+                                        res = name == str(下一频道数字)
+                                if res:
+                                    findNext = True
+                                    break
                     if findNext:
                         contents = random.choice(contentArr).split('|')
                         for content in contents:
@@ -553,7 +668,8 @@ class DailyTask:
         if 功能开关["日常总开关"] == 0 or 功能开关["冒险手册领取"] == 0:
             return
 
-        if 任务记录["冒险手册-倒计时"] > 0:
+        re = CompareColors.compare("683,351,#F35F42|686,351,#F15E40|690,351,#F65A41|686,353,#ED5B3D")  # 冒险手册红点
+        if not re and 任务记录["冒险手册-倒计时"] > 0:
             diffTime = time.time() - 任务记录["冒险手册-倒计时"]
             if diffTime < 3 * 60:
                 Toast(f'日常 - 冒险手册 - 倒计时{round((3 * 60 - diffTime) / 60, 2)}min')
@@ -716,7 +832,8 @@ class DailyTask:
             if newMapOK:
                 tapSleep(x, y, 5)
             res = TomatoOcrTap(593, 676, 638, 693, "前往")
-            if not newMapOK:
+            # 队员不满足时，才会不展示首页的前往下一关快速入口；因此判断开了单飞再从地图跳转下一关
+            if not newMapOK and 功能开关["队员不满足单飞"] == 1:
                 res1, _ = TomatoOcrText(573, 200, 694, 238, "新关卡已解锁")
                 res2 = False
                 if not res1:
@@ -1449,7 +1566,6 @@ class DailyTask:
             res = imageFindClick('营地-限时特惠', 0.9, 0.9, 94, 529, 182, 1053)
             if not res:
                 Toast('限时特惠 - 未找到活动入口')
-                return
         if res:
             Toast('限时特惠 - 领取')
             tapSleep(595, 153)  # 点击特惠宝箱
@@ -1558,13 +1674,14 @@ class DailyTask:
         tapSleep(75, 325)  # 领取回收物进度奖励
         tapSleep(76, 335)  # 领取回收物进度奖励
         tapSleep(360, 1040)  # 点击空白处
+        tapSleep(360, 1040)  # 点击空白处
 
-        re = CompareColors.compare("697,1183,#F35F42|697,1178,#F76143")
+        re = CompareColors.compare("682,1180,#F56043|683,1180,#F56143|682,1183,#F35E41")
         if not re:
             return
-        # res = TomatoOcrTap(554, 1239, 636, 1265, "伊尼兰特")
-        tapSleep(660, 1227, 0.6)
-        if res:
+        if re:
+            # res = TomatoOcrTap(554, 1239, 636, 1265, "伊尼兰特")
+            tapSleep(660, 1227, 0.8)  # 伊尼兰特
             res = TomatoOcrTap(321, 1073, 402, 1096, "高压充磁", 10, 10)
             sleep(8)  # 等待动画
             tapSleep(360, 1040)  # 点击空白处
@@ -1731,26 +1848,25 @@ class DailyTask:
             return
 
         # 领取累计奖励
-        re = FindColors.find("273,929,#FF5E50|268,928,#F05D40|270,931,#F25539|270,928,#F05C40",
-                             rect=[75, 907, 633, 1035])
-        if re:
-            tapSleep(re.x, re.y)
-            tapSleep(344, 1204)  # 点击空白处
+        for k in range(3):
+            re = FindColors.find("270,926,#F45F42|268,924,#F46043|270,929,#EF5C3F", rect=[88, 901, 625, 1027])
+            if re:
+                tapSleep(re.x - 5, re.y + 5)
+                tapSleep(344, 1204)  # 点击空白处
 
-        # 等待转盘动画完成
-        Toast('等待转盘动画')
-        tapSleep(479, 1096)  # 点击空白处
-        sleep(10)
-        tapSleep(344, 1204)  # 点击空白处
-        tapSleep(344, 1204)  # 点击空白处
-        TomatoOcrTap(92, 1186, 127, 1218, '回')
-
-        # 领取累计奖励
-        re = FindColors.find("273,929,#FF5E50|268,928,#F05D40|270,931,#F25539|270,928,#F05C40",
-                             rect=[75, 907, 633, 1035])
-        if re:
-            tapSleep(re.x, re.y)
+            # 等待转盘动画完成
+            Toast('等待转盘动画')
+            tapSleep(479, 1096)  # 点击空白处
+            sleep(10)
             tapSleep(344, 1204)  # 点击空白处
+            tapSleep(344, 1204)  # 点击空白处
+            TomatoOcrTap(92, 1186, 127, 1218, '回')
+
+            # 领取累计奖励
+            re = FindColors.find("270,926,#F45F42|268,924,#F46043|270,929,#EF5C3F", rect=[88, 901, 625, 1027])
+            if re:
+                tapSleep(re.x - 5, re.y + 5)
+                tapSleep(344, 1204)  # 点击空白处
 
         任务记录["火力全开-完成"] = 1
 

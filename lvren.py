@@ -36,8 +36,46 @@ class LvRenTask:
         # 自动升级技能
         self.updateSkill()
 
+        # 自动升星秘宝
+        self.updateMiBao()
+
         # 猫猫包
         self.maomaobao()
+
+    # 秘宝
+    def updateMiBao(self):
+        if 功能开关["自动升星秘宝"] == 0:
+            return
+
+        if 任务记录['旅人-秘宝升星-完成']:
+            Toast('旅人 - 秘宝升星 - 已完成')
+            return
+
+        Toast('旅人 - 秘宝升星 - 开始')
+        self.dailyTask.homePage()
+        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
+        re = CompareColors.compare("620,375,#F05C3F|615,374,#F15D40|622,375,#FF5544")  # 秘宝红点
+        if not re:
+            Toast('旅人 - 秘宝升星 - 已完成')
+            任务记录['旅人-秘宝升星-完成'] = 1
+            return
+        res = TomatoOcrTap(575, 413, 618, 434, "秘宝", sleep1=0.8)
+        if not re:
+            Toast('旅人 - 秘宝升星 - 未找到秘宝入口')
+            return
+
+        tapSleep(393, 142, 0.8)  # 点击可升星
+        for k in range(8):
+            re = FindColors.find("238,365,#F15D40|238,362,#F66042|240,366,#F85842")  # 寻找红点
+            if not re:
+                break
+            tapSleep(re.x, re.y, 0.8)  # 点击待升星秘宝
+            res = TomatoOcrTap(322, 1024, 391, 1054, "合成")
+            res = TomatoOcrTap(322, 1024, 391, 1054, "升星")
+            tapSleep(153, 1071)  # 点击空白处
+            tapSleep(153, 1071)  # 点击空白处
+            tapSleep(210, 1185)  # 点击返回
+        任务记录['旅人-秘宝升星-完成'] = 1
 
     # 猫猫包
     def maomaobao(self):
@@ -245,10 +283,12 @@ class LvRenTask:
         else:
             Toast('旅人 - 分解装备 - 开始')
 
-        self.dailyTask.homePage()
         res = TomatoOcrTap(233, 1205, 281, 1234, "行李", sleep1=0.8)
         if not res:
-            return
+            self.dailyTask.homePage()
+            res = TomatoOcrTap(233, 1205, 281, 1234, "行李", sleep1=0.8)
+            if not res:
+                return
 
         任务记录["分解装备-倒计时"] = time.time()
 
@@ -320,7 +360,7 @@ class LvRenTask:
 
     # 自动强化装备
     def updateEquip(self):
-        if 功能开关["自动强化装备"] == 0:
+        if 功能开关["自动强化装备"] == 0 and 功能开关["自动进阶装备"] == 0:
             return
 
         if 任务记录["强化装备-倒计时"] > 0:
@@ -445,3 +485,22 @@ class LvRenTask:
                     tapSleep(re.x, re.y)
                     tapSleep(129, 1023, 0.3)
                     TomatoOcrTap(94, 1188, 127, 1216, "回")
+
+        if 功能开关["自动进阶装备"] == 1:
+            TomatoOcrTap(94, 1188, 127, 1216, "回")
+            for k in range(6):
+                # 识别可强化标识
+                needUpdate = FindColors.find(
+                    "96,129,#FC694C|102,133,#FFFFFF|107,133,#F49C9C|96,142,#F69491|106,146,#FD684F",
+                    rect=[77, 112, 630, 553])
+                if needUpdate:
+                    tapSleep(needUpdate.x, needUpdate.y, 0.8)
+                    # 识别可进阶标识
+                    re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043")
+                    if re:
+                        tapSleep(554, 1076, 0.6)
+                        TomatoOcrTap(328, 980, 391, 1008, "进阶")
+                        tapSleep(129, 1023, 0.3)
+                        TomatoOcrTap(328, 980, 391, 1008, "进阶")
+                        tapSleep(129, 1023, 0.3)
+                        TomatoOcrTap(94, 1188, 127, 1216, "回")

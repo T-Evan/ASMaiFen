@@ -48,7 +48,7 @@ def main():
                     功能开关["fighting"] = 0
 
                 # 识别玩家当前关卡，做特殊逻辑
-                if (任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 300) and \
+                if (任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 900) and \
                         功能开关["秘境不开宝箱"] == 0:
                     Toast('开始检测最新关卡')
                     功能开关["fighting"] = 1
@@ -215,7 +215,7 @@ def waitInvite():
                 功能开关["fighting"] = 0
                 return
 
-        res1 = TomatoOcrTap(584, 651, 636, 678, "同意")
+        res1 = TomatoOcrTap(584, 651, 636, 678, "同意", sleep1=0.6)
         if res1:
             # 体力用尽不再提醒
             # 判断体力用尽提示
@@ -228,9 +228,16 @@ def waitInvite():
     findDoneStatus = False
     teamShout = False
     waitTime = 0
-    for i in range(25):
+    totalWait = 50
+    if 功能开关["自动离房等待时间"] != "":
+        totalWait = safe_int_v2(功能开关["自动离房等待时间"])
+    for i in range(100):
         waitTime = waitTime + 2
-        Toast(f'{fight_type}-等待队长开始{waitTime}/50s')
+        if waitTime >= totalWait:
+            Toast(f'等待进入战斗超时，退出组队')
+            break
+
+        Toast(f'{fight_type}-等待队长开始{waitTime}/{totalWait}s')
 
         # 兜底，已在队伍中时，停止返回操作
         功能开关["fighting"] = 1
@@ -268,13 +275,15 @@ def waitInvite():
         if fight_type == '梦魇带队' and not findDoneStatus:
             re1, _ = TomatoOcrText(427, 374, 489, 399, "24/24")
             re2, _ = TomatoOcrText(431, 375, 486, 404, "24/24")
+            re4, _ = TomatoOcrText(423, 374, 474, 400, "无尽层数")
             re3, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
-            if (not re1 and not re2) or (re3 and 功能开关['梦魇无尽自动离队'] == 1):
-                Toast('梦魇 - 未完成挑战 - 进入战斗后等待战斗结束')
-                fight_type = '梦魇挑战'
-            else:
+            wujinLevel = safe_int_v2(re4)
+            if re1 or re2 or (re3 and wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0):
                 findDoneStatus = True
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
+            else:
+                Toast('梦魇 - 未完成挑战 - 进入战斗后等待战斗结束')
+                fight_type = '梦魇挑战'
 
         if fight_type == '恶龙带队' and not findDoneStatus:
             # 判断是否为当前等级地图
@@ -355,8 +364,6 @@ def waitInvite():
                     sleep(3)
                 break
         sleep(2)
-    if waitTime > 50:
-        Toast(f'等待进入战斗超时，退出组队')
 
     # if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
     #     Toast('不退出房间')

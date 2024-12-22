@@ -173,7 +173,7 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
                         bitmap=bitmap)
-                # print(ocrRe)
+                print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
             return False
@@ -337,7 +337,7 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
             lineWords = ''
             lineWords = ocrReJson.get('words', '')
             if lineWords != "" and lineWords == keyword:
-                print(f"o识别成功-{keyword}|{lineWords}")
+                print(f"oText识别成功-{keyword}|{lineWords}")
                 return True, lineWords
             print(f"oText识别失败-不匹配-{keyword}|{lineWords}")
             return False, lineWords
@@ -367,7 +367,7 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
             lineWords = ocrReJson.get('words', '')
             if lineWords != "" and lineWords == keyword:
                 tapSleep(x1 + offsetX, y1 + offsetY, sleep1)
-                print(f"o识别成功-{keyword}|{lineWords}|{x1}|{y1}")
+                print(f"oTap识别成功-{keyword}|{lineWords}|{x1}|{y1}")
                 return True
             print(f"oTap识别失败-不匹配-{keyword}|{lineWords}")
             return False
