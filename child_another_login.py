@@ -18,8 +18,7 @@ def main():
 
 def anotherLogin():
     res1, _ = TomatoOcrText(311, 588, 408, 637, "异地登录")
-    res2, _ = TomatoOcrText(327, 691, 416, 717, "建立联系")
-    if res1 or res2:
+    if res1:
         start_up = StartUp(f'{功能开关["游戏包名"]}')
         print("顶号等待，检查被顶号")
         start_time = int(time.time())

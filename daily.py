@@ -58,7 +58,9 @@ class DailyTask:
                 Toast('尝试返回游戏')
                 system.open(f"{功能开关['游戏包名']}")
             if tryTimes > 20:
-                if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
+                res1, _ = TomatoOcrText(311, 588, 408, 637, "异地登录")
+                res2, _ = TomatoOcrText(292, 691, 427, 722, "尝试重新连接")
+                if not res2 and (res1 and 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0"):
                     return
                 Toast('尝试重启游戏')
                 # 结束应用
@@ -187,28 +189,31 @@ class DailyTask:
         tapSleep(352, 356)
         res = TomatoOcrTap(333, 1027, 358, 1049, "升")
         if res:
-            tapSleep(150, 1059)  # 点击空白处
+            tapSleep(200, 1100)  # 点击空白处
             任务记录["日常-升级1次麦乐兽-完成"] = 1
         else:
             Toast("每日任务 - 升级1次麦乐兽 - 未找到升级入口")
+            tapSleep(200, 1100)  # 点击空白处
 
         # 升级辅助麦乐兽左
         tapSleep(241, 363)
         res = TomatoOcrTap(333, 1027, 358, 1049, "升")
         if res:
-            tapSleep(150, 1059)  # 点击空白处
+            tapSleep(200, 1100)  # 点击空白处
             任务记录["日常-升级1次麦乐兽-完成"] = 1
         else:
             Toast("每日任务 - 升级1次麦乐兽 - 未找到升级入口")
+            tapSleep(200, 1100)  # 点击空白处
 
         # 升级辅助麦乐兽右
         tapSleep(473, 348)
         res = TomatoOcrTap(333, 1027, 358, 1049, "升")
         if res:
-            tapSleep(150, 1059)  # 点击空白处
+            tapSleep(200, 1100)  # 点击空白处
             任务记录["日常-升级1次麦乐兽-完成"] = 1
         else:
             Toast("每日任务 - 升级1次麦乐兽 - 未找到升级入口")
+            tapSleep(200, 1100)  # 点击空白处
 
     # 每日任务 - 洗练1次装备
     def meiRiXiLian(self):
@@ -1909,12 +1914,13 @@ class DailyTask:
                 if count > 15:
                     Toast('摸鱼时间到 - 已完成每日奖励')
                     任务记录["日常-摸鱼时间到-完成"] = 1
-                    TomatoOcrTap(317, 738, 388, 778, '喂鱼')
-                    point = FindColors.find("278,236,#F56142|280,236,#F56042|280,242,#F1593E|278,241,#F15B41",
-                                            rect=[208, 227, 611, 317])
-                    if point:
-                        tapSleep(point.x - 20, point.y + 30, 1)
-                        tapSleep(102, 1074)
+                    TomatoOcrTap(317, 738, 388, 778, '喂鱼', sleep1=1.5)
+                    for k in range(3):
+                        point = FindColors.find("278,236,#F56142|280,236,#F56042|280,242,#F1593E|278,241,#F15B41",
+                                                rect=[208, 227, 611, 317])
+                        if point:
+                            tapSleep(point.x - 20, point.y + 30, 1)
+                            tapSleep(102, 1074)
                     return
 
             res1 = TomatoOcrTap(325, 1095, 427, 1128, "开始匹配")
@@ -1923,7 +1929,7 @@ class DailyTask:
                 self.quitTeam()
 
             attempts = 0  # 初始化尝试次数
-            maxAttempts = 4  # 设置最大尝试次数
+            maxAttempts = 6  # 设置最大尝试次数
 
             resStart = False
             failCount = 0
@@ -2370,7 +2376,8 @@ class DailyTask:
 
     def checkGameStatus(self):
         try:
-            if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1:
+            if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1 or 功能开关[
+                '暴走进入战斗后启动']:
                 return
 
             # re1 = CompareColors.compare(

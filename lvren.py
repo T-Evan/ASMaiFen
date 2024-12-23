@@ -273,7 +273,7 @@ class LvRenTask:
 
         if 任务记录["分解装备-倒计时"] > 0:
             diffTime = time.time() - 任务记录["分解装备-倒计时"]
-            if diffTime < 10 * 60:
+            if diffTime < 20 * 60:
                 print(f'日常 - 分解装备 - 倒计时{round((10 * 60 - diffTime) / 60, 2)}min')
                 sleep(1.5)
                 return
@@ -310,6 +310,8 @@ class LvRenTask:
                 # 用户未配置自动熔炼，仅删除一件
                 if 功能开关["满包裹分解装备"] == 0 and needDelete:
                     tapSleep(162, 572)
+                    tapSleep(241, 574)
+                    tapSleep(323, 574)
                 else:
                     tapSleep(162, 572)
                     tapSleep(235, 574)
@@ -499,8 +501,10 @@ class LvRenTask:
                     re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043")
                     if re:
                         tapSleep(554, 1076, 0.6)
-                        TomatoOcrTap(328, 980, 391, 1008, "进阶")
+                        TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
+                        tapSleep(483, 778, 3)  # 确认进阶
                         tapSleep(129, 1023, 0.3)
-                        TomatoOcrTap(328, 980, 391, 1008, "进阶")
+                        TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
+                        tapSleep(483, 778, 3)  # 确认进阶
                         tapSleep(129, 1023, 0.3)
                         TomatoOcrTap(94, 1188, 127, 1216, "回")

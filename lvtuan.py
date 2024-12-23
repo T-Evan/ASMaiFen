@@ -147,14 +147,14 @@ class LvTuanTask:
             attempts = attempts + 3
             # 调查队宝箱
             # 战斗结束页
-            res = TomatoOcrTap(336,1087,385,1115, "开启", 10, 20)
+            res = TomatoOcrTap(340, 1019, 378, 1039, "开启", 10, 20)
             if res:
                 sleep(2)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
             # 结算页
-            res = TomatoOcrTap(337,757,380,776, "开启")
+            res = TomatoOcrTap(339, 756, 379, 776, "开启")
             if res:
                 sleep(1)
                 tapSleep(340, 930)
@@ -366,6 +366,7 @@ class LvTuanTask:
 
         for i in range(4):
             Toast(f'旅团 - 许愿墙 - 捐献中{i}/5')
+            TomatoOcrTap(116, 402, 164, 424, '领取', offsetX=10, offsetY=10)
             re = TomatoOcrFindRangeClick('捐献', whiteList='捐献')
             if re:
                 # # 点击最大
