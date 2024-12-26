@@ -147,17 +147,19 @@ class LvTuanTask:
             attempts = attempts + 3
             # 调查队宝箱
             # 战斗结束页
-            res = TomatoOcrTap(340, 1019, 378, 1039, "开启", 10, 20)
-            if res:
+            res1 = TomatoOcrTap(340, 1019, 378, 1039, "开启", 10, 20)
+            if res1:
                 sleep(2)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
             # 结算页
-            res = TomatoOcrTap(339, 756, 379, 776, "开启")
-            if res:
+            res2 = TomatoOcrTap(339, 756, 379, 776, "开启")
+            if res2:
                 sleep(1)
                 tapSleep(340, 930)
+            if not res1 and not res2:
+                TomatoOcrFindRangeClick('开启', 99, 697, 626, 1152)
 
             # -- 钥匙不足退出
             res1, _ = TomatoOcrText(535, 767, 566, 798, "0")

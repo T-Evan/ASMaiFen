@@ -271,7 +271,11 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
             return False
         center_x = 0
         center_y = 0
-        ocrReJson = json.loads(ocrRe)
+        try:
+            ocrReJson = json.loads(ocrRe)
+        except json.JSONDecodeError as e:
+            print(f"JSON 解析错误: {e} - OCR Result: {ocrRe}")
+            return False
         for line in ocrReJson:
             # print(line)
             lineWords = line.get('words', '')
@@ -379,7 +383,7 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
         return False
 
 
-lastToast = ''
+lastToast = []
 lastToastTime = 0
 
 
@@ -390,9 +394,11 @@ def Toast(content, tim=1000):
     global lastToastTime
     nowTime = time.time()
     # 重复提示，2s 1次
-    if lastToast == content and nowTime - lastToastTime < 5:
+    if content in lastToast and nowTime - lastToastTime < 5:
         return
-    lastToast = content
+    if nowTime - lastToastTime > 5:
+        lastToast = []
+    lastToast.append(content)
     lastToastTime = nowTime
     print(f"提示-{content}")
     Dialog.toast(content, tim, 3 | 48, 200, 0)

@@ -907,9 +907,10 @@ class ShiLianTask:
         res1 = False
         res2 = False
         res3 = False
-        # res1, _ = TomatoOcrText(313, 622, 404, 656, "通关奖励")  # 战斗结束页。宝箱提示
         bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
-        res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
+        res1, _ = TomatoOcrText(517,654,590,678, "战斗统计")  # 战斗结束页。宝箱提示
+        if not res1:
+            res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
                                   bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
                                                            {'keyword': '开启', 'match_mode': 'fuzzy'},
                                                            {'keyword': '体力不足',
@@ -1280,7 +1281,7 @@ class ShiLianTask:
                 self.quitTeamFighting()  # 退出队伍
                 功能开关["fighting"] = 0
                 break
-            if elapsed >= 15:
+            if elapsed >= 25:
                 self.teamShoutAI(f'绝境-战斗即将结束-期待下次相遇', shoutType="fight")
 
             # 识别战斗中状态
@@ -1360,7 +1361,7 @@ class ShiLianTask:
                 功能开关["fighting"] = 0
                 break
 
-            if elapsed >= 15:
+            if elapsed >= 25:
                 self.teamShoutAI(f'终末战-战斗即将结束-期待下次相遇', shoutType="fight")
 
             # 识别战斗中状态
@@ -1511,7 +1512,7 @@ class ShiLianTask:
             sleep(3)
 
     def fightingMengYanTeam(self, fightType='梦魇带队'):
-        totalWait = 25  # 30000 毫秒 = 30 秒
+        totalWait = 28  # 30000 毫秒 = 30 秒
         if fightType == '梦魇挑战':
             totalWait = 360
         if 功能开关["梦魇自动离队时间"] != "":
@@ -1608,7 +1609,10 @@ class ShiLianTask:
                                 offsetY=10)
 
         任务记录['战斗-上一次移动'] = time.time()
+        start_time = int(time.time())
         while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
             if elapsed >= totalWait:
                 Toast("战斗结束 - 超时退出组队")
                 self.quitTeamFighting()  # 退出队伍
@@ -1628,7 +1632,7 @@ class ShiLianTask:
                         f'秘境-{任务记录["战斗-关卡名称"]}-开始战斗~{teamName}-第{teamCount}次相遇~祝你武运昌隆~',
                         shoutType="fight")
                     teamShoutDone = self.teamShout()
-                if elapsed > 15 and fightType == '秘境带队':
+                if elapsed > 25 and fightType == '秘境带队':
                     self.teamShoutAI("秘境-战斗即将结束-期待下次相遇", shoutType="fight")
                 self.AIContent()
                 # 自动锁敌走位
@@ -1683,7 +1687,7 @@ class ShiLianTask:
             if allQuit:
                 break
             self.fight_fail_alert()
-            sleep(1)
+            sleep(0.5)
             elapsed = elapsed + 1
         功能开关["fighting"] = 0
 
@@ -2509,7 +2513,7 @@ class ShiLianTask:
                 print(teamFightNum)
                 print(任务记录['战斗-房主战力'])
                 tapSleep(96, 1235)  # 返回
-                tapSleep(96, 1235)  # 返回
+                tapSleep(96, 1235,0.1)  # 返回
                 任务记录['战斗-房主战力'] = safe_int_v2(任务记录['战斗-房主战力'])
                 if 任务记录['战斗-房主战力'] != 0 and teamFightNum != 0:
                     teamFightNumDiff = round(abs(teamFightNum - 任务记录['战斗-房主战力']) / 10000, 2)

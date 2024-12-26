@@ -91,7 +91,7 @@ def main():
                 Toast('等待组队邀请')
                 waitInvite()
                 dailyTask.checkGameStatus()
-        sleep(3)  # 等待 5 秒
+        sleep(1)  # 等待 5 秒
 
 
 def waitInvite():
@@ -200,6 +200,11 @@ def waitInvite():
                 return
             else:
                 Toast('同意调查队组队邀请')
+        if fight_type == '忆战回环带队':
+            Toast('忆战回环带队，自动拒绝')
+            res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+            功能开关["fighting"] = 0
+            return
 
         # 黑名单判断
         blackList = (功能开关['秘境带队黑名单'] + '|' + 功能开关['绝境带队黑名单'] + '|'
@@ -231,9 +236,11 @@ def waitInvite():
     totalWait = 50
     if 功能开关["自动离房等待时间"] != "":
         totalWait = safe_int_v2(功能开关["自动离房等待时间"])
+    start_time = int(time.time())
     for i in range(100):
-        waitTime = waitTime + 2
-        if waitTime >= totalWait:
+        current_time = int(time.time())
+        elapsed = current_time - start_time
+        if elapsed >= totalWait:
             Toast(f'等待进入战斗超时，退出组队')
             break
 
@@ -363,7 +370,7 @@ def waitInvite():
                         break
                     sleep(3)
                 break
-        sleep(2)
+        sleep(0.5)
 
     # if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
     #     Toast('不退出房间')
@@ -420,6 +427,13 @@ def checkFightType():
                                              bitmap=bitmap)  # 调查队邀请
             if resDiaoCha1:
                 fight_type = "调查队带队"
+                break
+    if fight_type == '':
+        for i in range(1, 4):
+            res1, _ = TomatoOcrText(404, 587, 480, 611, "忆战回环")  # 梦魇邀请
+            res2, _ = TomatoOcrText(442,588,480,609, "回环")  # 梦魇邀请
+            if res1 or res2:
+                fight_type = "忆战回环带队"
                 break
 
     if fight_type == '':

@@ -368,15 +368,18 @@ class DailyTask:
             zanList3 = ['来一个', '来人', '求个', '来个', '来打工', '来黑工', '来奶', '来t', '来输出', '来打工']
             contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
             if contains_zan:
-                return self.shijieShout(f"<color={colors}>来了来了~</COLOR>")
+                content = [f"<color={colors}>来了来了~</COLOR>", f"<color={colors}>来啦来啦~</COLOR>"]
+                return self.shijieShout(random.choice(content))
             zanList3 = ['有没有', '有人', '有打工', '有佬', '有帮忙', '还有', '有吗', '求佬']
             contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
             if contains_zan:
-                return self.shijieShout(f"<color={colors}>打工打工~</COLOR>")
+                content = [f"<color={colors}>打工打工~</COLOR>", f"<color={colors}>来啦来啦~</COLOR>"]
+                return self.shijieShout(random.choice(content))
             zanList = ['影子', '求带', '大佬', '带个', '带带', '差个', '大哥', '帮忙', '求求']
             contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
             if contains_zan:
-                return self.shijieShout(f"<color={colors}>拉我拉我~</COLOR>")
+                content = [f"<color={colors}>拉我拉我~</COLOR>", f"<color={colors}>打工打工~</COLOR>"]
+                return self.shijieShout(random.choice(content))
 
         need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
         if need_dur_minute == '':
@@ -479,21 +482,21 @@ class DailyTask:
                         Toast('开始切换热点频道')
                         for p in range(3):
                             point = FindColors.find("179,908,#F09C2F|180,914,#EF9B30|184,917,#E8962C",
-                                                    rect=[104, 594, 610, 878])  # 黄色
+                                                    rect=[104, 594, 610, 878], diff=0.95)  # 黄色
                             if point:
                                 re, _ = TomatoOcrText(point.x + 170, point.y - 30, point.x + 220, point.y, '当前')
                                 if not re:
-                                    Toast('切换热点频道')
+                                    Toast('切换黄色热点频道')
                                     findNext = True
                                     tapSleep(point.x, point.y)
                                     break
                             point = FindColors.find(
                                 "383,471,#ED5B3E|388,467,#ED5B3E|391,475,#E2543A",
-                                rect=[104, 594, 610, 878])  # 红色
+                                rect=[104, 594, 610, 878], diff=0.97)  # 红色
                             if point:
                                 re, _ = TomatoOcrText(point.x + 170, point.y - 30, point.x + 220, point.y, '当前')
                                 if not re:
-                                    Toast('切换热点频道')
+                                    Toast('切换红色热点频道')
                                     findNext = True
                                     tapSleep(point.x, point.y)
                                     break
@@ -940,6 +943,11 @@ class DailyTask:
                             return
         sleep(1)
 
+        # 领取累积奖励
+        re = FindColors.find("302,285,#F05E41|301,282,#F46042|302,283,#F46042", rect=[104, 265, 620, 395])
+        if re:
+            tapSleep(re.x, re.y)
+            tapSleep(216, 872)  # 点击空白
         # 识别是否已完成
         if 功能开关['派对大师重复挑战'] == 0:
             re = CompareColors.compare("517,939,#F1A949|524,939,#F1A949")  # 第五格宝箱
@@ -1363,6 +1371,44 @@ class DailyTask:
     def QiTaQianDao(self):
         if 功能开关["其他签到活动"] == 0:
             return
+
+        # 双旦联欢
+        if 任务记录["双旦联欢签到"] == 0:
+            self.homePage()
+            res = TomatoOcrFindRangeClick('双旦', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                          sleep1=1.5, match_mode='fuzzy')
+            if res:
+                Toast('双旦联欢签到 - 任务开始')
+                任务记录["双旦联欢签到"] = 1
+                res = CompareColors.compare("323,470,#F15D40|325,468,#F36042|326,470,#F15E41")  # 匹配红点
+                if res:
+                    tapSleep(211, 486, 0.8)
+                    res = TomatoOcrFindRangeClick('领取', x1=459, y1=528, x2=625, y2=1150, offsetX=30, offsetY=-20,
+                                                  sleep1=0.5)
+                    tapSleep(92, 1218)  # 返回
+                    tapSleep(92, 1218)
+                    tapSleep(92, 1218)
+
+        # 忆战回环
+        if 任务记录["忆战回环签到"] == 0:
+            self.homePage()
+            res = TomatoOcrFindRangeClick('忆战', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                          sleep1=1.5, match_mode='fuzzy')
+            if res:
+                Toast('忆战回环签到 - 任务开始')
+                任务记录["忆战回环签到"] = 1
+                res = CompareColors.compare("620,110,#F66042|620,115,#F05E41|620,118,#EF5435")  # 匹配红点
+                if res:
+                    tapSleep(593, 127, 3)  # 点击排行榜
+                    tapSleep(570, 1062)  # 点击奖励
+                    tapSleep(558, 1063)  # 点击奖励
+                    tapSleep(356, 1065)  # 点击奖励
+                    tapSleep(352, 1062)  # 点击奖励
+                    tapSleep(191, 1063)  # 点击奖励
+                    tapSleep(181, 1059)  # 点击奖励
+                    tapSleep(92, 1218)  # 返回
+                    tapSleep(92, 1218)
+
         # 半周年庆典签到
         if 任务记录["半周年庆典签到"] == 0:
             self.homePage()
@@ -1914,7 +1960,10 @@ class DailyTask:
                 if count > 15:
                     Toast('摸鱼时间到 - 已完成每日奖励')
                     任务记录["日常-摸鱼时间到-完成"] = 1
-                    TomatoOcrTap(317, 738, 388, 778, '喂鱼', sleep1=1.5)
+                    tapSleep(562, 940, 0.8)  # 点击最后一个奖励
+                    tapSleep(592, 1046)  # 点击空白
+                    tapSleep(592, 1046)  # 点击空白
+                    TomatoOcrTap(318, 738, 385, 782, '喂鱼', sleep1=1.5)
                     for k in range(3):
                         point = FindColors.find("278,236,#F56142|280,236,#F56042|280,242,#F1593E|278,241,#F15B41",
                                                 rect=[208, 227, 611, 317])
