@@ -333,12 +333,7 @@ class DailyTask:
         Toast("世界喊话 - 开始")
 
         # 关闭喊话窗口
-        point = FindColors.find(
-            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-            rect=[11, 26, 364, 489])
-        if point:
-            Toast('关闭喊话窗口')
-            tapSleep(point.x, point.y, 1)
+        self.closeLiaoTian()
 
         # AI回复世界频道发言
         if 功能开关['世界AI发言'] == 1 and contentAI == "":
@@ -370,7 +365,7 @@ class DailyTask:
             if contains_zan:
                 content = [f"<color={colors}>来了来了~</COLOR>", f"<color={colors}>来啦来啦~</COLOR>"]
                 return self.shijieShout(random.choice(content))
-            zanList3 = ['有没有', '有人', '有打工', '有佬', '有帮忙', '还有', '有吗', '求佬']
+            zanList3 = ['有没有', '有人', '有打工', '有佬', '有帮忙', '可以帮忙', '还有', '有吗', '求佬']
             contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
             if contains_zan:
                 content = [f"<color={colors}>打工打工~</COLOR>", f"<color={colors}>来啦来啦~</COLOR>"]
@@ -492,7 +487,11 @@ class DailyTask:
                                     break
                             point = FindColors.find(
                                 "383,471,#ED5B3E|388,467,#ED5B3E|391,475,#E2543A",
-                                rect=[104, 594, 610, 878], diff=0.97)  # 红色
+                                rect=[115, 609, 164, 869], diff=0.95)  # 红色
+                            if not point:
+                                point = FindColors.find(
+                                    "383,471,#ED5B3E|388,467,#ED5B3E|391,475,#E2543A",
+                                    rect=[366, 609, 415, 875], diff=0.95)  # 红色
                             if point:
                                 re, _ = TomatoOcrText(point.x + 170, point.y - 30, point.x + 220, point.y, '当前')
                                 if not re:
@@ -944,10 +943,11 @@ class DailyTask:
         sleep(1)
 
         # 领取累积奖励
-        re = FindColors.find("302,285,#F05E41|301,282,#F46042|302,283,#F46042", rect=[104, 265, 620, 395])
-        if re:
-            tapSleep(re.x, re.y)
-            tapSleep(216, 872)  # 点击空白
+        for k in range(3):
+            re = FindColors.find("576,909,#F15D40|580,907,#F45F42|577,912,#ED5B3E", rect=[213, 887, 604, 980], diff=0.95)
+            if re:
+                tapSleep(re.x, re.y + 10)
+                tapSleep(216, 872)  # 点击空白
         # 识别是否已完成
         if 功能开关['派对大师重复挑战'] == 0:
             re = CompareColors.compare("517,939,#F1A949|524,939,#F1A949")  # 第五格宝箱

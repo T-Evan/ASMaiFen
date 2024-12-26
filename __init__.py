@@ -4,7 +4,7 @@ import traceback
 import json
 
 # 导入动作模块
-from .res.ui.ui import 功能开关, loadConfig
+from .res.ui.ui import 功能开关, loadConfig,db
 from .res.ui.ui import 任务记录
 from .shilian import ShiLianTask
 from .lvtuan import LvTuanTask
@@ -34,15 +34,6 @@ from ascript.android.action import Path
 
 
 def kamiActive():
-    db = pymysql.connect(
-        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
-        port=3307,  # 开发者后台,创建的数据库 “端口”
-        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
-        password='233233',  # 开发者后台,创建的数据库 “初始密码”
-        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
-        charset='utf8mb4'  ""
-    )  # 连接数据库
-
     cursor = db.cursor()
     sql = "SELECT * FROM kami WHERE kami != '' and kami LIKE %s"
     # 使用参数化查询
@@ -176,8 +167,8 @@ def kamiActive():
 
     # 执行完之后要记得关闭游标和数据库连接
     cursor.close()
-    # 执行完毕后记得关闭db,不然会并发连接失败哦
-    db.close()
+    # # 执行完毕后记得关闭db,不然会并发连接失败哦
+    # db.close()
 
 
 print('卡密联网激活开始')

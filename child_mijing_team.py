@@ -283,9 +283,9 @@ def waitInvite():
             re1, _ = TomatoOcrText(427, 374, 489, 399, "24/24")
             re2, _ = TomatoOcrText(431, 375, 486, 404, "24/24")
             re4, _ = TomatoOcrText(423, 374, 474, 400, "无尽层数")
-            re3, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
+            # re3, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
             wujinLevel = safe_int_v2(re4)
-            if re1 or re2 or (re3 and wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0):
+            if re1 or re2 or (wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0) or 功能开关['梦魇无尽自动离队'] == 1:
                 findDoneStatus = True
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
             else:
@@ -360,15 +360,16 @@ def waitInvite():
             任务记录['AI发言-检测队友关注'] = 0
             任务记录["战斗-推荐战力"] = 0
             waitTime = 0
+            start_time = int(time.time())
             teamShout = False
             # 恶龙/绝境/终末，仅挑战1次，可直接退队
             if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队':
                 Toast('退出组队')
-                for z in range(3):
+                for z in range(6):
                     quitRes = shilianTask.quitTeam()
                     if quitRes:
                         break
-                    sleep(3)
+                    sleep(0.5)
                 break
         sleep(0.5)
 
@@ -431,7 +432,7 @@ def checkFightType():
     if fight_type == '':
         for i in range(1, 4):
             res1, _ = TomatoOcrText(404, 587, 480, 611, "忆战回环")  # 梦魇邀请
-            res2, _ = TomatoOcrText(442,588,480,609, "回环")  # 梦魇邀请
+            res2, _ = TomatoOcrText(442, 588, 480, 609, "回环")  # 梦魇邀请
             if res1 or res2:
                 fight_type = "忆战回环带队"
                 break

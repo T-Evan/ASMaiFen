@@ -90,23 +90,40 @@ class AutoMove:
                 if 任务记录['战斗-恶龙名称'] == '' or time.time() - 任务记录['战斗-恶龙名称-识别倒计时'] > 5:
                     re, 任务记录['战斗-恶龙名称'] = TomatoOcrText(288, 222, 408, 246, '恶龙名称')
                     任务记录['战斗-恶龙名称-识别倒计时'] = time.time()
+
+                # 三头盘踞拦路关
+                if '三头毒' in 任务记录['战斗-恶龙名称']:
+                    if 任务记录['战斗-上一次移动'] == 0:
+                        任务记录['战斗-上一次移动'] = time.time()
+                    name = 任务记录['战斗-恶龙名称']
+                    Toast(f'三头盘踞拦路关-战斗中')
+                    for k in range(30):
+                        if time.time() - 任务记录['战斗-上一次移动'] > 20:
+                            任务记录['战斗-上一次移动'] = time.time()
+                            tapSleep(142, 673)  # 移动-右侧地块
+                            Toast('前往下一地块')
+                        sleep(0.5)
+                        continue
+
                 if 任务记录['战斗-恶龙名称'] == '真炎界印龙' or 任务记录['战斗-恶龙名称'] == '熔火乡界印':
                     name = 任务记录['战斗-恶龙名称']
                     Toast(f'{name}-战斗中')
                     for k in range(30):
                         # 定位玩家位置
                         x, y = 298, 746
-                        point = FindColors.find("336,738,#BFFF26|336,740,#BFFF26|341,737,#BFFF26|341,738,#BFFF26", diff=0.95)
+                        point = FindColors.find("336,738,#BFFF26|336,740,#BFFF26|341,737,#BFFF26|341,738,#BFFF26",
+                                                diff=0.95)
                         if point:
                             x, y = point.x, point.y
 
                         #
                         if 任务记录['战斗-恶龙名称'] == '熔火乡界印':
                             # 炸地板
-                            re = FindColors.find("660,1191,#EAEAE3|660,1191,#EAEAE3|663,1191,#EAEAE5|650,1200,#E9E9C3",rect=[9,1150,704,1240],diff=0.95)
+                            re = FindColors.find("660,1191,#EAEAE3|660,1191,#EAEAE3|663,1191,#EAEAE5|650,1200,#E9E9C3",
+                                                 rect=[9, 1150, 704, 1240], diff=0.95)
                             if re:
                                 Toast('恶龙炸地板，自动走位')
-                                re = tapSleep(64,677)
+                                re = tapSleep(64, 677)
 
                         # 玩家头上为星星
                         re = FindColors.find(
@@ -153,7 +170,8 @@ class AutoMove:
                             for j in range(20):
                                 # 真炎
                                 re = CompareColors.compare(
-                                    "359,533,#FCFCFC|363,531,#FEFEFE|363,530,#FFFFFF|367,532,#FFFFFF|369,543,#FFFFFF", diff=0.95)
+                                    "359,533,#FCFCFC|363,531,#FEFEFE|363,530,#FFFFFF|367,532,#FFFFFF|369,543,#FFFFFF",
+                                    diff=0.95)
                                 # re, _ = TomatoOcrText(326, 523, 377, 549, '真炎')
                                 if not re:
                                     continue
@@ -179,7 +197,8 @@ class AutoMove:
                             for j in range(20):
                                 # 真炎
                                 re = CompareColors.compare(
-                                    "359,533,#FCFCFC|363,531,#FEFEFE|363,530,#FFFFFF|367,532,#FFFFFF|369,543,#FFFFFF", diff=0.95)
+                                    "359,533,#FCFCFC|363,531,#FEFEFE|363,530,#FFFFFF|367,532,#FFFFFF|369,543,#FFFFFF",
+                                    diff=0.95)
                                 if not re:
                                     continue
                                 Toast('恶龙真炎-逆时针，自动走位')

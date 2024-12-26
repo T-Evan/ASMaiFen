@@ -4,7 +4,7 @@ import sys
 import traceback
 from .特征库 import *
 from ascript.android.ui import Dialog
-from .res.ui.ui import 功能开关
+from .res.ui.ui import 功能开关,db
 from .res.ui.ui import 任务记录
 from .child_return_home import *
 from .baseUtils import *
@@ -1474,9 +1474,9 @@ class ShiLianTask:
             else:
                 # 战斗结束
                 # 兼容恶龙战斗结算页
-                res, _ = TomatoOcrText(301, 577, 412, 613, "战斗详情")
+                res, _ = TomatoOcrText(495,585,576,609, "战斗统计")
                 if res:
-                    res = TomatoOcrTap(331, 1049, 385, 1077, "开启")
+                    res = TomatoOcrTap(334,1049,385,1079, "开启")
                     if res:
                         tapSleep(363, 1191, 0.3)
                         tapSleep(363, 1191, 0.3)
@@ -2758,19 +2758,10 @@ class ShiLianTask:
 
         # 执行完之后要记得关闭游标和数据库连接
         cursor.close()
-        # 执行完毕后记得关闭db,不然会并发连接失败哦
-        db.close()
+        # # 执行完毕后记得关闭db,不然会并发连接失败哦
+        # db.close()
 
     def daiDuiCount(self):
-        db = pymysql.connect(
-            host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
-            port=3307,  # 开发者后台,创建的数据库 “端口”
-            user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
-            password='233233',  # 开发者后台,创建的数据库 “初始密码”
-            database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
-            charset='utf8mb4'  ""
-        )  # 连接数据库
-
         count = 0
         last_time = 0
         team_fight_num = 0
@@ -2788,8 +2779,8 @@ class ShiLianTask:
 
         # 执行完之后要记得关闭游标和数据库连接
         cursor.close()
-        # 执行完毕后记得关闭db,不然会并发连接失败哦
-        db.close()
+        # # 执行完毕后记得关闭db,不然会并发连接失败哦
+        # db.close()
 
         p = threading.Thread(target=self.daiDuiUpdate, args=(count, 任务记录["战斗-房主名称"], now_time))
         p.start()
@@ -2805,14 +2796,6 @@ class ShiLianTask:
         return count, last_time
 
     def daiDuiUpdate(self, count, teamName, now_time):
-        db = pymysql.connect(
-            host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
-            port=3307,  # 开发者后台,创建的数据库 “端口”
-            user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
-            password='233233',  # 开发者后台,创建的数据库 “初始密码”
-            database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
-            charset='utf8mb4'  ""
-        )  # 连接数据库
         cursor = db.cursor()
 
         # 插入
@@ -2833,5 +2816,5 @@ class ShiLianTask:
 
         # 执行完之后要记得关闭游标和数据库连接
         cursor.close()
-        # 执行完毕后记得关闭db,不然会并发连接失败哦
-        db.close()
+        # # 执行完毕后记得关闭db,不然会并发连接失败哦
+        # db.close()
