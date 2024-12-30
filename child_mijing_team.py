@@ -29,7 +29,8 @@ def main():
             if 功能开关["fighting"] == 0:
                 # 识别角色名称，做特殊逻辑
                 if 任务记录["AI发言-广告开关"] == 0:
-                    if 任务记录["玩家名称"] == '咸鱼搜麦乐芬' or 任务记录["玩家名称"] == '养只狐狸':
+                    if 任务记录["玩家名称"] in {'咸鱼搜麦乐芬', '养只狐狸', '那双眼动人', '风尘三尺剑', '霸王夜引弓',
+                                                '倚仗数昏鸦', '渡渡'}:
                         任务记录["AI发言-广告开关"] = 1
 
                 # 识别玩家所在旅团，做特殊逻辑
@@ -118,14 +119,39 @@ def waitInvite():
             return
 
     if res1:
-        if 功能开关["仅接收旅团成员邀请"] == 1:
-            Toast('判断是否为旅团成员邀请')
-            tapSleep(415, 544, 0.8)  # 点击右侧邀请玩家头像
-            res, 任务记录["战斗-房主旅团"] = TomatoOcrText(410, 828, 587, 862, "旅团名称")
-            if 任务记录["玩家-当前旅团"] != 任务记录["战斗-房主旅团"]:
-                Toast('非旅团成员，拒绝组队邀请')
-                res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
-                tapSleep(71, 1216)  # 点击返回
+        if 功能开关["仅接收旅团成员邀请"] == 1 or 功能开关["仅接收互关好友邀请"] == 1:
+            for p in range(3):
+                tmp = ''
+                for o in range(3):
+                    tapSleep(415, 544, 0.8)  # 点击右侧邀请玩家头像
+                    re = CompareColors.compare("525,1073,#78A1E7|528,1070,#78A1E7|527,1077,#78A1E7|536,1079,#78A1E7")
+                    if re:
+                        # 判断点进了头像
+                        break
+                if 功能开关["仅接收旅团成员邀请"] == 1:
+                    res, 任务记录["战斗-房主旅团"] = TomatoOcrText(410, 828, 587, 862, "旅团名称")
+                    if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != 任务记录["战斗-房主旅团"]:
+                        Toast('非旅团成员，拒绝组队邀请')
+                        res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                        tapSleep(71, 1216)  # 点击返回
+
+                if 功能开关["仅接收关注粉丝邀请"] == 1:
+                    res, tmp = TomatoOcrText(276, 983, 353, 1014, "未关注")
+                    if res and tmp != "":
+                        Toast('非关注粉丝，拒绝组队邀请')
+                        res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                        tapSleep(71, 1216)  # 点击返回
+
+                if 功能开关["仅接收互关好友邀请"] == 1:
+                    res, tmp = TomatoOcrText(221, 981, 312, 1014, "互相关注")
+                    if not res and tmp != "":
+                        res, _ = TomatoOcrText(221, 981, 312, 1014, "互相关注")
+                        if not res:
+                            Toast('非互关好友，拒绝组队邀请')
+                            res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                            tapSleep(71, 1216)  # 点击返回
+                if tmp != "" or 任务记录["战斗-房主旅团"] != "":
+                    break
 
         功能开关["fighting"] = 1
         功能开关["needHome"] = 0
@@ -285,7 +311,8 @@ def waitInvite():
             re4, _ = TomatoOcrText(423, 374, 474, 400, "无尽层数")
             # re3, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
             wujinLevel = safe_int_v2(re4)
-            if re1 or re2 or (wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0) or 功能开关['梦魇无尽自动离队'] == 1:
+            if re1 or re2 or (wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0) or 功能开关[
+                '梦魇无尽自动离队'] == 1:
                 findDoneStatus = True
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
             else:
@@ -299,7 +326,7 @@ def waitInvite():
             if levelName1 == levelName2:
                 # 判断是否未开宝箱
                 re1 = CompareColors.compare(
-                    "533,356,#DFB86D|533,348,#FAEAA8|536,339,#FFECB0|554,358,#EBC87E|552,350,#D79335")
+                    "532,358,#F4D387|535,347,#FAE69D|535,336,#D48D2F|544,334,#FDF5BC|544,348,#E7C783|555,355,#F9E79F")
                 # 未开宝箱，不退队
                 if not re1:
                     Toast('恶龙 - 未完成挑战 - 进入战斗后等待战斗结束')

@@ -16,7 +16,7 @@ from ascript.android.ui import FloatWindow
 from ascript.android.system import R
 # 导入-屏幕检索库
 from ascript.android.ui import WebWindow
-from ascript.android.ui import Loger
+# from ascript.android.ui import Loger
 from datetime import datetime, timedelta
 from time import sleep
 
@@ -108,15 +108,6 @@ elif 功能开关['选择游戏版本'] == "国际服":
 elif 功能开关['选择游戏版本'] == "国际服2":
     功能开关['游戏包名'] = "com.xd.muffin.gp.global"
 
-# 初始化数据库
-db = pymysql.connect(
-    host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
-    port=3307,  # 开发者后台,创建的数据库 “端口”
-    user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
-    password='233233',  # 开发者后台,创建的数据库 “初始密码”
-    database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
-    charset='utf8mb4'  ""
-)  # 连接数据库
 
 def loadConfig(configNum):
     global 功能开关
@@ -262,8 +253,8 @@ def tunner(k, v):
 
 
 # loger 继承 Window ,因此 Window 中的方法,loger都可以使用
-lw = Loger(R.ui("loger.html"))
-lw.tunner(tunner)  # 设置消息通道
+# lw = Loger(R.ui("loger.html"))
+# lw.tunner(tunner)  # 设置消息通道
 
 
 # lw.show() # 展示
@@ -297,6 +288,15 @@ FloatWindow.add_menu("10001", R.img("ico_rank.png"), a)
 
 
 def daiDuiCount():
+    db = pymysql.connect(
+        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+        port=3307,  # 开发者后台,创建的数据库 “端口”
+        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+        password='233233',  # 开发者后台,创建的数据库 “初始密码”
+        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+        charset='utf8mb4'  ""
+    )  # 连接数据库
+
     # 获取当前时间
     now = datetime.now()
     # 获取今天的0点时间
@@ -346,7 +346,7 @@ def daiDuiCount():
 
     # 执行完之后要记得关闭游标和数据库连接
     cursor.close()
-    # # 执行完毕后记得关闭db,不然会并发连接失败哦
-    # db.close()
+    # 执行完毕后记得关闭db,不然会并发连接失败哦
+    db.close()
 
     return userTotalDaiDuiCount, userTodayDaiDuiCount, TodayDaiDuiPaiHang, UserDaiDuiPaiHang

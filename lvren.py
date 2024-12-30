@@ -392,8 +392,8 @@ class LvRenTask:
         yiJianRes = False
         if 功能开关['仅强化武器戒指护腕'] == 0:
             yiJianRes = imageFindClick('一键强化')
-            if yiJianRes:
-                return
+            # if yiJianRes:
+            #     return
         if 功能开关['仅强化武器戒指护腕'] == 1 or not yiJianRes:
             for i in range(6):
                 tapSleep(140, 175, 0.6)  # 点击武器
@@ -489,12 +489,13 @@ class LvRenTask:
                     TomatoOcrTap(94, 1188, 127, 1216, "回")
 
         if 功能开关["自动进阶装备"] == 1:
+            Toast('旅人 - 装备进阶 - 开始')
             TomatoOcrTap(94, 1188, 127, 1216, "回")
             for k in range(6):
                 # 识别可强化标识
-                needUpdate = FindColors.find(
-                    "96,129,#FC694C|102,133,#FFFFFF|107,133,#F49C9C|96,142,#F69491|106,146,#FD684F",
-                    rect=[77, 112, 630, 553])
+                needUpdate = FindColors.find("538,135,#FDFDFD|544,137,#F46969|538,146,#FC694C|551,138,#FC694C",rect=[80,116,650,568],diff=0.95)
+                if not needUpdate:
+                    Toast('旅人 - 装备进阶 - 无可进阶装备')
                 if needUpdate:
                     tapSleep(needUpdate.x, needUpdate.y, 0.8)
                     # 识别可进阶标识

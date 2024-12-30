@@ -12,6 +12,7 @@ from ascript.android import plug
 from .res.ui.ui import TimeoutLock
 from ascript.android.screen import Ocr
 from .res.ui.ui import 任务记录
+import random
 
 
 # plug.load("BDS_OcrText")
@@ -153,6 +154,77 @@ from .res.ui.ui import 任务记录
 #         return False
 #
 
+def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, bitmap=''):
+    try:
+        lock = TimeoutLock(timeLock)
+        try:
+            with lock:
+                if bitmap == '':
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        capture=[x1, y1, x2, y2])
+                else:
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        bitmap=bitmap)
+                # print(ocrRe)
+        except RuntimeError as e:
+            print(f"TomatoOcrTextRange获取锁超时")
+            return False
+        center_x = 0
+        center_y = 0
+        if ocrRe != "":
+            ocrReJson = json.loads(ocrRe)
+            print(f"TomatoOcrTextRange识别成功-{ocrReJson}")
+            return True, ocrReJson
+        else:
+            print(f"TomatoOcrTextRange识别失败")
+            return False, []
+    except Exception as e:
+        print(f"TomatoOcrTextRange发生异常: {e}")
+        return False, []
+
+
+def shijieShoutText():
+    res, ocrReJson = TomatoOcrTextRange(x1=61, y1=781, x2=287, y2=1090)
+    print(res, ocrReJson)
+    player_messages = {}
+    if res:
+        current_player = '默认'
+        player_messages[current_player] = []
+        found_world = False
+        for line in ocrReJson:
+            words = line.get('words', '')
+            if '世界' in words:
+                # 提取“世界”后的部分作为玩家名称
+                parts = words.split('世界', 1)
+                if len(parts) > 1:
+                    player_name = parts[1].strip()
+                    player_name = (player_name.replace('[', '').replace('【', '').replace('】', '').replace(']', '').
+                                   replace('）', '').replace('(','').replace('（', '').replace('）', '').replace(' ', ''))
+                    print(player_name)
+                    if player_name != '':
+                        current_player = player_name
+                        player_messages[player_name] = []
+                        found_world = False
+                    else:
+                        found_world = True
+                else:
+                    found_world = True
+            elif found_world:
+                # 如果未找到“世界”，则将当前行的words内容作为玩家名称
+                current_player = words.strip()
+                player_messages[current_player] = []
+                found_world = False
+            elif current_player:
+                # 将当前行的words内容添加到当前玩家的发言列表中
+                player_messages[current_player].append(words)
+    print(player_messages)
+    return player_messages
+
+
 def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
                        match_mode='exact', bitmap='', keywords=None):
     try:
@@ -173,9 +245,9 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
                         bitmap=bitmap)
-                print(ocrRe)
+                # print(ocrRe)
         except RuntimeError as e:
-            print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
+            print(f"TomatoOcrFindRange获取锁超时-{keyword}")
             return False
         center_x = 0
         center_y = 0
@@ -386,7 +458,12 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
 lastToast = []
 lastToastTime = 0
 
-
+def generate_random_color():
+    colors = ["#ffa400", "#ffa631", "#fa8c35", "#00bc12", "#0aa344", "#6b6882", "#ca6924", "#1bd1a5", "#789262",
+              "#758a99",
+              "#70f3ff", "#44cef6", "#177cb0", "#4b5cc4", "#8d4bbb", "#4c8dae", "#b0a4e3", "#cca4e3", "#c93756",
+              "#f05654", "#725e82"]
+    return random.choice(colors)
 def Toast(content, tim=1000):
     if 任务记录['提示-并发锁'] == 1:
         return

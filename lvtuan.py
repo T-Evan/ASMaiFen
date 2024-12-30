@@ -92,7 +92,7 @@ class LvTuanTask:
 
             # 领取累积奖励
             for k in range(4):
-                re = FindColors.find("535,135,#F05D40|536,134,#F25E41|538,137,#FF5438")
+                re = CompareColors.compare("535,134,#F25F41|535,132,#F46042|535,134,#F25F41")
                 if re:
                     tapSleep(514, 172, 0.8)
                     TomatoOcrTap(333, 719, 386, 752, '领取')
@@ -148,18 +148,21 @@ class LvTuanTask:
             # 调查队宝箱
             # 战斗结束页
             res1 = TomatoOcrTap(340, 1019, 378, 1039, "开启", 10, 20)
-            if res1:
+            res2 = TomatoOcrTap(340, 1019, 378, 1039, "开户", 10, 20)
+            if res1 or res2:
                 sleep(2)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
+
             # 结算页
-            res2 = TomatoOcrTap(339, 756, 379, 776, "开启")
-            if res2:
+            res1 = TomatoOcrTap(339, 756, 379, 776, "开启")
+            res2 = TomatoOcrTap(339, 756, 379, 776, "开户")
+            if res1 or res2:
                 sleep(1)
                 tapSleep(340, 930)
             if not res1 and not res2:
-                TomatoOcrFindRangeClick('开启', 99, 697, 626, 1152)
+                TomatoOcrFindRangeClick('开启', x1=99, y1=697, x2=626, y2=1152)
 
             # -- 钥匙不足退出
             res1, _ = TomatoOcrText(535, 767, 566, 798, "0")

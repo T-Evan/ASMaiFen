@@ -18,7 +18,6 @@ from ascript.android.action import Path
 from ascript.android import system
 import sys
 import traceback
-import random
 
 
 class DailyTask:
@@ -55,7 +54,7 @@ class DailyTask:
                     self.quitTeam()
 
             if tryTimes > 15:
-                Toast('尝试返回游戏')
+                Toast(f'尝试返回游戏,{tryTimes}/20')
                 system.open(f"{功能开关['游戏包名']}")
             if tryTimes > 20:
                 res1, _ = TomatoOcrText(311, 588, 408, 637, "异地登录")
@@ -293,13 +292,6 @@ class DailyTask:
         res = TomatoOcrTap(645, 882, 690, 902, "手动", 10, -10)
         任务记录["日常-释放1次战术技能-完成"] = 1
 
-    def generate_random_color(self):
-        colors = ["#8869A5", "#C58ADE", "#B1BEEA", "#90C4E9", "#8095CE", "#FEA78C", "#FFA3A6", "#F583B4", "#CD69A7",
-                  "#ED7179",
-                  "#E49AAB", "#F3BDD7", "#FFDFA2", "#BFE4FF", "#A3B5FD", "#C3C5F8", "#60EFDB", "#BEF2E5", "#C5E7F1",
-                  "#79CEED", "#6F89A2"]
-        return random.choice(colors)
-
     def shijieShout(self, contentAI=""):
         if 功能开关['世界喊话'] == "" and 功能开关['世界喊话2'] == "" and 功能开关['世界喊话3'] == "" and 功能开关[
             '世界喊话4'] == "" and contentAI == "":
@@ -338,43 +330,54 @@ class DailyTask:
         # AI回复世界频道发言
         if 功能开关['世界AI发言'] == 1 and contentAI == "":
             # 检查公屏发言关键词
-            re, teamText1 = TomatoOcrText(63, 1048, 248, 1079, "队友发言")
-            re, teamText2 = TomatoOcrText(61, 988, 314, 1019, "队友发言")
-            re, teamText3 = TomatoOcrText(61, 926, 301, 964, "队友发言")
-            re, teamText4 = TomatoOcrText(63, 868, 297, 901, "队友发言")
-            re, teamText5 = TomatoOcrText(64, 1049, 246, 1081, "队友发言")
-            re, teamText6 = TomatoOcrText(63, 962, 277, 994, "队友发言")
-            re, teamText7 = TomatoOcrText(64, 904, 268, 932, "队友发言")
-            team_texts = [teamText1, teamText2, teamText3, teamText4, teamText5, teamText6, teamText7]
-            team_texts = list(filter(lambda text: text not in ["晚安~", "早安~", "午安~"], team_texts))
-            colors = self.generate_random_color()
-            zanList3 = ['早安', '早上好']
-            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
-            if contains_zan:
-                return self.shijieShout(f"<color={colors}>早安~</COLOR>")
-            zanList3 = ['晚安', '晚上好']
-            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
-            if contains_zan:
-                return self.shijieShout(f"<color={colors}>晚安~</COLOR>")
-            zanList3 = ['午安', '中午好']
-            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
-            if contains_zan:
-                return self.shijieShout(f"<color={colors}>午安~</COLOR>")
-            zanList3 = ['来一个', '来人', '求个', '来个', '来打工', '来黑工', '来奶', '来t', '来输出', '来打工']
-            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
-            if contains_zan:
-                content = [f"<color={colors}>来了来了~</COLOR>", f"<color={colors}>来啦来啦~</COLOR>"]
-                return self.shijieShout(random.choice(content))
-            zanList3 = ['有没有', '有人', '有打工', '有佬', '有帮忙', '可以帮忙', '还有', '有吗', '求佬']
-            contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
-            if contains_zan:
-                content = [f"<color={colors}>打工打工~</COLOR>", f"<color={colors}>来啦来啦~</COLOR>"]
-                return self.shijieShout(random.choice(content))
-            zanList = ['影子', '求带', '大佬', '带个', '带带', '差个', '大哥', '帮忙', '求求']
-            contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
-            if contains_zan:
-                content = [f"<color={colors}>拉我拉我~</COLOR>", f"<color={colors}>打工打工~</COLOR>"]
-                return self.shijieShout(random.choice(content))
+            player_messages = shijieShoutText()
+            for player, messages in player_messages.items():
+                team_texts = [msg.replace('~早安~', '').replace('~晚安~', '').replace('~午安~', '') for msg in messages
+                              if "回环" not in msg]
+                if player == '默认':
+                    player = ''
+                colors = generate_random_color()
+                zanList3 = ['早安', '早上好']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan:
+                    return self.shijieShout(f"<color={colors}>{player}~早安~</COLOR>")
+                zanList3 = ['晚安', '晚上好']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan:
+                    return self.shijieShout(f"<color={colors}>{player}~晚安~</COLOR>")
+                zanList3 = ['午安', '中午好']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan:
+                    return self.shijieShout(f"<color={colors}>{player}~午安~</COLOR>")
+                zanList3 = ['在哪里', '来一个', '来人', '求个', '来个', '来打工', '来黑工', '来奶', '来t', '来输出',
+                            '来打工']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~来了来了~</COLOR>", f"<color={colors}>{player}~来了~</COLOR>",
+                               f"<color={colors}>{player}~来啦来啦~</COLOR>", f"<color={colors}>{player}~来啦~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                zanList3 = ['有没有', '有人', '有打工', '帮帮', '有佬', '有帮忙', '可以帮忙', '还有', '有吗', '求佬']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~打工打工~</COLOR>", f"<color={colors}>{player}~打工~</COLOR>",
+                               f"<color={colors}>{player}~来啦来啦~</COLOR>", f"<color={colors}>{player}~来啦~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                zanList = ['影子', '求带', '有大佬', '带个', '带带', '差个', '有大哥', '帮忙', '求求']
+                contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~拉我拉我~</COLOR>", f"<color={colors}>{player}~拉我~</COLOR>",
+                               f"<color={colors}>{player}~打工打工~</COLOR>", f"<color={colors}>{player}~打工~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                # zanList = ['*']
+                # contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
+                # if contains_zan:
+                #     content = [f"<color={colors}>{player}~请文明发言喔~</COLOR>"]
+                #     return self.shijieShout(random.choice(content))
+                zanList = ['触发', '关键词', '机器人', 'AI']
+                contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~(*^▽^*)~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
 
         need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
         if need_dur_minute == '':
@@ -386,7 +389,7 @@ class DailyTask:
                 return
         if contentAI != "" and 任务记录["世界喊话-倒计时"] > 0:
             diffTime = time.time() - 任务记录["世界喊话-倒计时"]
-            if diffTime < 60:
+            if diffTime < random.randint(50, 60):
                 Toast(f'日常 - 世界喊话 - 倒计时{round((60 - diffTime) / 60, 2)}min')
                 return
 
@@ -912,79 +915,89 @@ class DailyTask:
 
     # 派对大师
     def PaiDuiDaShi(self):
-        if 功能开关["派对大师"] == 0:
-            return
-
-        if 任务记录["派对大师-完成"] == 1:
-            return
-
-        Toast('日常 - 派对大师 - 开始')
-
-        self.homePage()
-        self.quitTeam()
-        # 开始派对大师
-        res1 = TomatoOcrTap(556, 380, 618, 404, "派对大师", 30, -10)
-        res2 = TomatoOcrTap(556, 380, 618, 404, "舞会在即", 30, -10)
-        if not res1 and not res2:
-            res1 = TomatoOcrTap(554, 464, 622, 487, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-            res2 = TomatoOcrTap(554, 464, 622, 487, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
-            if not res1 and not res2:
-                res1 = TomatoOcrTap(548, 548, 626, 568, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-                res2 = TomatoOcrTap(548, 548, 626, 568, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
-                if not res1 and not res2:
-                    res1 = TomatoOcrTap(546, 628, 630, 653, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-                    res2 = TomatoOcrTap(546, 628, 630, 653, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
-                    if not res1 and not res2:
-                        res1 = TomatoOcrTap(550, 713, 569, 734, "派", 30, -20)  # 适配新手试炼 - 下方入口
-                        res2 = TomatoOcrTap(550, 713, 569, 734, "舞", 30, -20)  # 适配新手试炼 - 下方入口
-                        if not res1 and not res2:
-                            Toast('日常 - 派对大师 - 未找到入口')
-                            return
-        sleep(1)
-
-        # 领取累积奖励
-        for k in range(3):
-            re = FindColors.find("576,909,#F15D40|580,907,#F45F42|577,912,#ED5B3E", rect=[213, 887, 604, 980], diff=0.95)
-            if re:
-                tapSleep(re.x, re.y + 10)
-                tapSleep(216, 872)  # 点击空白
-        # 识别是否已完成
-        if 功能开关['派对大师重复挑战'] == 0:
-            re = CompareColors.compare("517,939,#F1A949|524,939,#F1A949")  # 第五格宝箱
-            if re:
-                Toast('日常 - 派对大师 - 已完成')
-                tapSleep(549, 920)
-                tapSleep(519, 1136)
-                任务记录["派对大师-完成"] = 1
+        for p in range(5):
+            if 功能开关["派对大师"] == 0:
                 return
 
-        re = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
-        if not re:
-            Toast('派对大师 - 进入失败')
-            return
+            if 任务记录["派对大师-完成"] == 1:
+                return
 
-        Toast('派对大师 - 开始匹配')
+            Toast('日常 - 派对大师 - 开始')
 
-        attempts = 0  # 初始化尝试次数
-        maxAttempts = 4  # 设置最大尝试次数
-        resStart = False
-        failCount = 0
-        while attempts < maxAttempts:
-            resStart = TomatoOcrTap(453, 602, 503, 634, '准备', 50, 10)
-            startStatus = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
-            waitStatus, _ = TomatoOcrText(320, 1039, 399, 1066, "匹配中")
-            if resStart:
-                Toast("匹配成功 - 已准备")
-                for j in range(10):
-                    resStart = TomatoOcrTap(453, 602, 503, 634, '准备', 50, 10)
-                    startStatus = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
-                    res1, text1 = TomatoOcrText(93, 303, 176, 336, "本轮目标")
-                    if res1:
-                        Toast("匹配成功 - 开始游戏")
-                        self.PaiDuiDaShiFighting()
-                        break
-                    sleep(2)  # 等待进入
-                break
+            self.homePage()
+            self.quitTeam()
+            # 开始派对大师
+            res1 = TomatoOcrTap(556, 380, 618, 404, "派对大师", 30, -10)
+            res2 = TomatoOcrTap(556, 380, 618, 404, "舞会在即", 30, -10)
+            if not res1 and not res2:
+                res1 = TomatoOcrTap(554, 464, 622, 487, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
+                res2 = TomatoOcrTap(554, 464, 622, 487, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
+                if not res1 and not res2:
+                    res1 = TomatoOcrTap(548, 548, 626, 568, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
+                    res2 = TomatoOcrTap(548, 548, 626, 568, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
+                    if not res1 and not res2:
+                        res1 = TomatoOcrTap(546, 628, 630, 653, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
+                        res2 = TomatoOcrTap(546, 628, 630, 653, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
+                        if not res1 and not res2:
+                            res1 = TomatoOcrTap(550, 713, 569, 734, "派", 30, -20)  # 适配新手试炼 - 下方入口
+                            res2 = TomatoOcrTap(550, 713, 569, 734, "舞", 30, -20)  # 适配新手试炼 - 下方入口
+                            if not res1 and not res2:
+                                Toast('日常 - 派对大师 - 未找到入口')
+                                return
+            sleep(1)
+
+            # 领取累积奖励
+            for k in range(3):
+                re = FindColors.find("576,909,#F15D40|580,907,#F45F42|577,912,#ED5B3E", rect=[213, 887, 604, 980],
+                                     diff=0.95)
+                if re:
+                    tapSleep(re.x, re.y + 10)
+                    tapSleep(216, 872)  # 点击空白
+
+                re = FindColors.find("454,283,#F45F42|449,286,#F05B3F|454,286,#F05C40", rect=[95, 246, 635, 400],
+                                     diff=0.95)
+                if re:
+                    tapSleep(re.x, re.y + 10)
+                    tapSleep(216, 872)  # 点击空白
+
+            # 识别是否已完成
+            if 功能开关['派对大师重复挑战'] == 0:
+                re = CompareColors.compare("517,939,#F1A949|524,939,#F1A949")  # 第五格宝箱
+                if re:
+                    Toast('日常 - 派对大师 - 已完成')
+                    tapSleep(549, 920)
+                    tapSleep(519, 1136)
+                    任务记录["派对大师-完成"] = 1
+                    return
+
+            re = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
+            if not re:
+                Toast('派对大师 - 进入失败')
+                return
+
+            Toast('派对大师 - 开始匹配')
+
+            attempts = 0  # 初始化尝试次数
+            maxAttempts = 10  # 设置最大尝试次数
+            resStart = False
+            failCount = 0
+            while attempts < maxAttempts:
+                resStart = TomatoOcrTap(453, 602, 503, 634, '准备', 50, 10)
+                startStatus = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
+                waitStatus, _ = TomatoOcrText(320, 1039, 399, 1066, "匹配中")
+                if resStart:
+                    Toast("匹配成功 - 已准备")
+                    for j in range(10):
+                        resStart = TomatoOcrTap(453, 602, 503, 634, '准备', 50, 10)
+                        startStatus = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
+                        res1, text1 = TomatoOcrText(93, 303, 176, 336, "本轮目标")
+                        if res1:
+                            Toast("匹配成功 - 开始游戏")
+                            self.PaiDuiDaShiFighting()
+                            break
+                        sleep(2)  # 等待进入
+                    break
+                sleep(2)  # 等待进入
 
     def PaiDuiDaShiFighting(self):
         # 开始战斗
@@ -1250,7 +1263,7 @@ class DailyTask:
                 if find:
                     # 开始选择
                     Toast('开始选牌')
-                    sleep(1)
+                    # sleep(1)
                     for i in range(10):
                         if points:
                             for k in range(2):
@@ -1361,10 +1374,14 @@ class DailyTask:
                             break
 
                         # 兜底选取任意卡牌
-                        tapSleep(510, 395, 0.3)
-                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
-                        tapSleep(205, 940, 0.3)
-                        TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                        reAll, tmpPoints = imageFindAll('派对大师-卡背', 0.9, 101, 222, 650, 1122)
+                        if reAll:
+                            Toast('选择未翻开卡牌')
+                            for tmpPoint in tmpPoints:
+                                tapSleep(tmpPoint["center_x"], tmpPoint["center_y"], 0.3)
+                                re = TomatoOcrTap(549, 1168, 608, 1199, '选择', sleep1=0.3)
+                                if not re:
+                                    break
         功能开关['fighting'] = 0
 
     # 其他签到活动（简单活动合集）
@@ -1400,12 +1417,15 @@ class DailyTask:
                 res = CompareColors.compare("620,110,#F66042|620,115,#F05E41|620,118,#EF5435")  # 匹配红点
                 if res:
                     tapSleep(593, 127, 3)  # 点击排行榜
-                    tapSleep(570, 1062)  # 点击奖励
-                    tapSleep(558, 1063)  # 点击奖励
-                    tapSleep(356, 1065)  # 点击奖励
-                    tapSleep(352, 1062)  # 点击奖励
-                    tapSleep(191, 1063)  # 点击奖励
-                    tapSleep(181, 1059)  # 点击奖励
+                    tapSleep(574, 1051, 0.1)  # 点击奖励
+                    tapSleep(570, 1062, 0.1)  # 点击奖励
+                    tapSleep(558, 1063, 0.1)  # 点击奖励
+                    tapSleep(356, 1038, 0.1)  # 点击奖励
+                    tapSleep(356, 1065, 0.1)  # 点击奖励
+                    tapSleep(352, 1062, 0.1)  # 点击奖励
+                    tapSleep(195, 1038, 0.1)  # 点击奖励
+                    tapSleep(191, 1063, 0.1)  # 点击奖励
+                    tapSleep(181, 1059, 0.1)  # 点击奖励
                     tapSleep(92, 1218)  # 返回
                     tapSleep(92, 1218)
 

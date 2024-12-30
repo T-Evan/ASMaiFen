@@ -4,7 +4,6 @@ import sys
 import traceback
 from .特征库 import *
 from ascript.android.ui import Dialog
-from .res.ui.ui import 功能开关,db
 from .res.ui.ui import 任务记录
 from .child_return_home import *
 from .baseUtils import *
@@ -14,6 +13,7 @@ from .thread import *
 from ascript.android.screen import FindColors
 import pymysql
 import random
+import re
 
 
 class ShiLianTask:
@@ -283,6 +283,13 @@ class ShiLianTask:
                 return self.fighting()
 
         # 开始匹配
+        re = FindColors.find("156,602,#BE4A52|159,602,#BE4A52|167,607,#E09EA1|176,595,#A13F47|200,599,#B2464D",
+                             rect=[75, 118, 644, 1174], diff=0.93)
+        if re:
+            Toast("梦魇任务 - 无尽模式跳过挑战")
+            sleep(1)
+            return
+
         re1 = TomatoOcrFindRangeClick('开始匹配', whiteList='开始匹配')
         if re1:
             res, _ = TomatoOcrText(321, 491, 397, 514, "选择职业")
@@ -908,13 +915,13 @@ class ShiLianTask:
         res2 = False
         res3 = False
         bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
-        res1, _ = TomatoOcrText(517,654,590,678, "战斗统计")  # 战斗结束页。宝箱提示
+        res1, _ = TomatoOcrText(517, 654, 590, 678, "战斗统计")  # 战斗结束页。宝箱提示
         if not res1:
             res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
-                                  bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
-                                                           {'keyword': '开启', 'match_mode': 'fuzzy'},
-                                                           {'keyword': '体力不足',
-                                                            'match_mode': 'fuzzy'}])  # 战斗结束页。宝箱提示
+                                      bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
+                                                               {'keyword': '开启', 'match_mode': 'fuzzy'},
+                                                               {'keyword': '体力不足',
+                                                                'match_mode': 'fuzzy'}])  # 战斗结束页。宝箱提示
         # if not res1:
         # res2, _ = TomatoOcrText(267, 755, 313, 783, "开启")  # 战斗结束页。宝箱提示
         # res2 = TomatoOcrFindRange("开启", x1=108, y1=462, x2=618, y2=1120, match_mode='fuzzy',
@@ -1282,7 +1289,9 @@ class ShiLianTask:
                 功能开关["fighting"] = 0
                 break
             if elapsed >= 25:
-                self.teamShoutAI(f'绝境-战斗即将结束-期待下次相遇', shoutType="fight")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>绝境-战斗即将结束-期待下次相遇~</COLOR>"
+                self.teamShoutAI(tmpContent, shoutType="fight")
 
             # 识别战斗中状态
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
@@ -1354,7 +1363,9 @@ class ShiLianTask:
             elapsed = current_time - start_time
             if elapsed >= totalWait:
                 Toast("战斗结束 - 终末战超时退出组队")
-                self.teamShoutAI(f'终末战-即将离队-期待下次相遇', shoutType="fight")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>终末战-即将离队-期待下次相遇~</COLOR>"
+                self.teamShoutAI(tmpContent, shoutType="fight")
                 功能开关["fighting"] = 1
                 sleep(2)
                 self.quitTeamFighting()  # 退出队伍
@@ -1362,7 +1373,9 @@ class ShiLianTask:
                 break
 
             if elapsed >= 25:
-                self.teamShoutAI(f'终末战-战斗即将结束-期待下次相遇', shoutType="fight")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>终末战-战斗即将结束-期待下次相遇~</COLOR>"
+                self.teamShoutAI(tmpContent, shoutType="fight")
 
             # 识别战斗中状态
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
@@ -1437,15 +1450,32 @@ class ShiLianTask:
             elapsed = current_time - start_time
             if elapsed >= totalWait:
                 Toast("战斗结束 - 恶龙超时退出组队")
-                self.teamShoutAI(f'恶龙-即将离队-期待下次相遇', shoutType="fight")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>恶龙-即将离队-期待下次相遇~</COLOR>"
+                self.teamShoutAI(tmpContent, shoutType="fight")
                 功能开关["fighting"] = 1
-                sleep(2)
+                res, _ = TomatoOcrText(495, 585, 576, 609, "战斗统计")
+                if res:
+                    res = TomatoOcrTap(334, 1049, 385, 1079, "开启")
+                    if res:
+                        tapSleep(363, 1191, 0.3)
+                        tapSleep(363, 1191, 0.3)
+                        tapSleep(363, 1191, 0.3)
+                        tapSleep(363, 1191, 0.3)
+                    else:
+                        tapSleep(363, 1191)
+                        tapSleep(363, 1191)
+                        tapSleep(363, 1191, 2)
+                    Toast("恶龙任务 - 战斗胜利 - 结算页返回房间")
+                    功能开关["fighting"] = 0
                 self.quitTeamFighting()  # 退出队伍
                 功能开关["fighting"] = 0
                 break
 
             if elapsed >= 15:
-                self.teamShoutAI(f'恶龙-战斗即将结束-期待下次相遇', shoutType="fight")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>恶龙-战斗即将结束-期待下次相遇~</COLOR>"
+                self.teamShoutAI(tmpContent, shoutType="fight")
 
             # 识别战斗中状态
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
@@ -1474,9 +1504,9 @@ class ShiLianTask:
             else:
                 # 战斗结束
                 # 兼容恶龙战斗结算页
-                res, _ = TomatoOcrText(495,585,576,609, "战斗统计")
+                res, _ = TomatoOcrText(495, 585, 576, 609, "战斗统计")
                 if res:
-                    res = TomatoOcrTap(334,1049,385,1079, "开启")
+                    res = TomatoOcrTap(334, 1049, 385, 1079, "开启")
                     if res:
                         tapSleep(363, 1191, 0.3)
                         tapSleep(363, 1191, 0.3)
@@ -1500,11 +1530,11 @@ class ShiLianTask:
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             if elapsed > 180 or (
                     "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
-                Toast(f"恶龙战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                Toast(f"恶龙战斗中状态 - 识别失败 - 次数 {failNum}/6")
                 failNum = failNum + 1
-                if failNum > 4:
+                if failNum > 6:
                     Toast(f"恶龙战斗中状态 - 识别失败 - 退出战斗")
-                if failNum > 10:
+                if failNum > 8:
                     self.fight_fail()
                     功能开关["fighting"] = 0
                     break
@@ -1533,7 +1563,9 @@ class ShiLianTask:
             elapsed = current_time - start_time
             if elapsed >= totalWait:
                 Toast("战斗结束 - 超时退出组队")
-                self.teamShoutAI(f'梦魇-即将离队-期待下次相遇', shoutType="fight")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>梦魇-即将离队-期待下次相遇~</COLOR>"
+                self.teamShoutAI(tmpContent, shoutType="fight")
                 功能开关["fighting"] = 1
                 sleep(2)
                 self.quitTeamFighting()  # 退出队伍
@@ -1633,7 +1665,9 @@ class ShiLianTask:
                         shoutType="fight")
                     teamShoutDone = self.teamShout()
                 if elapsed > 25 and fightType == '秘境带队':
-                    self.teamShoutAI("秘境-战斗即将结束-期待下次相遇", shoutType="fight")
+                    colors = generate_random_color()
+                    tmpContent = f"<color={colors}>秘境-战斗即将结束-期待下次相遇~</COLOR>"
+                    self.teamShoutAI(tmpContent, shoutType="fight")
                 self.AIContent()
                 # 自动锁敌走位
                 # self.autoMove()
@@ -2160,11 +2194,16 @@ class ShiLianTask:
         if 功能开关["队伍AI发言"] == 0:
             return
 
-        if content in 任务记录['AI发言-上一次发言']:
+        # 使用正则表达式匹配
+        matched_text = content
+        match = re.search(r'<color=#[0-9a-fA-F]+>(.*?)</COLOR>', content)
+        if match:
+            matched_text = match.group(1)
+        if matched_text in 任务记录['AI发言-上一次发言']:
             return
         res = self.teamShout(content, shoutType)
         if res:
-            任务记录['AI发言-上一次发言'].append(content)
+            任务记录['AI发言-上一次发言'].append(matched_text)
         print(任务记录['AI发言-上一次发言'])
         sleep(0.5)
 
@@ -2256,6 +2295,10 @@ class ShiLianTask:
                 # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
                 sleep(0.3)
                 # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
+                # if content != "":
+                #     AI 喊话发送彩色字符
+                # colors = generate_random_color()
+                # tmpContent = f"<color={colors}>{tmpContent}</COLOR>"
                 action.input(tmpContent)
                 tapSleep(360, 104, 0.3)  # 点击空白处确认输入
                 for i in range(1, 3):
@@ -2497,7 +2540,8 @@ class ShiLianTask:
                 tapSleep(30, 134, 0.8)  # 点击队友1
                 re, _ = TomatoOcrText(293, 988, 336, 1011, '回关')
                 if not re:
-                    content += "您还没有关注我喔,麻烦给个关注吧~"
+                    colors = generate_random_color()
+                    content += f"<color={colors}>您还没有关注我喔,麻烦给个关注吧~</COLOR>"
 
                 re, teamName = TomatoOcrText(125, 822, 313, 856, '队友名称')
                 tapSleep(448, 1076, 0.3)  # 点击属性页
@@ -2513,7 +2557,7 @@ class ShiLianTask:
                 print(teamFightNum)
                 print(任务记录['战斗-房主战力'])
                 tapSleep(96, 1235)  # 返回
-                tapSleep(96, 1235,0.1)  # 返回
+                tapSleep(96, 1235, 0.1)  # 返回
                 任务记录['战斗-房主战力'] = safe_int_v2(任务记录['战斗-房主战力'])
                 if 任务记录['战斗-房主战力'] != 0 and teamFightNum != 0:
                     teamFightNumDiff = round(abs(teamFightNum - 任务记录['战斗-房主战力']) / 10000, 2)
@@ -2535,7 +2579,9 @@ class ShiLianTask:
             contains_zan3 = any(zan in teamText3 for zan in zanList)
             if contains_zan1 or contains_zan2 or contains_zan3:
                 # 回复夸赞
-                self.teamShoutAI("自动回复~蟹蟹")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>自动回复~蟹蟹</COLOR>"
+                self.teamShoutAI(tmpContent)
 
             otherList = ['再', '把', '带']
             contains_zan1 = any(zan in teamText1 for zan in otherList)
@@ -2543,7 +2589,9 @@ class ShiLianTask:
             contains_zan3 = any(zan in teamText3 for zan in otherList)
             if contains_zan1 or contains_zan2 or contains_zan3:
                 # 回复夸赞
-                self.teamShoutAI("自动回复~当然可以 我会一直等你~")
+                colors = generate_random_color()
+                tmpContent = f"<color={colors}>自动回复~当然可以 我会一直等你~</COLOR>"
+                self.teamShoutAI(tmpContent)
 
             if 任务记录["AI发言-广告开关"] == 1:
                 wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么', '托管', '人机',
@@ -2553,7 +2601,9 @@ class ShiLianTask:
                 contains_zan3 = any(zan in teamText3 for zan in wenList)
                 if contains_zan1 or contains_zan2 or contains_zan3:
                     # 回复夸赞
-                    self.teamShoutAI("自动回复~欢迎加鹅了解喔~372~270~534")
+                    colors = generate_random_color()
+                    tmpContent = f"<color={colors}>自动回复~欢迎加鹅了解喔~372~270~534</COLOR>"
+                    self.teamShoutAI(tmpContent)
                     # self.teamShoutAI("全自动日常、一键刷赞、AI带队、智能走位施法、摸鱼种菜，欢迎来鹅了解~372~270~534")
 
             blackList = ['*']
@@ -2622,12 +2672,16 @@ class ShiLianTask:
             hour = now.hour
             # 根据时间段选择吉祥话
             # import requests
+            colors = generate_random_color()
             if 5 <= hour < 12:
-                self.teamShoutAI("早安，愿你今天也元气满满！")
+                tmpContent = f"<color={colors}>早安，愿你今天也元气满满！</COLOR>"
+                self.teamShoutAI(tmpContent)
             elif 12 <= hour < 18:
-                self.teamShoutAI("午安，愿你此间战无不胜！")
+                tmpContent = f"<color={colors}>午安，愿你此间战无不胜！</COLOR>"
+                self.teamShoutAI(tmpContent)
             elif 18 <= hour < 22:
-                self.teamShoutAI("晚好，愿你度过愉快的夜晚！")
+                tmpContent = f"<color={colors}>晚好，愿你度过愉快的夜晚！</COLOR>"
+                self.teamShoutAI(tmpContent)
             else:
                 # r = requests.get("https://api.kuleu.com/api/getGreetingMessage?type=json")
                 # # 打印状态Code
@@ -2640,7 +2694,8 @@ class ShiLianTask:
                 #     greet = obj['data']['greeting']
                 #     tip = obj['data']['tip']
                 #     self.teamShoutAI(f"{greet}~{tip}")
-                self.teamShoutAI("夜深了，愿你今晚好梦！")
+                tmpContent = f"<color={colors}>夜深了，愿你今晚好梦！</COLOR>"
+                self.teamShoutAI(tmpContent)
         except Exception as e:
             # 处理异常
             # 获取异常信息
@@ -2659,8 +2714,10 @@ class ShiLianTask:
         res4, _ = TomatoOcrText(459, 853, 546, 881, "发起重开")
         if res1 or res2 or res3 or res4:
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
-            self.teamShoutAI(f'战斗失败QAQ~期待下次相遇~', shoutType="fight")
-            self.teamShoutAI(f'提示~可以提醒我进行移动哟~', shoutType="fight")
+            colors = generate_random_color()
+            tmpContent = f"<color={colors}>战斗失败QAQ~期待下次相遇~</COLOR>"
+            self.teamShoutAI(tmpContent, shoutType="fight")
+            # self.teamShoutAI(f'可以提醒我进行移动哟~', shoutType="fight")
             sleep(0.5)
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
             tapSleep(30, 134, 0.8)  # 点击队友1
@@ -2758,10 +2815,19 @@ class ShiLianTask:
 
         # 执行完之后要记得关闭游标和数据库连接
         cursor.close()
-        # # 执行完毕后记得关闭db,不然会并发连接失败哦
-        # db.close()
+        # 执行完毕后记得关闭db,不然会并发连接失败哦
+        db.close()
 
     def daiDuiCount(self):
+        db = pymysql.connect(
+            host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+            port=3307,  # 开发者后台,创建的数据库 “端口”
+            user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+            password='233233',  # 开发者后台,创建的数据库 “初始密码”
+            database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+            charset='utf8mb4'  ""
+        )  # 连接数据库
+
         count = 0
         last_time = 0
         team_fight_num = 0
@@ -2779,8 +2845,8 @@ class ShiLianTask:
 
         # 执行完之后要记得关闭游标和数据库连接
         cursor.close()
-        # # 执行完毕后记得关闭db,不然会并发连接失败哦
-        # db.close()
+        # 执行完毕后记得关闭db,不然会并发连接失败哦
+        db.close()
 
         p = threading.Thread(target=self.daiDuiUpdate, args=(count, 任务记录["战斗-房主名称"], now_time))
         p.start()
@@ -2796,6 +2862,14 @@ class ShiLianTask:
         return count, last_time
 
     def daiDuiUpdate(self, count, teamName, now_time):
+        db = pymysql.connect(
+            host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+            port=3307,  # 开发者后台,创建的数据库 “端口”
+            user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+            password='233233',  # 开发者后台,创建的数据库 “初始密码”
+            database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+            charset='utf8mb4'  ""
+        )  # 连接数据库
         cursor = db.cursor()
 
         # 插入
@@ -2816,5 +2890,5 @@ class ShiLianTask:
 
         # 执行完之后要记得关闭游标和数据库连接
         cursor.close()
-        # # 执行完毕后记得关闭db,不然会并发连接失败哦
-        # db.close()
+        # 执行完毕后记得关闭db,不然会并发连接失败哦
+        db.close()

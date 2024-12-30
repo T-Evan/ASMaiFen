@@ -105,6 +105,43 @@ class AutoMove:
                         sleep(0.5)
                         continue
 
+                # 雷电焦土深处 - 万钧雷鹫
+                if '万钧雷' in 任务记录['战斗-恶龙名称']:
+                    Toast(f'雷电焦土深处-战斗中')
+                    for k in range(30):
+                        re1 = CompareColors.compare("243,962,#EA5F29|251,959,#EA5F29")  # 最左侧地块
+                        if re1:
+                            tapSleep(145, 675)  # 移动-右侧地块
+
+                        re3 = CompareColors.compare("192,781,#FE6A2C|198,784,#FE692D")  # 最右侧地块红色
+                        if re3:
+                            tapSleep(58, 677)  # 移动-左侧地块
+
+                        # 定位玩家位置
+                        x, y = 298, 746
+                        point = FindColors.find("336,738,#BFFF26|336,740,#BFFF26|341,737,#BFFF26|341,738,#BFFF26",
+                                                diff=0.95)
+                        if point:
+                            x, y = point.x, point.y
+                        # 玩家所在地板红色
+                        re = FindColors.find(
+                            "211,896,#E8A780|219,890,#E8BEA5",
+                            rect=[x - 100, y - 10, x + 120, y + 200], diff=0.98)
+                        if re:
+                            tapSleep(145, 675)  # 移动-右侧地块
+                            Toast('前往下一地块')
+                            for p in range(3):
+                                # 玩家所在地板红色
+                                re = FindColors.find(
+                                    "211,896,#E8A780|219,890,#E8BEA5",
+                                    rect=[x - 100, y - 10, x + 120, y + 200], diff=0.98)
+                                if re:
+                                    tapSleep(58, 677, 1)  # 移动-左侧地块
+                        sleep(0.5)
+                        continue
+                    sleep(0.5)
+                    continue
+
                 if 任务记录['战斗-恶龙名称'] == '真炎界印龙' or 任务记录['战斗-恶龙名称'] == '熔火乡界印':
                     name = 任务记录['战斗-恶龙名称']
                     Toast(f'{name}-战斗中')
@@ -253,52 +290,65 @@ class AutoMove:
                     入梦能量空 = CompareColors.compare("416,946,#0C0C0C|420,946,#121212|423,946,#151515")
                     isInYun = FindColors.find("653,716,#1D220C|653,694,#1E240D|645,678,#0D1607|686,692,#22290E",
                                               rect=[285, 639, 697, 1149], diff=0.95)
-                    if 入梦能量空:
-                        # 未入梦，跟随梦境绮云
-                        if not isInYun:
-                            Toast('未入梦，跟随梦境绮云-移动')
-                            yunPoint = FindColors.find(
-                                "653,716,#1D220C|653,694,#1E240D|645,678,#0D1607|686,692,#22290E", diff=0.95)
-                            if yunPoint and yunPoint.x > 360:
-                                # 右半屏
-                                tapSleep(144, 677)  # 向右移动
-                            else:
-                                tapSleep(69, 674)  # 向左移动
-                        else:
-                            Toast('未入梦，跟随梦境绮云-停留')
-                    if not 入梦能量空:
-                        # 已入梦，跟随梦境绮云
-                        if isInYun:
-                            Toast('已入梦，躲避梦境绮云-移动')
-                            tapSleep(69, 674)  # 向左移动
-                        else:
-                            Toast('已入梦，躲避梦境绮云-停留')
-                            sleep(1.5)
+                    # if 入梦能量空:
+                    #     # 未入梦，跟随梦境绮云
+                    #     if not isInYun:
+                    #         Toast('未入梦，跟随梦境绮云-移动')
+                    #         yunPoint = FindColors.find(
+                    #             "653,716,#1D220C|653,694,#1E240D|645,678,#0D1607|686,692,#22290E", diff=0.95)
+                    #         if yunPoint and yunPoint.x > 360:
+                    #             # 右半屏
+                    #             tapSleep(144, 677)  # 向右移动
+                    #         else:
+                    #             tapSleep(69, 674)  # 向左移动
+                    #     else:
+                    #         Toast('未入梦，跟随梦境绮云-停留')
+                    # if not 入梦能量空:
+                    #     # 已入梦，跟随梦境绮云
+                    #     if isInYun:
+                    #         Toast('已入梦，躲避梦境绮云-移动')
+                    #         tapSleep(69, 674)  # 向左移动
+                    #     else:
+                    #         Toast('已入梦，躲避梦境绮云-停留')
+                    #         sleep(1.5)
+                    # 已入梦，跟随梦境绮云
+                    if isInYun:
+                        Toast('躲避梦境绮云-移动')
+                        tapSleep(69, 674)  # 向左移动
+                    else:
+                        Toast('躲避梦境绮云-停留')
+                        sleep(1.5)
 
-                    凡世侵袭 = CompareColors.compare(
-                        "319,605,#F6F6F6|336,608,#FBFBFB|346,609,#FCFCFC|371,608,#FFFFFF|387,611,#F8F8F8")
-                    if 凡世侵袭:
-                        if not 入梦能量空:
-                            Toast('凡世侵袭，开始入梦')
-                            tapSleep(423, 972)
-                        else:
-                            Toast('凡世侵袭，等待入梦')
-
-                    梦境袭扰 = CompareColors.compare(
-                        "313,605,#FEFEFE|323,615,#FFFFFF|341,616,#F8F8F8|367,619,#F8F8F8|392,621,#F1F1F1")
-                    if 梦境袭扰:
-                        已入梦 = CompareColors.compare(
-                            "418,951,#FFFFE8|421,951,#FFFFEC|410,954,#FFFFD4|427,959,#FFFFEA")
-                        if 已入梦:
-                            Toast('梦境袭扰，取消入梦')
-                            tapSleep(423, 972)
-                        else:
-                            Toast('梦境袭扰，未入梦')
+                    # 凡世侵袭 = CompareColors.compare(
+                    #     "319,605,#F6F6F6|336,608,#FBFBFB|346,609,#FCFCFC|371,608,#FFFFFF|387,611,#F8F8F8")
+                    # if 凡世侵袭:
+                    #     if not 入梦能量空:
+                    #         Toast('凡世侵袭，开始入梦')
+                    #         tapSleep(423, 972)
+                    #     else:
+                    #         Toast('凡世侵袭，等待入梦')
+                    #
+                    # 梦境袭扰 = CompareColors.compare(
+                    #     "313,605,#FEFEFE|323,615,#FFFFFF|341,616,#F8F8F8|367,619,#F8F8F8|392,621,#F1F1F1")
+                    # if 梦境袭扰:
+                    #     已入梦 = CompareColors.compare(
+                    #         "418,951,#FFFFE8|421,951,#FFFFEC|410,954,#FFFFD4|427,959,#FFFFEA")
+                    #     if 已入梦:
+                    #         Toast('梦境袭扰，取消入梦')
+                    #         tapSleep(423, 972)
+                    #     else:
+                    #         Toast('梦境袭扰，未入梦')
                     sleep(0.5)
                     continue
 
                 if time.time() - 任务记录['战斗-上一次移动'] > 7:
                     re = imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+                    if re:
+                        Toast('自动走位')
+                    任务记录['战斗-上一次移动'] = time.time()
+
+                if time.time() - 任务记录['战斗-上一次移动'] > 15:
+                    re = imageFindClick('战斗-向右移动', x1=11, y1=565, x2=206, y2=778)
                     if re:
                         Toast('自动走位')
                     任务记录['战斗-上一次移动'] = time.time()

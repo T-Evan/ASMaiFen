@@ -1071,7 +1071,17 @@
                             <div class="checkbox-item">
                                 <input id="仅接收旅团成员邀请" name="vehicle" type="checkbox"
                                        value="Bike">仅接收旅团成员邀请<label
-                                    class="gray-text">(恶龙/梦魇等邀请也生效)</label><br>
+                                    class="gray-text">(恶龙/梦魇邀请也生效)</label><br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="仅接收关注粉丝邀请" name="vehicle" type="checkbox"
+                                       value="Bike">仅接收关注粉丝邀请<label
+                                    class="gray-text">(恶龙/梦魇邀请也生效)</label><br>
+                            </div>
+                            <div class="checkbox-item">
+                                <input id="仅接收互关好友邀请" name="vehicle" type="checkbox"
+                                       value="Bike">仅接收互关好友邀请<label
+                                    class="gray-text">(恶龙/梦魇邀请也生效)</label><br>
                             </div>
                         </div>
                         <div class="flex-container">
@@ -1526,14 +1536,14 @@
                                     <input id="舞会签到簿" name="vehicle" type="checkbox" value="Bike">舞会签到簿<br>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input id="派对大师" name="vehicle" type="checkbox" value="Bike">派对大师<br>
+                                    <input id="派对大师" name="vehicle" type="checkbox" value="Bike">舞会在即<br>
                                 </div>
                             </div>
                         </div>
                         <div class="flex-container">
                             <label for="高级配置">高级配置:</label>
                             <div class="checkbox-item">
-                                <input id="派对大师重复挑战" name="vehicle" type="checkbox" value="Bike">派对大师重复挑战<br>
+                                <input id="派对大师重复挑战" name="vehicle" type="checkbox" value="Bike">舞会在即重复挑战<br>
                             </div>
                         </div>
                         <div class="checkbox-item">
@@ -2183,6 +2193,8 @@
         setSwitchStatus("创建房间");
         setSwitchStatus("秘境自动接收邀请");
         setSwitchStatus("仅接收旅团成员邀请");
+        setSwitchStatus("仅接收关注粉丝邀请");
+        setSwitchStatus("仅接收互关好友邀请");
         var 建房重复挑战次数 = localStorage.getItem("建房重复挑战次数");
         document.getElementById("建房重复挑战次数").value = 建房重复挑战次数;
 
@@ -2767,6 +2779,8 @@
         创建房间 = saveSwitchStatus("创建房间");
         秘境自动接收邀请 = saveSwitchStatus("秘境自动接收邀请");
         仅接收旅团成员邀请 = saveSwitchStatus("仅接收旅团成员邀请");
+        仅接收关注粉丝邀请 = saveSwitchStatus("仅接收关注粉丝邀请");
+        仅接收互关好友邀请 = saveSwitchStatus("仅接收互关好友邀请");
         var 建房重复挑战次数 = document.getElementById("建房重复挑战次数").value;
         localStorage.setItem("建房重复挑战次数", 建房重复挑战次数);
 
@@ -3071,6 +3085,8 @@
             秘境创建房间: 创建房间,
             秘境自动接收邀请: 秘境自动接收邀请,
             仅接收旅团成员邀请: 仅接收旅团成员邀请,
+            仅接收关注粉丝邀请: 仅接收关注粉丝邀请,
+            仅接收互关好友邀请: 仅接收互关好友邀请,
             秘境建房重复挑战次数: 建房重复挑战次数,
             秘境地图: 秘境地图,
             秘境关卡: 秘境关卡,

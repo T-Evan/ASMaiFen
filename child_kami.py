@@ -4,7 +4,7 @@ from ascript.android import system
 from .特征库 import *
 from ascript.android.ui import Dialog
 from .baseUtils import *
-from .res.ui.ui import 功能开关,db
+from .res.ui.ui import 功能开关
 from ascript.android.screen import Colors
 import pymysql
 from ascript.android.system import Device
@@ -22,6 +22,14 @@ def main():
 
 # 每 30s 清空一次在线设备ip数，每 10s 检查在线ip数是否超过2个
 def kamiOnlineDeviceCount():
+    db = pymysql.connect(
+        host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
+        port=3307,  # 开发者后台,创建的数据库 “端口”
+        user='yiwan233',  # 开发者后台,创建的数据库 “用户名”
+        password='233233',  # 开发者后台,创建的数据库 “初始密码”
+        database='db_dev_12886',  # 开发者后台 ,创建的 "数据库"
+        charset='utf8mb4'  ""
+    )  # 连接数据库
     cursor = db.cursor()
     global 清空ip倒计时
     nowTime = time.time()
@@ -72,5 +80,5 @@ def kamiOnlineDeviceCount():
 
     # 执行完之后要记得关闭游标和数据库连接
     cursor.close()
-    # # 执行完毕后记得关闭db,不然会并发连接失败哦
-    # db.close()
+    # 执行完毕后记得关闭db,不然会并发连接失败哦
+    db.close()

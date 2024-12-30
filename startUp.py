@@ -33,7 +33,7 @@ class StartUp:
         # r = system.shell(f"start -n com.xd.cfbmf")
         tryTimes = 0
 
-        max_attempt = 12
+        max_attempt = 8
         for attempt in range(max_attempt):
             tryTimes = tryTimes + 1
             if 功能开关["fighting"] == 1:
@@ -63,7 +63,7 @@ class StartUp:
             login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
             if login1 or login2:
                 Toast('准备进入游戏')
-                return self.login()
+                self.login()
             else:
                 re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
                 if not re:
@@ -116,14 +116,15 @@ class StartUp:
                     self.shilianTask.fightingBaoZou()
                     return
 
-            Toast('启动游戏，等待加载中')
+            Toast(f'启动游戏，等待加载中，{attempt}/8')
 
             sleep(3)  # 等待游戏启动
         print('启动游戏失败，超过最大尝试次数')
 
     def login(self):
         功能开关["needHome"] = 0
-        sleep(1.5)
+        功能开关["fighting"] = 1
+        sleep(0.5)
         # 开始冒险之旅
         login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
         if login1:
@@ -177,8 +178,8 @@ class StartUp:
             tapSleep(340, 930, 1)
             tapSleep(340, 930)
             sleep(5)
-        else:
-            return self.start_app()
+        # else:
+        #     return self.start_app()
 
         shou_ye = False
         for loopCount in range(1, 4):  # 循环3次，从1到3
@@ -191,11 +192,10 @@ class StartUp:
             if shou_ye1 or shou_ye2:
                 Toast('已进入游戏')
                 shou_ye = True
-                break
-            sleep(3)  # 等待 3 秒
+                sleep(0.5)  # 等待 3 秒
 
-        if not shou_ye:
-            return self.start_app()
+        # if not shou_ye:
+        #     return self.start_app()
 
         return shou_ye
 
@@ -266,40 +266,53 @@ class StartUp:
 
         res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
         # dialog(下一角色)
-        if 下一角色 <= 3:
-            swipe(190, 1090, 555, 1090, 300)  # 翻到最左
-            sleep(1.5)
-            swipe(150, 1090, 535, 1090, 300)  # 翻到最左
-            sleep(1.5)
-            swipe(210, 1090, 575, 1090, 300)  # 翻到最左
-            sleep(2)
-            x = 190 + (下一角色 - 1) * 157  # 从第一个角色 190，依次往右加 165 至下一角色
-            y = 1090
-            tapSleep(x, y, 1.5)
-            res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
-            if res:
-                # 无该角色，退出
-                Toast('未创建角色')
-                res = TomatoOcrTap(70, 1198, 125, 1232, "返回")
-                任务记录['当前任务角色'] = 0
-                return self.switchRole(2)
+        for p in range(3):
+            if 下一角色 <= 3:
+                swipe(190, 1090, 555, 1090, 300)  # 翻到最左
+                sleep(1.5)
+                swipe(150, 1090, 535, 1090, 300)  # 翻到最左
+                sleep(1.5)
+                swipe(210, 1090, 575, 1090, 300)  # 翻到最左
+                sleep(2)
+                x = 190 + (下一角色 - 1) * 157  # 从第一个角色 190，依次往右加 165 至下一角色
+                y = 1090
+                tapSleep(x, y, 1.5)
+                res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
+                if res:
+                    # 无该角色，退出
+                    Toast('未创建角色' + str(下一角色))
+                    res = TomatoOcrTap(70, 1198, 125, 1232, "返回")
+                    任务记录['当前任务角色'] = 0
+                    return self.switchRole(2)
+                # 检查是否已选中
+                re = FindColors.find("148,1076,#FDF2DE|148,1073,#FDF2DE|153,1081,#FDF2DE",
+                                     rect=[x - 20, y - 20, x + 20, y + 20])
+                if re:
+                    Toast('已选中角色' + str(下一角色))
+                    break
 
-        if 下一角色 > 3:
-            swipe(555, 1090, 190, 1090, 300)  # 翻到最右
-            sleep(1.5)
-            swipe(535, 1090, 170, 1090, 300)  # 翻到最右
-            sleep(1.5)
-            swipe(575, 1090, 210, 1090, 300)  # 翻到最右
-            sleep(2)
-            x = 540 - (5 - 下一角色) * 165  # 从第五个角色 540，依次往左减 165 至下一角色
-            y = 1090
-            tapSleep(x, y, 1.5)
-            res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
-            if res:
-                # 无该角色，退出
-                res = TomatoOcrTap(70, 1198, 125, 1232, "返回")
-                任务记录['当前任务角色'] = 0
-                return self.switchRole(2)
+            if 下一角色 > 3:
+                swipe(555, 1090, 190, 1090, 300)  # 翻到最右
+                sleep(1.5)
+                swipe(535, 1090, 170, 1090, 300)  # 翻到最右
+                sleep(1.5)
+                swipe(575, 1090, 210, 1090, 300)  # 翻到最右
+                sleep(2)
+                x = 540 - (5 - 下一角色) * 165  # 从第五个角色 540，依次往左减 165 至下一角色
+                y = 1090
+                tapSleep(x, y, 1.5)
+                res, _ = TomatoOcrText(300, 1197, 420, 1232, "选择职业")
+                if res:
+                    # 无该角色，退出
+                    res = TomatoOcrTap(70, 1198, 125, 1232, "返回")
+                    任务记录['当前任务角色'] = 0
+                    return self.switchRole(2)
+                # 检查是否已选中
+                re = FindColors.find("148,1076,#FDF2DE|148,1073,#FDF2DE|153,1081,#FDF2DE",
+                                     rect=[x - 20, y - 20, x + 20, y + 20])
+                if re:
+                    Toast('已选中角色' + str(下一角色))
+                    break
         任务记录['当前任务角色'] = 下一角色
 
     def switchAccount(self):

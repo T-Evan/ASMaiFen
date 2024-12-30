@@ -436,13 +436,13 @@ class YingDiTask:
 
         # 点击秘宝
         tapSleep(241, 192, 3.5)  # 秘宝
-        re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
+        re, _ = TomatoOcrText(558,168,639,194, '补充能源')
         if not re:
             tapSleep(194, 178, 3.5)  # 秘宝
-            re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
+            re, _ = TomatoOcrText(630,1210,680,1237, '秘宝')
             if not re:
                 tapSleep(282, 178, 3.5)  # 秘宝
-                re, _ = TomatoOcrText(562, 172, 653, 197, '补充能源')
+                re, _ = TomatoOcrText(527, 1212, 609, 1237, '秘宝产出')
                 if not re:
                     Toast('营地任务 - 秘宝领取 - 识别未开启')
                     任务记录["秘宝领取-完成"] = 1
