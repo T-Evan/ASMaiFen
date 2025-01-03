@@ -228,11 +228,12 @@ class StartUp:
             r = system.shell(f"am force-stop {功能开关['游戏包名']}")
             system.open(self.app_name)
             sleep(5)
-            for i in range(1, 6):
+            for i in range(15):
                 system.open(self.app_name)
                 login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
                 if login1:
                     break
+                Toast(f'等待游戏加载{i}/15')
                 sleep(5)
             else:
                 Toast('返回登录界面失败，跳过角色切换')

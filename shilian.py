@@ -62,6 +62,9 @@ class ShiLianTask:
         if 功能开关['大暴走开关'] == 1 and 功能开关['暴走自动接收邀请'] == 0:
             self.daBaoZou()
 
+        if 功能开关['三魔头开关'] == 1 and 功能开关['三魔头自动接收邀请'] == 0:
+            self.sanMoTou()
+
         if 功能开关['冒险总开关'] == 0:
             return
 
@@ -93,6 +96,66 @@ class ShiLianTask:
             self.homePage()
             self.quitTeam()
 
+    # 三打三守三魔头
+    def sanMoTou(self):
+        if 任务记录["三魔头-完成"] == 1:
+            return
+        Toast('三打三守三魔头 - 开始')
+        self.homePage()
+        self.quitTeam()
+        res = TomatoOcrFindRangeClick('西行记', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                      sleep1=1.5, match_mode='fuzzy')
+
+        if not res:
+            Toast('三打三守三魔头 - 未找到活动入口')
+            return
+
+        res = TomatoOcrTap(521, 604, 585, 632, '三魔头', sleep1=1.5)
+        if not res:
+            Toast('三打三守三魔头 - 未找到活动入口')
+            return
+
+        Toast('三打三守三魔头 - 任务开始')
+        # 领取全服榜奖励
+        re = CompareColors.compare("169,241,#EE5C40|171,243,#ED5B3E|172,241,#EF5D3F")
+        if re:
+            Toast('领取共享战利品')
+            tapSleep(145, 215, 0.8)
+            for j in range(6):
+                re = FindColors.find("580,266,#F05C40|583,268,#F15A41|585,265,#F35E41", rect=[481, 239, 622, 1076],
+                                     diff=0.95)
+                if re:
+                    tapSleep(re.x, re.y)
+                    tapSleep(427, 217)
+                    tapSleep(427, 217)
+            swipe(345, 935, 339, 337)
+            sleep(2)
+            for k in range(6):
+                re = FindColors.find("580,266,#F05C40|583,268,#F15A41|585,265,#F35E41", rect=[481, 239, 622, 1076],
+                                     diff=0.95)
+                if re:
+                    tapSleep(re.x, re.y)
+                    tapSleep(427, 217)
+                    tapSleep(427, 217)
+            tapSleep(93, 1213)  # 返回
+
+        # 识别目标阶段
+        toLevel = safe_int_v2(功能开关['三魔头目标阶段'])
+        if toLevel == 0:
+            toLevel = 15
+        if toLevel > 0:
+            re, level = TomatoOcrText(124, 1011, 205, 1041, "阶段")
+            level = level.replace("阶", "")
+            level = safe_int_v2(level)
+            if level >= toLevel:
+                Toast("三魔头 - 已达到目标等阶")
+                sleep(1.5)
+                任务记录["三魔头-完成"] = 1
+                return
+
+        self.startFightMoTou()
+
+    # 史莱姆大暴走
     def daBaoZou(self):
         if 任务记录["大暴走-完成"] == 1:
             return
@@ -154,7 +217,7 @@ class ShiLianTask:
         if re:
             Toast('领取共享战利品')
             tapSleep(145, 215, 0.8)
-            for k in range(6):
+            for j in range(6):
                 re = FindColors.find("584,321,#F25E41|581,323,#F05D40|585,325,#FF5438", rect=[480, 295, 614, 1030])
                 if re:
                     tapSleep(re.x, re.y)
@@ -197,6 +260,73 @@ class ShiLianTask:
 
         self.startFightBaoZou()
 
+    def startFightMoTou(self):
+        # 直接开始匹配
+        res = TomatoOcrTap(304, 1153, 412, 1185, "开始匹配", 40, -40)
+        Toast("三魔头 - 开始匹配")
+
+        # 判断职业选择
+        res, _ = TomatoOcrText(321, 491, 397, 514, "选择职业")
+        if res:
+            Toast("三魔头 - 选择职业")
+            if 功能开关["三魔头职能优先输出"] != "" or 功能开关['三魔头职能优先坦克'] != "" or 功能开关[
+                '三魔头职能优先治疗'] != "":
+                if 功能开关["三魔头职能优先输出"] == 1:
+                    tapSleep(280, 665, 1)  # 职能输出
+                elif 功能开关['三魔头职能优先坦克'] == 1 or 功能开关['三魔头职能优先治疗'] == 1:
+                    tapSleep(435, 665, 1)  # 坦克
+                else:
+                    tapSleep(280, 665, 1)  # 职能输出
+            else:
+                if 功能开关["职能优先输出"] == 1:
+                    tapSleep(280, 665, 1)  # 职能输出
+                elif 功能开关["职能优先坦克"] == 1 or 功能开关["职能优先治疗"] == 1:
+                    tapSleep(435, 665, 1)  # 坦克
+                else:
+                    tapSleep(280, 665, 1)  # 职能输出
+            res = TomatoOcrTap(332, 754, 387, 789, "确定")
+
+        # 判断正在匹配中 - 循环等待300s
+        totalWait = 150  # 30000 毫秒 = 30 秒
+        elapsed = 0
+        while 1:
+            if elapsed > totalWait:
+                # 超时取消匹配
+                res = TomatoOcrTap(320, 1166, 393, 1190, "匹配中", 40, -40)
+                if not res:
+                    res = TomatoOcrTap(325, 1156, 390, 1182, "匹配中", 40, -40)
+                    if not res:
+                        res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
+                break
+
+            Toast(f"三魔头任务 - 匹配中 - 等待{elapsed}/150s")
+            # 判断无合适队伍，重新开始匹配
+            res, _ = TomatoOcrText(230, 625, 306, 648, "匹配超时")
+            if res:
+                Toast("三魔头 - 匹配超时 - 无合适队伍 - 重新匹配")
+                res = TomatoOcrTap(455, 729, 512, 758, "确定")
+
+            waitStatus, _ = TomatoOcrText(320, 1166, 393, 1190, "匹配中")
+            if not waitStatus:
+                waitStatus, _ = TomatoOcrText(325, 1156, 390, 1182, "匹配中")
+                if not waitStatus:
+                    res, waitTime = TomatoOcrText(334, 1184, 383, 1201, "等待时间")
+                    if waitTime != "":
+                        waitStatus = True
+
+            res1 = self.WaitFight("三魔头")
+            if res1 == True or (waitStatus == False):  # 成功准备战斗 或 未匹配到
+                # 超时取消匹配
+                res = TomatoOcrTap(320, 1166, 393, 1190, "匹配中", 40, -40)
+                if not res:
+                    res = TomatoOcrTap(325, 1156, 390, 1182, "匹配中", 40, -40)
+                    if not res:
+                        res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
+                break
+
+            sleep(5)
+            elapsed = elapsed + 5
+
     def startFightBaoZou(self):
         # 直接开始匹配
         res = TomatoOcrTap(311, 1156, 407, 1182, "开始匹配", 40, -40)
@@ -206,12 +336,21 @@ class ShiLianTask:
         res, _ = TomatoOcrText(321, 491, 397, 514, "选择职业")
         if res:
             Toast("大暴走 - 选择职业")
-            if 功能开关["职能优先输出"] == 1:
-                tapSleep(280, 665, 1)  # 职能输出
-            elif 功能开关["职能优先坦克"] == 1 or 功能开关["职能优先治疗"] == 1:
-                tapSleep(435, 665, 1)  # 坦克
+            if 功能开关["暴走职能优先输出"] != "" or 功能开关['暴走职能优先坦克'] != "" or 功能开关[
+                '暴走职能优先治疗'] != "":
+                if 功能开关["暴走职能优先输出"] == 1:
+                    tapSleep(280, 665, 1)  # 职能输出
+                elif 功能开关['暴走职能优先坦克'] == 1 or 功能开关['暴走职能优先治疗'] == 1:
+                    tapSleep(435, 665, 1)  # 坦克
+                else:
+                    tapSleep(280, 665, 1)  # 职能输出
             else:
-                tapSleep(280, 665, 1)  # 职能输出
+                if 功能开关["职能优先输出"] == 1:
+                    tapSleep(280, 665, 1)  # 职能输出
+                elif 功能开关["职能优先坦克"] == 1 or 功能开关["职能优先治疗"] == 1:
+                    tapSleep(435, 665, 1)  # 坦克
+                else:
+                    tapSleep(280, 665, 1)  # 职能输出
             res = TomatoOcrTap(332, 754, 387, 789, "确定")
 
         # 判断正在匹配中 - 循环等待300s
@@ -462,6 +601,15 @@ class ShiLianTask:
             return
 
         self.openTreasure()
+
+        # 限时活动，寻找西行小妖
+        re = CompareColors.compare("296,1186,#B7AC9F|301,1194,#F6F2E9|306,1196,#F6F2E9|318,1182,#CBC3B7")  # 判断小兵对话框
+        if re:
+            for k in range(10):
+                tapSleep(214, 1201)
+                res = TomatoOcrTap(131, 1204, 156, 1230, '回')
+                if res:
+                    break
 
         # 判断是否已在当前地图
         if selectMap != '最新地图':
@@ -1073,6 +1221,10 @@ class ShiLianTask:
                         self.fighting(fightType)
                     if fightType == "暴走":
                         self.fightingBaoZou()
+                    if fightType == "三魔头":
+                        self.fightingSanMoTou()
+                    if fightType == "三魔头带队":
+                        self.fightingSanMoTouTeam()
                     if fightType == "梦魇带队" or fightType == "梦魇挑战":
                         self.fightingMengYanTeam(fightType)
                     if fightType == "恶龙带队" or fightType == "恶龙挑战":
@@ -1126,6 +1278,85 @@ class ShiLianTask:
         tapSleep(361, 1018, 0.5)  # 点击上阵
         tapSleep(356, 1204, 0.3)  # 点击返回
         tapSleep(356, 1204, 0.3)  # 点击冒险
+
+    def fightingSanMoTouTeam(self):
+        totalWait = 30
+        elapsed = 0
+        teamShoutDone = 0
+        if 功能开关["三魔头自动离队时间"] != "":
+            totalWait = safe_int_v2(功能开关["三魔头自动离队时间"])
+            if totalWait == 0:
+                totalWait = 30
+        Toast("战斗开始 - 三魔头组队邀请")
+        failNum = 0  # 战斗中状态识别失败次数
+        while 1:
+            if elapsed >= totalWait:
+                Toast("战斗结束 - 三魔头超时退出组队")
+                self.teamShoutAI(f'三魔头-即将离队-期待下次相遇', shoutType="fight")
+                功能开关["fighting"] = 1
+                sleep(2)
+                self.quitTeamFighting()  # 退出队伍
+                功能开关["fighting"] = 0
+                break
+
+            # 识别战斗中状态
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            res3 = TomatoOcrTap(327, 1205, 389, 1233, "冒险")
+            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
+                功能开关["fighting"] = 1
+                功能开关["needHome"] = 0
+                Toast(f'三魔头战斗中,战斗时长{elapsed}/{totalWait}秒')
+                if teamShoutDone == 0:
+                    teamName = 任务记录['战斗-房主名称']
+                    teamCount = 任务记录['带队次数']
+                    self.teamShoutAI(
+                        f'三魔头-留镜像后离队~祝你武运昌隆~{teamName}-第{teamCount}次相遇~祝你游戏开心~',
+                        shoutType="fight")
+                    teamShoutDone = self.teamShout()
+                self.AIContent()
+            else:
+                # 战斗结束
+                res1 = TomatoOcrTap(333, 716, 384, 744, "开启")  # 领取宝箱
+                res2 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
+                res3 = TomatoOcrTap(323, 1106, 391, 1137, "开启")  # 领取宝箱
+                res4 = CompareColors.compare(
+                    "448,803,#FFE298|445,782,#F8D37E|448,770,#FBD682|426,770,#D0714C|483,763,#9C3B43")  # 匹配宝箱颜色
+                res5 = TomatoOcrText(513, 899, 590, 923, '战斗统计')
+                if res1 or res2 or res3 or res4 or res5:
+                    Toast("三打三守三魔头 - 战斗结束 - 战斗胜利")
+                    功能开关["fighting"] = 0
+                    sleep(2)
+                    tapSleep(55, 1140)  # 领取后，点击空白
+                    tapSleep(60, 1100)  # 领取后，点击空白
+                    tapSleep(50, 1234)  # 领取后，点击空白
+                    break
+                res3, _ = TomatoOcrText(499, 191, 581, 215, "离开队伍")  # 已返回队伍
+                if res3:
+                    Toast("三打三守三魔头 - 战斗结束")
+                    功能开关["fighting"] = 0
+                    break
+                else:
+                    tapSleep(365, 1135, 3)
+                Toast("三魔头 - 战斗胜利 - 结算页返回房间")
+                break
+
+            # 判断是否战斗失败（战斗4分钟后）
+            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+            if elapsed > 180 or (
+                    "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
+                Toast(f"三魔头战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                failNum = failNum + 1
+                if failNum > 4:
+                    Toast(f"三魔头战斗中状态 - 识别失败 - 退出战斗")
+                    break
+                if failNum > 7:
+                    failStatus = self.fight_fail()
+                    break
+            self.fight_fail_alert()
+            sleep(3)
+            elapsed = elapsed + 4
 
     def fightingBaoZouTeam(self):
         totalWait = 30
@@ -1347,13 +1578,13 @@ class ShiLianTask:
             elapsed = elapsed + 4
 
     def fightingZhongMoTeam(self):
-        totalWait = 180
+        totalWait = 240
         elapsed = 0
         teamShoutDone = 0
         if 功能开关["终末自动离队时间"] != "":
             totalWait = safe_int_v2(功能开关["终末自动离队时间"])
             if totalWait == 0:
-                totalWait = 180
+                totalWait = 240
 
         Toast("战斗开始 - 终末战组队邀请")
         start_time = int(time.time())
@@ -1723,6 +1954,62 @@ class ShiLianTask:
             self.fight_fail_alert()
             sleep(0.5)
             elapsed = elapsed + 1
+        功能开关["fighting"] = 0
+
+    def fightingSanMoTou(self):
+        totalWait = 380  # 30000 毫秒 = 30 秒
+
+        teamShoutDone = 0
+        start_time = int(time.time())
+        while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
+            if elapsed >= totalWait:
+                Toast("战斗结束 - 超时退出组队")
+                self.quitTeamFighting()  # 退出队伍
+                break
+
+            # 识别战斗中状态
+            res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
+            res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
+            res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
+
+            # 大暴走可跟队友影子继续战斗，无需判断队友是否在队伍中
+            if res1 or ("等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2):
+                Toast(f'三魔头战斗中,战斗时长{elapsed}/{totalWait}秒')
+                功能开关["fighting"] = 1
+                功能开关["needHome"] = 0
+                if teamShoutDone == 0:
+                    teamShoutDone = self.teamShout()
+            else:
+                功能开关["fighting"] = 0
+
+            # 判断是否战斗失败（战斗5分钟后）
+            if not res1 and (teamName1 == "" and teamName2 == ""):
+                功能开关["fighting"] = 0
+                # 战斗结束
+                res1 = TomatoOcrTap(333, 716, 384, 744, "开启")  # 领取宝箱
+                res2 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
+                res3 = TomatoOcrTap(323, 1106, 391, 1137, "开启")  # 领取宝箱
+                res4 = CompareColors.compare(
+                    "448,803,#FFE298|445,782,#F8D37E|448,770,#FBD682|426,770,#D0714C|483,763,#9C3B43")  # 匹配宝箱颜色
+                res5 = TomatoOcrText(513, 899, 590, 923, '战斗统计')
+                if res1 or res2 or res3 or res4 or res5:
+                    Toast("三打三守三魔头 - 战斗结束 - 战斗胜利")
+                    sleep(2)
+                    tapSleep(55, 1140)  # 领取后，点击空白
+                    tapSleep(60, 1100)  # 领取后，点击空白
+                    tapSleep(50, 1234)  # 领取后，点击空白
+                    break
+                res3, _ = TomatoOcrText(499, 191, 581, 215, "离开队伍")  # 已返回队伍
+                if res3:
+                    Toast("三打三守三魔头 - 战斗结束")
+                    break
+                quitStatus = self.quitTeam()
+                if quitStatus:
+                    break
+                功能开关["fighting"] = 0
+            sleep(0.5)
         功能开关["fighting"] = 0
 
     def fightingBaoZou(self):
@@ -2570,10 +2857,23 @@ class ShiLianTask:
                 if content != "":
                     self.teamShoutAI(content)
 
-            zanList = ['棒', '厉害', '谢', '哇', '牛', '6', '已关注', '佬', '专业']
             re, teamText1 = TomatoOcrText(62, 1023, 251, 1052, "队友发言")
             re, teamText2 = TomatoOcrText(58, 1049, 244, 1079, "队友发言")
             re, teamText3 = TomatoOcrText(63, 965, 252, 994, "队友发言")
+            if 任务记录["AI发言-广告开关"] == 1:
+                wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么', '托管', '人机',
+                           '机器', '功能']
+                contains_zan1 = any(zan in teamText1 for zan in wenList)
+                contains_zan2 = any(zan in teamText2 for zan in wenList)
+                contains_zan3 = any(zan in teamText3 for zan in wenList)
+                if contains_zan1 or contains_zan2 or contains_zan3:
+                    # 回复夸赞
+                    colors = generate_random_color()
+                    tmpContent = f"<color={colors}>自动回复~欢迎加鹅来玩喔~372~270~534</COLOR>"
+                    self.teamShoutAI(tmpContent)
+                    # self.teamShoutAI("全自动日常、一键刷赞、AI带队、智能走位施法、摸鱼种菜，欢迎来鹅了解~372~270~534")
+
+            zanList = ['棒', '厉害', '谢', '哇', '牛', '6', '已关注', '佬', '专业']
             contains_zan1 = any(zan in teamText1 for zan in zanList)
             contains_zan2 = any(zan in teamText2 for zan in zanList)
             contains_zan3 = any(zan in teamText3 for zan in zanList)
@@ -2592,19 +2892,6 @@ class ShiLianTask:
                 colors = generate_random_color()
                 tmpContent = f"<color={colors}>自动回复~当然可以 我会一直等你~</COLOR>"
                 self.teamShoutAI(tmpContent)
-
-            if 任务记录["AI发言-广告开关"] == 1:
-                wenList = ['脚本', '科技', '狠活', '高级', '群', '挂', '智能', 'ai', 'AI', '啥', '什么', '托管', '人机',
-                           '机器', '功能']
-                contains_zan1 = any(zan in teamText1 for zan in wenList)
-                contains_zan2 = any(zan in teamText2 for zan in wenList)
-                contains_zan3 = any(zan in teamText3 for zan in wenList)
-                if contains_zan1 or contains_zan2 or contains_zan3:
-                    # 回复夸赞
-                    colors = generate_random_color()
-                    tmpContent = f"<color={colors}>自动回复~欢迎加鹅了解喔~372~270~534</COLOR>"
-                    self.teamShoutAI(tmpContent)
-                    # self.teamShoutAI("全自动日常、一键刷赞、AI带队、智能走位施法、摸鱼种菜，欢迎来鹅了解~372~270~534")
 
             blackList = ['*']
             contains_zan1 = any(zan in teamText1 for zan in blackList)
@@ -2818,7 +3105,7 @@ class ShiLianTask:
         # 执行完毕后记得关闭db,不然会并发连接失败哦
         db.close()
 
-    def daiDuiCount(self):
+    def daiDuiCount(self, teamName='', needUpdate=True):
         db = pymysql.connect(
             host="8.140.162.237",  # 开发者后台,创建的数据库 “主机地址”
             port=3307,  # 开发者后台,创建的数据库 “端口”
@@ -2836,7 +3123,9 @@ class ShiLianTask:
         cursor = db.cursor()
         sql = "SELECT * FROM daidui WHERE user_name	 = %s and team_name	= %s"
         # 使用参数化查询
-        cursor.execute(sql, (任务记录['玩家名称'], 任务记录["战斗-房主名称"]))
+        if teamName == '':
+            teamName = 任务记录["战斗-房主名称"]
+        cursor.execute(sql, (任务记录['玩家名称'], teamName))
         results = cursor.fetchall()
         for row in results:
             count = row[2]
@@ -2848,8 +3137,9 @@ class ShiLianTask:
         # 执行完毕后记得关闭db,不然会并发连接失败哦
         db.close()
 
-        p = threading.Thread(target=self.daiDuiUpdate, args=(count, 任务记录["战斗-房主名称"], now_time))
-        p.start()
+        if needUpdate:
+            p = threading.Thread(target=self.daiDuiUpdate, args=(count, 任务记录["战斗-房主名称"], now_time))
+            p.start()
 
         if count == 0:
             count = 1

@@ -190,13 +190,13 @@ class LvTuanTask:
         # 判断是否在旅团页面
         isLvtuan = False
         for i in range(2):
-            res = TomatoOcrFindRangeClick("服务区", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+            res = TomatoOcrFindRangeClick("服务区", x1=630, y1=560, x2=705, y2=1147, offsetX=25, offsetY=-15)
             if not res:
                 # 返回首页
                 self.dailyTask.homePage()
                 res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                 # 判断是否在旅团页面
-                res = TomatoOcrFindRangeClick("服务区", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                res = TomatoOcrFindRangeClick("服务区", x1=626, y1=648, x2=709, y2=986, offsetX=25, offsetY=-15)
                 if res:
                     isLvtuan = True
                     break
@@ -210,10 +210,13 @@ class LvTuanTask:
         sleep(3)  # 等待跳转动画
 
         # 检查剩余叶子
-        res, availableCount = TomatoOcrText(607, 82, 669, 102, "叶子")
+        res, availableCount = TomatoOcrText(448, 80, 514, 104, "叶子")
+        if availableCount == '':
+            res, availableCount = TomatoOcrText(607, 82, 669, 102, "叶子")
         availableCount = safe_int_v2(availableCount)
         if availableCount < 100:
             Toast("旅团 - 商店兑换 - 剩余叶子不足")
+            任务记录["旅团-商店-完成"] = 1
             tapSleep(90, 1202)  # 返回
             return
 
@@ -260,10 +263,13 @@ class LvTuanTask:
                         self.shopBuy()
 
             # 检查剩余叶子
-            res, availableCount = TomatoOcrText(607, 82, 669, 102, "叶子")
+            res, availableCount = TomatoOcrText(448, 80, 514, 104, "叶子")
+            if availableCount == '':
+                res, availableCount = TomatoOcrText(607, 82, 669, 102, "叶子")
             availableCount = safe_int_v2(availableCount)
             if availableCount < 100:
                 Toast("旅团 - 商店兑换 - 剩余叶子不足")
+                任务记录["旅团-商店-完成"] = 1
                 tapSleep(90, 1202)  # 返回
                 return
 

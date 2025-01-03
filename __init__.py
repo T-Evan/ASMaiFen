@@ -418,9 +418,11 @@ def main():
                                 configNum = configNum + 1
                                 if configNum > 5:
                                     configNum = 1  # 从配置1重新切换
-                                if 功能开关[f"配置{configNum}名称"] == "":
+                                if 功能开关[f"配置{configNum}名称"] == "" or 功能开关[f"配置{configNum}运行时长"] == "":
                                     continue
                                 need_config_minute = safe_int(功能开关.get(f"配置{configNum}运行时长", 0))  # 分钟
+                                if need_config_minute == 0:
+                                    continue
                                 Toast(
                                     f'加载配置{configNum}{功能开关[f"配置{configNum}名称"]} + 预计执行{need_config_minute}分后继续切换')
                                 res = loadConfig(configNum)

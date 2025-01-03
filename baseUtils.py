@@ -204,7 +204,7 @@ def shijieShoutText():
                     player_name = parts[1].strip()
                     player_name = (player_name.replace('[', '').replace('【', '').replace('】', '').replace(']', '').
                                    replace('）', '').replace('(','').replace('（', '').replace('）', '').replace(' ', ''))
-                    print(player_name)
+                    # print(player_name)
                     if player_name != '':
                         current_player = player_name
                         player_messages[player_name] = []
@@ -459,10 +459,9 @@ lastToast = []
 lastToastTime = 0
 
 def generate_random_color():
-    colors = ["#ffa400", "#ffa631", "#fa8c35", "#00bc12", "#0aa344", "#6b6882", "#ca6924", "#1bd1a5", "#789262",
-              "#758a99",
-              "#70f3ff", "#44cef6", "#177cb0", "#4b5cc4", "#8d4bbb", "#4c8dae", "#b0a4e3", "#cca4e3", "#c93756",
-              "#f05654", "#725e82"]
+    colors = ["#ffa400", "#ffa631", "#fa8c35", "#00bc12", "#0aa344", "#6b6882", "#ca6924", "#789262",
+              "#758a99", "#177cb0", "#4b5cc4", "#8d4bbb", "#4c8dae", "#b0a4e3", "#cca4e3", "#c93756",
+              "#f05654", "#725e82", "#7b68ee"]
     return random.choice(colors)
 def Toast(content, tim=1000):
     if 任务记录['提示-并发锁'] == 1:

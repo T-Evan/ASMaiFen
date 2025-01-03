@@ -89,14 +89,87 @@ class AutoMove:
 
                 if 任务记录['战斗-恶龙名称'] == '' or time.time() - 任务记录['战斗-恶龙名称-识别倒计时'] > 5:
                     re, 任务记录['战斗-恶龙名称'] = TomatoOcrText(288, 222, 408, 246, '恶龙名称')
+                    if 任务记录['战斗-恶龙名称'] == "":
+                        # 识别右上角关卡名称
+                        re, 任务记录['战斗-恶龙名称'] = TomatoOcrText(440, 138, 600, 160, '关卡名称')
                     任务记录['战斗-恶龙名称-识别倒计时'] = time.time()
+
+                # 三打三守三魔头
+                if '三打三守' in 任务记录['战斗-恶龙名称']:
+                    if 任务记录['战斗-上一次移动'] == 0:
+                        任务记录['战斗-上一次移动'] = time.time()
+                    Toast(f'三打三守三魔头 - 自动走位')
+                    for k in range(30):
+                        # 自动施法
+                        skill = CompareColors.compare("422,944,#FFFFCC|425,943,#FDFAC0|427,943,#FCF8C1")
+                        if skill:
+                            Toast('释放技能')
+                            tapSleep(424, 975)
+                        if time.time() - 任务记录['战斗-上一次移动'] > 5:
+                            # 黄色牛头boss
+                            re = FindColors.find("98,628,#863F2D|103,628,#853E30|106,628,#873F30",
+                                                 rect=[13, 585, 196, 774], diff=0.93)
+                            if re:
+                                任务记录['战斗-上一次移动'] = time.time()
+                                Toast('前往战斗地块')
+                                tapSleep(re.x, re.y)
+                                continue
+                            # 蓝色精英兵
+                            re = FindColors.find("151,688,#83E5E8|153,684,#67D1E0|146,691,#98F2EF",
+                                                 rect=[13, 585, 196, 774], diff=0.93)
+                            if re:
+                                任务记录['战斗-上一次移动'] = time.time()
+                                Toast('前往战斗地块')
+                                tapSleep(re.x, re.y)
+                                continue
+                            re = FindColors.find("105,612,#F05941|72,636,#EE4038|138,634,#E14A4F",
+                                                 rect=[11, 585, 210, 798], diff=0.9)
+                            # 爆炸图标
+                            re = FindColors.find("56,683,#F6C27D|57,683,#F8C07B|68,691,#FAD395|69,699,#FEEEC9")
+                            if re:
+                                任务记录['战斗-上一次移动'] = time.time()
+                                Toast('前往战斗地块')
+                                tapSleep(re.x, re.y)
+                                continue
+                            re = FindColors.find("105,612,#F05941|72,636,#EE4038|138,634,#E14A4F",
+                                                 rect=[11, 585, 210, 798], diff=0.9)
+                            if re:
+                                任务记录['战斗-上一次移动'] = time.time()
+                                tapSleep(re.x + 20, re.y + 30)  # 移动-红色地块
+                                Toast('前往战斗地块')
+                            if not re:
+                                re = FindColors.find("105,610,#AD414C|72,637,#B64B48|140,642,#A95863",
+                                                     rect=[11, 585, 210, 798], diff=0.9)
+                                if re:
+                                    任务记录['战斗-上一次移动'] = time.time()
+                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
+                                    Toast('前往战斗地块')
+                            if not re:
+                                re = FindColors.find("104,708,#BE6D6E|75,735,#A94E4E|138,738,#A94C4D",
+                                                     rect=[17, 590, 200, 789], diff=0.9)
+                                if re:
+                                    任务记录['战斗-上一次移动'] = time.time()
+                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
+                                    Toast('前往战斗地块')
+                            if not re:
+                                re = FindColors.find(
+                                    "154,661,#A76B6C|121,684,#9F5051|186,689,#8E4B4D|184,689,#8D4A4C",
+                                    rect=[23, 598, 194, 784], diff=0.92)
+                                if re:
+                                    任务记录['战斗-上一次移动'] = time.time()
+                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
+                                    Toast('前往战斗地块')
+                        sleep(0.5)
+                        continue
+                    sleep(0.5)
+                    continue
 
                 # 三头盘踞拦路关
                 if '三头毒' in 任务记录['战斗-恶龙名称']:
                     if 任务记录['战斗-上一次移动'] == 0:
                         任务记录['战斗-上一次移动'] = time.time()
                     name = 任务记录['战斗-恶龙名称']
-                    Toast(f'三头盘踞拦路关-战斗中')
+                    Toast(f'三头盘踞拦路关-自动走位')
                     for k in range(30):
                         if time.time() - 任务记录['战斗-上一次移动'] > 20:
                             任务记录['战斗-上一次移动'] = time.time()
@@ -104,10 +177,12 @@ class AutoMove:
                             Toast('前往下一地块')
                         sleep(0.5)
                         continue
+                    sleep(0.5)
+                    continue
 
                 # 雷电焦土深处 - 万钧雷鹫
                 if '万钧雷' in 任务记录['战斗-恶龙名称']:
-                    Toast(f'雷电焦土深处-战斗中')
+                    Toast(f'雷电焦土深处-自动走位')
                     for k in range(30):
                         re1 = CompareColors.compare("243,962,#EA5F29|251,959,#EA5F29")  # 最左侧地块
                         if re1:
@@ -144,7 +219,7 @@ class AutoMove:
 
                 if 任务记录['战斗-恶龙名称'] == '真炎界印龙' or 任务记录['战斗-恶龙名称'] == '熔火乡界印':
                     name = 任务记录['战斗-恶龙名称']
-                    Toast(f'{name}-战斗中')
+                    Toast(f'{name}-自动走位')
                     for k in range(30):
                         # 定位玩家位置
                         x, y = 298, 746

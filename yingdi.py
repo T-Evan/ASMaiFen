@@ -166,12 +166,36 @@ class YingDiTask:
             # 判断限时特卖是否领取
             re = CompareColors.compare("680,1122,#EE5C3F|683,1122,#F05C3F|680,1117,#F56043")
             if re:
+                Toast('领取免费特卖礼包')
                 TomatoOcrTap(584, 1115, 677, 1145, "限时特卖", sleep1=0.8)
                 TomatoOcrTap(145, 587, 200, 620, "免费", sleep1=0.8)
                 TomatoOcrTap(339, 744, 381, 762, "免费", sleep1=0.8)
-                tapSleep(393, 1125)  # 关闭弹窗
-                tapSleep(393, 1125)  # 返回积分奖励页
-                tapSleep(393, 1125)
+                tapSleep(394, 1133)  # 关闭弹窗
+                tapSleep(394, 1133)  # 返回积分奖励页
+                tapSleep(394, 1133, 0.8)
+
+            # 自动购买礼包
+            if 功能开关['纸飞机礼包购买'] == 1:
+                Toast('购买钻石自选礼包')
+                for k in range(3):
+                    TomatoOcrTap(584, 1115, 677, 1145, "限时特卖", sleep1=0.8)
+                    re = TomatoOcrFindRangeClick('星钻自选礼包', x1=85, y1=351, x2=636, y2=642, sleep1=0.8)
+                    if re:
+                        TomatoOcrTap(337, 719, 382, 741, "购买", sleep1=0.8)
+                    tapSleep(394, 1133)  # 关闭弹窗
+                    tapSleep(394, 1133)  # 返回积分奖励页
+                    tapSleep(394, 1133, 0.8)
+                    if not re:
+                        break
+
+            # 自动购买礼包
+            if 功能开关['纸飞机信物兑换'] == 1:
+                Toast('信物兑换')
+                TomatoOcrTap(461, 1115, 560, 1149, "信物兑换", sleep1=0.8)
+                tapSleep(358, 991, 0.8)
+                re = TomatoOcrTap(336, 804, 383, 827, "购买", sleep1=0.8)
+                tapSleep(394, 1133)  # 关闭弹窗
+                tapSleep(394, 1133, 0.8)  # 返回积分奖励页
 
             # 判断是否完成
             res, _ = TomatoOcrText(549, 282, 625, 303, '100/100')
@@ -436,10 +460,10 @@ class YingDiTask:
 
         # 点击秘宝
         tapSleep(241, 192, 3.5)  # 秘宝
-        re, _ = TomatoOcrText(558,168,639,194, '补充能源')
+        re, _ = TomatoOcrText(558, 168, 639, 194, '补充能源')
         if not re:
             tapSleep(194, 178, 3.5)  # 秘宝
-            re, _ = TomatoOcrText(630,1210,680,1237, '秘宝')
+            re, _ = TomatoOcrText(630, 1210, 680, 1237, '秘宝')
             if not re:
                 tapSleep(282, 178, 3.5)  # 秘宝
                 re, _ = TomatoOcrText(527, 1212, 609, 1237, '秘宝产出')

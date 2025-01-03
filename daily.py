@@ -332,11 +332,28 @@ class DailyTask:
             # 检查公屏发言关键词
             player_messages = shijieShoutText()
             for player, messages in player_messages.items():
-                team_texts = [msg.replace('~早安~', '').replace('~晚安~', '').replace('~午安~', '') for msg in messages
+                team_texts = [msg.replace('元旦快乐~', '').replace('新年快乐~', '').replace('早安~', '')
+                              .replace('晚安~', '').replace('午安~', '') for msg in messages
                               if "回环" not in msg]
                 if player == '默认':
                     player = ''
                 colors = generate_random_color()
+                zanList3 = ['狐巡司', '第一只']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~点开主线大地图，滑动上方找到藏匿妖怪喔~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                zanList3 = ['火眼金睛', '找妖怪', '在哪']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~1.大地图 2.铁匠铺 3.秘境之间~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                # zanList3 = ['元旦快乐', '新年快乐']
+                # contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                # if contains_zan:
+                #     content = [f"<color={colors}>{player}~元旦快乐~</COLOR>",
+                #                f"<color={colors}>{player}~新年快乐~</COLOR>", ]
+                #     return self.shijieShout(random.choice(content))
                 zanList3 = ['早安', '早上好']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
@@ -353,30 +370,35 @@ class DailyTask:
                             '来打工']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
-                    content = [f"<color={colors}>{player}~来了来了~</COLOR>", f"<color={colors}>{player}~来了~</COLOR>",
-                               f"<color={colors}>{player}~来啦来啦~</COLOR>", f"<color={colors}>{player}~来啦~</COLOR>"]
+                    content = [f"<color={colors}>{player}~来了来了~</COLOR>",
+                               f"<color={colors}>{player}~来了~</COLOR>",
+                               f"<color={colors}>{player}~来啦~</COLOR>"]
                     return self.shijieShout(random.choice(content))
                 zanList3 = ['有没有', '有人', '有打工', '帮帮', '有佬', '有帮忙', '可以帮忙', '还有', '有吗', '求佬']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
-                    content = [f"<color={colors}>{player}~打工打工~</COLOR>", f"<color={colors}>{player}~打工~</COLOR>",
-                               f"<color={colors}>{player}~来啦来啦~</COLOR>", f"<color={colors}>{player}~来啦~</COLOR>"]
+                    content = [f"<color={colors}>{player}~打工打工~</COLOR>",
+                               f"<color={colors}>{player}~打工~</COLOR>",
+                               f"<color={colors}>{player}~有的~</COLOR>",
+                               f"<color={colors}>{player}~来啦~</COLOR>"]
                     return self.shijieShout(random.choice(content))
                 zanList = ['影子', '求带', '有大佬', '带个', '带带', '差个', '有大哥', '帮忙', '求求']
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 if contains_zan:
-                    content = [f"<color={colors}>{player}~拉我拉我~</COLOR>", f"<color={colors}>{player}~拉我~</COLOR>",
-                               f"<color={colors}>{player}~打工打工~</COLOR>", f"<color={colors}>{player}~打工~</COLOR>"]
+                    content = [f"<color={colors}>{player}~拉我拉我~</COLOR>",
+                               f"<color={colors}>{player}~拉我~</COLOR>",
+                               f"<color={colors}>{player}~打工打工~</COLOR>",
+                               f"<color={colors}>{player}~打工~</COLOR>"]
                     return self.shijieShout(random.choice(content))
                 # zanList = ['*']
                 # contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 # if contains_zan:
                 #     content = [f"<color={colors}>{player}~请文明发言喔~</COLOR>"]
                 #     return self.shijieShout(random.choice(content))
-                zanList = ['触发', '关键词', '机器人', 'AI']
+                zanList = ['触发', '关键词', '机器人', 'AI', 'ai', '脚本']
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 if contains_zan:
-                    content = [f"<color={colors}>{player}~(*^▽^*)~</COLOR>"]
+                    content = [f"<color={colors}>{player}~新年快乐~(*^▽^*)~</COLOR>"]
                     return self.shijieShout(random.choice(content))
 
         need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
@@ -948,6 +970,11 @@ class DailyTask:
 
             # 领取累积奖励
             for k in range(3):
+                re = CompareColors.compare("581,351,#F1A949|581,347,#F1A949|581,356,#F1A949")  # 最后一个奖励需右滑，根据橙色进度条特殊处理
+                if re:
+                    tapSleep(573, 303)
+                    tapSleep(606, 992)
+
                 re = FindColors.find("576,909,#F15D40|580,907,#F45F42|577,912,#ED5B3E", rect=[213, 887, 604, 980],
                                      diff=0.95)
                 if re:
@@ -972,8 +999,10 @@ class DailyTask:
 
             re = TomatoOcrTap(302, 1054, 363, 1085, '开始', 50, 10)
             if not re:
-                Toast('派对大师 - 进入失败')
-                return
+                re = TomatoOcrTap(361, 1055, 418, 1086, '匹配', 30, 10)
+                if not re:
+                    Toast('派对大师 - 进入失败')
+                    return
 
             Toast('派对大师 - 开始匹配')
 
@@ -1389,6 +1418,58 @@ class DailyTask:
         if 功能开关["其他签到活动"] == 0:
             return
 
+        # 西行记
+        if 任务记录["西行记签到"] == 0:
+            self.homePage()
+            res = TomatoOcrFindRangeClick('西行记', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                          sleep1=1.5, match_mode='fuzzy')
+            if res:
+                Toast('西行记活动 - 任务开始')
+                re = TomatoOcrTap(168, 470, 285, 505, '火眼金睛', sleep1=1.5)
+                if re:
+                    re = TomatoOcrText(271, 620, 410, 659, '蓝力士')
+                    if re:
+                        Toast('火眼金睛 - 蓝力士 - 任务开始')
+                        tapSleep(85, 1202, 0.8)  # 返回
+                        tapSleep(162, 1201, 1.3)  # 营地
+                        tapSleep(345, 421, 3)  # 铁匠铺
+                        tapSleep(172, 329, 0.8)  # 妖怪
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+
+                    re = TomatoOcrText(271, 620, 410, 659, '狐巡司')
+                    if re:
+                        Toast('火眼金睛 - 狐巡司 - 任务开始')
+                        tapSleep(85, 1202, 0.8)  # 返回
+                        tapSleep(634, 164, 0.8)  # 大地图
+                        tapSleep(311, 39, 0.8)  # 点击空白
+                        for l in range(10):
+                            swipe(350, 277, 380, 609)  # 上划
+                            sleep(0.5)
+                            if l > 5:
+                                swipe(108, 599, 505, 577)  # 左滑
+                            else:
+                                swipe(505, 577, 108, 599)  # 右滑
+                            sleep(1)
+
+                            find = FindColors.find(
+                                "375,250,#F7F3EA|369,230,#F7F3EA|347,244,#836E55|363,239,#8F7D69|393,243,#F7F3EA|397,243,#F7F3EA",
+                                rect=[11, 31, 701, 523], diff=0.93)
+                            if find:
+                                tapSleep(find.x - 50, find.y + 40)
+                                任务记录["西行记签到"] = 1
+                                Toast('火眼金睛 - 已找到任务奖励')
+                                break
+                    re = FindColors.find("304,474,#F55F42|305,478,#F15B41|308,476,#F15D40", rect=[115, 440, 617, 572],
+                                         diff=0.93)  # 累积奖励
+                    if re:
+                        tapSleep(re.x - 20, re.y + 20)
+            else:
+                Toast('西行记活动 - 未找到活动入口')
+
         # 双旦联欢
         if 任务记录["双旦联欢签到"] == 0:
             self.homePage()
@@ -1405,6 +1486,8 @@ class DailyTask:
                     tapSleep(92, 1218)  # 返回
                     tapSleep(92, 1218)
                     tapSleep(92, 1218)
+            else:
+                任务记录["双旦联欢签到"] = 1
 
         # 忆战回环
         if 任务记录["忆战回环签到"] == 0:
@@ -1428,6 +1511,8 @@ class DailyTask:
                     tapSleep(181, 1059, 0.1)  # 点击奖励
                     tapSleep(92, 1218)  # 返回
                     tapSleep(92, 1218)
+            else:
+                任务记录["半周年庆典签到"] = 1
 
         # 半周年庆典签到
         if 任务记录["半周年庆典签到"] == 0:
@@ -1445,6 +1530,8 @@ class DailyTask:
                     tapSleep(92, 1218)  # 返回
                     tapSleep(92, 1218)
                     tapSleep(92, 1218)
+            else:
+                任务记录["半周年庆典签到"] = 1
 
         # 大家的麦芬
         if 任务记录["大家的麦芬"] == 0:
@@ -1473,6 +1560,7 @@ class DailyTask:
                 任务记录["大家的麦芬"] = 1
             else:
                 Toast('大家的麦芬 - 未找到入口')
+                任务记录["大家的麦芬"] = 1
 
         # 盛大公演
         if 任务记录["盛大公演"] == 0:
@@ -1494,6 +1582,29 @@ class DailyTask:
                     任务记录["盛大公演"] = 1
                 else:
                     Toast('盛大公演 - 未找到入口')
+                    任务记录["盛大公演"] = 1
+
+        # 逍遥大圣
+        if 任务记录["逍遥大圣"] == 0:
+            self.homePage()
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
+            # 判断是否在营地页面
+            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            if res:
+                res = TomatoOcrFindRangeClick('大圣', match_mode='fuzzy', x1=7, y1=797, x2=96, y2=1144, offsetX=30,
+                                              offsetY=-20,
+                                              sleep1=0.8)
+                if res:
+                    Toast('逍遥大圣 - 任务开始')
+                    res = TomatoOcrTap(624, 895, 713, 921, "登录奖励", sleep1=0.5)
+                    res = TomatoOcrFindRangeClick('可领取', x1=101, y1=389, x2=622, y2=1068, offsetX=30, offsetY=-20,
+                                                  sleep1=0.5)
+                    tapSleep(90, 1204)  # 返回
+                    tapSleep(90, 1204)
+                    任务记录["逍遥大圣"] = 1
+                else:
+                    Toast('逍遥大圣 - 未找到入口')
+                    任务记录["逍遥大圣"] = 1
 
     # 箱庭苗圃
     def XiangTingMiaoPu(self):
@@ -1819,10 +1930,14 @@ class DailyTask:
             Toast('进入营地失败')
             return
 
-        res = TomatoOcrFindRangeClick("紧急委托", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40)  # 进入紧急委托
+        res = TomatoOcrFindRangeClick("紧急委托", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
+                                      sleep1=1.5)  # 进入紧急委托
         if not res:
-            Toast('紧急委托 - 未找到活动入口')
-            return
+            res = TomatoOcrFindRangeClick("瑶池盛会", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
+                                          sleep1=1.5)  # 进入紧急委托
+            if not res:
+                Toast('紧急委托 - 未找到活动入口')
+                return
 
         # 领取每日礼包
         tapSleep(595, 162)  # 点击塔莎特惠
@@ -1849,10 +1964,20 @@ class DailyTask:
 
         # 前往下一层
         sleep(0.5)
-        re1 = imageFindClick('塔莎委托-下一层', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
-        re2 = imageFindClick('塔莎委托-下一层2', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
-        re3 = imageFindClick('塔莎委托-下一层3', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
-        if re1 or re2 or re3:
+        nextLevel = False
+        for l in range(3):
+            re1 = imageFindClick('塔莎委托-下一层', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
+            re2 = imageFindClick('塔莎委托-下一层2', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
+            re3 = imageFindClick('塔莎委托-下一层3', confidence1=0.8, x1=78, y1=514, x2=645, y2=1090)
+            re4 = FindColors.find("440,1024,#94665A|440,1018,#9A6D5B|442,1021,#95675A", rect=[83, 514, 634, 1084],
+                                  diff=0.95)  # 匹配瑶池盛会下一层图标
+            if re4:
+                tapSleep(re4.x, re4.y)
+            if re1 or re2 or re3 or re4:
+                nextLevel = True
+                break
+
+        if nextLevel:
             sleep(0.5)
             TomatoOcrTap(452, 744, 510, 771, '确定')
             sleep(3)
@@ -1881,10 +2006,24 @@ class DailyTask:
             Toast('准备剪彩')
             sleep(5)
 
+        # 准备剪彩（瑶池盛会）
+        res = TomatoOcrTap(497, 1133, 552, 1167, "吃桃", 10, 10)
+        if res:
+            res = TomatoOcrTap(497, 1133, 552, 1167, "吃桃", 10, 10)
+            res = TomatoOcrTap(497, 1133, 552, 1167, "吃桃", 10, 10)
+            Toast('准备吃桃')
+            sleep(5)
+
         # 自动剪彩
         res = TomatoOcrTap(457, 1142, 574, 1175, "自动剪彩", 10, 10)
         if res:
             Toast('开始剪彩')
+            sleep(10)
+
+        # 自动剪彩（瑶池盛会）
+        res = TomatoOcrTap(457, 1142, 574, 1175, "自动吃桃", 10, 10)
+        if res:
+            Toast('自动吃桃')
             sleep(10)
 
         tapSleep(330, 1166)  # 点击空白处
