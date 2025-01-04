@@ -352,6 +352,13 @@ def waitInvite():
             Toast('收起喊话窗口')
             tapSleep(107, 93)
 
+        # 关闭未结算宝箱
+        re = CompareColors.compare("492,519,#F4E37D|491,523,#F4D86C|494,528,#EFD06E")
+        if re:
+            Toast('关闭未结算宝箱')
+            tapSleep(353, 1046, 0.8)
+            tapSleep(364, 738, 0.8)
+
         # 判断队友全部离队，退出房间
         if fight_type == '恶龙带队' or fight_type == '恶龙挑战':
             allQuit, _ = TomatoOcrText(325, 558, 393, 585, "等待加入")

@@ -67,9 +67,10 @@ class AutoSkill:
                     if res3 or res4:
                         print('辅助施法-识别战斗状态-开始战斗')
                         self.fighting = 1
-                        res = TomatoOcrTap(644, 878, 687, 902, "自动", 10, -10)
                         if self.SkillCount >= self.SkillNeedCount:
                             res = TomatoOcrTap(644, 878, 687, 902, "手动", 10, -10)
+                        else:
+                            res = TomatoOcrTap(644, 878, 687, 902, "自动", 10, -10)
                     else:
                         sleep(0.2)
                         self.fighting = 0
@@ -144,7 +145,7 @@ class AutoSkill:
                                     self.Skill2 = time.time()
                                 self.Skill1Flag = True
                                 self.Skill1 = time.time()
-                                self.SkillNeedCount = self.SkillNeedCount +1
+                                self.SkillNeedCount = self.SkillNeedCount + 1
                         else:
                             a = 1  # debug
                             # text = self.Skill1Time - (time.time() - self.Skill1)

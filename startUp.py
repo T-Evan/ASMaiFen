@@ -90,14 +90,8 @@ class StartUp:
 
                 功能开关["needHome"] = 0
                 if 任务记录["玩家名称"] == "":
-                    res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
-                    任务记录["玩家名称"] = name
-                    res, fightNum = TomatoOcrText(110, 99, 200, 118, '玩家战力')
-                    if "万" in fightNum:
-                        任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
-                    else:
-                        任务记录["玩家战力"] = float(fightNum.replace("万", ""))
-                    Toast(f'玩家：{name}-战力：{任务记录["玩家战力"]}-已进入游戏')
+                    self.shilianTask.zhiYeZhanLi()
+                    Toast(f'玩家：{任务记录["玩家名称"]}-战力：{任务记录["玩家战力"]}-职业：{任务记录["玩家-当前职业"]}已进入游戏')
                 return True
             else:
                 # 不在首页，尝试开始返回首页

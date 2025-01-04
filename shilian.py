@@ -1090,9 +1090,10 @@ class ShiLianTask:
             if isTreasure == 1:
                 if 功能开关['秘境点赞队友'] == 1:
                     Toast('点赞队友')
-                    res = TomatoOcrTap(514, 511, 592, 538, "一键全赞", 5, 5)  # 一键点赞
+                    res = TomatoOcrTap(514, 575, 593, 599, "一键全赞", 5, 5)  # 一键点赞
                     if not res:
-                        res = TomatoOcrTap(513, 570, 594, 594, "一键全赞", 5, 5)  # 一键点赞
+                        res = TomatoOcrFindRangeClick("全赞", x1=480, y1=490, x2=615, y2=768,
+                                                      match_mode='fuzzy')  # 一键点赞
                     if not res:
                         for i in range(1, 4):
                             imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
@@ -1126,9 +1127,9 @@ class ShiLianTask:
         if 功能开关['秘境点赞队友'] == 1:
             if isTreasure == 1:
                 Toast('点赞队友')
-                res = TomatoOcrTap(514, 511, 592, 538, "一键全赞", 5, 5)  # 一键点赞
+                res = TomatoOcrTap(514, 575, 593, 599, "一键全赞", 5, 5)  # 一键点赞
                 if not res:
-                    res = TomatoOcrTap(513, 570, 594, 594, "一键全赞", 5, 5)  # 一键点赞
+                    res = TomatoOcrFindRangeClick("全赞", x1=480, y1=490, x2=615, y2=768, match_mode='fuzzy')  # 一键点赞
                 if not res:
                     for i in range(1, 4):
                         imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
@@ -1278,6 +1279,41 @@ class ShiLianTask:
         tapSleep(361, 1018, 0.5)  # 点击上阵
         tapSleep(356, 1204, 0.3)  # 点击返回
         tapSleep(356, 1204, 0.3)  # 点击冒险
+
+    def zhiYeZhanLi(self):
+        res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
+        任务记录["玩家名称"] = name
+        res, fightNum = TomatoOcrText(113,101,193,117, '玩家战力')
+        if "万" in fightNum:
+            任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
+        else:
+            任务记录["玩家战力"] = float(fightNum.replace("万", ""))
+        # 识别当前职业
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-战士1", 0.9, 6,53,94,142)
+            if re:
+                Toast('识别当前职业-战士')
+                任务记录['玩家-当前职业'] = '战士'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-服事1", 0.9, 6,53,94,142)
+            if re:
+                Toast('识别当前职业-服事')
+                任务记录['玩家-当前职业'] = '服事'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-刺客1", 0.9, 6,53,94,142)
+            if re:
+                Toast('识别当前职业-刺客')
+                任务记录['玩家-当前职业'] = '刺客'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-法师1", 0.9, 6,53,94,142)
+            if re:
+                Toast('识别当前职业-法师')
+                任务记录['玩家-当前职业'] = '法师'
+        if 任务记录['玩家-当前职业'] == '':
+            re, x, y = imageFind("职业-游侠1", 0.9, 6,53,94,142)
+            if re:
+                Toast('识别当前职业-游侠')
+                任务记录['玩家-当前职业'] = '游侠'
 
     def fightingSanMoTouTeam(self):
         totalWait = 30
