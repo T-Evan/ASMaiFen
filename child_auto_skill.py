@@ -323,7 +323,7 @@ class AutoSkill:
                                         diff=0.95)
                                     if re:
                                         skill1CoolTime = 3
-                                print(f'1技能冷却-{skill1CoolTime}')
+                                # print(f'1技能冷却-{skill1CoolTime}')
                                 # re, skill2CoolTime = TomatoOcrText(495, 1056, 537, 1095, '1技能冷却')  # 1技能冷却时间
                                 # # 误识别修正
                                 # skill2CoolTime = self.coolTimeFix(skill2CoolTime)

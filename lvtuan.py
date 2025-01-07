@@ -389,10 +389,10 @@ class LvTuanTask:
         if 功能开关['旅团自动许愿'] == 1 and chongWuName != '':
             re = CompareColors.compare("143,336,#9D7D51|140,337,#9D7D51|142,339,#9D7D51")  # 判断能否许愿
             if re:
-                tapSleep(140, 331, 0.8)  # 点击许愿
-                TomatoOcrFindRangeClick(chongWuName)
-                TomatoOcrFindRangeClick('确定')
-                TomatoOcrFindRangeClick('确认')
+                tapSleep(140, 331, 1)  # 点击许愿
+                re = TomatoOcrFindRangeClick(f'{chongWuName}拼图', x1=127, y1=190, x2=611, y2=973)
+                if re:
+                    tapSleep(359,1024) # 确认选择
 
         for i in range(4):
             Toast(f'旅团 - 许愿墙 - 捐献中{i}/5')

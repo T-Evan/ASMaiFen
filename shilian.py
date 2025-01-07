@@ -1118,11 +1118,11 @@ class ShiLianTask:
         if res1 or res2 or res3:
             isTreasure = 1
         if 功能开关['秘境不开宝箱'] == 1:
-            res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
-            res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
-            if res6 or res7:
-                Toast('已返回房间')
-                return 1
+            # res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+            # res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+            # if res6 or res7:
+            #     Toast('已返回房间')
+            #     return 1
 
             openStatus = 0
             if isTreasure == 1:
@@ -1595,7 +1595,7 @@ class ShiLianTask:
                 break
             if elapsed >= 25:
                 colors = generate_random_color()
-                tmpContent = f"<color={colors}>绝境-战斗即将结束-期待下次相遇~</COLOR>"
+                tmpContent = f"<color={colors}>绝境-战斗即将结束-辛苦了~期待下次相遇~</COLOR>"
                 self.teamShoutAI(tmpContent, shoutType="fight")
 
             # 识别战斗中状态
@@ -1679,7 +1679,7 @@ class ShiLianTask:
 
             if elapsed >= 25:
                 colors = generate_random_color()
-                tmpContent = f"<color={colors}>终末战-战斗即将结束-期待下次相遇~</COLOR>"
+                tmpContent = f"<color={colors}>终末战-战斗即将结束-辛苦了~期待下次相遇~</COLOR>"
                 self.teamShoutAI(tmpContent, shoutType="fight")
 
             # 识别战斗中状态
@@ -1779,7 +1779,7 @@ class ShiLianTask:
 
             if elapsed >= 15:
                 colors = generate_random_color()
-                tmpContent = f"<color={colors}>恶龙-战斗即将结束-期待下次相遇~</COLOR>"
+                tmpContent = f"<color={colors}>恶龙-战斗即将结束-辛苦了~期待下次相遇~</COLOR>"
                 self.teamShoutAI(tmpContent, shoutType="fight")
 
             # 识别战斗中状态
@@ -1971,7 +1971,7 @@ class ShiLianTask:
                     teamShoutDone = self.teamShout()
                 if elapsed > 25 and fightType == '秘境带队':
                     colors = generate_random_color()
-                    tmpContent = f"<color={colors}>秘境-战斗即将结束-期待下次相遇~</COLOR>"
+                    tmpContent = f"<color={colors}>秘境-战斗即将结束-辛苦了~期待下次相遇~</COLOR>"
                     self.teamShoutAI(tmpContent, shoutType="fight")
                 self.AIContent()
                 # 自动锁敌走位
@@ -3077,6 +3077,8 @@ class ShiLianTask:
             res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
             colors = generate_random_color()
             tmpContent = f"<color={colors}>战斗失败QAQ~期待下次相遇~</COLOR>"
+            self.teamShoutAI(tmpContent, shoutType="fight")
+            tmpContent = f"<color={colors}>大家加油~~</COLOR>"
             self.teamShoutAI(tmpContent, shoutType="fight")
             # self.teamShoutAI(f'可以提醒我进行移动哟~', shoutType="fight")
             sleep(0.5)

@@ -387,11 +387,11 @@ def waitInvite():
             if not teamShout:
                 count, last_time = shilianTask.daiDuiCount()
                 content = f'{fight_type}-等待开始~{任务记录["战斗-房主名称"]}'
-                if count < 3:
-                    shilianTask.teamShoutAI(f'{content}-初次相遇~给个关注叭', shoutType='room')
-                else:
-                    shilianTask.teamShoutAI(f'{content}-第{count}次相遇~祝你游戏开心',
-                                            shoutType='room')
+                # if count < 3:
+                #     shilianTask.teamShoutAI(f'{content}-初次相遇~给个关注叭', shoutType='room')
+                # else:
+                #     shilianTask.teamShoutAI(f'{content}-第{count}次相遇~祝你游戏开心',
+                #                             shoutType='room')
                 teamShout = True
                 Toast(f'{content}-第{count}次相遇')
 

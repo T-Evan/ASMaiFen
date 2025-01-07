@@ -381,8 +381,31 @@ class DailyTask:
                 zhiye = 职业映射.get(任务记录["玩家-当前职业"], '')
                 self.shilianTask.zhiYeZhanLi()
                 extraContent = f'{zhanLi}w{zhiye}'
-                zanList3 = ['在哪里', '来一个', '来人', '求个', '来个', '来打工', '来黑工', '来奶', '来t', '来输出',
-                            '来打工']
+                zanList3 = ['来奶', '来个奶', '有奶', '找个奶', '差个奶', '差奶', '缺奶', '缺个奶']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan and zhiye == '奶':
+                    content = [f"<color={colors}>{player}~来了~{extraContent}</COLOR>",
+                               f"<color={colors}>{player}~来啦~{extraContent}</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                zanList3 = ['来t', '来个t', '有t', '找个t', '差个t', '差t', '缺t', '缺个t']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan and zhiye == '战':
+                    content = [f"<color={colors}>{player}~来了~{extraContent}</COLOR>",
+                               f"<color={colors}>{player}~来啦~{extraContent}</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                zanList3 = ['来输出', '来个输出', '有输出', '找个输出', '差个输出', '差输出', '缺输出', '缺个输出']
+                contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
+                if contains_zan and (zhiye == '刺' or zhiye == '法' or zhiye == '弓'):
+                    content = [f"<color={colors}>{player}~来了~{extraContent}</COLOR>",
+                               f"<color={colors}>{player}~来啦~{extraContent}</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                zanList = ['来个ai', '来个AI', '召唤ai', '召唤AI']
+                contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~来了~新年快乐~(*^▽^*)~</COLOR>",
+                               f"<color={colors}>{player}~在呢~辛苦啦~(*^▽^*)~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
+                zanList3 = ['在哪里', '来一个', '来人', '求个', '来个', '来打工', '来黑工', '来打工']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
                     content = [f"<color={colors}>{player}~来了来了~{extraContent}</COLOR>",
@@ -398,7 +421,7 @@ class DailyTask:
                                f"<color={colors}>{player}~有的~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~来啦~{extraContent}</COLOR>"]
                     return self.shijieShout(random.choice(content))
-                zanList = ['影子', '求带', '带个', '带带', '差个', '有大哥', '帮忙', '求求']
+                zanList = ['影子', '求带', '带个', '带带', '差个', '有大哥', '求求']
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 if contains_zan:
                     content = [f"<color={colors}>{player}~拉我拉我~{extraContent}</COLOR>",
@@ -412,11 +435,6 @@ class DailyTask:
                 #     content = [f"<color={colors}>{player}~请文明发言喔~</COLOR>"]
                 #     return self.shijieShout(random.choice(content))
                 # zanList = ['机器人', 'AI', 'ai', '脚本']
-                zanList = ['ai']
-                contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
-                if contains_zan:
-                    content = [f"<color={colors}>{player}~新年快乐~(*^▽^*)~</COLOR>"]
-                    return self.shijieShout(random.choice(content))
 
         need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
         if need_dur_minute == '':
@@ -1448,7 +1466,37 @@ class DailyTask:
                 Toast('西行记活动 - 任务开始')
                 re = TomatoOcrTap(168, 470, 285, 505, '火眼金睛', sleep1=1.5)
                 if re:
-                    re = TomatoOcrText(271, 620, 410, 659, '蓝力士')
+                    re, _ = TomatoOcrText(277, 623, 353, 653, '狸弓手')
+                    if re:
+                        Toast('火眼金睛 - 狸弓手 - 任务开始')
+                        tapSleep(85, 1202, 0.8)  # 返回
+                        tapSleep(465, 1210, 0.8)  # 旅人
+                        tapSleep(590, 481, 1.5)  # 天赋
+                        swipe(80, 809, 143, 323)
+                        sleep(0.5)
+                        swipe(80, 809, 143, 323)
+                        sleep(0.5)
+                        tapSleep(148, 1032, 0.8)  # 妖怪
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+
+                    re, _ = TomatoOcrText(279, 620, 375, 654, '青毛狮王')
+                    if re:
+                        Toast('火眼金睛 - 青毛狮王 - 任务开始')
+                        tapSleep(85, 1202, 0.8)  # 返回
+                        tapSleep(667, 505, 0.8)  # 试炼
+                        tapSleep(390, 374, 1.5)  # 绝境
+                        tapSleep(94, 160, 0.8)  # 妖怪
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+                        tapSleep(348, 1188)  # 点击空白
+
+                    re, _ = TomatoOcrText(271, 620, 410, 659, '蓝力士')
                     if re:
                         Toast('火眼金睛 - 蓝力士 - 任务开始')
                         tapSleep(85, 1202, 0.8)  # 返回
@@ -1461,7 +1509,7 @@ class DailyTask:
                         tapSleep(348, 1188)  # 点击空白
                         tapSleep(348, 1188)  # 点击空白
 
-                    re = TomatoOcrText(271, 620, 410, 659, '狐巡司')
+                    re, _ = TomatoOcrText(271, 620, 410, 659, '狐巡司')
                     if re:
                         Toast('火眼金睛 - 狐巡司 - 任务开始')
                         tapSleep(85, 1202, 0.8)  # 返回
@@ -1485,7 +1533,7 @@ class DailyTask:
                                 Toast('火眼金睛 - 已找到任务奖励')
                                 break
                     re = FindColors.find("304,474,#F55F42|305,478,#F15B41|308,476,#F15D40", rect=[115, 440, 617, 572],
-                                         diff=0.93)  # 累积奖励
+                                         diff=0.88)  # 累积奖励
                     if re:
                         tapSleep(re.x - 20, re.y + 20)
             else:
