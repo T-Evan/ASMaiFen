@@ -1445,20 +1445,27 @@
                             <input id="旅团浇树" name="vehicle" type="checkbox" value="Bike">旅团浇树<br>
                         </div>
                         <div class="checkbox-item">
-                            <input id="旅团任务" name="vehicle" type="checkbox" value="Bike">旅团任务<br>
+                            <input id="旅团任务" name="vehicle" type="checkbox" value="Bike">旅团任务领取<br>
                         </div>
-                        <div class="checkbox-item">
-                            <input id="旅团许愿墙" name="vehicle" type="checkbox" value="Bike">旅团许愿墙<br>
-                        </div>
-                    </div>
-                    <div class="checkbox-item">
-                        <input id="旅团许愿墙不捐公共" name="vehicle" type="checkbox" value="Bike">旅团许愿-不捐公共<br>
                     </div>
                     <div class="flex-container">
                         <label for="付费浇灌次数">付费浇灌次数：</label>
                         <input type="text" id="付费浇灌次数" name="付费浇灌次数" lay-verify="title"
                                autocomplete="off"
                                placeholder="付费浇灌次数" class="layui-input">
+                    </div>
+                    <legend>旅团许愿</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="旅团许愿墙" name="vehicle" type="checkbox" value="Bike">旅团捐献<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团许愿墙不捐公共" name="vehicle" type="checkbox" value="Bike">旅团捐献-不捐公共<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="旅团自动许愿" name="vehicle" type="checkbox" value="Bike">旅团自动许愿<br>
+                            <label class="gray-text">(许愿主战宠物)</label><br>
+                        </div>
                     </div>
                     <legend>旅团调查队</legend>
                     <div class="checkbox-group">
@@ -1748,7 +1755,7 @@
                         <label for="三魔头离队等待时间">三魔头离队等待时间:</label>
                         <input type="text" id="三魔头自动离队时间" name="三魔头自动离队时间" lay-verify="title"
                                autocomplete="off"
-                               placeholder="默认进入战斗后30s离队" class="layui-input">
+                               placeholder="默认进入战斗后300s离队" class="layui-input">
                     </div>
                     <legend>职能相关</legend>
                     <div class="checkbox-group">
@@ -2496,6 +2503,7 @@
         setSwitchStatus("调查队自动接收邀请");
         setSwitchStatus("旅团许愿墙");
         setSwitchStatus("旅团许愿墙不捐公共");
+        setSwitchStatus("旅团自动许愿");
 
         var 付费浇灌次数 = localStorage.getItem("付费浇灌次数");
         document.getElementById("付费浇灌次数").value = 付费浇灌次数;
@@ -2994,6 +3002,7 @@
         调查队无钥匙继续 = saveSwitchStatus("调查队无钥匙继续");
         旅团许愿墙 = saveSwitchStatus("旅团许愿墙");
         旅团许愿墙不捐公共 = saveSwitchStatus("旅团许愿墙不捐公共");
+        旅团自动许愿 = saveSwitchStatus("旅团自动许愿");
 
         var 付费浇灌次数 = document.getElementById("付费浇灌次数").value;
         localStorage.setItem("付费浇灌次数", 付费浇灌次数);
@@ -3263,6 +3272,7 @@
             调查队自动接收邀请: 调查队自动接收邀请,
             旅团许愿墙: 旅团许愿墙,
             旅团许愿墙不捐公共: 旅团许愿墙不捐公共,
+            旅团自动许愿: 旅团自动许愿,
             付费浇灌次数: 付费浇灌次数,
             调查队挑战次数: 调查队挑战次数,
             旅团商店开关: 旅团商店开关,

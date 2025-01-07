@@ -56,7 +56,9 @@ class DailyTask:
             if tryTimes > 15:
                 Toast(f'尝试返回游戏,{tryTimes}/20')
                 system.open(f"{功能开关['游戏包名']}")
-            if tryTimes > 20:
+
+            resConnErr, _ = TomatoOcrText(292, 691, 427, 722, "尝试重新连接")
+            if resConnErr or tryTimes > 20:
                 res1, _ = TomatoOcrText(311, 588, 408, 637, "异地登录")
                 res2, _ = TomatoOcrText(292, 691, 427, 722, "尝试重新连接")
                 if not res2 and (res1 and 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0"):
@@ -337,6 +339,8 @@ class DailyTask:
                               if "回环" not in msg]
                 if player == '默认':
                     player = ''
+                if '旅团' in player:
+                    continue
                 colors = generate_random_color()
                 zanList3 = ['狐巡司', '第一只']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
@@ -346,7 +350,7 @@ class DailyTask:
                 zanList3 = ['火眼金睛', '找妖怪', '在哪']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
-                    content = [f"<color={colors}>{player}~1.大地图 2.铁匠铺 3.秘境之间~</COLOR>"]
+                    content = [f"1.大地图 2.铁匠铺 3.秘境 4.绝境 5.天赋页"]
                     return self.shijieShout(random.choice(content))
                 # zanList3 = ['元旦快乐', '新年快乐']
                 # contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
@@ -408,10 +412,11 @@ class DailyTask:
                 #     content = [f"<color={colors}>{player}~请文明发言喔~</COLOR>"]
                 #     return self.shijieShout(random.choice(content))
                 # zanList = ['机器人', 'AI', 'ai', '脚本']
-                # contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
-                # if contains_zan:
-                #     content = [f"<color={colors}>{player}~新年快乐~(*^▽^*)~</COLOR>"]
-                #     return self.shijieShout(random.choice(content))
+                zanList = ['ai']
+                contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
+                if contains_zan:
+                    content = [f"<color={colors}>{player}~新年快乐~(*^▽^*)~</COLOR>"]
+                    return self.shijieShout(random.choice(content))
 
         need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0))  # 分钟
         if need_dur_minute == '':
@@ -423,8 +428,9 @@ class DailyTask:
                 return
         if contentAI != "" and 任务记录["世界喊话AI-倒计时"] > 0:
             diffTime = time.time() - 任务记录["世界喊话AI-倒计时"]
-            if diffTime < random.randint(50, 60):
-                Toast(f'日常 - 世界AI喊话 - 倒计时{round((60 - diffTime) / 60, 2)}min')
+            dur_time = random.randint(60, 90)
+            if diffTime < dur_time:
+                Toast(f'日常 - 世界AI喊话 - 倒计时{round((dur_time - diffTime) / dur_time, 2)}min')
                 return
 
         self.homePage(needQuitTeam=True)

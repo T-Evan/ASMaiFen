@@ -342,6 +342,16 @@ class LvTuanTask:
 
         Toast("旅团 - 许愿墙 - 开始")
 
+        chongWuName = ''
+        if 功能开关['旅团自动许愿'] == 1:
+            Toast("旅团 - 许愿墙 - 寻找主战宠物")
+            # 返回首页
+            self.dailyTask.homePage()
+            re = TomatoOcrTap(527, 1207, 593, 1232, '麦乐兽')
+            if re:
+                tapSleep(350, 359)  # 点击主战宠物
+                re, chongWuName = TomatoOcrText(287, 388, 437, 423, '主战宠物')
+
         # 判断是否在旅团页面
         isLvtuan = False
         for i in range(2):
@@ -374,6 +384,15 @@ class LvTuanTask:
         #         res = TomatoOcrTap(636, 817, 701, 839, "许愿墙", 20, -20)
         #         if not res:
         #             return
+
+        # 自动许愿
+        if 功能开关['旅团自动许愿'] == 1 and chongWuName != '':
+            re = CompareColors.compare("143,336,#9D7D51|140,337,#9D7D51|142,339,#9D7D51")  # 判断能否许愿
+            if re:
+                tapSleep(140, 331, 0.8)  # 点击许愿
+                TomatoOcrFindRangeClick(chongWuName)
+                TomatoOcrFindRangeClick('确定')
+                TomatoOcrFindRangeClick('确认')
 
         for i in range(4):
             Toast(f'旅团 - 许愿墙 - 捐献中{i}/5')

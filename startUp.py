@@ -33,7 +33,7 @@ class StartUp:
         # r = system.shell(f"start -n com.xd.cfbmf")
         tryTimes = 0
 
-        max_attempt = 8
+        max_attempt = 12
         for attempt in range(max_attempt):
             tryTimes = tryTimes + 1
             if 功能开关["fighting"] == 1:
@@ -91,7 +91,8 @@ class StartUp:
                 功能开关["needHome"] = 0
                 if 任务记录["玩家名称"] == "":
                     self.shilianTask.zhiYeZhanLi()
-                    Toast(f'玩家：{任务记录["玩家名称"]}-战力：{任务记录["玩家战力"]}-职业：{任务记录["玩家-当前职业"]}已进入游戏')
+                    Toast(
+                        f'玩家：{任务记录["玩家名称"]}-战力：{任务记录["玩家战力"]}-职业：{任务记录["玩家-当前职业"]}已进入游戏')
                 return True
             else:
                 # 不在首页，尝试开始返回首页
@@ -110,7 +111,7 @@ class StartUp:
                     self.shilianTask.fightingBaoZou()
                     return
 
-            Toast(f'启动游戏，等待加载中，{attempt}/8')
+            Toast(f'启动游戏，等待加载中，{attempt}/12')
 
             sleep(3)  # 等待游戏启动
         print('启动游戏失败，超过最大尝试次数')

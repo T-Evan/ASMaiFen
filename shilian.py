@@ -139,6 +139,23 @@ class ShiLianTask:
                     tapSleep(427, 217)
             tapSleep(93, 1213)  # 返回
 
+        # 领取全服心火奖励
+        re = FindColors.find("610,437,#F56042|613,438,#F55F42|611,440,#F05D40", rect=[563, 344, 630, 756], diff=0.95)
+        if re:
+            tapSleep(re.x, re.y)
+            tapSleep(353, 1245)  # 点击空白处返回
+            tapSleep(353, 1245)
+
+        # 升级法宝
+        re = CompareColors.compare("180,639,#F15D41|180,637,#F55F42|181,639,#EF5C40")
+        if re:
+            tapSleep(137, 666)  # 点击法宝
+            for k in range(3):
+                TomatoOcrTap(330, 1009, 355, 1035, '升')  # 点击升级
+                TomatoOcrTap(330, 1009, 355, 1035, '突')  # 点击升级
+            tapSleep(353, 1245)  # 点击空白处返回
+            tapSleep(353, 1245)
+
         # 识别目标阶段
         toLevel = safe_int_v2(功能开关['三魔头目标阶段'])
         if toLevel == 0:
@@ -443,7 +460,7 @@ class ShiLianTask:
                 res = TomatoOcrTap(332, 754, 387, 789, "确定")
 
         # 判断正在匹配中 - 循环等待300s
-        totalWait = 150  # 30000 毫秒 = 30 秒
+        totalWait = 210  # 30000 毫秒 = 30 秒
         elapsed = 0
         while 1:
             if elapsed > totalWait:
@@ -460,15 +477,36 @@ class ShiLianTask:
             if res:
                 res = TomatoOcrTap(454, 727, 508, 758, "确定")
                 if res:
-                    Toast("梦魇任务 - 匹配超时 - 无队伍")
-                    elapsed = 0
+                    Toast("梦魇任务 - 匹配超时")
+
+            waitStatus3, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
+            if not waitStatus3:
+                Toast("梦魇任务 - 尝试寻找房间")
+                re = TomatoOcrFindRangeClick('更多队伍', x1=453, y1=464, x2=623, y2=1171)
+                if re:
+                    findTeam = False
+                    for k in range(5):
+                        TomatoOcrFindRangeClick(keywords=[{'keyword': '加入', 'match_mode': 'fuzzy'},
+                                                          {'keyword': '申请', 'match_mode': 'fuzzy'}], x1=470, y1=249,
+                                                x2=601, y2=988)
+                        sleep(1)
+                        re, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
+                        if re:
+                            findTeam = True
+                            elapsed = 0
+                            break
+                        tapSleep(590, 208)  # 点击刷新按钮
+                    if not findTeam:
+                        Toast("梦魇任务 - 无可进入房间")
+                        re, _ = TomatoOcrText(307, 1019, 407, 1046, '创建队伍')
+                        if re:
+                            tapSleep(91, 1213)  # 点击返回匹配页
 
             waitStatus1 = TomatoOcrFindRange('匹配中')
             waitStatus2, x, y = imageFind('队伍-匹配中')
+            waitStatus3, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
             res1 = self.WaitFight()
-            # if res1:
-            #     任务记录["试炼-恶龙-完成次数"] = 任务记录["试炼-恶龙-完成次数"] + 1
-            if res1 == True or (not waitStatus1 and not waitStatus2):  # 成功准备战斗 或 未匹配到
+            if res1 == True or (not waitStatus1 and not waitStatus2 and not waitStatus3):  # 成功准备战斗 或 未匹配到 或 未进入房间
                 break
 
             elapsed = elapsed + 5
@@ -1283,46 +1321,46 @@ class ShiLianTask:
     def zhiYeZhanLi(self):
         res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
         任务记录["玩家名称"] = name
-        res, fightNum = TomatoOcrText(113,101,193,117, '玩家战力')
+        res, fightNum = TomatoOcrText(113, 101, 193, 117, '玩家战力')
         if "万" in fightNum:
             任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
         else:
             任务记录["玩家战力"] = float(fightNum.replace("万", ""))
         # 识别当前职业
         if 任务记录['玩家-当前职业'] == '':
-            re, x, y = imageFind("职业-战士1", 0.9, 6,53,94,142)
+            re, x, y = imageFind("职业-战士1", 0.9, 6, 53, 94, 142)
             if re:
                 Toast('识别当前职业-战士')
                 任务记录['玩家-当前职业'] = '战士'
         if 任务记录['玩家-当前职业'] == '':
-            re, x, y = imageFind("职业-服事1", 0.9, 6,53,94,142)
+            re, x, y = imageFind("职业-服事1", 0.9, 6, 53, 94, 142)
             if re:
                 Toast('识别当前职业-服事')
                 任务记录['玩家-当前职业'] = '服事'
         if 任务记录['玩家-当前职业'] == '':
-            re, x, y = imageFind("职业-刺客1", 0.9, 6,53,94,142)
+            re, x, y = imageFind("职业-刺客1", 0.9, 6, 53, 94, 142)
             if re:
                 Toast('识别当前职业-刺客')
                 任务记录['玩家-当前职业'] = '刺客'
         if 任务记录['玩家-当前职业'] == '':
-            re, x, y = imageFind("职业-法师1", 0.9, 6,53,94,142)
+            re, x, y = imageFind("职业-法师1", 0.9, 6, 53, 94, 142)
             if re:
                 Toast('识别当前职业-法师')
                 任务记录['玩家-当前职业'] = '法师'
         if 任务记录['玩家-当前职业'] == '':
-            re, x, y = imageFind("职业-游侠1", 0.9, 6,53,94,142)
+            re, x, y = imageFind("职业-游侠1", 0.9, 6, 53, 94, 142)
             if re:
                 Toast('识别当前职业-游侠')
                 任务记录['玩家-当前职业'] = '游侠'
 
     def fightingSanMoTouTeam(self):
-        totalWait = 30
+        totalWait = 360
         elapsed = 0
         teamShoutDone = 0
         if 功能开关["三魔头自动离队时间"] != "":
             totalWait = safe_int_v2(功能开关["三魔头自动离队时间"])
             if totalWait == 0:
-                totalWait = 30
+                totalWait = 360
         Toast("战斗开始 - 三魔头组队邀请")
         failNum = 0  # 战斗中状态识别失败次数
         while 1:
