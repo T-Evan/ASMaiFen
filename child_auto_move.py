@@ -72,7 +72,7 @@ class AutoMove:
                 # 切换攻击目标
                 point = FindColors.find(
                     "135,252,#7CA2E2|153,238,#7DA1E2|170,255,#85A7E1|164,265,#7DA1E2|150,271,#94B1E5",
-                    rect=[1, 175, 697, 836], diff=0.95)
+                    rect=[1, 175, 697, 620], diff=0.95)
                 if point:
                     Toast('切换攻击目标')
                     # print(point.x, point.y)

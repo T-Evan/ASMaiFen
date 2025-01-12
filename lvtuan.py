@@ -34,6 +34,9 @@ class LvTuanTask:
         # 旅团任务
         self.lvTuanRenWu()
 
+        # 旅团大采购
+        self.lvTuanDaCaiGou()
+
         # 旅团商店
         self.lvTuanShop()
 
@@ -288,6 +291,60 @@ class LvTuanTask:
         tapSleep(362, 866)  # 点击购买
         tapSleep(360, 1210)  # 点击空白处
 
+    # 旅团大采购
+    def lvTuanDaCaiGou(self):
+        if 功能开关["旅团大采购"] == 0:
+            return
+        if 任务记录["旅团-大采购-完成"] == 1:
+            return
+
+        Toast("旅团 - 旅团大采购领取 - 开始")
+        # 判断是否在旅团页面
+        isLvtuan = False
+        for i in range(2):
+            res = TomatoOcrFindRangeClick("大采购", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+            if not res:
+                # 返回首页
+                self.dailyTask.homePage()
+                res = TomatoOcrTap(647, 592, 689, 614, "旅团", sleep1=1.5)
+                # 判断是否在旅团页面
+                res = TomatoOcrFindRangeClick("大采购", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                if res:
+                    isLvtuan = True
+                    break
+            else:
+                isLvtuan = True
+                break
+        if not isLvtuan:
+            Toast("旅团 - 旅团大采购 - 未找到任务入口")
+            return
+
+        # 滑到最左
+        swipe(281, 1191, 656, 1194)
+        sleep(0.8)
+        swipe(281, 1191, 656, 1194)
+        sleep(0.8)
+        swipe(281, 1191, 656, 1194)
+        sleep(0.8)
+        swipe(281, 1191, 656, 1194)
+        sleep(0.8)
+        for k in range(35):
+            re = FindColors.find("448,1164,#F35E41|450,1161,#F76143|450,1164,#F35E41", diff=0.97,rect=[153,1141,717,1246])
+            if re:
+                Toast('领取采购单')
+                print(re)
+                tapSleep(re.x - 10, re.y + 10)  # 点击待领取
+                re2 = CompareColors.compare("562,314,#F3A84B|558,303,#F3A84B|571,315,#F6B35E")  # 判断可领取
+                if re2:
+                    tapSleep(522, 310, 1)  # 点击领取
+                    tapSleep(344, 1251)  # 点击空白
+                    tapSleep(344, 1251)  # 点击空白
+                    tapSleep(344, 1251)  # 点击空白
+            else:
+                Toast('寻找待领取采购单')
+                swipe(656, 1194, 450, 1191)  # 右滑
+                sleep(1)
+
     # 旅团任务
     def lvTuanRenWu(self):
         if 功能开关["旅团任务"] == 0:
@@ -392,7 +449,7 @@ class LvTuanTask:
                 tapSleep(140, 331, 1)  # 点击许愿
                 re = TomatoOcrFindRangeClick(f'{chongWuName}拼图', x1=127, y1=190, x2=611, y2=973)
                 if re:
-                    tapSleep(359,1024) # 确认选择
+                    tapSleep(359, 1024)  # 确认选择
 
         for i in range(4):
             Toast(f'旅团 - 许愿墙 - 捐献中{i}/5')

@@ -59,6 +59,7 @@ class StartUp:
             system.open(self.app_name)
 
             # 识别是否进入登录页
+            TomatoOcrTap(330, 828, 390, 871, '同意')  # 隐私政策更新
             login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
             login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
             if login1 or login2:
@@ -124,6 +125,7 @@ class StartUp:
         login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
         if login1:
             # 切换区服
+            print(功能开关['选择启动区服'])
             if 功能开关['选择启动区服'] != "":
                 启动区服 = safe_int_v2(功能开关['选择启动区服'])
                 if 启动区服 > 0:
@@ -369,7 +371,7 @@ class StartUp:
             configNum = 功能开关['账号' + str(account_name) + '配置']
             if configNum != 0 and configNum != '' and configNum != '0':
                 Toast(f'加载账号{account_name} + 加载配置{configNum}')
-                功能开关 = loadConfig(configNum)
+                功能开关 = loadConfig(configNum, account_name)
                 print(功能开关)
             # system.open("com.xd.cfbmf")
             # r = system.shell(f"am start -n com.xd.cfbmf")

@@ -280,7 +280,7 @@ def waitInvite():
             Toast(f'等待进入战斗超时，退出组队')
             break
 
-        Toast(f'{fight_type}-等待队长开始{waitTime}/{totalWait}s')
+        Toast(f'{fight_type}-等待队长开始{elapsed}/{totalWait}s')
 
         # 兜底，已在队伍中时，停止返回操作
         功能开关["fighting"] = 1
@@ -321,8 +321,8 @@ def waitInvite():
             re4, _ = TomatoOcrText(423, 374, 474, 400, "无尽层数")
             # re3, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
             wujinLevel = safe_int_v2(re4)
-            if re1 or re2 or (wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0) or 功能开关[
-                '梦魇无尽自动离队'] == 1:
+            if re1 or re2 or (wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0) or (
+                    wujinLevel > 0 and 功能开关['梦魇无尽自动离队'] == 1):
                 findDoneStatus = True
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
             else:

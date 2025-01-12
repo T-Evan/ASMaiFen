@@ -318,6 +318,7 @@ class ShiLianTask:
 
             Toast(f"三魔头任务 - 匹配中 - 等待{elapsed}/150s")
             # 判断无合适队伍，重新开始匹配
+            res = TomatoOcrTap(304, 1153, 412, 1185, "开始匹配", 40, -40)
             res, _ = TomatoOcrText(230, 625, 306, 648, "匹配超时")
             if res:
                 Toast("三魔头 - 匹配超时 - 无合适队伍 - 重新匹配")
@@ -439,9 +440,9 @@ class ShiLianTask:
                 return self.fighting()
 
         # 开始匹配
-        re = FindColors.find("156,602,#BE4A52|159,602,#BE4A52|167,607,#E09EA1|176,595,#A13F47|200,599,#B2464D",
-                             rect=[75, 118, 644, 1174], diff=0.93)
-        if re:
+        re4, _ = TomatoOcrText(311, 591, 355, 612, "无尽层数")
+        wujinLevel = safe_int_v2(re4)
+        if wujinLevel > 60:
             Toast("梦魇任务 - 无尽模式跳过挑战")
             sleep(1)
             return
@@ -1103,6 +1104,8 @@ class ShiLianTask:
         bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
         res1, _ = TomatoOcrText(517, 654, 590, 678, "战斗统计")  # 战斗结束页。宝箱提示
         if not res1:
+            res1, _ = TomatoOcrText(311, 449, 356, 486, "宝箱")  # 房间页。宝箱提示
+        if not res1:
             res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
                                       bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
                                                                {'keyword': '开启', 'match_mode': 'fuzzy'},
@@ -1136,10 +1139,11 @@ class ShiLianTask:
                         for i in range(1, 4):
                             imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
                             imageFindClick('点赞2', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
-                Toast('返回房间')
+                Toast('不开宝箱-返回房间')
                 # 加锁兜底
                 功能开关["fighting"] = 1
                 功能开关["needHome"] = 0
+                sleep(0.5)
                 tapSleep(645, 1235, 0.5)  # 战斗结束页确认不领取
                 res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
                 if not res:
@@ -1178,25 +1182,32 @@ class ShiLianTask:
 
         openStatus = 0
         if isTreasure == 1:
-            while attempts < maxAttempts:
-                res, _ = TomatoOcrText(300, 606, 417, 634, "宝箱尚未开启")  # 避免前置错误点击弹出宝箱尚未开启
-                if res:
-                    res = TomatoOcrTap(99, 1199, 128, 1234, "回")  # 关闭确认弹窗，返回待领取页
+            re = FindColors.find(
+                "292,1065,#A6A1AD|306,1068,#A6A1AD|314,1065,#A6A1AD|306,1079,#A6A1AD|314,1077,#A6A1AD|290,1093,#A6A1AD",
+                rect=[101, 623, 618, 1087])
+            if re:
+                Toast('体力不足 - 跳过宝箱')
+            else:
+                Toast('准备开启宝箱')
+                while attempts < maxAttempts:
+                    res, _ = TomatoOcrText(300, 606, 417, 634, "宝箱尚未开启")  # 避免前置错误点击弹出宝箱尚未开启
+                    if res:
+                        res = TomatoOcrTap(99, 1199, 128, 1234, "回")  # 关闭确认弹窗，返回待领取页
 
-                attempts = attempts + 1
-                # 图色识别兜底
-                res = imageFindClick('宝箱-开启')
-                if res:
-                    Toast('开启宝箱')
-                    sleep(2)
-                    tapSleep(340, 930)
-                    openStatus = 1
-                res = imageFindClick('宝箱-开启2')
-                if res:
-                    Toast('开启宝箱')
-                    sleep(2)
-                    tapSleep(340, 930)
-                    openStatus = 1
+                    attempts = attempts + 1
+                    # 图色识别兜底
+                    res = imageFindClick('宝箱-开启')
+                    if res:
+                        Toast('开启宝箱')
+                        sleep(2)
+                        tapSleep(340, 930)
+                        openStatus = 1
+                    res = imageFindClick('宝箱-开启2')
+                    if res:
+                        Toast('开启宝箱')
+                        sleep(2)
+                        tapSleep(340, 930)
+                        openStatus = 1
 
         if openStatus == 1:
             Toast('开启宝箱 - 成功')
@@ -1920,11 +1931,10 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
-            res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+            # res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+            # res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
             if (elapsed > 180 or (
-                    "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2)
-                    or res6 or res7):
+                    "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2)):
                 Toast(f"梦魇战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 3:

@@ -61,7 +61,7 @@ import time
 
 
 class TimeoutLock:
-    def __init__(self, timeLock=10, lock = ''):
+    def __init__(self, timeLock=10, lock=''):
         self.lock = lock
         if lock == '':
             self.lock = switch_lock
@@ -109,8 +109,11 @@ elif 功能开关['选择游戏版本'] == "国际服2":
     功能开关['游戏包名'] = "com.xd.muffin.gp.global"
 
 
-def loadConfig(configNum):
+def loadConfig(configNum, accountNum=""):
     global 功能开关
+    if accountNum != "":
+        功能开关["选择启动区服"] = 功能开关[f"账号{configNum}启动区服"]
+
     configName = '配置' + str(configNum)
     new = json.loads(功能配置[configName])
     if not new:
@@ -198,6 +201,7 @@ def 初始化任务记录(initAll=True):
         "旅团-许愿墙-完成": 0,
         "旅团-任务-完成": 0,
         "旅团-商店-完成": 0,
+        "旅团-大采购-完成": 0,
     })
 
     # 冒险
