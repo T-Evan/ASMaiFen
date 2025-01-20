@@ -80,6 +80,7 @@ class StartUp:
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
+                self.shilianTask.fight_fail()
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")

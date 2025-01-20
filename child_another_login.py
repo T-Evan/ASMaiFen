@@ -13,7 +13,7 @@ def main():
     if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
         while True:
             anotherLogin()
-            sleep(10)
+            sleep(20)
 
 
 def anotherLogin():

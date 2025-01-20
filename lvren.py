@@ -312,6 +312,8 @@ class LvRenTask:
                     tapSleep(162, 572)
                     tapSleep(241, 574)
                     tapSleep(323, 574)
+                    tapSleep(396, 572)
+                    tapSleep(480, 577)
                 else:
                     tapSleep(162, 572)
                     tapSleep(235, 574)
@@ -493,7 +495,8 @@ class LvRenTask:
             TomatoOcrTap(94, 1188, 127, 1216, "回")
             for k in range(6):
                 # 识别可强化标识
-                needUpdate = FindColors.find("538,135,#FDFDFD|544,137,#F46969|538,146,#FC694C|551,138,#FC694C",rect=[80,116,650,568],diff=0.95)
+                needUpdate = FindColors.find("538,135,#FDFDFD|544,137,#F46969|538,146,#FC694C|551,138,#FC694C",
+                                             rect=[80, 116, 650, 568], diff=0.95)
                 if not needUpdate:
                     Toast('旅人 - 装备进阶 - 无可进阶装备')
                 if needUpdate:

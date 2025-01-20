@@ -442,7 +442,7 @@ class YingDiTask:
         if not res:
             # 返回首页
             self.dailyTask.homePage()
-            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.5)
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.8)
             # 判断是否在营地页面
             hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
             hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
@@ -494,7 +494,7 @@ class YingDiTask:
                 swipe(361, 547, 380, 918)
                 sleep(1)
 
-            for i in range(3):
+            for i in range(4):
                 Toast('寻找秘宝能量')
                 re, x, y = imageFind('秘宝能量', 0.8)
                 if re:
@@ -521,11 +521,12 @@ class YingDiTask:
                 sleep(2.5)
 
             if not findNL:
-                for i in range(3):
+                for i in range(4):
                     re, x, y = imageFind('秘宝能量', 0.8)
                     if re:
                         tapSleep(x, y, 2)
                         tapSleep(360, 1100)  # 点击空白处关闭
+                        break
                     else:
                         # 再找左侧
                         swipe(180, 1070, 525, 1070)

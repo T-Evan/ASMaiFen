@@ -21,8 +21,7 @@ def main():
         if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关[
             '恶龙自动接收邀请'] == 1 or \
                 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
-                功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1 or 功能开关[
-            '三魔头自动接收邀请'] == 1:
+                功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1:
             # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
@@ -70,6 +69,7 @@ def main():
                         else:
                             Toast("未找到试炼入口 - 重新尝试")
                     if isFind:
+                        shilianTask.openTreasure(noNeedOpen=1)
                         tiliPoint = FindColors.find(
                             "577,363,#F4DB77|577,358,#F3D76B|585,364,#888A93|585,356,#888992|592,356,#D9DADC|601,364,#F3F3F4",
                             rect=[72, 205, 655, 1120], diff=0.9)
@@ -318,9 +318,9 @@ def waitInvite():
         if fight_type == '梦魇带队' and not findDoneStatus:
             re1, _ = TomatoOcrText(427, 374, 489, 399, "24/24")
             re2, _ = TomatoOcrText(431, 375, 486, 404, "24/24")
-            re4, _ = TomatoOcrText(423, 374, 474, 400, "无尽层数")
+            re4, wujinLevel = TomatoOcrText(423, 374, 474, 400, "无尽层数")
             # re3, _ = TomatoOcrText(453, 298, 510, 331, "无尽")
-            wujinLevel = safe_int_v2(re4)
+            wujinLevel = safe_int_v2(wujinLevel)
             if re1 or re2 or (wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0) or (
                     wujinLevel > 0 and 功能开关['梦魇无尽自动离队'] == 1):
                 findDoneStatus = True
