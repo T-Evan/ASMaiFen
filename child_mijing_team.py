@@ -120,7 +120,8 @@ def waitInvite():
             return
 
     if res1:
-        if 功能开关["仅接收旅团成员邀请"] == 1 or 功能开关["仅接收互关好友邀请"] == 1:
+        if 功能开关["仅接收旅团成员邀请"] == 1 or 功能开关["仅接收关注粉丝邀请"] == 1 or 功能开关[
+            "仅接收互关好友邀请"] == 1:
             for p in range(3):
                 tmp = ''
                 for o in range(3):
@@ -129,28 +130,37 @@ def waitInvite():
                     if re:
                         # 判断点进了头像
                         break
-                if 功能开关["仅接收旅团成员邀请"] == 1:
+
+                needReject = True
+                if needReject == True and 功能开关["仅接收旅团成员邀请"] == 1:
                     res, 任务记录["战斗-房主旅团"] = TomatoOcrText(410, 828, 587, 862, "旅团名称")
                     if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != 任务记录["战斗-房主旅团"]:
                         Toast('非旅团成员，拒绝组队邀请')
-                        res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
-                        tapSleep(71, 1216)  # 点击返回
+                    else:
+                        Toast('接受旅团成员组队邀请')
+                        needReject = False
 
-                if 功能开关["仅接收关注粉丝邀请"] == 1:
+                if needReject == True and 功能开关["仅接收关注粉丝邀请"] == 1:
                     res, tmp = TomatoOcrText(276, 983, 353, 1014, "未关注")
                     if res and tmp != "":
                         Toast('非关注粉丝，拒绝组队邀请')
-                        res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
-                        tapSleep(71, 1216)  # 点击返回
+                    else:
+                        Toast('接受关注粉丝组队邀请')
+                        needReject = False
 
-                if 功能开关["仅接收互关好友邀请"] == 1:
+                if needReject == True and 功能开关["仅接收互关好友邀请"] == 1:
                     res, tmp = TomatoOcrText(221, 981, 312, 1014, "互相关注")
                     if not res and tmp != "":
                         res, _ = TomatoOcrText(221, 981, 312, 1014, "互相关注")
                         if not res:
                             Toast('非互关好友，拒绝组队邀请')
-                            res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
-                            tapSleep(71, 1216)  # 点击返回
+                        else:
+                            Toast('接受互关好友组队邀请')
+                            needReject = False
+
+                if needReject:
+                    res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                    tapSleep(71, 1216)  # 点击返回
                 if tmp != "" or 任务记录["战斗-房主旅团"] != "":
                     break
 

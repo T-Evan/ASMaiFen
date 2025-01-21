@@ -89,12 +89,9 @@ class LvRenTask:
 
         Toast('旅人 - 猫猫包 - 开始')
         self.dailyTask.homePage()
-        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
-        res = TomatoOcrTap(564, 238, 630, 263, "猫猫包")
+        res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
+        res = tapSleep(551, 915) # 点击猫包
         sleep(1)
-        res = TomatoOcrTap(615, 1030, 696, 1055, "猫猫烤箱")
-        if not res:
-            return
 
         if 功能开关['领取猫猫包果木']:
             # 点击果木
@@ -506,9 +503,11 @@ class LvRenTask:
                     if re:
                         tapSleep(554, 1076, 0.6)
                         TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
+                        TomatoOcrTap(200, 762, 301, 797, '继续进阶')
                         tapSleep(483, 778, 3)  # 确认进阶
                         tapSleep(129, 1023, 0.3)
                         TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
+                        TomatoOcrTap(200, 762, 301, 797, '继续进阶')
                         tapSleep(483, 778, 3)  # 确认进阶
                         tapSleep(129, 1023, 0.3)
                         TomatoOcrTap(94, 1188, 127, 1216, "回")

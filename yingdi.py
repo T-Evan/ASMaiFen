@@ -180,6 +180,8 @@ class YingDiTask:
                 for k in range(3):
                     TomatoOcrTap(584, 1115, 677, 1145, "限时特卖", sleep1=0.8)
                     re = TomatoOcrFindRangeClick('星钻自选礼包', x1=85, y1=351, x2=636, y2=642, sleep1=0.8)
+                    if not re:
+                        re = TomatoOcrTap(101, 478, 226, 508, '星钻自选礼包', sleep1=0.8)
                     if re:
                         TomatoOcrTap(337, 719, 382, 741, "购买", sleep1=0.8)
                     tapSleep(394, 1133)  # 关闭弹窗
