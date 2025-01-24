@@ -811,6 +811,7 @@ class YingDiTask:
         re = CompareColors.compare(
             "145,714,#E1DBD1|420,718,#E6E1D8|557,718,#E6E1D8|146,916,#E6E1D8|282,913,#E6E1D8|420,915,#E6E1D8")
         if re:
+            任务记录["仓鼠百货-完成"] = 1
             Toast('营地任务 - 仓鼠百货 - 已购买完成')
 
         if not re:
@@ -824,6 +825,7 @@ class YingDiTask:
 
                 # 原材料
                 if 功能开关['商店原材料'] == 1:
+                    Toast('营地任务 - 仓鼠百货 - 原材料')
                     imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
                     re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                     re2 = False
@@ -835,6 +837,7 @@ class YingDiTask:
 
                 # 星星经验
                 if 功能开关['商店星星经验'] == 1:
+                    Toast('营地任务 - 仓鼠百货 - 星星经验')
                     imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
                     re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                     re2 = False
@@ -845,6 +848,7 @@ class YingDiTask:
                         tapSleep(360, 1100, 1)  # 点击空白处关闭
 
                 if 功能开关['商店全价兽粮'] == 1:
+                    Toast('营地任务 - 仓鼠百货 - 全价兽粮')
                     imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
                     re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                     re2 = False
@@ -855,6 +859,7 @@ class YingDiTask:
                         tapSleep(360, 1100, 1)  # 点击空白处关闭
 
                 if 功能开关['商店超级成长零食三折'] == 1:
+                    Toast('营地任务 - 仓鼠百货 - 超级成长零食三折')
                     imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
                     re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                     re2 = False
@@ -865,6 +870,7 @@ class YingDiTask:
                         tapSleep(360, 1100, 1)  # 点击空白处关闭
 
                 if 功能开关['商店黑烬突破石五折'] == 1:
+                    Toast('营地任务 - 仓鼠百货 - 黑烬突破石五折')
                     imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
                     re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                     re2 = False
@@ -875,6 +881,7 @@ class YingDiTask:
                         tapSleep(360, 1100, 1)  # 点击空白处关闭
 
                 if 功能开关['商店经验补剂五折'] == 1:
+                    Toast('营地任务 - 仓鼠百货 - 经验补剂五折')
                     imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
                     re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                     re2 = False
@@ -884,6 +891,7 @@ class YingDiTask:
                         tapSleep(360, 855, 0.6)  # 购买
                         tapSleep(360, 1100, 1)  # 点击空白处关闭
                 if 功能开关['商店金币箱五折'] == 1:
+                    Toast('营地任务 - 仓鼠百货 - 金币箱五折')
                     TomatoOcrFindRangeClick('金币箱', x1=78, y1=751, x2=637, y2=961, match_mode='fuzzy')
                     re1 = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
                     re2 = False

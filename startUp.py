@@ -74,9 +74,7 @@ class StartUp:
 
             # 判断是否已在首页
             # 判断底部冒险图标
-            res2 = FindColors.find(
-                "323,1210,#FCF8EE|333,1210,#FCF8ED|336,1212,#F9ECCB|336,1234,#FEF8E9|347,1231,#FCF8EE|363,1231,#FEF7EB|377,1229,#F4EFE1|372,1218,#88684E|353,1216,#9E8776",
-                rect=[301, 1130, 421, 1273])
+            res2 = CompareColors.compare("375,1229,#F6F1E7|377,1216,#7C532E|386,1220,#F8ECCD|382,1205,#FCF8EE|382,1193,#FCF8EE|380,1183,#FCF8EE")
             shou_ye1 = False
             shou_ye2 = False
             if not res2:

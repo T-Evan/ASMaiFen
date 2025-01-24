@@ -107,17 +107,17 @@ def waitInvite():
     fight_type = ''
     if not res1 and not res2 and not res3:
         res = TomatoOcrTap(615, 558, 686, 582, "正在组队")
-        sleep(1)
-        res, _ = TomatoOcrText(402, 337, 442, 361, "险境")
-        if res:
-            fight_type = '绝境带队'
-
-        if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
-            Toast('不退出房间')
-        else:
-            quitTeamRe = shilianTask.quitTeam()
-            功能开关["秘境不开宝箱"] = tmpBx
-            return
+        # sleep(1)
+        # res, _ = TomatoOcrText(402, 337, 442, 361, "险境")
+        # if res:
+        #     fight_type = '绝境带队'
+        #
+        # if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
+        #     Toast('不退出房间')
+        # else:
+        quitTeamRe = shilianTask.quitTeam()
+        功能开关["秘境不开宝箱"] = tmpBx
+        return
 
     if res1:
         if 功能开关["仅接收旅团成员邀请"] == 1 or 功能开关["仅接收关注粉丝邀请"] == 1 or 功能开关[

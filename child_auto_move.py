@@ -430,6 +430,40 @@ class AutoMove:
                     sleep(0.5)
                     continue
 
+                # 绮梦晶彩龙
+                if 任务记录['战斗-恶龙名称'] == '曳风晶彩龙':
+                    Toast(f'曳风晶彩龙-等待走位')
+                    re = FindColors.find("493,883,#E4EAEA|483,896,#EAEBEB|473,911,#EAEBEB|464,927,#EAEAEA|470,924,#EAEAEB",rect=[383,475,699,1153])
+                    if re:
+                        Toast('恶龙技能，自动走位')
+                        tapSleep(69, 674)  # 向左移动
+
+                    re = FindColors.find("313,1123,#74C33F|324,1122,#14874B|332,1125,#1F9450",rect=[62,699,706,1163])
+                    if re:
+                        Toast('恶龙技能，自动走位')
+                        tapSleep(148,675)  # 向右移动
+
+                    re = FindColors.find("284,1106,#DFE9DC|295,1123,#CAE9C7|312,1141,#CDE9CB|314,1155,#C9E9C5",rect=[225,686,702,1191],diff=0.98)
+                    if re:
+                        Toast('恶龙炸地板，自动走位')
+                        tapSleep(69, 674)  # 向左移动
+
+                    re = FindColors.find("236,1081,#DAE9E9|240,1066,#E9E9E9|241,1052,#E9E9E9|247,1049,#E9E9E9",rect=[91,694,701,1208],diff=0.98)
+                    if re:
+                        Toast('恶龙技能，自动走位')
+                        tapSleep(148,675)  # 向右移动
+
+                    re = FindColors.find("337,822,#227342|334,827,#227446|328,834,#1A7243|320,844,#106B3D",rect=[91,694,701,1208],diff=0.95)
+                    if re:
+                        Toast('恶龙技能，自动走位')
+                        tapSleep(69, 674)  # 向左移动
+                    re = FindColors.find("418,1004,#3A8675|411,1003,#388272|418,1006,#377F70",rect=[371,926,478,1016],diff=0.95)
+                    if re:
+                        Toast('释放技能')
+                        tapSleep(423,974)  # 技能
+                    sleep(0.5)
+                    continue
+
                 if time.time() - 任务记录['战斗-上一次移动'] > 7:
                     re = imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
                     if re:

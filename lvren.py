@@ -79,9 +79,8 @@ class LvRenTask:
 
     # 猫猫包
     def maomaobao(self):
-        if 功能开关["领取猫猫包果木"] == 0:
-            if 功能开关['猫猫包自动升温'] == 0:
-                return
+        if 功能开关["领取猫猫包果木"] == 0 and 功能开关['猫猫包自动升温'] == 0 and 功能开关['猫猫包自动融合'] == 0:
+            return
 
         if 任务记录['旅人-猫猫果木-完成']:
             Toast('旅人 - 猫猫果 - 已完成')
@@ -90,7 +89,7 @@ class LvRenTask:
         Toast('旅人 - 猫猫包 - 开始')
         self.dailyTask.homePage()
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
-        res = tapSleep(551, 915) # 点击猫包
+        res = tapSleep(551, 915)  # 点击猫包
         sleep(1)
 
         if 功能开关['领取猫猫包果木']:
@@ -138,7 +137,15 @@ class LvRenTask:
                 res, availableGuoMu = TomatoOcrText(607, 80, 662, 102, "剩余果木")
                 availableGuoMu = safe_int(availableGuoMu)
                 if availableGuoMu == "" or availableGuoMu <= 100:
+                    Toast('猫猫包 - 剩余果木不足')
                     break
+                Toast('猫猫包 - 自动烘焙')
+                res = TomatoOcrTap(326, 1017, 389, 1047, "出炉")
+                if res:
+                    tapSleep(136, 1051)  # 点击空白处
+                    tapSleep(136, 1051)  # 点击空白处
+                    tapSleep(136, 1051)  # 点击空白处
+                    tapSleep(136, 1051)  # 点击空白处
                 res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动烘焙")
                 if not res:
                     res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动升温")
@@ -158,6 +165,21 @@ class LvRenTask:
                             tapSleep(136, 1051)  # 点击空白处
                             break
                         sleep(3)
+
+        if 功能开关['猫猫包自动融合'] == 1:
+            re = TomatoOcrTap(513, 1089, 610, 1119, '风味融合', offsetX=10, offsetY=10, sleep1=0.8)
+            if re:
+                for i in range(10):
+                    res, availableCount = TomatoOcrText(365, 928, 416, 955, "剩余次数")
+                    if availableCount == '0/15':
+                        Toast('猫猫包 - 剩余次数不足')
+                        break
+                    Toast('猫猫包 - 自动融合')
+                    res = TomatoOcrTap(453, 1016, 510, 1049, "融合", offsetX=5, offsetY=5)
+                    TomatoOcrTap(600, 31, 642, 53, '跳过', offsetX=5, offsetY=5)
+                    tapSleep(136, 1051)  # 点击空白处
+                    tapSleep(136, 1051)  # 点击空白处
+                    tapSleep(136, 1051)  # 点击空白处
 
     # 自动升级技能
     def updateSkill(self):

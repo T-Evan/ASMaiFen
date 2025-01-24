@@ -1685,7 +1685,8 @@ class ShiLianTask:
                 res1, _ = TomatoOcrText(303, 962, 412, 1002, "通关奖励")
                 res2, _ = TomatoOcrText(502, 187, 582, 213, '离开队伍')
                 res3, _ = TomatoOcrText(512, 999, 596, 1024, '战斗统计')
-                if res1 or res2 or res3:
+                res4, _ = TomatoOcrText(516, 939, 591, 961, '战斗统计')
+                if res1 or res2 or res3 or res4:
                     if 功能开关['秘境点赞队友'] == 1:
                         Toast('点赞队友')
                         res = TomatoOcrTap(517, 909, 595, 929, "一键全赞", 5, 5)  # 一键点赞
@@ -2087,8 +2088,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 200 or (
-                    "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
+            if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if shou_ye1:
                     break
@@ -2098,8 +2098,7 @@ class ShiLianTask:
                 if failNum > 13:
                     Toast(f"战斗中状态 - 识别失败 - 退出战斗")
                     failStatus = self.fight_fail()
-                    if failStatus:
-                        break
+                    self.quitTeamFighting()  # 退出队伍
                     break
             else:
                 # 重置战败计算
