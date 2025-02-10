@@ -27,6 +27,9 @@ class LvRenTask:
         # 自动更换装备
         self.changeEquip()
 
+        # 自动使用经验补剂
+        self.useLevelPotion()
+
         # 自动强化装备
         self.updateEquip()
 
@@ -69,7 +72,7 @@ class LvRenTask:
             re = FindColors.find("238,365,#F15D40|238,362,#F66042|240,366,#F85842")  # 寻找红点
             if not re:
                 break
-            tapSleep(re.x, re.y, 0.8)  # 点击待升星秘宝
+            tapSleep(re.x - 10, re.y + 10, 0.8)  # 点击待升星秘宝
             res = TomatoOcrTap(322, 1024, 391, 1054, "合成")
             res = TomatoOcrTap(322, 1024, 391, 1054, "升星")
             tapSleep(153, 1071)  # 点击空白处
@@ -133,7 +136,7 @@ class LvRenTask:
                     tapSleep(155, 1020)  # 点击空白处关闭
 
         if 功能开关['猫猫包自动升温'] == 1:
-            for i in range(1, 10):
+            for i in range(10):
                 res, availableGuoMu = TomatoOcrText(607, 80, 662, 102, "剩余果木")
                 availableGuoMu = safe_int(availableGuoMu)
                 if availableGuoMu == "" or availableGuoMu <= 100:
@@ -142,10 +145,13 @@ class LvRenTask:
                 Toast('猫猫包 - 自动烘焙')
                 res = TomatoOcrTap(326, 1017, 389, 1047, "出炉")
                 if res:
+                    re, _ = TomatoOcrText(206, 610, 276, 639, '陈列柜')
                     tapSleep(136, 1051)  # 点击空白处
                     tapSleep(136, 1051)  # 点击空白处
                     tapSleep(136, 1051)  # 点击空白处
                     tapSleep(136, 1051)  # 点击空白处
+                    if re:
+                        break
                 res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动烘焙")
                 if not res:
                     res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动升温")
@@ -159,6 +165,9 @@ class LvRenTask:
                     for k in range(1, 5):
                         res = TomatoOcrTap(326, 1017, 389, 1047, "出炉")
                         if res:
+                            re, _ = TomatoOcrText(206, 610, 276, 639, '陈列柜')
+                            if re:
+                                break
                             tapSleep(136, 1051)  # 点击空白处
                             tapSleep(136, 1051)  # 点击空白处
                             tapSleep(136, 1051)  # 点击空白处
@@ -176,6 +185,7 @@ class LvRenTask:
                         break
                     Toast('猫猫包 - 自动融合')
                     res = TomatoOcrTap(453, 1016, 510, 1049, "融合", offsetX=5, offsetY=5)
+                    res = TomatoOcrTap(333, 1019, 385, 1047, "融合", offsetX=5, offsetY=5)
                     TomatoOcrTap(600, 31, 642, 53, '跳过', offsetX=5, offsetY=5)
                     tapSleep(136, 1051)  # 点击空白处
                     tapSleep(136, 1051)  # 点击空白处
@@ -290,6 +300,10 @@ class LvRenTask:
         if 功能开关["满包裹分解装备"] == 0 and not needDelete:
             return
 
+        if 任务记录['装备数量'] < 140:
+            Toast(f'旅人 - 无需分解装备 {任务记录["装备数量"]}/150')
+            return
+
         if 任务记录["分解装备-倒计时"] > 0:
             diffTime = time.time() - 任务记录["分解装备-倒计时"]
             if diffTime < 20 * 60:
@@ -318,6 +332,7 @@ class LvRenTask:
         re, equipNum = TomatoOcrText(510, 1043, 597, 1074, '装备数量')
         equipNum = equipNum.replace("/150", "")
         equipNum = safe_int(equipNum)
+        任务记录["装备数量"] = equipNum
         if equipNum == "":
             return
 
@@ -328,23 +343,53 @@ class LvRenTask:
             if re:
                 # 用户未配置自动熔炼，仅删除一件
                 if 功能开关["满包裹分解装备"] == 0 and needDelete:
-                    tapSleep(162, 572)
-                    tapSleep(241, 574)
-                    tapSleep(323, 574)
-                    tapSleep(396, 572)
-                    tapSleep(480, 577)
+                    # 未勾选史诗+
+                    re = CompareColors.compare(
+                        "120,861,#FEFCF7|121,868,#FEFCF7|121,869,#FEFCF7|127,871,#FEFCF7|124,869,#FEFCF7|131,868,#FEFCF7|126,864,#FEFBF5")
+                    if re:
+                        tapSleep(121, 866)
                 else:
-                    tapSleep(162, 572)
-                    tapSleep(235, 574)
-                    tapSleep(320, 579)
-                    tapSleep(396, 572)
-                    tapSleep(480, 577)
-                    tapSleep(563, 574)
+                    # 未勾选史诗+
+                    re = CompareColors.compare(
+                        "120,861,#FEFCF7|121,868,#FEFCF7|121,869,#FEFCF7|127,871,#FEFCF7|124,869,#FEFCF7|131,868,#FEFCF7|126,864,#FEFBF5")
+                    if re:
+                        tapSleep(121, 866)
                 tapSleep(353, 926)  # 点击转化
                 tapSleep(356, 1208)  # 点击空白
                 tapSleep(356, 1208)  # 点击空白
+                tapSleep(356, 1208)  # 点击空白
         else:
-            Toast('旅人 - 无需分解装备')
+            Toast(f'旅人 - 无需分解装备 {任务记录["装备数量"]}/150')
+
+    # 自动使用经验补剂
+    def useLevelPotion(self):
+        if 功能开关["自动使用经验补剂"] == 0:
+            return
+
+        if 任务记录["自动使用经验补剂-完成"] == 1:
+            return
+
+        Toast('旅人 - 自动使用经验补剂 - 开始')
+        self.dailyTask.homePage()
+        res = TomatoOcrTap(233, 1205, 281, 1234, "行李", sleep1=0.8)
+        res = TomatoOcrTap(405, 1103, 472, 1136, "道具", sleep1=0.8)
+        if not res:
+            return
+
+        for i in range(10):
+            res1, x, y = imageFind('经验补剂', x1=118, y1=631, x2=606, y2=1033, confidence1=0.8)
+            if res1:
+                tapSleep(x, y, 1)
+                tapSleep(540, 887)  # 最大
+                tapSleep(356, 935, 2)  # 使用
+                break
+            swipe(358, 894, 358, 744)
+            sleep(0.5)
+        tapSleep(363, 1218)  # 返回首页
+        tapSleep(363, 1218)
+        tapSleep(363, 1218)
+
+        任务记录["自动使用经验补剂-完成"] = 1
 
     # 自动更换装备
     def changeEquip(self):

@@ -177,7 +177,7 @@ def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='
         center_y = 0
         if ocrRe != "":
             ocrReJson = json.loads(ocrRe)
-            print(f"TomatoOcrTextRange识别成功-{ocrReJson}")
+            # print(f"TomatoOcrTextRange识别成功-{ocrReJson}")
             return True, ocrReJson
         else:
             print(f"TomatoOcrTextRange识别失败")

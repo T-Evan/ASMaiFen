@@ -481,6 +481,7 @@ class YingDiTask:
             if res:
                 res, 功能开关["秘宝地图"] = TomatoOcrText(270, 1008, 475, 1055, '秘宝地图')
                 tapSleep(373, 1166)  # 返回
+                Toast(f'识别最新地图 - {功能开关["秘宝地图"]}')
 
         # 判断能量是否已满；能量已满暂不领取能源
         res, availableNengLiang = TomatoOcrText(607, 80, 661, 102, "剩余能量")  # 右上角剩余嫩俩
@@ -491,27 +492,27 @@ class YingDiTask:
             findNum = 0
             # 返回上半屏
             if 功能开关["秘宝地图"] == "巨像的旷野" or 功能开关["秘宝地图"] == "白帆之都" or 功能开关[
-                "秘宝地图"] == "石松沼泽":
+                "秘宝地图"] == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
                 Toast("返回上半屏")
                 swipe(361, 547, 380, 918)
                 sleep(1)
 
             for i in range(4):
                 Toast('寻找秘宝能量')
-                re, x, y = imageFind('秘宝能量', 0.8)
+                re, x, y = imageFind('秘宝能量', 0.78)
                 if re:
                     findNL = True
-                    tapSleep(x, y, 2)
+                    tapSleep(x, y, 2.5)
                     tapSleep(360, 1100)  # 点击空白处关闭
                 else:
                     # 先找右侧
                     swipe(525, 1070, 180, 1070)
                     sleep(2.2)
                     # 领取秘宝能量
-                    re, x, y = imageFind('秘宝能量', 0.8)
+                    re, x, y = imageFind('秘宝能量', 0.78)
                     if re:
                         findNL = True
-                        tapSleep(x, y, 2)
+                        tapSleep(x, y, 2.5)
                         tapSleep(360, 1100)  # 点击空白处关闭
                 if findNL:
                     break
@@ -524,9 +525,9 @@ class YingDiTask:
 
             if not findNL:
                 for i in range(4):
-                    re, x, y = imageFind('秘宝能量', 0.8)
+                    re, x, y = imageFind('秘宝能量', 0.78)
                     if re:
-                        tapSleep(x, y, 2)
+                        tapSleep(x, y, 2.5)
                         tapSleep(360, 1100)  # 点击空白处关闭
                         break
                     else:
@@ -534,13 +535,14 @@ class YingDiTask:
                         swipe(180, 1070, 525, 1070)
                         sleep(2.2)
                         # 领取秘宝能量
-                        re, x, y = imageFind('秘宝能量', 0.8)
+                        re, x, y = imageFind('秘宝能量', 0.78)
                         if re:
                             tapSleep(x, y, 2)
                             tapSleep(360, 1100)  # 点击空白处关闭
 
             # 返回下半屏地图
-            if 功能开关["秘宝地图"] == "白帆之都" or 功能开关["秘宝地图"] == "石松沼泽":
+            if 功能开关["秘宝地图"] == "白帆之都" or 功能开关["秘宝地图"] == "石松沼泽" or 功能开关[
+                "秘宝地图"] == "天鹅仙宫":
                 Toast("返回下半屏")
                 swipe(380, 918, 361, 547)
                 sleep(1)
@@ -661,14 +663,14 @@ class YingDiTask:
         selectMap = 功能开关["秘宝地图"]
         findMap = False
 
-        if selectMap == "白帆之都" or selectMap == "石松沼泽":
+        if selectMap == "白帆之都" or selectMap == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
             Toast("返回下半屏")
             swipe(380, 918, 361, 547)
             sleep(1)
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
-            if selectMap == "白帆之都" or selectMap == "石松沼泽":
+            if selectMap == "白帆之都" or selectMap == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
                 Toast("返回下半屏")
                 swipe(380, 918, 361, 547)
                 sleep(1)
@@ -680,7 +682,7 @@ class YingDiTask:
 
         # 再找左侧
         if left < 4 and right == 4:
-            if selectMap == "白帆之都" or selectMap == "石松沼泽":
+            if selectMap == "白帆之都" or selectMap == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
                 Toast("返回下半屏")
                 swipe(380, 918, 361, 547)
                 sleep(1)
@@ -748,6 +750,11 @@ class YingDiTask:
 
         if selectMap == "石松沼泽":
             re = TomatoOcrFindRangeClick('石松沼泽', sleep1=2, whiteList='石松沼泽')
+            if re:
+                findMap = True
+
+        if selectMap == "天鹅仙宫":
+            re = TomatoOcrFindRangeClick('天鹅仙宫', sleep1=2, whiteList='天鹅仙宫')
             if re:
                 findMap = True
 
