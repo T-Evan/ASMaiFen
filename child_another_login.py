@@ -37,8 +37,8 @@ def anotherLogin():
                 res = TomatoOcrTap(320, 760, 396, 798, "确认")
                 res = TomatoOcrTap(320, 760, 396, 798, "确认")
                 Toast("顶号等待，开始重新登录")
-                for i in range(2):
-                    # start_up.login()
+                for i in range(3):
+                    start_up.login()
                     sleep(4)
                     功能开关["fighting"] = 0
                     sleep(5)

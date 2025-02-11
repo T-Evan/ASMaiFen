@@ -1125,13 +1125,15 @@ class ShiLianTask:
         res1 = False
         res2 = False
         res3 = False
+        tmp2 = False
+        tmp3 = False
         bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
-        res1, _ = TomatoOcrText(515,599,591,620, "战斗统计")  # 战斗结束页。宝箱提示
+        res1, tmp1 = TomatoOcrText(515, 599, 591, 620, "战斗统计")  # 战斗结束页。宝箱提示
         if not res1:
-            res1, _ = TomatoOcrText(517,539,593,563, "一键全赞")  # 战斗结束页。宝箱提示
+            res1, tmp2 = TomatoOcrText(517, 539, 593, 563, "一键全赞")  # 战斗结束页。宝箱提示
             if not res1:
-                res1, _ = TomatoOcrText(311, 449, 356, 486, "宝箱")  # 房间页。宝箱提示
-        if not res1:
+                res1, tmp3 = TomatoOcrText(311, 449, 356, 486, "宝箱")  # 房间页。宝箱提示
+        if not res1 and (tmp1 != "" or tmp2 != "" or tmp3 != ""):
             res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
                                       bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
                                                                {'keyword': '开启', 'match_mode': 'fuzzy'},
@@ -1727,7 +1729,7 @@ class ShiLianTask:
     def fightingJueJingTeam(self):
         totalWait = 90
         if 功能开关["绝境自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["绝境自动离队时间"])
+            totalWait = safe_int_v2(功能开关["绝境自动离队时间"].replace('s', '').replace('S', '').replace('秒', ''))
             if totalWait == 0:
                 totalWait = 90
         elapsed = 0
@@ -1795,13 +1797,16 @@ class ShiLianTask:
                     "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"绝境战斗中状态 - 识别失败 - 次数 {failNum}/5")
                 failNum = failNum + 1
-                if failNum > 4:
-                    Toast(f"绝境战斗中状态 - 识别失败 - 退出战斗")
                 if failNum > 6:
+                    Toast(f"绝境战斗中状态 - 识别失败 - 退出战斗")
+                if failNum > 8:
                     self.fight_fail()
                     功能开关["fighting"] = 0
                     break
-
+                res6, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+                if res6:
+                    Toast(f"绝境战斗中状态 - 识别失败 - 退出战斗")
+                    break
             # 判断角色死亡 & 队伍仅剩佣兵(名字长度均为2个)
             allQuit = self.allQuit()
             if allQuit:
@@ -1897,7 +1902,7 @@ class ShiLianTask:
         if fightType == '恶龙挑战':
             totalWait = 360
         if 功能开关["恶龙自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["恶龙自动离队时间"])
+            totalWait = safe_int_v2(功能开关["恶龙自动离队时间"].replace('s', '').replace('S', '').replace('秒', ''))
             if totalWait == 0:
                 totalWait = 30
                 if fightType == '恶龙挑战':
@@ -2003,11 +2008,15 @@ class ShiLianTask:
                     "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"恶龙战斗中状态 - 识别失败 - 次数 {failNum}/6")
                 failNum = failNum + 1
-                if failNum > 6:
+                if failNum > 10:
                     Toast(f"恶龙战斗中状态 - 识别失败 - 退出战斗")
-                if failNum > 8:
+                if failNum > 12:
                     self.fight_fail()
                     功能开关["fighting"] = 0
+                    break
+                res6, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+                if res6:
+                    Toast(f"恶龙战斗中状态 - 识别失败 - 退出战斗")
                     break
             self.fight_fail_alert()
             sleep(3)
@@ -2017,7 +2026,7 @@ class ShiLianTask:
         if fightType == '梦魇挑战':
             totalWait = 360
         if 功能开关["梦魇自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["梦魇自动离队时间"])
+            totalWait = safe_int_v2(功能开关["梦魇自动离队时间"].replace('s', '').replace('S', ''))
             if totalWait == 0:
                 totalWait = 30
                 if fightType == '梦魇挑战':
@@ -2076,9 +2085,9 @@ class ShiLianTask:
                 #     功能开关["fighting"] = 0
                 #     break
 
-                res1, _ = TomatoOcrText(514,876,594,901, "一键全赞")
+                res1, _ = TomatoOcrText(514, 876, 594, 901, "一键全赞")
                 if not res1:
-                    res1, _ = TomatoOcrText(517,937,593,959, "战斗统计")
+                    res1, _ = TomatoOcrText(517, 937, 593, 959, "战斗统计")
                 if res1:
                     if 功能开关['秘境点赞队友'] == 1:
                         Toast('点赞队友')
@@ -2152,7 +2161,10 @@ class ShiLianTask:
                 # self.autoMove()
             else:
                 # 战斗结束
-                openStatus = self.openTreasure()
+                if fightType == '秘境带队' and 功能开关['秘境不开宝箱'] == 1:
+                    openStatus = self.openTreasure(noNeedOpen=1)
+                else:
+                    openStatus = self.openTreasure()
                 if openStatus == 1:
                     Toast("战斗结束 - 战斗胜利")
                     功能开关["fighting"] = 0
@@ -3158,7 +3170,7 @@ class ShiLianTask:
                 print(teamFightText)
                 teamFightNum = 0
                 if "万" in teamFightText or "厰" in teamFightText or "廠" in teamFightText or "個" in teamFightText or "麺" in teamFightText or "時" in teamFightText:
-                    teamFightNum = float(
+                    teamFightNum = safe_float_v2(
                         teamFightText.replace("万", "").replace("厰", "").replace("廠", "").replace("個", "").replace(
                             "麺", "").replace("時", "").replace("闇", "").replace("間", "")) * 10000
                 print(teamFightNum)
@@ -3167,7 +3179,7 @@ class ShiLianTask:
                 tapSleep(96, 1235, 0.1)  # 返回
                 任务记录['战斗-房主战力'] = safe_int_v2(任务记录['战斗-房主战力'])
                 if 任务记录['战斗-房主战力'] != 0 and teamFightNum != 0:
-                    teamFightNumDiff = round(abs(teamFightNum - 任务记录['战斗-房主战力']) / 10000, 2)
+                    teamFightNumDiff = round(abs(teamFightNum - 任务记录['战斗-房主战力']) / 10000, 1)
                     diffHour = round((time.time() - 任务记录['战斗-房主上次相遇']) / 3600, 1)
                     if teamFightNumDiff != 0:
                         content += f"上次相遇已{diffHour}h,您的战力提升了{teamFightNumDiff}万.恭喜!"

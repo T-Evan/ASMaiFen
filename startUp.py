@@ -37,7 +37,7 @@ class StartUp:
         for attempt in range(max_attempt):
             tryTimes = tryTimes + 1
             if 功能开关["fighting"] == 1:
-                if tryTimes < 5:
+                if tryTimes < 3:
                     res, _ = TomatoOcrText(502, 187, 582, 213, '离开队伍')
                     if res:
                         return
@@ -51,7 +51,7 @@ class StartUp:
                     if point:
                         Toast('收起喊话窗口')
                         tapSleep(107, 93)
-                    Toast(f'返回首页 - 等待任务结束{tryTimes * 10}/50')
+                    Toast(f'返回首页 - 等待任务结束{tryTimes * 10}/30')
                     sleep(10)
                     continue
 

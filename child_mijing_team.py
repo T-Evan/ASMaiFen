@@ -21,7 +21,8 @@ def main():
         if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关[
             '恶龙自动接收邀请'] == 1 or \
                 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
-                功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1 or 功能开关['斗歌会自动接收邀请'] == 1:
+                功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1 or 功能开关[
+            '斗歌会自动接收邀请'] == 1:
             # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
@@ -89,7 +90,8 @@ def main():
                             # 识别剩余体力不足40时，尝试补充
                             res2, availableTiLi = TomatoOcrText(605, 81, 630, 100, "剩余体力")  # 20/60
                             availableTiLi = safe_int(availableTiLi)
-                            if 功能开关["秘境不开宝箱"] == 0 and (availableTiLi == "" or availableTiLi < 40):  # 识别剩余体力不足40时，尝试补充
+                            if 功能开关["秘境不开宝箱"] == 0 and (
+                                    availableTiLi == "" or availableTiLi < 40):  # 识别剩余体力不足40时，尝试补充
                                 shilianTask.tili()
                             tapSleep(98, 1212)  # 返回首页
                             tapSleep(98, 1212)  # 返回首页

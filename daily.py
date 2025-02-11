@@ -30,9 +30,13 @@ class DailyTask:
         while True:
             tryTimes = tryTimes + 1
             # 避免战斗中直接退出
-            if tryTimes < 10:
-                res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
-                if res:
+            if 功能开关["fighting"] == 1:
+                if tryTimes < 10:
+                    res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
+                    if res:
+                        sleep(30)
+                        continue
+
                     Toast(f'返回首页 - 等待战斗结束{tryTimes * 10}/100')
                     sleep(10)
                     continue
@@ -3192,7 +3196,7 @@ class DailyTask:
 
             # 首页卡死检测（通过点击行李判断能否跳转成功）
             failCount = 0
-            for i in range(25):
+            for i in range(15):
                 return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)  # 简单尝试返回首页
                 res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击战斗失败确认
                 TomatoOcrFindRangeClick('准备')  # 避免点击开始瞬间队友离队，错误点击了开始匹配，兜底准备按钮
@@ -3214,8 +3218,8 @@ class DailyTask:
                     if not re:
                         system.open(f"{功能开关['游戏包名']}")
                         self.closeLiaoTian()
-                        sleep(2)
-                        Toast(f'游戏卡死，等待{i * 2}/50s')
+                        sleep(1)
+                        Toast(f'游戏卡死，等待{i * 2}/30s')
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         if res:

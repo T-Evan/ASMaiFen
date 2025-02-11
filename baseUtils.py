@@ -163,12 +163,12 @@ def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                        capture=[x1, y1, x2, y2])
+                        run_mode='fast', capture=[x1, y1, x2, y2])
                 else:
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                        bitmap=bitmap)
+                        run_mode='fast', bitmap=bitmap)
                 # print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrTextRange获取锁超时")
@@ -203,7 +203,7 @@ def shijieShoutText():
                 if len(parts) > 1:
                     player_name = parts[1].strip()
                     player_name = (player_name.replace('[', '').replace('【', '').replace('】', '').replace(']', '').
-                                   replace('）', '').replace('(','').replace('（', '').replace('）', '').replace(' ', ''))
+                                   replace('）', '').replace('(', '').replace('（', '').replace('）', '').replace(' ', ''))
                     # print(player_name)
                     if player_name != '':
                         current_player = player_name
@@ -239,12 +239,12 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                        capture=[x1, y1, x2, y2])
+                        run_mode='fast', capture=[x1, y1, x2, y2])
                 else:
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                        bitmap=bitmap)
+                        run_mode='fast', bitmap=bitmap)
                 # print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrFindRange获取锁超时-{keyword}")
@@ -331,12 +331,12 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                        capture=[x1, y1, x2, y2])
+                        run_mode='fast', capture=[x1, y1, x2, y2])
                 else:
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
                         rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                        bitmap=bitmap)
+                        run_mode='fast', bitmap=bitmap)
                 # print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
@@ -458,11 +458,14 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
 lastToast = []
 lastToastTime = 0
 
+
 def generate_random_color():
     colors = ["#ffa400", "#ffa631", "#fa8c35", "#00bc12", "#0aa344", "#6b6882", "#ca6924", "#789262",
               "#758a99", "#177cb0", "#4b5cc4", "#8d4bbb", "#4c8dae", "#b0a4e3", "#cca4e3", "#c93756",
               "#f05654", "#725e82", "#7b68ee"]
     return random.choice(colors)
+
+
 def Toast(content, tim=1000):
     if 任务记录['提示-并发锁'] == 1:
         return
@@ -507,5 +510,18 @@ def safe_int_v2(value):
         if value == "o" or value == "O":
             return 0
         return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def safe_float_v2(value):
+    """
+    尝试将给定的值转换为小数，如果失败则返回默认值 0。
+    """
+    try:
+        # 兜底子母o
+        if value == "o" or value == "O":
+            return 0
+        return float(value)
     except (TypeError, ValueError):
         return 0
