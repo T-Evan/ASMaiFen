@@ -47,7 +47,7 @@ def anotherLogin():
             tmpDiffMinute = (total_another_minute - (current_time - start_time))
             Toast(f"顶号等待，已等待{tmpMinute}s/剩余等待{tmpDiffMinute}s")
             tapSleep(505, 667)  # 点击防止进入房车动画页
-            sleep(10)  # 等待
+            sleep(2)  # 等待
     else:
         # login()
         print("顶号等待，检查状态正常")

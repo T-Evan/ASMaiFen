@@ -100,17 +100,6 @@ class StartUp:
                 功能开关["needHome"] = 1
                 功能开关["fighting"] = 0
 
-            # 识别是否战斗中
-            res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
-            res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-            # res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
-            if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
-                # 大暴走战斗中
-                if 功能开关["大暴走开关"] == 1 and 功能开关["暴走进入战斗后启动"] == 1:
-                    Toast("进入暴走战斗成功 - 开始战斗")
-                    self.shilianTask.fightingBaoZou()
-                    return
-
             Toast(f'启动游戏，等待加载中，{attempt}/12')
 
             sleep(3)  # 等待游戏启动

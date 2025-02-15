@@ -124,6 +124,11 @@ def waitInvite():
         # if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
         #     Toast('不退出房间')
         # else:
+        # 房间 - 关闭邀请玩家
+        re, _ = TomatoOcrText(318, 222, 401, 247, '邀请玩家')
+        if re:
+            tapSleep(590, 1076)
+            tapSleep(590, 1076)
         quitTeamRe = shilianTask.quitTeam()
         功能开关["秘境不开宝箱"] = tmpBx
         return
@@ -145,6 +150,7 @@ def waitInvite():
                     res, 任务记录["战斗-房主旅团"] = TomatoOcrText(410, 828, 587, 862, "旅团名称")
                     if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != 任务记录["战斗-房主旅团"]:
                         Toast('非旅团成员，拒绝组队邀请')
+                        sleep(0.5)
                     else:
                         Toast('接受旅团成员组队邀请')
                         needReject = False
@@ -153,6 +159,7 @@ def waitInvite():
                     res, tmp = TomatoOcrText(276, 983, 353, 1014, "未关注")
                     if res and tmp != "":
                         Toast('非关注粉丝，拒绝组队邀请')
+                        sleep(0.5)
                     else:
                         Toast('接受关注粉丝组队邀请')
                         needReject = False
@@ -163,6 +170,7 @@ def waitInvite():
                         res, _ = TomatoOcrText(221, 981, 312, 1014, "互相关注")
                         if not res:
                             Toast('非互关好友，拒绝组队邀请')
+                            sleep(0.5)
                         else:
                             Toast('接受互关好友组队邀请')
                             needReject = False
@@ -178,7 +186,8 @@ def waitInvite():
         resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
         resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 517, 570, 542, "房主名称")  # 房主名称
         # 判断带队为最新关卡，默认开启宝箱
-        if 任务记录["玩家-当前关卡"] != "" and 任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"] and tmpBx == 0:
+        if 任务记录["玩家-当前关卡"] != "" and len(任务记录["战斗-关卡名称"]) > 4 and 任务记录["玩家-当前关卡"] in \
+                任务记录["战斗-关卡名称"] and tmpBx == 0:
             # 若配置要求不开宝箱，则最新关卡也不开启
             Toast('带队最新关卡，战斗后开启宝箱')
             print(f'{任务记录["玩家-当前关卡"]}-{任务记录["战斗-关卡名称"]}')
@@ -190,6 +199,7 @@ def waitInvite():
         if fight_type == '梦魇带队':
             if 功能开关['梦魇自动接收邀请'] == 0:
                 Toast('梦魇带队未开启，拒绝梦魇组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -199,6 +209,7 @@ def waitInvite():
         if fight_type == '恶龙带队':
             if 功能开关['恶龙自动接收邀请'] == 0:
                 Toast('恶龙带队未开启，拒绝恶龙组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -208,6 +219,7 @@ def waitInvite():
         if fight_type == '暴走带队':
             if 功能开关['暴走自动接收邀请'] == 0:
                 Toast('暴走带队未开启，拒绝暴走组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -217,6 +229,7 @@ def waitInvite():
         if fight_type == '秘境带队':
             if 功能开关['秘境自动接收邀请'] == 0:
                 Toast('秘境带队未开启，拒绝秘境组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -225,6 +238,7 @@ def waitInvite():
         if fight_type == '绝境带队':
             if 功能开关['绝境自动接收邀请'] == 0:
                 Toast('绝境带队未开启，拒绝绝境组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -233,6 +247,7 @@ def waitInvite():
         if fight_type == '终末战带队':
             if 功能开关['终末战自动接收邀请'] == 0:
                 Toast('终末战带队未开启，拒绝终末战组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -241,6 +256,7 @@ def waitInvite():
         if fight_type == '调查队带队':
             if 功能开关['调查队自动接收邀请'] == 0:
                 Toast('调查队带队未开启，拒绝调查队组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -248,6 +264,7 @@ def waitInvite():
                 Toast('同意调查队组队邀请')
         if fight_type == '忆战回环带队':
             Toast('忆战回环带队，自动拒绝')
+            sleep(0.5)
             res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
             功能开关["fighting"] = 0
             return
@@ -255,6 +272,7 @@ def waitInvite():
         if fight_type == '三魔头带队':
             if 功能开关['三魔头自动接收邀请'] == 0:
                 Toast('三魔头带队未开启，拒绝三魔头组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -264,6 +282,7 @@ def waitInvite():
         if fight_type == '斗歌会带队':
             if 功能开关['斗歌会自动接收邀请'] == 0:
                 Toast('斗歌会带队未开启，拒绝斗歌会组队邀请')
+                sleep(0.5)
                 res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
                 功能开关["fighting"] = 0
                 return
@@ -309,6 +328,7 @@ def waitInvite():
             break
 
         Toast(f'{fight_type}-等待队长开始{elapsed}/{totalWait}s')
+        shilianTask.openTreasure(noNeedOpen=1)
 
         # 兜底，已在队伍中时，停止返回操作
         功能开关["fighting"] = 1
@@ -347,6 +367,12 @@ def waitInvite():
             sleep(0.5)
         if failTeam >= 2:
             break
+
+        # 房间 - 关闭邀请玩家
+        re, _ = TomatoOcrText(318, 222, 401, 247, '邀请玩家')
+        if re:
+            tapSleep(590, 1076)
+            tapSleep(590, 1076)
 
         # 房间 - 特殊状态识别
         if fight_type == '梦魇带队' and not findDoneStatus:
@@ -389,12 +415,12 @@ def waitInvite():
             Toast('收起喊话窗口')
             tapSleep(107, 93)
 
-        # 关闭未结算宝箱
-        re = CompareColors.compare("492,519,#F4E37D|491,523,#F4D86C|494,528,#EFD06E")
-        if re:
-            Toast('关闭未结算宝箱')
-            tapSleep(353, 1046, 0.8)
-            tapSleep(364, 738, 0.8)
+        # # 关闭未结算宝箱
+        # re = CompareColors.compare("492,519,#F4E37D|491,523,#F4D86C|494,528,#EFD06E")
+        # if re:
+        #     Toast('关闭未结算宝箱')
+        #     tapSleep(353, 1046, 0.8)
+        #     tapSleep(364, 738, 0.8)
 
         # 判断队友全部离队，退出房间
         if fight_type == '恶龙带队' or fight_type == '恶龙挑战':
@@ -469,14 +495,6 @@ def checkFightType():
     fight_type = ''
     if fight_type == '':
         for i in range(2):
-            resMengYan1, _ = TomatoOcrText(404, 587, 480, 611, "梦魇狂潮")  # 梦魇邀请
-            if not resMengYan1:
-                resMengYan1, _ = TomatoOcrText(443, 590, 481, 612, "狂潮")  # 梦魇邀请
-            if resMengYan1:
-                fight_type = "梦魇带队"
-                break
-    if fight_type == '':
-        for i in range(2):
             resELong1, _ = TomatoOcrText(405, 588, 498, 615, "恶龙大通缉")  # 恶龙邀请
             if resELong1:
                 fight_type = "恶龙带队"
@@ -486,6 +504,14 @@ def checkFightType():
             resMiJing1, _ = TomatoOcrText(405, 588, 480, 611, "秘境之间")  # 秘境邀请
             if resMiJing1:
                 fight_type = "秘境带队"
+                break
+    if fight_type == '':
+        for i in range(2):
+            resMengYan1, _ = TomatoOcrText(404, 587, 480, 611, "梦魇狂潮")  # 梦魇邀请
+            if not resMengYan1:
+                resMengYan1, _ = TomatoOcrText(443, 590, 481, 612, "狂潮")  # 梦魇邀请
+            if resMengYan1:
+                fight_type = "梦魇带队"
                 break
     if fight_type == '':
         bitmap = screen.capture(380, 583, 510, 615)

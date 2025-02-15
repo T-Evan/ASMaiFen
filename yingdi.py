@@ -332,7 +332,8 @@ class YingDiTask:
             sleep(1.5)
             TomatoOcrTap(315, 980, 407, 1010, "点击签到")
             # re, x, y = imageFind('月签到-累计奖励', confidence1=0.7)
-            point = FindColors.find("361,232,#E65638|361,225,#F46042|366,224,#F55E42", rect=[91, 200, 622, 355])
+            point = FindColors.find("361,232,#E65638|361,225,#F46042|366,224,#F55E42", rect=[91, 200, 622, 355],
+                                    diff=0.8)
             if point:
                 print(point.x, point.y)
                 tapSleep(point.x, point.y, 1)

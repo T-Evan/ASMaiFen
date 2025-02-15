@@ -98,7 +98,13 @@ class AutoMove:
 
                 # 白网与织女
                 if '白网与织女' in 任务记录['战斗-恶龙名称']:
-                    sleep(0.5)
+                    sleep(3)
+                    continue
+
+                if '暴走' in 任务记录['战斗-恶龙名称']:
+                    if '烈焰' in 任务记录['战斗-恶龙名称']:
+                        功能开关["史莱姆选择"] = "暴走烈焰大王"
+                    sleep(5)
                     continue
 
                 # 三打三守三魔头
@@ -260,7 +266,7 @@ class AutoMove:
                             re = imageFindClick('恶龙-星星', x1=9, y1=632, x2=205, y2=797)
 
                         # 玩家头上为太阳
-                        re = FindColors.find_all(
+                        re = FindColors.find(
                             "407,669,#FEFAA3|404,664,#FEFAA3|412,666,#FEFAA3|394,680,#FEF89B|405,686,#FEF89B|418,681,#FEF89B",
                             rect=[x - 10, y - 130, x + 120, y], diff=0.95)
                         if re:
@@ -433,34 +439,41 @@ class AutoMove:
                 # 绮梦晶彩龙
                 if 任务记录['战斗-恶龙名称'] == '曳风晶彩龙':
                     Toast(f'曳风晶彩龙-等待走位')
-                    re = FindColors.find("493,883,#E4EAEA|483,896,#EAEBEB|473,911,#EAEBEB|464,927,#EAEAEA|470,924,#EAEAEB",rect=[383,475,699,1153])
+                    re = FindColors.find(
+                        "493,883,#E4EAEA|483,896,#EAEBEB|473,911,#EAEBEB|464,927,#EAEAEA|470,924,#EAEAEB",
+                        rect=[383, 475, 699, 1153])
                     if re:
                         Toast('恶龙技能，自动走位')
                         tapSleep(69, 674)  # 向左移动
 
-                    re = FindColors.find("313,1123,#74C33F|324,1122,#14874B|332,1125,#1F9450",rect=[62,699,706,1163])
+                    re = FindColors.find("313,1123,#74C33F|324,1122,#14874B|332,1125,#1F9450",
+                                         rect=[62, 699, 706, 1163])
                     if re:
                         Toast('恶龙技能，自动走位')
-                        tapSleep(148,675)  # 向右移动
+                        tapSleep(148, 675)  # 向右移动
 
-                    re = FindColors.find("284,1106,#DFE9DC|295,1123,#CAE9C7|312,1141,#CDE9CB|314,1155,#C9E9C5",rect=[225,686,702,1191],diff=0.98)
+                    re = FindColors.find("284,1106,#DFE9DC|295,1123,#CAE9C7|312,1141,#CDE9CB|314,1155,#C9E9C5",
+                                         rect=[225, 686, 702, 1191], diff=0.98)
                     if re:
                         Toast('恶龙炸地板，自动走位')
                         tapSleep(69, 674)  # 向左移动
 
-                    re = FindColors.find("236,1081,#DAE9E9|240,1066,#E9E9E9|241,1052,#E9E9E9|247,1049,#E9E9E9",rect=[91,694,701,1208],diff=0.98)
+                    re = FindColors.find("236,1081,#DAE9E9|240,1066,#E9E9E9|241,1052,#E9E9E9|247,1049,#E9E9E9",
+                                         rect=[91, 694, 701, 1208], diff=0.98)
                     if re:
                         Toast('恶龙技能，自动走位')
-                        tapSleep(148,675)  # 向右移动
+                        tapSleep(148, 675)  # 向右移动
 
-                    re = FindColors.find("337,822,#227342|334,827,#227446|328,834,#1A7243|320,844,#106B3D",rect=[91,694,701,1208],diff=0.95)
+                    re = FindColors.find("337,822,#227342|334,827,#227446|328,834,#1A7243|320,844,#106B3D",
+                                         rect=[91, 694, 701, 1208], diff=0.95)
                     if re:
                         Toast('恶龙技能，自动走位')
                         tapSleep(69, 674)  # 向左移动
-                    re = FindColors.find("418,1004,#3A8675|411,1003,#388272|418,1006,#377F70",rect=[371,926,478,1016],diff=0.95)
+                    re = FindColors.find("418,1004,#3A8675|411,1003,#388272|418,1006,#377F70",
+                                         rect=[371, 926, 478, 1016], diff=0.95)
                     if re:
                         Toast('释放技能')
-                        tapSleep(423,974)  # 技能
+                        tapSleep(423, 974)  # 技能
                     sleep(0.5)
                     continue
 

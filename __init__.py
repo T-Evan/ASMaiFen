@@ -189,6 +189,7 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
     Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
     Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
 
+
 # debug
 # res = Ocr.mlkitocr_v2()
 # if res:
@@ -308,9 +309,20 @@ def main():
                     # Toast('战斗中 - 主进程暂停')
                     sleep(5)
                     continue
-                if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1:
+                if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1 or 功能开关[
+                    '暴走进入战斗后启动'] == 1:
                     Toast('已开启-进入战斗后启动！等待进入战斗')
-                    sleep(30)
+                    # 识别是否战斗中
+                    res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+                    res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+                    # res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
+                    if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
+                        # 大暴走战斗中
+                        if 功能开关["大暴走开关"] == 1 and 功能开关["暴走进入战斗后启动"] == 1:
+                            Toast("进入暴走战斗成功 - 开始战斗")
+                            shilianTask.fightingBaoZou()
+                            return
+                    sleep(10)
                     continue
                 # 获取当前设备运行的APP信息
                 # info = Device.memory()

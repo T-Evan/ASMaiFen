@@ -266,10 +266,12 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
             for key in keywords:
                 if key['match_mode'] == 'fuzzy':
                     if key['keyword'] in lineWords:
+                        print(f"TomatoOcrFindRange-fuzzy-别成功-{lineWords}")
                         isFind = True
                         break
                 elif key['match_mode'] == 'exact':
                     if lineWords == key['keyword']:
+                        print(f"TomatoOcrFindRange-exact-识别成功-{lineWords}")
                         isFind = True
                         break
                 else:
