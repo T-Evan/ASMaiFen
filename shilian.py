@@ -420,10 +420,12 @@ class ShiLianTask:
             waitStatus, _ = TomatoOcrText(311, 1156, 407, 1182, "匹配中")
             if waitStatus == False:
                 waitStatus, _ = TomatoOcrText(325, 1156, 390, 1182, "匹配中")
-                if waitStatus == False:
-                    res, waitTime = TomatoOcrText(334, 1184, 383, 1201, "等待时间")
-                    if waitTime != "":
-                        waitStatus = True
+                if res == False:
+                    waitStatus, _ = TomatoOcrText(321, 1151, 393, 1185, "匹配中")
+                # if waitStatus == False:
+                #     res, waitTime = TomatoOcrText(334, 1184, 383, 1201, "等待时间")
+                #     if waitTime != "":
+                #         waitStatus = True
 
             res1 = self.WaitFight("暴走")
             if res1 == True or (waitStatus == False):  # 成功准备战斗 或 未匹配到
@@ -1144,7 +1146,8 @@ class ShiLianTask:
             res1 = TomatoOcrFindRange("", x1=108, y1=462, x2=618, y2=1120,
                                       bitmap=bitmap, keywords=[{'keyword': '通关奖励', 'match_mode': 'fuzzy'},
                                                                {'keyword': '开启', 'match_mode': 'exact'},
-                                                               {'keyword': '体力不足',
+                                                               {'keyword': '体力不足', 'match_mode': 'fuzzy'},
+                                                               {'keyword': '战斗统计',
                                                                 'match_mode': 'fuzzy'}])  # 战斗结束页。宝箱提示
         # if not res1:
         # res2, _ = TomatoOcrText(267, 755, 313, 783, "开启")  # 战斗结束页。宝箱提示
@@ -1657,8 +1660,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
-            if elapsed > 180 or (
-                    "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
+            if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
                 Toast(f"暴走战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1671,7 +1673,7 @@ class ShiLianTask:
                     break
             self.fight_fail_alert()
             sleep(3)
-            elapsed = elapsed + 4
+            elapsed = elapsed + 5
 
     def fightingDiaoChaTeam(self):
         totalWait = 30
@@ -1710,8 +1712,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 200 or (
-                    "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
+            if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
                 Toast(f"调查队战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 4:
@@ -1723,7 +1724,7 @@ class ShiLianTask:
                     功能开关["fighting"] = 0
                     break
             sleep(3)
-            elapsed = elapsed + 4
+            elapsed = elapsed + 5
 
     def fightingJueJingTeam(self):
         totalWait = 90
@@ -2107,8 +2108,7 @@ class ShiLianTask:
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             # res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
             # res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
-            if (elapsed > 180 or (
-                    "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2)):
+            if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
                 Toast(f"梦魇战斗中状态 - 识别失败 - 次数 {failNum}/4")
                 failNum = failNum + 1
                 if failNum > 3:
@@ -2333,7 +2333,7 @@ class ShiLianTask:
         功能开关["fighting"] = 0
 
     def fightingBaoZou(self):
-        totalWait = 380 * 1000  # 30000 毫秒 = 30 秒
+        totalWait = 380  # 30000 毫秒 = 30 秒
 
         teamShoutDone = 0
         start_time = int(time.time())
@@ -2389,6 +2389,11 @@ class ShiLianTask:
 
             # 判断是否战斗失败（战斗5分钟后）
             if not res1 and (teamName1 == "" and teamName2 == ""):
+                # 房间 - 关闭邀请玩家
+                re1, _ = TomatoOcrText(318, 222, 401, 247, '邀请玩家')
+                if re1:
+                    tapSleep(590, 1076)
+                    tapSleep(590, 1076)
                 功能开关["fighting"] = 0
                 功能开关["fighting_baozou"] = 0
                 # 战斗结束
@@ -2736,12 +2741,105 @@ class ShiLianTask:
 
     # 大暴走（烈焰大王）
     def daBaoZouLieYan(self):
-        for i in range(1, 5):
+        for i in range(5):
             def 往左():
                 tapSleep(63, 680, 4)
 
             def 往右():
                 tapSleep(148, 675, 4)
+
+            sleep(0.5)
+            # print(任务记录['玩家-当前职业'])
+            # print(功能开关['暴走职能优先治疗'])
+            if 任务记录['玩家-当前职业'] == '服事' and 功能开关['暴走职能优先治疗'] == 1:
+                notGreen = 0
+                re1 = False
+                re2 = False
+                for k in range(5):
+                    re1 = FindColors.find("141,646,#79DC1A|141,643,#63D110|141,638,#45BF04|145,642,#55C90E",
+                                          rect=[61, 520, 341, 729], diff=0.95)
+                    if not re1:
+                        re1 = FindColors.find("453,805,#4FCDCB|457,801,#45C9CA|461,797,#45C9CC",
+                                              rect=[47, 711, 623, 860], diff=0.95)
+                    if not re1:
+                        re1 = FindColors.find("140,640,#7DC51C|145,626,#639C13|140,631,#8DCC2A",
+                                              rect=[30, 511, 309, 667], diff=0.95)
+                    if not re1:
+                        re1 = FindColors.find("185,689,#85CE2E|188,689,#89D22E|188,686,#7DC52D",
+                                              rect=[25, 509, 262, 714], diff=0.92)
+                    if not re1:
+                        re1 = FindColors.find("192,694,#77D8DD|192,691,#7BD1D9|194,691,#7ED4DA",
+                                              rect=[37, 703, 631, 888], diff=0.95)
+                    re2 = FindColors.find("132,653,#B0D0D7|132,648,#ACC1CC|134,645,#B7BBC6", rect=[30, 511, 309, 667],
+                                          diff=0.95)
+                    if not re2:
+                        FindColors.find(
+                            "510,785,#FD6025|505,778,#FD5926|514,778,#FD5927|519,774,#FE794F|521,773,#FE5C2E",
+                            rect=[47, 711, 623, 860], diff=0.95)
+                    if not re2:
+                        re2 = FindColors.find("558,768,#F65A1E|555,771,#FA6626|558,762,#F95621|553,762,#F56623",
+                                              rect=[33, 705, 631, 879])
+                    if not re2:
+                        re2 = FindColors.find("192,694,#77D8DD|192,691,#7BD1D9|194,691,#7ED4DA",
+                                              rect=[35, 565, 273, 732], diff=0.95)
+                    if not re2:
+                        re2 = FindColors.find(
+                            "532,754,#ECDCD1|533,759,#EBD8CD|535,760,#EBD8CD|521,768,#FC5E39|532,767,#F85837",
+                            rect=[37, 703, 631, 888], diff=0.95)
+                    if re1 or re2:
+                        notGreen = notGreen + 1
+                    sleep(0.2)
+                if notGreen > 3:
+                    Toast('服事-战斗中-准备走位草')
+                    re = CompareColors.compare("75,673,#384558|77,669,#384558|80,675,#384558")
+                    if re:
+                        Toast('服事-战斗中-自动走位草')
+                        if re1:
+                            tapSleep(72, 677)
+                        elif re2:
+                            tapSleep(143, 672)
+                        sleep(2)
+                continue
+
+            if 功能开关['bossNumber0'] == '' and 功能开关['bossNumber1'] == '' and 功能开关['bossNumber2'] == '':
+                notBlue = 0
+                re1 = False
+                re2 = False
+                for k in range(5):
+                    re1 = FindColors.find("195,670,#9ABCC8|199,664,#8BAFBD|199,670,#9AC7D0", rect=[61, 528, 295, 713],
+                                          diff=0.97)
+                    if not re1:
+                        re1 = FindColors.find("189,605,#939FAF|185,605,#939AA8|182,610,#A6B0B9|188,616,#A2C0C7",
+                                              rect=[52, 546, 243, 648], diff=0.97)
+                    if not re1:
+                        re1 = FindColors.find("541,784,#FD5E35|543,774,#F84C31|546,763,#F44C32",
+                                              rect=[108, 705, 628, 858], diff=0.97)
+                    if not re1:
+                        re1 = FindColors.find("196,675,#85C9D2|196,677,#8CCFD6|194,670,#74B6C5",
+                                              rect=[20, 501, 306, 705], diff=0.95)
+                    re2 = FindColors.find("570,645,#7ECCD3|571,639,#61B0C2|573,634,#529EB2",
+                                          rect=[390, 552, 641, 711], diff=0.97)
+                    if not re2:
+                        re2 = FindColors.find("562,630,#4CB8CD|562,634,#68C7D3|565,628,#56BFCE",
+                                              rect=[440, 544, 642, 694], diff=0.97)
+                    if not re2:
+                        re2 = FindColors.find("511,785,#8BDA31|514,778,#70C528|523,778,#7ED02A|528,773,#70C627",
+                                              rect=[108, 705, 628, 858], diff=0.97)
+                    if not re2:
+                        re2 = FindColors.find("533,781,#72C923|534,776,#5EB71F|538,765,#47941E",
+                                              rect=[60, 710, 639, 902], diff=0.95)
+                    if re1 or re2:
+                        notBlue = notBlue + 1
+                    sleep(0.2)
+                if notBlue > 3:
+                    re = CompareColors.compare("75,673,#384558|77,669,#384558|80,675,#384558")
+                    if re:
+                        Toast('复位蓝色')
+                        if re1:
+                            tapSleep(72, 677)
+                        elif re2:
+                            tapSleep(143, 672)
+                        sleep(2)
 
             if 功能开关['bossNumber1'] != '' and 功能开关['bossNumber2'] != '':
                 if 功能开关['bossLastNumber1'] != '' and 功能开关['bossLastNumber2'] != '' and (
@@ -3191,7 +3289,7 @@ class ShiLianTask:
                     teamFightNumDiff = round(abs(teamFightNum - 任务记录['战斗-房主战力']) / 10000, 1)
                     diffHour = round((time.time() - 任务记录['战斗-房主上次相遇']) / 3600, 1)
                     if teamFightNumDiff != 0:
-                        content += f"上次相遇已{diffHour}h,您的战力提升了{teamFightNumDiff}万.恭喜!"
+                        content += f"上次相遇已{diffHour}h,您的战力提升{teamFightNumDiff}w.恭喜!"
                 if teamFightNum != 0:
                     p = threading.Thread(target=self.daiDuiZhanLi, args=(teamName, teamFightNum))
                     p.start()

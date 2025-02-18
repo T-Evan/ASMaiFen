@@ -30,15 +30,16 @@ class DailyTask:
         while True:
             tryTimes = tryTimes + 1
             # 避免战斗中直接退出
-            if 功能开关["fighting"] == 1:
-                if tryTimes < 10:
-                    res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
-                    if res:
-                        sleep(30)
-                        continue
+            if 功能开关["fighting"] == 1 and tryTimes < 5:
+                Toast(f'返回首页 - 等待任务结束{tryTimes * 20}/100')
+                sleep(20)
+                continue
 
-                    Toast(f'返回首页 - 等待战斗结束{tryTimes * 10}/100')
-                    sleep(10)
+            if tryTimes < 10:
+                res, _ = TomatoOcrText(649, 321, 694, 343, '队伍')
+                if res:
+                    Toast(f'返回首页 - 等待战斗结束{tryTimes * 30}/300')
+                    sleep(30)
                     continue
 
             if tryTimes > 3:
@@ -936,6 +937,7 @@ class DailyTask:
             needNewMap = False
             if newMapOK:
                 tapSleep(x, y, 5)
+                tapSleep(x + 10, y + 10, 5)
             if not newMapOK:
                 newMapOK = TomatoOcrTap(589, 674, 629, 691, '前往', sleep1=1.5)
             res1, _ = TomatoOcrText(143, 195, 202, 219, "上一区")
@@ -2995,6 +2997,8 @@ class DailyTask:
             needCount = safe_int(功能开关["讲述故事次数"])
             if needCount == '':
                 needCount = 0
+            if needCount > 10:
+                needCount = 10  # 单次任务最多操作10次
             if needCount > 0:
                 attempt = 0
                 # 关闭批量讲述
@@ -3130,7 +3134,7 @@ class DailyTask:
         if res1 or res2 or res3 or res4 or res5 or res6:
             功能开关["needHome"] = 0
             功能开关["fighting"] = 1
-            teamStatus = TomatoOcrTap(632, 570, 684, 598, "匹配中")
+            teamStatus = TomatoOcrTap(632, 570, 684, 598, "匹配中", 10, 10)
             if teamStatus:
                 Toast('取消匹配')
 

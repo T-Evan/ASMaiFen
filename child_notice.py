@@ -2,6 +2,7 @@
 from .baseUtils import *
 from .res.ui.ui import 功能开关
 
+
 # 实例方法
 def main():
     while True:
@@ -32,8 +33,8 @@ def noticeCancel():
         # res2 = TomatoOcrTap(279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 20)
         # res3 = TomatoOcrTap(266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
         # res5 = TomatoOcrTap(268, 869, 359, 888, "点击空白处", 30, 100)
-        bitmap = screen.capture(107,759,603,1257)
-        res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107,759,603,1257, whiteList='点击空白处', timeLock=5,
+        bitmap = screen.capture(107, 759, 603, 1257)
+        res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
                                       offsetX=20, offsetY=40, bitmap=bitmap,
                                       keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
         if res:
@@ -44,7 +45,7 @@ def noticeCancel():
         #     Toast('关闭弹窗')
 
         if 功能开关["优先推图到最新关卡"] == 1:
-            res = TomatoOcrTap(428,1073,521,1100, "下一关卡", 10, 10)
+            res = TomatoOcrTap(428, 1073, 521, 1100, "下一关卡", 10, 10)
             if res:
                 Toast('前往下一关')
 

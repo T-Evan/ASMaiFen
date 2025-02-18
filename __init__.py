@@ -325,12 +325,14 @@ def main():
                     sleep(10)
                     continue
                 # 获取当前设备运行的APP信息
-                # info = Device.memory()
+                info = Device.memory()
                 # # 返回单位是字节
-                # total_memory_mb = info[2] / (1024 ** 2)
+                total_memory_mb = info[2] / (1024 ** 2)
                 # used_memory_mb = info[1] / (1024 ** 2)
-                # free_memory_mb = info[0] / (1024 ** 2)
-                # print(f"剩余内存:{free_memory_mb},已用内存{used_memory_mb},总共内存{total_memory_mb}")
+                free_memory_mb = info[0] / (1024 ** 2)
+                print(f"总内存{total_memory_mb},剩余内存:{free_memory_mb}")
+                if total_memory_mb < 6144:
+                    Toast(f"总内存{total_memory_mb},建议调整内存 > 6G")
                 # counter += 1
                 # if counter % 3 == 0:
                 #     runThreadNotice()
@@ -361,8 +363,15 @@ def main():
 
                 # 营地活动（优先领取）
                 yingdiTask.yingdiTask()
+
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
+
                 # 日常（优先领取）
                 dailyTask.dailyTask()
+
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
 
                 # 检查背包是否已满
                 lvrenTask.deleteEquip(needDelete=True)
@@ -370,26 +379,50 @@ def main():
                 # 试炼
                 shilianTask.shilian()
 
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
+
                 # 旅团相关
                 lvtuanTask.lvtuanTask()
+
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
 
                 # 旅人相关
                 lvrenTask.lvrenTask()
 
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
+
                 # 日常2
                 dailyTask.dailyTask2()
+
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
 
                 # 日常（最后领取）
                 dailyTask.dailyTaskEnd()
 
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
+
                 # 营地活动（优先领取）
                 yingdiTask.yingdiTask2()
+
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
 
                 # 营地活动（最后领取）
                 yingdiTask.yingdiTaskEnd()
 
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
+
                 # 日常（最后领取一次冒险手册）
                 dailyTask.maoXianShouCe()
+
+                if 功能开关["日常总开关"] == 1 and 功能开关["优先推图到最新关卡"] == 1:
+                    res = dailyTask.newMap()
 
                 # 定时休息
                 current_time = int(time.time())

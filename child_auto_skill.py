@@ -85,6 +85,7 @@ class AutoSkill:
 
             if self.SkillCount >= self.SkillNeedCount:
                 res = TomatoOcrTap(644, 878, 687, 902, "手动", 10, -10)
+                self.SkillCount = 0
                 continue
 
             if 功能开关["技能定时释放"] == 1:
