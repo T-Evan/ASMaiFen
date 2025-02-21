@@ -228,7 +228,7 @@ class LvTuanTask:
         # 翻页（先返回上面）
         swipe(360, 750, 360, 850)
         sleep(2.5)
-        for i in range(9):
+        for i in range(11):
             re = FindColors.find(
                 "120,703,#FEF396|131,705,#F5CE4F|140,708,#F2A94B|124,711,#F1D65A|129,714,#E8BA46|138,714,#F2A94B",
                 rect=[78, 527, 639, 1104])
@@ -286,11 +286,14 @@ class LvTuanTask:
         任务记录['旅团-商店-完成'] = 1
 
     def shopBuy(self):
-        re = TomatoOcrFindRangeClick('最大', whiteList='最大')
+        re = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=45, y1=460, x2=656, y2=1095)
         # if not re:
         #     return
         # ldE.element('旅团-购买').click().execute(sleep=1)
-        tapSleep(362, 866)  # 点击购买
+        re = TomatoOcrFindRangeClick('购买', whiteList='购买', x1=45, y1=460, x2=656, y2=1095)
+        if not re:
+            tapSleep(362, 866)  # 点击购买
+            tapSleep(362, 843)  # 点击购买
         tapSleep(360, 1210)  # 点击空白处
 
     # 旅团大采购
@@ -331,7 +334,8 @@ class LvTuanTask:
         swipe(281, 1191, 656, 1194)
         sleep(0.8)
         for k in range(35):
-            re = FindColors.find("448,1164,#F35E41|450,1161,#F76143|450,1164,#F35E41", diff=0.97,rect=[153,1141,717,1246])
+            re = FindColors.find("448,1164,#F35E41|450,1161,#F76143|450,1164,#F35E41", diff=0.97,
+                                 rect=[153, 1141, 717, 1246])
             if re:
                 Toast('领取采购单')
                 print(re)

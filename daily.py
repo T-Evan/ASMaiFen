@@ -941,10 +941,13 @@ class DailyTask:
             if not newMapOK:
                 newMapOK = TomatoOcrTap(589, 674, 629, 691, '前往', sleep1=1.5)
             res1, _ = TomatoOcrText(143, 195, 202, 219, "上一区")
+            if not res1:
+                res1, _ = TomatoOcrText(513, 192, 577, 217, "下一区")
             if res1:
                 needNewMap = True
                 tapSleep(93, 1212, 1)  # 返回
                 tapSleep(93, 1212, 1)  # 返回
+                tapSleep(93, 1212, 0.5)  # 返回
 
             # 队员不满足时，才会不展示首页的前往下一关快速入口；因此判断开了单飞再从地图跳转下一关
             if (not newMapOK and 功能开关["队员不满足单飞"] == 1) or needNewMap:
@@ -3024,7 +3027,7 @@ class DailyTask:
 
         Toast('日常 - 兑换码领取 - 开始')
 
-        duihuanmas = ["goyuanx", "golover"]
+        duihuanmas = ["golover"]
         for duihuanma in duihuanmas:
             # 判断是否在营地页面
             res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")

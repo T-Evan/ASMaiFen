@@ -2,6 +2,7 @@
 import sys
 import traceback
 import json
+import gc
 
 # 导入动作模块
 from .res.ui.ui import 功能开关, loadConfig
@@ -325,14 +326,17 @@ def main():
                     sleep(10)
                     continue
                 # 获取当前设备运行的APP信息
+                gc.collect()
                 info = Device.memory()
                 # # 返回单位是字节
-                total_memory_mb = info[2] / (1024 ** 2)
+                total_memory_mb = round(info[2] / (1024 ** 3), 2)
                 # used_memory_mb = info[1] / (1024 ** 2)
-                free_memory_mb = info[0] / (1024 ** 2)
-                print(f"总内存{total_memory_mb},剩余内存:{free_memory_mb}")
-                if total_memory_mb < 6144:
-                    Toast(f"总内存{total_memory_mb},建议调整内存 > 6G")
+                free_memory_mb = round(info[0] / (1024 ** 3), 2)
+                if total_memory_mb < 5:
+                    Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G,建议调整内存>6G")
+                    sleep(0.5)
+                else:
+                    Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G")
                 # counter += 1
                 # if counter % 3 == 0:
                 #     runThreadNotice()
@@ -429,8 +433,8 @@ def main():
 
                 # 将时间戳转换为 datetime 对象
                 # 判断执行时间超过4小时（重置每日任务）
-                if current_time - 任务记录["任务重置-倒计时"] > 60 * 60 * 4:
-                    Toast(f"执行时间超过4小时，重置每日任务")
+                if current_time - 任务记录["任务重置-倒计时"] > 60 * 60 * 2:
+                    Toast(f"执行时间超过2小时，重置每日任务")
                     sleep(1.5)
                     初始化任务记录(False)
                     任务记录["任务重置-倒计时"] = int(time.time())

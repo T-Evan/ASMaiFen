@@ -492,11 +492,13 @@ class YingDiTask:
             findNL = False
             findNum = 0
             # 返回上半屏
-            if 功能开关["秘宝地图"] == "巨像的旷野" or 功能开关["秘宝地图"] == "白帆之都" or 功能开关[
-                "秘宝地图"] == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
-                Toast("返回上半屏")
-                swipe(361, 547, 380, 918)
-                sleep(1)
+            if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野"]:
+                re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[44, 8, 626, 45],
+                                     diff=0.96)
+                if not re:
+                    Toast("返回上半屏")
+                    swipe(361, 547, 380, 918)
+                    sleep(1)
 
             for i in range(4):
                 Toast('寻找秘宝能量')
@@ -544,9 +546,12 @@ class YingDiTask:
             # 返回下半屏地图
             if 功能开关["秘宝地图"] == "白帆之都" or 功能开关["秘宝地图"] == "石松沼泽" or 功能开关[
                 "秘宝地图"] == "天鹅仙宫":
-                Toast("返回下半屏")
-                swipe(380, 918, 361, 547)
-                sleep(1)
+                re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
+                                     diff=0.96)  # 底部牛皮纸
+                if not re:
+                    Toast("返回下半屏")
+                    swipe(380, 918, 361, 547)
+                    sleep(1)
 
             # 购买秘宝能量
             needNengLiang = False
@@ -665,16 +670,22 @@ class YingDiTask:
         findMap = False
 
         if selectMap == "白帆之都" or selectMap == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
-            Toast("返回下半屏")
-            swipe(380, 918, 361, 547)
-            sleep(1)
+            re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
+                                 diff=0.96)  # 底部牛皮纸
+            if not re:
+                Toast("返回下半屏")
+                swipe(380, 918, 361, 547)
+                sleep(1)
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
             if selectMap == "白帆之都" or selectMap == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
-                Toast("返回下半屏")
-                swipe(380, 918, 361, 547)
-                sleep(1)
+                re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
+                                     diff=0.96)  # 底部牛皮纸
+                if not re:
+                    Toast("返回下半屏")
+                    swipe(380, 918, 361, 547)
+                    sleep(1)
             else:
                 swipe(420, 200, 420, 600)
                 sleep(2)
@@ -684,9 +695,12 @@ class YingDiTask:
         # 再找左侧
         if left < 4 and right == 4:
             if selectMap == "白帆之都" or selectMap == "石松沼泽" or 功能开关["秘宝地图"] == "天鹅仙宫":
-                Toast("返回下半屏")
-                swipe(380, 918, 361, 547)
-                sleep(1)
+                re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
+                                     diff=0.96)  # 底部牛皮纸
+                if not re:
+                    Toast("返回下半屏")
+                    swipe(380, 918, 361, 547)
+                    sleep(1)
             else:
                 swipe(420, 200, 420, 600)
                 sleep(2)

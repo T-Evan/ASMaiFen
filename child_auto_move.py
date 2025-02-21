@@ -22,8 +22,8 @@ class AutoMove:
                 re1 = CompareColors.compare(
                     "657,324,#F3EDDD|659,324,#F3EDDD|664,331,#F3EDDD|676,329,#F3EDDD|681,337,#F3EDDD|687,334,#F3EDDD")  # 战斗内队伍图标
                 if re1:
-                    res3, _ = TomatoOcrText(647, 879, 686, 904, '自动')  # 辅助施法-识别战斗状态
-                    res4, _ = TomatoOcrText(647, 879, 686, 904, '手动')  # 辅助施法-识别战斗状态
+                    res3, _ = TomatoOcrText(646,879,687,902, '自动')  # 辅助施法-识别战斗状态
+                    res4, _ = TomatoOcrText(646,879,687,902, '手动')  # 辅助施法-识别战斗状态
                     # print('辅助施法-识别战斗状态')
                     # if res1 or res2 or res3 or res4:
                     if res3 or res4:

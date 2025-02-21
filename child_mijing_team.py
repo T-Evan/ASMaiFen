@@ -22,7 +22,7 @@ def main():
             '恶龙自动接收邀请'] == 1 or \
                 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
                 功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1 or 功能开关[
-            '斗歌会自动接收邀请'] == 1:
+            '斗歌会自动接收邀请'] == 1 or 功能开关['桎梏之形自动接收邀请'] == 1:
             # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
@@ -48,13 +48,13 @@ def main():
                             "603,1068,#77A0E6|603,1073,#78A1E7|603,1079,#78A1E7|601,1085,#78A1E7|609,1076,#78A1E7")
                         if re:
                             res, 任务记录["玩家-当前旅团"] = TomatoOcrText(415, 830, 584, 857, "旅团名称")
+                            Toast(f'识别所在旅团-{任务记录["玩家-当前旅团"]}')
                             任务记录["玩家-当前旅团-倒计时"] = time.time()
                         tapSleep(69, 1216)  # 关闭玩家信息
                     功能开关["fighting"] = 0
 
                 # 识别玩家当前关卡，做特殊逻辑
-                if (任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 900) and \
-                        功能开关["秘境不开宝箱"] == 0:
+                if (任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 900):
                     Toast('开始检测最新关卡')
                     功能开关["fighting"] = 1
                     功能开关["needHome"] = 0
@@ -71,7 +71,7 @@ def main():
                             if not re:
                                 Toast("未找到试炼入口 - 重新尝试")
                         else:
-                            Toast("未找到试炼入口 - 重新尝试")
+                            Toast("未找到试炼入口 - 待重新尝试")
                     if isFind:
                         shilianTask.openTreasure(noNeedOpen=1)
                         tiliPoint = FindColors.find(
@@ -86,7 +86,12 @@ def main():
                             y2 = y1 + 30
                             res, tmp = TomatoOcrText(x1, y1, x2, y2, "当前关卡")  # 关卡
                             if tmp != "":
-                                任务记录['玩家-当前关卡'] = tmp
+                                res, nandu = TomatoOcrText(tiliPoint.x - 237, tiliPoint.y + 25, tiliPoint.x - 200,
+                                                           tiliPoint.y + 45, "难度")  # 关卡难度
+                                if nandu == '挑战' or nandu == '姚战':
+                                    任务记录['玩家-当前关卡'] = tmp + "（挑战）"
+                                else:
+                                    任务记录['玩家-当前关卡'] = tmp
                                 Toast(f"识别最新关卡-{任务记录['玩家-当前关卡']}-带队时自动开启宝箱")
 
                             # 补充体力
@@ -195,9 +200,11 @@ def waitInvite():
         功能开关["needHome"] = 0
         resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
         resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 517, 570, 542, "房主名称")  # 房主名称
+        print(f'{任务记录["战斗-关卡名称"]}-{任务记录["玩家-当前关卡"]}-{tmpBx}')
         # 判断带队为最新关卡，默认开启宝箱
-        if 任务记录["玩家-当前关卡"] != "" and len(任务记录["战斗-关卡名称"]) > 4 and 任务记录["玩家-当前关卡"] in \
-                任务记录["战斗-关卡名称"] and tmpBx == 0:
+        if 任务记录["玩家-当前关卡"] != "" and len(任务记录["战斗-关卡名称"]) > 4 and (
+                任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"] or (
+                "挑战" in 任务记录["玩家-当前关卡"] and "挑战" in 任务记录["战斗-关卡名称"])) and tmpBx == 0:
             # 若配置要求不开宝箱，则最新关卡也不开启
             Toast('带队最新关卡，战斗后开启宝箱')
             print(f'{任务记录["玩家-当前关卡"]}-{任务记录["战斗-关卡名称"]}')
@@ -298,6 +305,16 @@ def waitInvite():
                 return
             else:
                 Toast('同意斗歌会组队邀请')
+
+        if fight_type == '桎梏之形带队':
+            if 功能开关['桎梏之形自动接收邀请'] == 0:
+                Toast('桎梏之形带队未开启，拒绝桎梏之形组队邀请')
+                sleep(0.5)
+                res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                功能开关["fighting"] = 0
+                return
+            else:
+                Toast('同意桎梏之形组队邀请')
 
         # 黑名单判断
         blackList = (功能开关['秘境带队黑名单'] + '|' + 功能开关['绝境带队黑名单'] + '|'
@@ -418,6 +435,19 @@ def waitInvite():
                 findDoneStatus = True
                 Toast('恶龙 - 已完成挑战 - 进入战斗后自动留影')
 
+        if fight_type == '桎梏之形带队' and not findDoneStatus:
+            re, level = TomatoOcrText(431, 347, 492, 375, "阶段")
+            import re as rep
+            level = int(rep.findall(r'\d+', level)[0]) if rep.findall(r'\d+', level) else None
+            level = safe_int_v2(level)
+            print(level)
+            if level >= 100:
+                findDoneStatus = True
+                Toast("桎梏之形 - 已完成挑战 - 进入战斗后自动留影")
+            else:
+                Toast('桎梏之形 - 未完成挑战 - 进入战斗后等待战斗结束')
+                fight_type = '桎梏之形挑战'
+
         # 关闭喊话窗口
         point = CompareColors.compare(
             "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
@@ -481,7 +511,7 @@ def waitInvite():
             start_time = int(time.time())
             teamShout = False
             # 恶龙/绝境/终末，仅挑战1次，可直接退队
-            if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队':
+            if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队' or fight_type == '桎梏之形带队' or fight_type == '桎梏之形挑战':
                 Toast('退出组队')
                 for z in range(6):
                     quitRes = shilianTask.quitTeam()
@@ -561,6 +591,13 @@ def checkFightType():
             res2, _ = TomatoOcrText(407, 591, 461, 610, "斗歌会")  # 斗歌会
             if res1 or res2:
                 fight_type = "斗歌会带队"
+                break
+
+    if fight_type == '':
+        for i in range(2):
+            res1, _ = TomatoOcrText(442, 588, 479, 609, "之形")  # 斗歌金元花
+            if res1:
+                fight_type = "桎梏之形带队"
                 break
 
     if fight_type == '':
