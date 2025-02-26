@@ -228,10 +228,9 @@ class LvTuanTask:
         # 翻页（先返回上面）
         swipe(360, 750, 360, 850)
         sleep(2.5)
-        for i in range(11):
-            re = FindColors.find(
-                "120,703,#FEF396|131,705,#F5CE4F|140,708,#F2A94B|124,711,#F1D65A|129,714,#E8BA46|138,714,#F2A94B",
-                rect=[78, 527, 639, 1104])
+        for i in range(13):
+            re = FindColors.find("258,928,#DBA636|259,921,#FDEF88|263,923,#F7DD62|257,932,#CC8F30",
+                                 rect=[85, 538, 491, 1092], diff=0.9)
             if re:  # 有可购买商品时，继续判断
                 if 功能开关['旅团唤兽琴弦']:
                     re = TomatoOcrFindRangeClick(keywords=[{'keyword': '唤兽', 'match_mode': 'fuzzy'}], x1=93, y1=561,
@@ -239,31 +238,43 @@ class LvTuanTask:
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团全价兽粮']:
-                    re = imageFindClick('旅团-全价兽粮', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '全价兽粮', 'match_mode': 'fuzzy'}], x1=93,
+                                                 y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团超级成长零食']:
-                    re = imageFindClick('旅团-超级成长零食', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '超级成长零食', 'match_mode': 'fuzzy'}], x1=93,
+                                                 y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团原材料']:
-                    re = imageFindClick('旅团-原材料', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '原材料', 'match_mode': 'fuzzy'}], x1=93, y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团史诗经验']:
-                    re = imageFindClick('旅团-史诗经验', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '史诗经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                 y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团优秀经验']:
-                    re = imageFindClick('旅团-优秀经验', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '优秀经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                 y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团普通经验']:
-                    re = imageFindClick('旅团-普通经验', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '普通经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                 y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
                 if 功能开关['旅团金币']:
-                    re = imageFindClick('旅团-金币', confidence1=0.85)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '金币', 'match_mode': 'fuzzy'}], x1=93, y1=561,
+                                                 x2=630, y2=1084)
                     if re:
                         self.shopBuy()
 
@@ -279,7 +290,8 @@ class LvTuanTask:
                 return
 
             # 翻页
-            swipe(360, 850, 360, 800)
+            swipe(360, 850, 360, 770)
+            Toast("旅团 - 商店兑换 - 翻页")
             sleep(3)
 
         res = TomatoOcrTap(66, 1186, 121, 1220, "返回")  # 返回旅团首页
@@ -350,6 +362,11 @@ class LvTuanTask:
                 Toast('寻找待领取采购单')
                 swipe(656, 1194, 450, 1191)  # 右滑
                 sleep(1)
+                re = FindColors.find_all(
+                    "203,1165,#A3A0AA|194,1217,#A4A1AB|216,1227,#A6A1AE|274,1222,#A6A1AD|279,1207,#8D8297|280,1167,#A6A1AD|279,1184,#A6A1AD",
+                    rect=[153, 1133, 699, 1243], diff=0.96)
+                if re:
+                    break
 
     # 旅团任务
     def lvTuanRenWu(self):
@@ -414,6 +431,7 @@ class LvTuanTask:
             if re:
                 tapSleep(350, 359)  # 点击主战宠物
                 re, chongWuName = TomatoOcrText(287, 388, 437, 423, '主战宠物')
+                Toast(f"旅团 - 许愿墙 - 主战宠物{chongWuName}")
 
         # 判断是否在旅团页面
         isLvtuan = False

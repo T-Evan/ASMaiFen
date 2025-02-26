@@ -18,12 +18,13 @@ class AutoMove:
                 continue
 
             # 间隔2s检查战斗中状态
-            if self.fighting == 0 or time.time() - self.lastCheckFighting > 5:
+            if (self.fighting == 0 and time.time() - self.lastCheckFighting > 5) or (
+                    self.fighting == 1 and time.time() - self.lastCheckFighting > 10):
                 re1 = CompareColors.compare(
                     "657,324,#F3EDDD|659,324,#F3EDDD|664,331,#F3EDDD|676,329,#F3EDDD|681,337,#F3EDDD|687,334,#F3EDDD")  # 战斗内队伍图标
                 if re1:
-                    res3, _ = TomatoOcrText(646,879,687,902, '自动')  # 辅助施法-识别战斗状态
-                    res4, _ = TomatoOcrText(646,879,687,902, '手动')  # 辅助施法-识别战斗状态
+                    res3, _ = TomatoOcrText(646, 879, 687, 902, '自动')  # 辅助施法-识别战斗状态
+                    res4, _ = TomatoOcrText(646, 879, 687, 902, '手动')  # 辅助施法-识别战斗状态
                     # print('辅助施法-识别战斗状态')
                     # if res1 or res2 or res3 or res4:
                     if res3 or res4:
@@ -72,7 +73,7 @@ class AutoMove:
                 # 切换攻击目标
                 point = FindColors.find(
                     "135,252,#7CA2E2|153,238,#7DA1E2|170,255,#85A7E1|164,265,#7DA1E2|150,271,#94B1E5",
-                    rect=[1, 175, 697, 620], diff=0.95)
+                    rect=[93, 263, 628, 749], diff=0.95)
                 if point:
                     Toast('切换攻击目标')
                     # print(point.x, point.y)

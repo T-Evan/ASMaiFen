@@ -57,7 +57,7 @@ import random
 #     return False
 #
 #
-# def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10):
+# def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=3):
 #     try:
 #         if whiteList == '':
 #             whiteList = keyword
@@ -154,7 +154,7 @@ import random
 #         return False
 #
 
-def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, bitmap=''):
+def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=3, bitmap=''):
     try:
         lock = TimeoutLock(timeLock)
         try:
@@ -225,7 +225,7 @@ def shijieShoutText():
     return player_messages
 
 
-def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
+def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=3,
                        match_mode='exact', bitmap='', keywords=None):
     try:
         if whiteList == '':
@@ -345,6 +345,9 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
             return False
         center_x = 0
         center_y = 0
+        if ocrRe == "":
+            print(f"TomatoOcrFindRangeClick识别为空-{keyword}")
+            return False
         try:
             ocrReJson = json.loads(ocrRe)
         except json.JSONDecodeError as e:

@@ -27,6 +27,15 @@ def main():
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
             #     continue
+
+            login1 = CompareColors.compare(
+                "202,419,#FCF8F0|200,426,#FCF8F0|195,460,#FCF8F0|292,426,#FCF8F0|328,438,#FCF8F0|404,421,#FCF8F0|427,467,#FCF8F0")  # 登录页 - 出发吧麦芬
+            login2 = CompareColors.compare(
+                "435,1201,#FABD59|424,1231,#F5AD4E|420,1215,#F7B554|296,1202,#F9BC58|295,1220,#F6B351|312,1213,#FFFFFF|328,1213,#FFFFFF|358,1216,#F7B554|382,1215,#FFFFFF")  # 角色页 - 开始冒险
+            if login1 or login2:
+                sleep(10)  # 等待 10 秒
+                continue
+
             if 功能开关["fighting"] == 0:
                 # 识别角色名称，做特殊逻辑
                 if 任务记录["AI发言-广告开关"] == 0:
@@ -54,12 +63,12 @@ def main():
                     功能开关["fighting"] = 0
 
                 # 识别玩家当前关卡，做特殊逻辑
-                if (任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 900):
+                if 任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 900:
                     Toast('开始检测最新关卡')
-                    功能开关["fighting"] = 1
-                    功能开关["needHome"] = 0
                     isFind = False
                     for k in range(3):
+                        功能开关["fighting"] = 1
+                        功能开关["needHome"] = 0
                         res = TomatoOcrTap(650, 522, 688, 544, "试炼", sleep1=0.8)
                         if res:
                             re = imageFindClick('秘境之间', x1=85, y1=53, x2=636, y2=700)
@@ -67,7 +76,7 @@ def main():
                                 isFind = True
                                 break
                             if not re:
-                                re = imageFindClick('秘境之间', x1=374, y1=101, x2=562, y2=156, confidence1=0.8)
+                                re = TomatoOcrFindRangeClick('秘境之间', x1=374, y1=101, x2=562, y2=156)
                             if not re:
                                 Toast("未找到试炼入口 - 重新尝试")
                         else:
@@ -391,7 +400,7 @@ def waitInvite():
                 if shou_ye1:
                     Toast(f'未进入房间{j}/ 3')
                     failTeam = failTeam + 1
-            sleep(0.5)
+            sleep(0.4)
         if failTeam >= 2:
             break
 
@@ -412,7 +421,7 @@ def waitInvite():
                     re4, wujinLevel = TomatoOcrText(423, 374, 474, 400, "无尽层数")
                     wujinLevel = safe_int_v2(wujinLevel)
             if re1 or re2 or (wujinLevel >= 72 and 功能开关['梦魇无尽自动离队'] == 0) or (
-                    wujinLevel > 0 and 功能开关['梦魇无尽自动离队'] == 1):
+                    功能开关['梦魇无尽自动离队'] == 1):
                 findDoneStatus = True
                 Toast('梦魇 - 已完成挑战 - 进入战斗后自动留影')
             else:
@@ -449,11 +458,11 @@ def waitInvite():
                 fight_type = '桎梏之形挑战'
 
         # 关闭喊话窗口
-        point = CompareColors.compare(
-            "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
-        if point:
-            Toast('收起喊话窗口')
-            tapSleep(107, 93)
+        # point = CompareColors.compare(
+        #     "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+        # if point:
+        #     Toast('收起喊话窗口')
+        #     tapSleep(107, 93)
 
         # # 关闭未结算宝箱
         # re = CompareColors.compare("492,519,#F4E37D|491,523,#F4D86C|494,528,#EFD06E")
@@ -501,6 +510,7 @@ def waitInvite():
 
         waitFight = shilianTask.WaitFight(fightType=fight_type)
         if waitFight:
+            Toast('战斗结束 - 等待下次带队')
             # 战斗结束后不立即返回，先处理队伍中的逻辑
             功能开关["fighting"] = 1
             功能开关["needHome"] = 0
@@ -513,7 +523,7 @@ def waitInvite():
             # 恶龙/绝境/终末，仅挑战1次，可直接退队
             if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队' or fight_type == '桎梏之形带队' or fight_type == '桎梏之形挑战':
                 Toast('退出组队')
-                for z in range(6):
+                for z in range(2):
                     quitRes = shilianTask.quitTeam()
                     if quitRes:
                         break
@@ -524,7 +534,8 @@ def waitInvite():
     # if fight_type == '绝境带队' and 功能开关['绝境不退出房间'] == 1:
     #     Toast('不退出房间')
     # else:
-    quitTeamRe = shilianTask.quitTeam()
+    for p in range(2):
+        quitTeamRe = shilianTask.quitTeam()
     功能开关["fighting"] = 0
     功能开关["秘境不开宝箱"] = tmpBx
 

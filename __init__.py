@@ -46,6 +46,7 @@ def kamiActive():
     cursor = db.cursor()
     sql = "SELECT * FROM kami WHERE kami != '' and kami LIKE %s"
     # 使用参数化查询
+    功能开关['激活码'] = 功能开关['激活码'].strip()
     cursor.execute(sql, (功能开关['激活码'],))
     results = cursor.fetchall()
 

@@ -989,6 +989,7 @@
                                     <option value="白帆之都">白帆之都</option>
                                     <option value="石松沼泽">石松沼泽</option>
                                     <option value="天鹅仙宫">天鹅仙宫</option>
+                                    <option value="妖精旷野">妖精旷野</option>
                                 </select>
                             </div>
                         </div>
@@ -1804,6 +1805,12 @@
                     <input id="桎梏之形自动接收邀请" name="vehicle" type="checkbox" value="Bike"
                            onclick="toggleInviteToast()">自动接收邀请<label
                         class="gray-text">(等待邀请，不会自动匹配)</label><br>
+                    <div class="flex-container">
+                        <label for="桎梏之形离队等待时间">桎梏之形离队等待时间:</label>
+                        <input type="text" id="桎梏之形自动离队时间" name="桎梏之形自动离队时间" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="默认进入战斗后30s离队" class="layui-input">
+                    </div>
                     <legend>职能相关</legend>
                     <div class="checkbox-group">
                         <div class="checkbox-item">
@@ -2516,6 +2523,8 @@
         setSwitchStatus("桎梏之形职能优先输出");
         setSwitchStatus("桎梏之形职能优先坦克");
         setSwitchStatus("桎梏之形职能优先治疗");
+        var 桎梏之形自动离队时间 = localStorage.getItem("桎梏之形自动离队时间");
+        document.getElementById("桎梏之形自动离队时间").value = 桎梏之形自动离队时间;
 
         setSwitchStatus("斗歌会");
         setSwitchStatus("斗歌会自动接收邀请");
@@ -3101,6 +3110,8 @@
         桎梏之形职能优先输出 = saveSwitchStatus("桎梏之形职能优先输出");
         桎梏之形职能优先坦克 = saveSwitchStatus("桎梏之形职能优先坦克");
         桎梏之形职能优先治疗 = saveSwitchStatus("桎梏之形职能优先治疗");
+        var 桎梏之形自动离队时间 = document.getElementById("桎梏之形自动离队时间").value;
+        localStorage.setItem("桎梏之形自动离队时间", 桎梏之形自动离队时间);
 
         斗歌会 = saveSwitchStatus("斗歌会");
         斗歌会自动接收邀请 = saveSwitchStatus("斗歌会自动接收邀请");
@@ -3414,6 +3425,7 @@
             桎梏之形职能优先输出: 桎梏之形职能优先输出,
             桎梏之形职能优先坦克: 桎梏之形职能优先坦克,
             桎梏之形职能优先治疗: 桎梏之形职能优先治疗,
+            桎梏之形自动离队时间: 桎梏之形自动离队时间,
 
             斗歌会: 斗歌会,
             斗歌会自动接收邀请: 斗歌会自动接收邀请,
@@ -3487,7 +3499,7 @@
             旅团大采购: 旅团大采购,
             旅团调查队: 旅团调查队,
             调查队无钥匙继续: 调查队无钥匙继续,
-            调查队自动接收邀请: 调查队自动接收邀请,
+            调查队自动接收邀请: 0,
             旅团许愿墙: 旅团许愿墙,
             旅团许愿墙不捐公共: 旅团许愿墙不捐公共,
             旅团自动许愿: 旅团自动许愿,

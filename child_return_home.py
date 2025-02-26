@@ -29,8 +29,9 @@ def returnHome():
         return3 = False
         return4 = False
         return5 = False
-        return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
-        return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
+        if 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
+            return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
+            return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
         if i > 2 and (return1 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0) or (return3 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0):
             # 返回上级页面时二次确认入口通用处理
             sleep(0.2)
@@ -51,7 +52,7 @@ def returnHome():
                     if return4 and 功能开关["needHome"] == 1:
                         Toast('返回首页')
 
-        if not return1 and not return2 and not return3 and not return4:
+        if not return1 and not return2 and not return3 and not return4 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
             # 识别是否进入首页
             # 点击首页-冒险
             # re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')

@@ -61,7 +61,7 @@ import time
 
 
 class TimeoutLock:
-    def __init__(self, timeLock=10, lock=''):
+    def __init__(self, timeLock=3, lock=''):
         self.lock = lock
         if lock == '':
             self.lock = switch_lock

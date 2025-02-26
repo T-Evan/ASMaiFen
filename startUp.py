@@ -11,7 +11,6 @@ from .res.ui.ui import 功能配置
 from .res.ui.ui import loadConfig
 from .res.ui.ui import switch_lock
 from .baseUtils import *
-from .shilian import ShiLianTask
 import shutil
 import os
 import sys
@@ -25,7 +24,6 @@ class StartUp:
     # 构造器
     def __init__(self, app_name):
         self.app_name = app_name
-        self.shilianTask = ShiLianTask()
 
     # 实例方法
     def start_app(self):
@@ -51,7 +49,7 @@ class StartUp:
                     if point:
                         Toast('收起喊话窗口')
                         tapSleep(107, 93)
-                    Toast(f'返回首页 - 等待任务结束{tryTimes * 10}/30')
+                    Toast(f'检查登录状态 - 等待任务结束{tryTimes * 10}/30')
                     sleep(10)
                     continue
 
@@ -74,12 +72,14 @@ class StartUp:
 
             # 判断是否已在首页
             # 判断底部冒险图标
-            res2 = CompareColors.compare("375,1229,#F6F1E7|377,1216,#7C532E|386,1220,#F8ECCD|382,1205,#FCF8EE|382,1193,#FCF8EE|380,1183,#FCF8EE")
+            res2 = CompareColors.compare(
+                "375,1229,#F6F1E7|377,1216,#7C532E|386,1220,#F8ECCD|382,1205,#FCF8EE|382,1193,#FCF8EE|380,1183,#FCF8EE")
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
-                self.shilianTask.fight_fail()
-                shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
+                shou_ye1 = CompareColors.compare(
+                    "658,369,#E2DFD1|660,370,#E2DFD1|675,372,#E2DFD1|661,370,#E2DFD1|678,372,#E2DFD1|671,356,#E3DFD4|671,353,#E1DED0")  # 冒险手册图标
+                # shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
             if res2 or shou_ye1 or shou_ye2:
@@ -90,7 +90,7 @@ class StartUp:
 
                 功能开关["needHome"] = 0
                 if 任务记录["玩家名称"] == "":
-                    self.shilianTask.zhiYeZhanLi()
+                    self.zhiYeZhanLi()
                     Toast(
                         f'玩家：{任务记录["玩家名称"]}-战力：{任务记录["玩家战力"]}-职业：{任务记录["玩家-当前职业"]}已进入游戏')
                 return True
@@ -99,6 +99,15 @@ class StartUp:
                 # 开始异步处理返回首页
                 功能开关["needHome"] = 1
                 功能开关["fighting"] = 0
+
+            if tryTimes > 5:
+                resConnErr, _ = TomatoOcrText(292, 691, 427, 722, "尝试重新连接")
+                if resConnErr:
+                    Toast('网络断开，尝试重启游戏')
+                    # 结束应用
+                    r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
+                    # 重启游戏
+                    self.start_app()
 
             Toast(f'启动游戏，等待加载中，{attempt}/12')
 
@@ -134,7 +143,8 @@ class StartUp:
                                 if res:
                                     break
                                 sleep(0.5)
-                                res = TomatoOcrFindRangeClick(f'{启动区服}', x1=112, y1=337, x2=184, y2=604, sleep1=0.7,
+                                res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=112, y1=337, x2=184, y2=604,
+                                                              sleep1=0.7,
                                                               match_mode='fuzzy')
                                 if res:
                                     break
@@ -147,9 +157,14 @@ class StartUp:
                                     Toast(f'未找到，{启动区服}区角色')
                                     tapSleep(325, 1117, 1)  # 关闭选区界面
 
-        login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅", sleep1=1)
+        login2 = False
+        for i in range(5):
+            login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅", sleep1=0.5)
+            # 开始冒险
+            login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
+            if login2:
+                break
         # 开始冒险
-        login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
         if login2:
             self.switchRole(2, 任务记录['当前任务角色'])
         if not login1 and not login2:
@@ -210,6 +225,7 @@ class StartUp:
         if not login1 and not login2:
             # 重启应用
             # r = system.shell("am kill com.xd.cfbmf")
+            Toast('切换角色，尝试重启游戏')
             r = system.shell(f"am force-stop {功能开关['游戏包名']}")
             system.open(self.app_name)
             sleep(5)
@@ -415,6 +431,44 @@ class StartUp:
             Dialog.confirm("保存失败！请检查是否授予root权限")
         system.exit()
         return True
+
+    def zhiYeZhanLi(self):
+        res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
+        任务记录["玩家名称"] = name
+        res, fightNum = TomatoOcrText(113, 101, 193, 117, '玩家战力')
+        if fightNum != "":
+            if "万" in fightNum:
+                任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
+            else:
+                任务记录["玩家战力"] = float(fightNum.replace("万", ""))
+        # 识别当前职业
+        if 任务记录['玩家-当前职业'] == '':
+            re = CompareColors.compare(
+                "34,75,#384458|37,78,#FEFEE3|34,77,#384458|37,78,#FEFEE3|37,83,#384458|31,85,#FEFEDD|30,78,#384458|41,78,#FEFEDC|39,85,#384458")
+            if re:
+                Toast('识别当前职业-战士')
+                任务记录['玩家-当前职业'] = '战士'
+        if 任务记录['玩家-当前职业'] == '':
+            re = CompareColors.compare(
+                "39,83,#384458|36,86,#FFFEE1|39,80,#585F68|33,83,#384458|33,80,#4A5260|34,77,#404A5B|34,75,#464F5E|34,77,#404A5B|36,78,#FFFEE1")
+            if re:
+                Toast('识别当前职业-服事')
+                任务记录['玩家-当前职业'] = '服事'
+        if 任务记录['玩家-当前职业'] == '':
+            re = CompareColors.compare(
+                "30,77,#B2B4A4|33,75,#CBCDBA|33,80,#374558|34,83,#374558|37,83,#FEFEE1|39,83,#FEFEE1|39,86,#374558")
+            if re:
+                Toast('识别当前职业-法师')
+                任务记录['玩家-当前职业'] = '法师'
+        if 任务记录['玩家-当前职业'] == '':
+            re = CompareColors.compare(
+                "34,75,#374558|39,78,#FDFDDD|31,78,#374558|34,75,#374558|36,80,#FFFEE1|37,77,#FEFEE3|39,83,#374558|34,83,#374558")
+            if re:
+                Toast('识别当前职业-游侠')
+                任务记录['玩家-当前职业'] = '游侠'
+        # if 任务记录['玩家-当前职业'] == '':
+        #     Toast('识别当前职业-刺客')
+        #     任务记录['玩家-当前职业'] = '刺客'
 
 
 class L(ShellListener):

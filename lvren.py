@@ -187,6 +187,12 @@ class LvRenTask:
                     if availableCount == '0/15':
                         Toast('猫猫包 - 剩余次数不足')
                         break
+
+                    noMaoBao = CompareColors.compare(
+                        "457,814,#FCF8EE|470,815,#7B6347|480,815,#7C6347|491,819,#FCF8EE|502,820,#FCF8EE|492,833,#FCF8EE")
+                    if noMaoBao:
+                        Toast('猫猫包 - 剩余猫包不足')
+                        break
                     Toast('猫猫包 - 自动融合')
                     res = TomatoOcrTap(453, 1016, 510, 1049, "融合", offsetX=5, offsetY=5)
                     res = TomatoOcrTap(333, 1019, 385, 1047, "融合", offsetX=5, offsetY=5)
@@ -304,9 +310,9 @@ class LvRenTask:
         if 功能开关["满包裹分解装备"] == 0 and not needDelete:
             return
 
-        if 任务记录["分解装备-倒计时"] > 0:
+        if 任务记录["分解装备-倒计时"] > 0 and not needDelete:
             diffTime = time.time() - 任务记录["分解装备-倒计时"]
-            if diffTime < 20 * 60:
+            if diffTime < 10 * 60:
                 print(f'日常 - 分解装备 - 倒计时{round((10 * 60 - diffTime) / 60, 2)}min')
                 sleep(1.5)
                 return
@@ -394,9 +400,11 @@ class LvRenTask:
             return
 
         for i in range(10):
-            res1, x, y = imageFind('经验补剂', x1=118, y1=631, x2=606, y2=1033, confidence1=0.8)
+            res1 = FindColors.find(
+                "316,969,#3B97EF|316,961,#2578DA|322,950,#AAD8F5|326,945,#BFF4FB|322,964,#378FF1|337,984,#F4AA4B",
+                rect=[112, 643, 611, 1054], diff=0.9)
             if res1:
-                tapSleep(x, y, 1)
+                tapSleep(res1.x, res1.y, 1)
                 tapSleep(540, 887)  # 最大
                 tapSleep(356, 935, 2)  # 使用
                 break
@@ -455,137 +463,161 @@ class LvRenTask:
                 sleep(1.5)
                 return
 
-        Toast('旅人 - 强化装备 - 开始')
-        self.dailyTask.homePage()
-        res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
-        if not res:
-            return
+        if 功能开关["自动强化装备"] == 1:
+            Toast('旅人 - 强化装备 - 开始')
+            self.dailyTask.homePage()
+            res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
+            if not res:
+                return
 
-        res, _ = TomatoOcrText(339, 461, 379, 481, '熔炼')
-        if res:
-            # 返回首页
-            tapSleep(364, 1212)
-            tapSleep(364, 1212)
-            # 自动分解装备
-            Toast('背包装备已满，自动分解装备')
-            self.deleteEquip(needDelete=True)
+            res, _ = TomatoOcrText(339, 461, 379, 481, '熔炼')
+            if res:
+                # 返回首页
+                tapSleep(364, 1212)
+                tapSleep(364, 1212)
+                # 自动分解装备
+                Toast('背包装备已满，自动分解装备')
+                self.deleteEquip(needDelete=True)
 
-        任务记录["强化装备-倒计时"] = time.time()
+            任务记录["强化装备-倒计时"] = time.time()
 
-        yiJianRes = False
-        if 功能开关['仅强化武器戒指护腕'] == 0:
-            yiJianRes = imageFindClick('一键强化')
-            # if yiJianRes:
-            #     return
-        if 功能开关['仅强化武器戒指护腕'] == 1 or not yiJianRes:
-            for i in range(6):
-                tapSleep(140, 175, 0.6)  # 点击武器
-                re = FindColors.find(
-                    "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
-                    rect=[94, 705, 627, 1092], diff=0.9)
-                if not re:
-                    Toast('旅人 - 强化装备 - 材料用尽')
-                    break
-                tapSleep(re.x, re.y)
-                tapSleep(re.x, re.y)
-                tapSleep(re.x, re.y)
-                tapSleep(129, 1023, 0.3)
-                TomatoOcrTap(94, 1188, 127, 1216, "回")
-
-                tapSleep(579, 287, 0.6)  # 点击护腕
-                re = FindColors.find(
-                    "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
-                    rect=[94, 705, 627, 1092], diff=0.9)
-                if not re:
-                    Toast('旅人 - 强化装备 - 材料用尽')
-                    break
-                tapSleep(re.x, re.y)
-                tapSleep(re.x, re.y)
-                tapSleep(re.x, re.y)
-                tapSleep(129, 1023, 0.3)
-                TomatoOcrTap(94, 1188, 127, 1216, "回")
-
-                tapSleep(228, 506, 0.6)  # 点击戒指
-                re = FindColors.find(
-                    "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
-                    rect=[94, 705, 627, 1092], diff=0.9)
-                if not re:
-                    Toast('旅人 - 强化装备 - 材料用尽')
-                    break
-                tapSleep(re.x, re.y)
-                tapSleep(re.x, re.y)
-                tapSleep(re.x, re.y)
-                tapSleep(129, 1023, 0.3)
-                TomatoOcrTap(94, 1188, 127, 1216, "回")
-
-                if not yiJianRes:
-                    tapSleep(574, 178, 0.6)  # 点击面具
+            yiJianRes = False
+            if 功能开关['仅强化武器戒指护腕'] == 0:
+                yiJianRes = imageFindClick('一键强化')
+                # if yiJianRes:
+                #     return
+            if 功能开关['仅强化武器戒指护腕'] == 1 or not yiJianRes:
+                for i in range(2):
+                    tapSleep(140, 175, 0.6)  # 点击武器
                     re = FindColors.find(
                         "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
                         rect=[94, 705, 627, 1092], diff=0.9)
                     if not re:
                         Toast('旅人 - 强化装备 - 材料用尽')
-                        break
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
+                        # break
+                    if re:
+                        tapSleep(re.x, re.y)
+                        tapSleep(re.x, re.y)
+                        tapSleep(re.x, re.y)
                     tapSleep(129, 1023, 0.3)
                     TomatoOcrTap(94, 1188, 127, 1216, "回")
 
-                    tapSleep(140, 285, 0.6)  # 点击胸甲
+                    tapSleep(579, 287, 0.6)  # 点击护腕
                     re = FindColors.find(
                         "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
                         rect=[94, 705, 627, 1092], diff=0.9)
                     if not re:
                         Toast('旅人 - 强化装备 - 材料用尽')
-                        break
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
+                        # break
+                    if re:
+                        tapSleep(re.x, re.y)
+                        tapSleep(re.x, re.y)
+                        tapSleep(re.x, re.y)
                     tapSleep(129, 1023, 0.3)
                     TomatoOcrTap(94, 1188, 127, 1216, "回")
 
-                    tapSleep(135, 394, 0.6)  # 点击腿甲
+                    tapSleep(228, 506, 0.6)  # 点击戒指
                     re = FindColors.find(
                         "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
                         rect=[94, 705, 627, 1092], diff=0.9)
                     if not re:
                         Toast('旅人 - 强化装备 - 材料用尽')
-                        break
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
+                        # break
+                    if re:
+                        tapSleep(re.x, re.y)
+                        tapSleep(re.x, re.y)
+                        tapSleep(re.x, re.y)
                     tapSleep(129, 1023, 0.3)
                     TomatoOcrTap(94, 1188, 127, 1216, "回")
 
-                    tapSleep(577, 391, 0.6)  # 点击鞋子
-                    re = FindColors.find(
-                        "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
-                        rect=[94, 705, 627, 1092], diff=0.9)
-                    if not re:
-                        Toast('旅人 - 强化装备 - 材料用尽')
-                        break
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
-                    tapSleep(re.x, re.y)
-                    tapSleep(129, 1023, 0.3)
-                    TomatoOcrTap(94, 1188, 127, 1216, "回")
+                    if not yiJianRes:
+                        tapSleep(574, 178, 0.6)  # 点击面具
+                        re = FindColors.find(
+                            "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
+                            rect=[94, 705, 627, 1092], diff=0.9)
+                        if not re:
+                            Toast('旅人 - 强化装备 - 材料用尽')
+                            # break
+                        if re:
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                        tapSleep(129, 1023, 0.3)
+                        TomatoOcrTap(94, 1188, 127, 1216, "回")
+
+                        tapSleep(140, 285, 0.6)  # 点击胸甲
+                        re = FindColors.find(
+                            "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
+                            rect=[94, 705, 627, 1092], diff=0.9)
+                        if not re:
+                            Toast('旅人 - 强化装备 - 材料用尽')
+                            # break
+                        if re:
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                        tapSleep(129, 1023, 0.3)
+                        TomatoOcrTap(94, 1188, 127, 1216, "回")
+
+                        tapSleep(135, 394, 0.6)  # 点击腿甲
+                        re = FindColors.find(
+                            "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
+                            rect=[94, 705, 627, 1092], diff=0.9)
+                        if not re:
+                            Toast('旅人 - 强化装备 - 材料用尽')
+                            # break
+                        if re:
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                        tapSleep(129, 1023, 0.3)
+                        TomatoOcrTap(94, 1188, 127, 1216, "回")
+
+                        tapSleep(577, 391, 0.6)  # 点击鞋子
+                        re = FindColors.find(
+                            "427,954,#FC694C|432,954,#F26B5E|436,952,#FFFFFF|428,962,#F17473|435,962,#F76D58|440,961,#FCF2F2",
+                            rect=[94, 705, 627, 1092], diff=0.9)
+                        if not re:
+                            Toast('旅人 - 强化装备 - 材料用尽')
+                            # break
+                        if re:
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                            tapSleep(re.x, re.y)
+                        tapSleep(129, 1023, 0.3)
+                        TomatoOcrTap(94, 1188, 127, 1216, "回")
 
         if 功能开关["自动进阶装备"] == 1:
             Toast('旅人 - 装备进阶 - 开始')
             TomatoOcrTap(94, 1188, 127, 1216, "回")
-            for k in range(6):
-                # 识别可强化标识
-                needUpdate = FindColors.find_all(
-                    "536,127,#FC694C|538,123,#FF9796|543,137,#F58A85|541,143,#FC674D|547,145,#F9DFDF|549,138,#FA684B",
-                    rect=[91, 102, 622, 557], diff=0.8)
-                if not needUpdate:
-                    Toast('旅人 - 装备进阶 - 无可进阶装备')
-                if needUpdate:
-                    for p in needUpdate:
-                        tapSleep(p.x, p.y, 0.8)
-                        # 识别可进阶标识
-                        re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043", diff=0.8)
+            self.dailyTask.homePage()
+            res = TomatoOcrTap(233, 1205, 281, 1234, "行李", sleep1=0.8)
+            if not res:
+                return
+
+            res, _ = TomatoOcrText(339, 461, 379, 481, '熔炼')
+            if res:
+                # 返回首页
+                tapSleep(364, 1212)
+                tapSleep(364, 1212)
+                # 自动分解装备
+                Toast('背包装备已满，自动分解装备')
+                self.deleteEquip(needDelete=True)
+
+            任务记录["强化装备-倒计时"] = time.time()
+
+            # 识别可强化标识
+            needUpdate = FindColors.find_all(
+                "537,132,#FB7966|541,127,#FA674C|547,132,#FF6655|540,134,#FFFFFF|543,129,#FAEAEA|547,138,#FD6A4F|546,146,#FC6D55|546,145,#F18383|551,134,#FC674A",
+                rect=[86, 119, 623, 495], diff=0.8)
+            if not needUpdate:
+                Toast('旅人 - 装备进阶 - 无可进阶装备')
+            if needUpdate:
+                for p in needUpdate:
+                    tapSleep(p.x, p.y, 0.8)
+                    # 识别可进阶标识
+                    for i in range(3):
+                        re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043", diff=0.7)
                         if re:
                             tapSleep(554, 1076, 0.6)
                             TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
@@ -597,6 +629,5 @@ class LvRenTask:
                             tapSleep(483, 778, 2)  # 确认进阶
                             tapSleep(129, 1023, 0.3)
                             TomatoOcrTap(94, 1188, 127, 1216, "回")
-                        else:
-                            tapSleep(652, 1234)
-                            tapSleep(652, 1234)
+                    tapSleep(652, 1234, 0.2)
+                    tapSleep(652, 1234, 0.2)

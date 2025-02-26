@@ -1,6 +1,8 @@
 # 导包
 from .baseUtils import *
 from .res.ui.ui import 功能开关
+from ascript.android.screen import FindColors
+from ascript.android import screen
 
 
 # 实例方法
@@ -23,6 +25,18 @@ def noticeCancel():
         # for i in range(1, 2):
         #     res = TomatoOcrFindRangeClick('空白处')
 
+        # screen.cache(True)
+        # 自动拒绝，避免影响日常任务进行
+        if 功能开关["秘境自动接收邀请"] == 0 and 功能开关['梦魇自动接收邀请'] == 0 and 功能开关[
+            '恶龙自动接收邀请'] == 0 and 功能开关['暴走自动接收邀请'] == 0 and 功能开关['终末战自动接收邀请'] == 0 and \
+                功能开关['绝境自动接收邀请'] == 0 and 功能开关['调查队自动接收邀请'] == 0:
+            # 匹配拒绝提示
+            res2 = CompareColors.compare(
+                "514,667,#F4E0AC|468,659,#F4E0AC|521,659,#F4E0AC|478,664,#846D4F|480,667,#D4C193|480,670,#DCC899|487,661,#D8C596|487,661,#D8C596|500,669,#DCC899")
+            if res2:
+                tapSleep(489, 664)  # 点击拒绝
+                Toast('日常任务执行中 - 拒绝邀请')
+
         # res = TomatoOcrTap(292, 1191, 429, 1238, "点击空白处关闭")
         # # 领取离线奖励
         # res = TomatoOcrTap(268, 869, 359, 888, "点击空白处", 30, 100)
@@ -33,16 +47,31 @@ def noticeCancel():
         # res2 = TomatoOcrTap(279, 1079, 440, 1099, "点击空白处可领取奖励", 30, 20)
         # res3 = TomatoOcrTap(266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
         # res5 = TomatoOcrTap(268, 869, 359, 888, "点击空白处", 30, 100)
-        bitmap = screen.capture(107, 759, 603, 1257)
-        res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
-                                      offsetX=20, offsetY=40, bitmap=bitmap,
-                                      keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
+        # bitmap = screen.capture(107, 759, 603, 1257)
+        # res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
+        #                               offsetX=20, offsetY=40, bitmap=bitmap,
+        #                               keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
+        res = CompareColors.compare(
+            "341,872,#A09BA7|345,872,#A09BA7|339,884,#9E9AA5|344,884,#9E9AA5|359,872,#A49FAB|362,884,#A09BA7")
+        if not res:
+            res = CompareColors.compare(
+                "317,1232,#87838F|321,1232,#888490|320,1242,#A19CA8|335,1232,#9D98A4|336,1237,#A09BA7|336,1243,#615D69")
+        if not res:
+            res = CompareColors.compare(
+                "342,1122,#97939E|342,1129,#96929D|338,1134,#97929D|345,1134,#97929D|359,1123,#8B8791|361,1135,#6B6770")
+        if not res:
+            res = CompareColors.compare(
+                "343,1208,#A09CA7|359,1209,#948F9A|363,1209,#94909A|344,1216,#A6A1AD|360,1214,#96929D|345,1219,#9994A0")
+        if not res:
+            res = CompareColors.compare(
+                "314,873,#7C767F|331,873,#9A95A1|314,879,#A49FAC|332,879,#807A84|315,885,#6F6971|331,885,#7C767F")
         if res:
-            # tapSleep(45, 1245)
+            tapSleep(35, 1260)
             Toast('关闭弹窗')
         # res = PaddleOcrFindRangeClick('空白', x1=107, y1=759, x2=603, y2=1257, offsetX=20, offsetY=40)
         # if res:
         #     Toast('关闭弹窗')
+        # screen.cache(False)
 
         if 功能开关["优先推图到最新关卡"] == 1:
             res = TomatoOcrTap(428, 1073, 521, 1100, "下一关卡", 10, 10)

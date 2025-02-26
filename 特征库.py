@@ -57,14 +57,14 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=3):
                 print(f"imageFind识别失败: {name}")
                 return False, 0, 0
         else:
-            print(f"imageFind识别错误: {name}")
+            print(f"imageFind未识别: {name}")
             return False, 0, 0
     except Exception as e:
         print(f"imageFind发生异常: {e}")
         return False, 0, 0
 
 
-def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
+def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=3):
     try:
         lock = TimeoutLock(timeLock)
         try:
