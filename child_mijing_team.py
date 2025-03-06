@@ -22,7 +22,7 @@ def main():
             '恶龙自动接收邀请'] == 1 or \
                 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
                 功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1 or 功能开关[
-            '斗歌会自动接收邀请'] == 1 or 功能开关['桎梏之形自动接收邀请'] == 1:
+            '斗歌会自动接收邀请'] == 1 or 功能开关['桎梏之形自动接收邀请'] == 1 :
             # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
@@ -30,9 +30,10 @@ def main():
 
             login1 = CompareColors.compare(
                 "202,419,#FCF8F0|200,426,#FCF8F0|195,460,#FCF8F0|292,426,#FCF8F0|328,438,#FCF8F0|404,421,#FCF8F0|427,467,#FCF8F0")  # 登录页 - 出发吧麦芬
-            login2 = CompareColors.compare(
-                "435,1201,#FABD59|424,1231,#F5AD4E|420,1215,#F7B554|296,1202,#F9BC58|295,1220,#F6B351|312,1213,#FFFFFF|328,1213,#FFFFFF|358,1216,#F7B554|382,1215,#FFFFFF")  # 角色页 - 开始冒险
-            if login1 or login2:
+            # if not login1:
+            #     login1 = CompareColors.compare(
+            #         "435,1201,#FABD59|424,1231,#F5AD4E|420,1215,#F7B554|296,1202,#F9BC58|295,1220,#F6B351|312,1213,#FFFFFF|328,1213,#FFFFFF|358,1216,#F7B554|382,1215,#FFFFFF")  # 角色页 - 开始冒险
+            if login1:
                 sleep(10)  # 等待 10 秒
                 continue
 
@@ -66,9 +67,11 @@ def main():
                 if 任务记录["玩家-当前关卡"] == "" or time.time() - 任务记录["玩家-当前关卡-倒计时"] > 900:
                     Toast('开始检测最新关卡')
                     isFind = False
+                    # dailyTask.checkGameStatus()
                     for k in range(3):
                         功能开关["fighting"] = 1
                         功能开关["needHome"] = 0
+                        # 功能开关["noHomeMust"] = 1
                         res = TomatoOcrTap(650, 522, 688, 544, "试炼", sleep1=0.8)
                         if res:
                             re = imageFindClick('秘境之间', x1=85, y1=53, x2=636, y2=700)
@@ -79,8 +82,8 @@ def main():
                                 re = TomatoOcrFindRangeClick('秘境之间', x1=374, y1=101, x2=562, y2=156)
                             if not re:
                                 Toast("未找到试炼入口 - 重新尝试")
-                        else:
-                            Toast("未找到试炼入口 - 待重新尝试")
+                        # else:
+                        #     Toast("未找到试炼入口 - 待重新尝试")
                     if isFind:
                         shilianTask.openTreasure(noNeedOpen=1)
                         tiliPoint = FindColors.find(
@@ -115,7 +118,9 @@ def main():
                             tapSleep(98, 1212)  # 返回首页
                             sleep(1)
                     功能开关["fighting"] = 0
+                    # 功能开关["noHomeMust"] = 0
 
+            if 功能开关["fighting"] == 0:
                 Toast('等待组队邀请')
                 waitInvite()
                 dailyTask.checkGameStatus()
@@ -210,6 +215,14 @@ def waitInvite():
         resFightName, 任务记录["战斗-关卡名称"] = TomatoOcrText(374, 609, 655, 640, "关卡名称")  # 关卡名称
         resTeamName, 任务记录["战斗-房主名称"] = TomatoOcrText(456, 517, 570, 542, "房主名称")  # 房主名称
         print(f'{任务记录["战斗-关卡名称"]}-{任务记录["玩家-当前关卡"]}-{tmpBx}')
+        if '烈焰' in 任务记录["战斗-关卡名称"]:
+            功能开关['史莱姆选择'] = '暴走烈焰大王'
+        elif '水波' in 任务记录["战斗-关卡名称"]:
+            功能开关['史莱姆选择'] = '暴走水波大王'
+        elif '雷电' in 任务记录["战斗-关卡名称"]:
+            功能开关['史莱姆选择'] = '暴走雷电大王'
+        elif '深林' in 任务记录["战斗-关卡名称"]:
+            功能开关['史莱姆选择'] = '暴走深林大王'
         # 判断带队为最新关卡，默认开启宝箱
         if 任务记录["玩家-当前关卡"] != "" and len(任务记录["战斗-关卡名称"]) > 4 and (
                 任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"] or (
@@ -221,6 +234,10 @@ def waitInvite():
             功能开关["补充体力次数"] = 3
 
         fight_type = checkFightType()
+        if fight_type == '':
+            Toast('未识别的战斗类型，拒绝邀请')
+            功能开关["fighting"] = 0
+            return
 
         if fight_type == '梦魇带队':
             if 功能开关['梦魇自动接收邀请'] == 0:
@@ -363,6 +380,16 @@ def waitInvite():
             Toast(f'等待进入战斗超时，退出组队')
             break
 
+        # 兜底，已在队伍中时，停止返回操作
+        功能开关["fighting"] = 1
+        功能开关["needHome"] = 0
+
+        # 行李页，返回首页
+        tmp = CompareColors.compare(
+            "230,1202,#FCF8EE|240,1205,#FCF8EE|258,1207,#F8ECCD|271,1205,#FDF5E6|257,1223,#FAEFD5|273,1231,#FCF8EE")
+        if tmp:
+            Toast('行李页-返回首页')
+            tapSleep(355, 1202)
         Toast(f'{fight_type}-等待队长开始{elapsed}/{totalWait}s')
         shilianTask.openTreasure(noNeedOpen=1)
 
@@ -372,7 +399,7 @@ def waitInvite():
 
         # 返回房间
         failTeam = 0
-        for j in range(4):
+        for j in range(5):
             res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
             if not res6:
                 res6, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
@@ -396,12 +423,10 @@ def waitInvite():
                 res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 
             if not res1 and not res2:
-                shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
-                if shou_ye1:
-                    Toast(f'未进入房间{j}/ 3')
-                    failTeam = failTeam + 1
-            sleep(0.4)
-        if failTeam >= 2:
+                Toast(f'未进入房间{j}/ 5')
+                failTeam = failTeam + 1
+            sleep(0.3)
+        if failTeam >= 4:
             break
 
         # 房间 - 关闭邀请玩家
@@ -544,81 +569,83 @@ def waitInvite():
 
 def checkFightType():
     fight_type = ''
-    if fight_type == '':
-        for i in range(2):
+    for k in range(2):
+        if fight_type != '':
+            break
+        if fight_type == '':
             resELong1, _ = TomatoOcrText(405, 588, 498, 615, "恶龙大通缉")  # 恶龙邀请
             if resELong1:
                 fight_type = "恶龙带队"
                 break
-    if fight_type == '':
-        for i in range(2):
+        if fight_type == '':
             resMiJing1, _ = TomatoOcrText(405, 588, 480, 611, "秘境之间")  # 秘境邀请
             if resMiJing1:
                 fight_type = "秘境带队"
                 break
-    if fight_type == '':
-        for i in range(2):
+        if fight_type == '':
             resMengYan1, _ = TomatoOcrText(404, 587, 480, 611, "梦魇狂潮")  # 梦魇邀请
             if not resMengYan1:
                 resMengYan1, _ = TomatoOcrText(443, 590, 481, 612, "狂潮")  # 梦魇邀请
             if resMengYan1:
                 fight_type = "梦魇带队"
                 break
-    if fight_type == '':
-        bitmap = screen.capture(380, 583, 510, 615)
-        for i in range(2):
-            resJueJing1 = TomatoOcrFindRange("绝境挑战", 0.9, 380, 583, 510, 615, match_mode='fuzzy',
-                                             bitmap=bitmap)  # 绝境邀请
-            # resJueJing1, _ = TomatoOcrText(405, 588, 483, 610, "绝境挑战")  # 绝境邀请
+        if fight_type == '':
+            # bitmap = screen.capture(380, 583, 510, 615)
+            # resJueJing1 = TomatoOcrFindRange("绝境挑战", 0.9, 380, 583, 510, 615, match_mode='fuzzy',
+            #                                  bitmap=bitmap)  # 绝境邀请
+            resJueJing1, _ = TomatoOcrText(405, 589, 480, 612, "绝境挑战")  # 绝境邀请
             if resJueJing1:
                 fight_type = "绝境带队"
                 break
         if fight_type == '':
-            for i in range(2):
-                resZhongMo1 = TomatoOcrFindRange("终末战", 0.9, 380, 583, 510, 615, match_mode='fuzzy',
-                                                 bitmap=bitmap)  # 终末战邀请
-                if resZhongMo1:
-                    fight_type = "终末战带队"
-                    break
+            # resZhongMo1 = TomatoOcrFindRange("终末战", 0.9, 380, 583, 510, 615, match_mode='fuzzy',
+            #                                  bitmap=bitmap)  # 终末战邀请
+            resZhongMo1, _ = TomatoOcrText(406, 589, 461, 610, "终末战")  # 绝境邀请
+            if resZhongMo1:
+                fight_type = "终末战带队"
+                break
+            # if fight_type == '':
+            #     bitmap = screen.capture(380, 583, 510, 615)
+            #     for i in range(2):
+            #         resDiaoCha1 = TomatoOcrFindRange("调查队", 0.9, 380, 583, 510, 615, match_mode='fuzzy',
+            #                                          bitmap=bitmap)  # 调查队邀请
+            #         if resDiaoCha1:
+            #             fight_type = "调查队带队"
+            #             break
         if fight_type == '':
-            bitmap = screen.capture(380, 583, 510, 615)
-            for i in range(2):
-                resDiaoCha1 = TomatoOcrFindRange("调查队", 0.9, 380, 583, 510, 615, match_mode='fuzzy',
-                                                 bitmap=bitmap)  # 调查队邀请
-                if resDiaoCha1:
-                    fight_type = "调查队带队"
-                    break
-    if fight_type == '':
-        for i in range(2):
-            res1, _ = TomatoOcrText(404, 587, 480, 611, "忆战回环")  # 梦魇邀请
-            res2, _ = TomatoOcrText(442, 588, 480, 609, "回环")  # 梦魇邀请
+            res1, _ = TomatoOcrText(404, 587, 480, 611, "忆战回环")  # 忆战回环邀请
+            res2, _ = TomatoOcrText(442, 588, 480, 609, "回环")  # 忆战回环邀请
             if res1 or res2:
                 fight_type = "忆战回环带队"
                 break
 
-    if fight_type == '':
-        for i in range(2):
+        if fight_type == '':
+            res1, _ = TomatoOcrText(405, 587, 462, 611, "大暴走")  # 斗歌金元花
+            res2, _ = TomatoOcrText(460, 614, 498, 637, "大王")  # 斗歌会
+            if res1 or res2:
+                fight_type = "暴走带队"
+                break
+
+        if 功能开关['斗歌会自动接收邀请'] == 1 and fight_type == '':
             res1, _ = TomatoOcrText(385, 612, 483, 637, "斗歌金元花")  # 斗歌金元花
             res2, _ = TomatoOcrText(407, 591, 461, 610, "斗歌会")  # 斗歌会
             if res1 or res2:
                 fight_type = "斗歌会带队"
                 break
 
-    if fight_type == '':
-        for i in range(2):
-            res1, _ = TomatoOcrText(442, 588, 479, 609, "之形")  # 斗歌金元花
+        if fight_type == '':
+            res1, _ = TomatoOcrText(442, 588, 479, 609, "之形")  # 桎梏之形
             if res1:
                 fight_type = "桎梏之形带队"
                 break
 
-    if fight_type == '':
-        for i in range(2):
+        if 功能开关['三魔头自动接收邀请'] == 1 and fight_type == '':
             res1, _ = TomatoOcrText(382, 609, 524, 639, "三打三守三魔头")  # 三魔头邀请
             res2, _ = TomatoOcrText(380, 613, 460, 640, "三打三守")  # 三魔头邀请
             if res1 or res2:
                 fight_type = "三魔头带队"
                 break
 
-    if fight_type == '':
-        fight_type = '暴走带队'
+        # if fight_type == '':
+        #     fight_type = '暴走带队'
     return fight_type

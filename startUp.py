@@ -31,7 +31,7 @@ class StartUp:
         # r = system.shell(f"start -n com.xd.cfbmf")
         tryTimes = 0
 
-        max_attempt = 12
+        max_attempt = 14
         for attempt in range(max_attempt):
             tryTimes = tryTimes + 1
             if 功能开关["fighting"] == 1:
@@ -47,17 +47,18 @@ class StartUp:
                     point = CompareColors.compare(
                         "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
                     if point:
-                        Toast('收起喊话窗口')
+                        Toast('检查登录状态-收起喊话窗口')
                         tapSleep(107, 93)
-                    Toast(f'检查登录状态 - 等待任务结束{tryTimes * 10}/30')
-                    sleep(10)
+                    Toast(f'检查登录状态 - 等待任务结束{tryTimes * 2}/6')
+                    sleep(2)
                     continue
 
             功能开关["fighting"] = 0
             system.open(self.app_name)
+            if tryTimes > 5:
+                TomatoOcrTap(330, 828, 390, 871, '同意')  # 隐私政策更新
 
             # 识别是否进入登录页
-            TomatoOcrTap(330, 828, 390, 871, '同意')  # 隐私政策更新
             login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
             login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
             if login1 or login2:
@@ -77,9 +78,7 @@ class StartUp:
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
-                shou_ye1 = CompareColors.compare(
-                    "658,369,#E2DFD1|660,370,#E2DFD1|675,372,#E2DFD1|661,370,#E2DFD1|678,372,#E2DFD1|671,356,#E3DFD4|671,353,#E1DED0")  # 冒险手册图标
-                # shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
+                shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
             if res2 or shou_ye1 or shou_ye2:
@@ -109,10 +108,14 @@ class StartUp:
                     # 重启游戏
                     self.start_app()
 
-            Toast(f'启动游戏，等待加载中，{attempt}/12')
+            Toast(f'启动游戏，等待加载中，{attempt}/{max_attempt}')
 
             sleep(3)  # 等待游戏启动
-        print('启动游戏失败，超过最大尝试次数')
+        print('启动游戏失败，尝试重启游戏')
+        # 结束应用
+        r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
+        # 重启游戏
+        return self.start_app()
 
     def login(self):
         功能开关["needHome"] = 0
@@ -128,8 +131,11 @@ class StartUp:
                 if 启动区服 > 0:
                     Toast(f'准备切换区服-{启动区服}区')
                     # 检查当前区服
+                    ifFind = False
                     for l in range(2):
-                        res, _ = TomatoOcrText(282, 1017, 437, 10516, f'{启动区服}服')
+                        if ifFind:
+                            break
+                        res, _ = TomatoOcrText(295, 943, 345, 980, f'{启动区服}服')
                         if res:
                             Toast(f'当前选择区服-{启动区服}区')
                             break
@@ -137,20 +143,24 @@ class StartUp:
                             Toast(f'切换启动区服-{启动区服}区')
                             tapSleep(358, 958, 0.7)
                             for k in range(10):
-                                res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=112, y1=337, x2=184, y2=604,
+                                res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=110, y1=339, x2=292, y2=615,
                                                               sleep1=0.7,
                                                               match_mode='fuzzy')
                                 if res:
+                                    ifFind = True
                                     break
                                 sleep(0.5)
-                                res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=112, y1=337, x2=184, y2=604,
+                                res = TomatoOcrFindRangeClick(f'{启动区服}服', x1=110, y1=339, x2=292, y2=615,
                                                               sleep1=0.7,
                                                               match_mode='fuzzy')
                                 if res:
+                                    ifFind = True
                                     break
                                 if k < 5:
+                                    Toast(f'下翻，寻找{启动区服}服')
                                     swipe(228, 552 + k, 228, 440)  # 下翻
                                 if k > 5:
+                                    Toast(f'上翻，寻找{启动区服}服')
                                     swipe(228, 430 + k, 228, 552)  # 上翻
                                 sleep(1.5)
                                 if k == 9:

@@ -14,7 +14,7 @@ from ascript.android.screen import FindColors
 # 实例方法
 def main():
     while True:
-        if 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
+        if 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0 and 功能开关["fighting"] == 0:
             print("返回首页处理线程 - 运行中")
             returnHome()
             sleep(1)  # 等待 1 秒
@@ -23,44 +23,51 @@ def main():
 
 
 def returnHome():
-    for i in range(4):
+    for i in range(5):
         return1 = False
         return2 = False
         return3 = False
-        return4 = False
-        return5 = False
-        if 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
+        if 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
-            return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
-        if i > 2 and (return1 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0) or (return3 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0):
+            return2 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
+            if return1 or return2:
+                Toast('线程-返回首页1')
+
+        if not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
+            return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 7, 1111, 176, 1243, timeLock=5,
+                                              offsetX=20, offsetY=20,
+                                              keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
+                                                        {'keyword': '营地', 'match_mode': 'fuzzy'}])
+            # return3 = TomatoOcrTap(89, 1197, 136, 1220, '返回', 10, 10)
+            # if not return3:
+            #     return3 = TomatoOcrTap(77, 1161, 127, 1191, '营地', 10, 10)
+            #     if not return3:
+            #         return3 = TomatoOcrTap(69, 1182, 127, 1220, '营地', 10, 10)
+            #         if not return3:
+            #             # return2 = imageFindClick('返回_1')
+            #             return3 = TomatoOcrTap(86, 1193, 140, 1224, '返回', 10, 10)
+            if return3:
+                Toast('线程-返回首页2')
+
+        if i > 3 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             # 返回上级页面时二次确认入口通用处理
-            sleep(0.2)
-            re = TomatoOcrFindRangeClick(x1=39,y1=250,x2=674,y2=1205,keywords=[{'keyword': '确定', 'match_mode': 'exact'},{'keyword': '确认', 'match_mode': 'exact'}])
-            Toast('返回首页')
+            res = openTreasure(noNeedOpen=1)
+            # if not res:
+            #     re = TomatoOcrFindRangeClick(x1=39, y1=250, x2=674, y2=1205,
+            #                                  keywords=[{'keyword': '确定', 'match_mode': 'exact'},
+            #                                            {'keyword': '确认', 'match_mode': 'exact'}])
+            #     if re:
+            #         Toast('线程-返回首页-确定')
 
-        if not return1 and not return3 and 功能开关["fighting"] == 0:
-            return6 = TomatoOcrTap(89,1197,136,1220, '返回', 10, 10)
-            if not return6:
-                return5 = TomatoOcrTap(69, 1182, 127, 1220, '营地', 10, 10)
-                if not return5:
-                    # return2 = imageFindClick('返回_1')
-                    return2 = TomatoOcrTap(86,1193,140,1224, '返回', 10, 10)
-                    if return2 and 功能开关["needHome"] == 1:
-                        Toast('返回首页')
-
-                    return4 = imageFindClick('返回_2')
-                    if return4 and 功能开关["needHome"] == 1:
-                        Toast('返回首页')
-
-        if not return1 and not return2 and not return3 and not return4 and 功能开关["needHome"] == 1 and 功能开关["fighting"] == 0:
-            # 识别是否进入首页
-            # 点击首页-冒险
+        # if i > 4:
+        #     点击首页-冒险
             # re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
 
+        if 1:
+            # 识别是否进入首页
+
             # 判断底部冒险图标
-            res2 = FindColors.find(
-                "323,1210,#FCF8EE|333,1210,#FCF8ED|336,1212,#F9ECCB|336,1234,#FEF8E9|347,1231,#FCF8EE|363,1231,#FEF7EB|377,1229,#F4EFE1|372,1218,#88684E|353,1216,#9E8776",
-                rect=[301, 1130, 421, 1273])
+            res2, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
@@ -73,7 +80,7 @@ def returnHome():
                 # shou_ye2 = TomatoOcrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
             if res2 or shou_ye1 or shou_ye2:
                 功能开关["needHome"] = 0
-                Toast('已返回首页')
+                Toast('线程-已返回首页')
                 return True
 
         # # 兜底
@@ -84,3 +91,174 @@ def returnHome():
         #     login2 = TomatoOcrTap(302, 1199, 414, 1231, "开始冒险")
 
     return
+
+
+def openTreasure(noNeedOpen=0):
+    isTreasure = 0  # 是否在宝箱页
+    if noNeedOpen == 0:
+        noNeedOpen = 功能开关['秘境不开宝箱']
+
+    res, _ = TomatoOcrText(300, 606, 417, 634, "宝箱尚未开启")  # 避免前置错误点击弹出宝箱尚未开启
+    if res:
+        res = TomatoOcrTap(99, 1199, 128, 1234, "回")  # 关闭确认弹窗，返回待领取页
+
+    res1 = False
+    res2 = False
+    res3 = False
+    tmp2 = False
+    tmp3 = False
+    tmp4 = False
+    # 房间页 - 宝箱UI
+    res1 = FindColors.find(
+        "228,569,#7DD7F1|228,580,#E4B76E|228,603,#FFECC5|228,629,#FBF9D4|227,666,#3C6AC4",
+        rect=[101, 260, 611, 1089], diff=0.95)
+    if not res1:
+        res1 = FindColors.find(
+            "299,764,#F3A84B|304,765,#F3A84B|313,763,#F3A84B|321,763,#F3A84B|425,791,#F3A84B|425,776,#F3A84B",
+            rect=[93, 154, 633, 1085])
+    if res1 or res2 or res3:
+        isTreasure = 1
+        # 加锁兜底
+
+    if noNeedOpen == 1:
+        openStatus = 0
+        if isTreasure == 1:
+            if 功能开关['秘境点赞队友'] == 1:
+                Toast('点赞队友')
+                res = TomatoOcrTap(516, 549, 592, 572, "一键全赞", 5, 5)  # 一键点赞
+                if not res:
+                    res = TomatoOcrTap(511, 458, 595, 484, "一键全赞", 5, 5)  # 一键点赞
+                    if not res:
+                        res = TomatoOcrFindRangeClick("全赞", x1=480, y1=490, x2=615, y2=768,
+                                                      match_mode='fuzzy')  # 一键点赞
+                if not res:
+                    for i in range(2):
+                        imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
+                        imageFindClick('点赞2', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
+            Toast('不开宝箱-返回房间')
+            # 加锁兜底
+            tapSleep(645, 1235, 0.8)  # 战斗结束页确认不领取
+            res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+            if not res:
+                res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+                if not res:
+                    tapSleep(645, 1235, 1)  # 战斗结束页确认不领取
+                    res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+            if not res:
+                Toast('返回房间-2')
+                res = TomatoOcrTap(96, 1199, 130, 1232, "回", 10, 10, 0.8)  # 返回
+                res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+                if not res:
+                    Toast('返回房间-3')
+                    res = TomatoOcrFindRangeClick("确定", whiteList='确定', x1=88, y1=277, x2=644,
+                                                  y2=986)  # 战斗结束页确认退出
+                    # res = TomatoOcrTap(331, 727, 388, 761, "确定")  # 确定返回
+                if res:
+                    openStatus = 1
+            else:
+                openStatus = 1
+        return openStatus
+
+    # 点赞队友
+    if 功能开关['秘境点赞队友'] == 1:
+        if isTreasure == 1:
+            Toast('点赞队友')
+            res = TomatoOcrTap(516, 549, 592, 572, "一键全赞", 5, 5)  # 一键点赞
+            if not res:
+                res = TomatoOcrTap(511, 458, 595, 484, "一键全赞", 5, 5)  # 一键点赞
+                if not res:
+                    res = TomatoOcrFindRangeClick("全赞", x1=480, y1=490, x2=615, y2=768,
+                                                  match_mode='fuzzy')  # 一键点赞
+            if not res:
+                for i in range(1, 4):
+                    imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
+                    imageFindClick('点赞2', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
+
+    attempts = 0  # 初始化尝试次数
+    maxAttempts = 3  # 设置最大尝试次数
+
+    openStatus = 0
+    if isTreasure == 1:
+        re = FindColors.find(
+            "292,1065,#A6A1AD|306,1068,#A6A1AD|314,1065,#A6A1AD|306,1079,#A6A1AD|314,1077,#A6A1AD|290,1093,#A6A1AD",
+            rect=[101, 623, 618, 1087], diff=0.93)
+        if not re:
+            re, _ = TomatoOcrText(453, 1006, 528, 1029, '体力不足')
+        if re:
+            Toast('体力不足 - 跳过宝箱')
+            tapSleep(645, 1235, 0.8)  # 战斗结束页确认不领取
+            res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+            if not res:
+                res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+                if not res:
+                    tapSleep(645, 1235, 1)  # 战斗结束页确认不领取
+                    res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+            if not res:
+                Toast('返回房间-2')
+                res = TomatoOcrTap(96, 1199, 130, 1232, "回", 10, 10, 0.8)  # 返回
+                res = TomatoOcrTap(333, 732, 386, 757, "确定", 10, 0)  # 确定
+                if not res:
+                    Toast('返回房间-3')
+                    res = TomatoOcrFindRangeClick("确定", whiteList='确定', x1=88, y1=277, x2=644,
+                                                  y2=986)  # 战斗结束页确认退出
+                    # res = TomatoOcrTap(331, 727, 388, 761, "确定")  # 确定返回
+            if res:
+                openStatus = 1
+        else:
+            Toast('准备开启宝箱')
+            while attempts < maxAttempts:
+                res, _ = TomatoOcrText(300, 606, 417, 634, "宝箱尚未开启")  # 避免前置错误点击弹出宝箱尚未开启
+                if res:
+                    res = TomatoOcrTap(99, 1199, 128, 1234, "回")  # 关闭确认弹窗，返回待领取页
+
+                attempts = attempts + 1
+                # 先快速图色匹配一次宝箱图标
+                res1 = FindColors.find(
+                    "314,809,#F3A84B|312,819,#F3A84B|415,812,#F3A84A|402,822,#F3A84B|412,817,#F3A84B|416,817,#F3AD53",
+                    rect=[85, 288, 647, 1120], diff=0.95)
+                if res1:
+                    # 图色识别兜底
+                    res = imageFindClick('宝箱-开启')
+                    if res:
+                        Toast('开启宝箱')
+                        sleep(1.5)
+                        tapSleep(340, 930)
+                        openStatus = 1
+                    tmp = FindColors.find(
+                        "557,762,#A6A1AD|535,760,#A6A1AD|563,782,#A6A1AD|525,776,#76727C|421,751,#A6A1AD|423,779,#A6A1AD",
+                        rect=[90, 265, 637, 1066], diff=0.95)
+                    if tmp:
+                        Toast('体力不足 - 跳过宝箱')
+                        break
+                    res = imageFindClick('宝箱-开启2')
+                    if res:
+                        Toast('开启宝箱')
+                        sleep(1.5)
+                        tapSleep(340, 930)
+                        openStatus = 1
+
+    if openStatus == 1:
+        Toast('开启宝箱 - 成功')
+
+    # 开启宝箱后，返回
+    if openStatus == 1 or isTreasure == 1:
+        Toast("已开启宝箱 - 返回房间")
+        res = TomatoOcrTap(96, 1199, 130, 1232, "回", sleep1=0.8)  # 返回
+        res = TomatoOcrTap(330, 726, 387, 759, "确定")  # 确定返回
+        if not res:
+            res = TomatoOcrTap(331, 727, 388, 761, "确定")  # 确定返回
+        if not res:
+            # 识别战斗结束页提前返回
+            res1 = False
+            res1 = TomatoOcrFindRange("通关奖励", x1=112, y1=456, x2=620, y2=1032)  # 战斗结束页。宝箱提示
+            if res1:
+                tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
+                # res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 战斗结束页确认退出
+                res = TomatoOcrFindRangeClick("确定", whiteList='确定')  # 战斗结束页确认退出
+                if not res:
+                    res = TomatoOcrTap(96, 1199, 130, 1232, "回")  # 返回
+                    res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 确定
+                    if not res:
+                        res = TomatoOcrTap(331, 727, 388, 761, "确定")  # 确定返回
+                        openStatus = 1
+    return openStatus

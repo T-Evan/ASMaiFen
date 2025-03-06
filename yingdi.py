@@ -443,7 +443,7 @@ class YingDiTask:
         # 判断秘宝已完成
         isDone = CompareColors.compare(
             "254,176,#9FA8A8|240,175,#FFFFFF|247,186,#FFFFFF|258,189,#FFFFFF|263,178,#645A66")
-        # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=3)
+        # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=10)
         if isDone:
             Toast('营地任务 - 秘宝领取 - 识别已完成')
             任务记录["秘宝领取-完成"] = 1
@@ -898,7 +898,7 @@ class YingDiTask:
             if not re:
                 re = TomatoOcrFindRangeClick('最大', whiteList='最大', x1=93, y1=643, x2=618, y2=1004)
             if not re:
-                re2, x, y = imageFind('商店购买', x1=52, y1=478, x2=634, y2=1149)
+                re, x, y = imageFind('商店购买', x1=52, y1=478, x2=634, y2=1149)
             if re:
                 re = TomatoOcrTap(334, 842, 385, 867, '购买', offsetX=5, offsetY=5)
                 if not re:
@@ -910,3 +910,4 @@ class YingDiTask:
                 # tapSleep(360, 855, 0.6)  # 购买
                 if re:
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
+            tapSleep(360, 1100)  # 点击空白处关闭

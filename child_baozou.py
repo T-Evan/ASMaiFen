@@ -36,7 +36,6 @@ def main():
     while True:
         if 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走烈焰大王":
             global yolo
-            yolo = YoLov5("麦芬-火焰大暴走:0.4")
             # print(R.res("/yolo_baozou_lieyan/"))
             # yolo = YoLov5(path=R.res("/yolo_baozou_lieyan/"))
 
@@ -46,13 +45,12 @@ def main():
             #         print(r)
             #     sleep(0.5)
 
-            while 1:
-                # 检测战斗状态
+            # 检测战斗状态
+            if 功能开关["fighting"] == 1:
                 # 异步识别boss状态
                 re = CompareColors.compare(
                     "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF")  # 匹配boss名称包含大王
                 if re:
-                    功能开关["fighting"] = 1
                     daBaoZouLieYanBoss()
                 else:
                     sleep(3)
@@ -372,6 +370,8 @@ def daBaoZouLeiDianBoss():
 
 
 def daBaoZouLieYanBoss():
+    yolo = YoLov5("麦芬-火焰大暴走:0.4")
+
     # 判断是否为史莱姆战斗中
     res, _ = TomatoOcrText(380, 217, 429, 247, '大王')
     if not res:

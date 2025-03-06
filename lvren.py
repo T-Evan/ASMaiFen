@@ -24,6 +24,9 @@ class LvRenTask:
         self.dailyTask.homePage(needQuitTeam=True)
 
         # 旅人相关
+        # 自动转职
+        self.updateLevel()
+
         # 自动更换装备
         self.changeEquip()
 
@@ -44,6 +47,65 @@ class LvRenTask:
 
         # 猫猫包
         self.maomaobao()
+
+    # 自动转职
+    def updateLevel(self):
+        if 功能开关["自动转职"] == 0:
+            return
+
+        if 任务记录['自动转职-完成']:
+            return
+
+        Toast('自动转职 - 开始')
+        for p in range(5):
+            self.dailyTask.homePage()
+            re = CompareColors.compare(
+                "353,1202,#FCF8EE|361,1202,#FCF8EE|353,1190,#9F7A53|364,1186,#A5855C|356,1182,#9F7D57")  # 匹配已回到首页
+            if re:
+                re, _ = TomatoOcrText(105, 116, 175, 134, '待转职')
+                if not re:
+                    Toast('自动转职 - 未开启转职')
+                    任务记录['自动转职-完成'] = 1
+                    return
+
+            res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
+            res = TomatoOcrTap(464, 492, 543, 516, "转职任务", sleep1=0.8, offsetX=10, offsetY=-10)
+            if not res:
+                Toast('自动转职 - 未找到任务入口')
+                return
+
+            # 匹配可转职
+            re = CompareColors.compare("306,1068,#F3A84B|311,1079,#F3A84B|408,1068,#F3A84B|405,1084,#F3A84B")
+            if re:
+                Toast('自动转职 - 开始转职')
+                tapSleep(360, 1077, 0.8)  # 点击转职
+                for t in range(10):
+                    re = TomatoOcrTap(293, 1237, 421, 1257, '点击空白处关闭')
+                    if re:
+                        break
+                    Toast('等待动画')
+                    sleep(2)
+                    tapSleep(358, 1266)  # 点击跳过
+                任务记录['自动转职-完成'] = 1
+                return
+
+            tapSleep(558, 1212, 0.8)  # 点击英雄诗篇
+            for k in range(8):
+                Toast('跳过对话')
+                tapSleep(347, 1256)  # 点击空白处
+
+            for k in range(12):
+                re = TomatoOcrFindRangeClick('领取', x1=465, y1=123, x2=623, y2=1096)
+                if re:
+                    Toast('领取任务')
+                else:
+                    re = FindColors.find("606,163,#B4835E|609,163,#B4835E|618,155,#F56042|617,152,#FF5C45", diff=0.95)
+                    if re:
+                        Toast('切换任务')
+                        tapSleep(re.x, re.y)
+                        swipe(415, 795, 352, 526)
+                        sleep(1)
+                tapSleep(347, 1256)  # 点击空白处
 
     # 秘宝
     def updateMiBao(self):
@@ -317,8 +379,8 @@ class LvRenTask:
                 sleep(1.5)
                 return
 
-        if 任务记录['装备数量'] != "" and 任务记录['装备数量'] < 140:
-            Toast(f'旅人 - 无需分解装备 {任务记录["装备数量"]}/150')
+        if 任务记录['装备数量'] != "" and 任务记录['装备数量'] < 190:
+            Toast(f'旅人 - 无需分解装备 {任务记录["装备数量"]}/200')
             return
 
         if needDelete:
@@ -339,15 +401,15 @@ class LvRenTask:
         if res:
             res = TomatoOcrTap(211, 765, 285, 793, '取消')
 
-        re, equipNum = TomatoOcrText(510, 1043, 597, 1074, '装备数量')
-        equipNum = equipNum.replace("/150", "")
+        re, equipNum = TomatoOcrText(498, 1042, 588, 1072, '装备数量')
+        equipNum = equipNum.replace("/200", "")
         equipNum = safe_int(equipNum)
         任务记录["装备数量"] = equipNum
         if equipNum == "":
             return
 
         # 超过140件时分解
-        if (needDelete and equipNum > 145) or (not needDelete and equipNum > 140):
+        if (needDelete and equipNum > 195) or (not needDelete and equipNum > 190):
             Toast('旅人 - 分解装备')
             re = TomatoOcrTap(156, 1046, 203, 1073, '熔炼')
             if re:
@@ -365,10 +427,13 @@ class LvRenTask:
                     if re:
                         tapSleep(121, 866)
                 # 判断是否有可选的分解装备
-                re = FindColors.find_all("128,317,#4EAE3B|128,312,#4DAF3B|133,306,#4EAE3B", rect=[101, 263, 608, 808],
-                                         diff=0.8)
+                re = FindColors.find(
+                    "132,314,#4EAE3B|131,320,#DAEFDA|131,323,#4DB039|129,329,#49AC38|129,323,#4EAF3A|135,322,#4CAE39",
+                    rect=[104, 282, 606, 806], diff=0.9)
                 if not re:
                     # 选中低等级装备
+                    swipe(358, 722, 360, 574)
+                    swipe(358, 722, 360, 574)
                     swipe(358, 722, 360, 574)
                     swipe(358, 722, 360, 574)
                     sleep(1)
@@ -382,7 +447,7 @@ class LvRenTask:
                 tapSleep(356, 1208)  # 点击空白
                 tapSleep(356, 1208)  # 点击空白
         else:
-            Toast(f'旅人 - 无需分解装备 {任务记录["装备数量"]}/150')
+            Toast(f'旅人 - 无需分解装备 {任务记录["装备数量"]}/200')
 
     # 自动使用经验补剂
     def useLevelPotion(self):

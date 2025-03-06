@@ -17,6 +17,12 @@ class AutoMove:
                 sleep(0.2)
                 continue
 
+            # 关闭进入战斗后启动时，依赖主线程判断是否进入战斗状态
+            if 功能开关['AI进入战斗后启动'] == 0:
+                if 功能开关["fighting"] == 0:
+                    sleep(2)
+                continue
+
             # 间隔2s检查战斗中状态
             if (self.fighting == 0 and time.time() - self.lastCheckFighting > 5) or (
                     self.fighting == 1 and time.time() - self.lastCheckFighting > 10):
@@ -478,13 +484,15 @@ class AutoMove:
                     sleep(0.5)
                     continue
 
-                if time.time() - 任务记录['战斗-上一次移动'] > 7:
+                if '眠域' not in 任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
+                        任务记录['战斗-上一次移动'] > 7:
                     re = imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
                     if re:
                         Toast('自动走位')
                     任务记录['战斗-上一次移动'] = time.time()
 
-                if time.time() - 任务记录['战斗-上一次移动'] > 15:
+                if '眠域' not in 任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
+                        任务记录['战斗-上一次移动'] > 15:
                     re = imageFindClick('战斗-向右移动', x1=11, y1=565, x2=206, y2=778)
                     if re:
                         Toast('自动走位')

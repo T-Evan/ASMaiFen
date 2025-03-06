@@ -234,7 +234,7 @@ def main():
 
         功能开关["breakChild"] = 0
         功能开关["fighting"] = 0
-        功能开关["fighting_baozou"] = 0
+        功能开关["noHomeMust"] = 0
         功能开关["needHome"] = 0
 
         # 处理休息时间
@@ -333,11 +333,11 @@ def main():
                 total_memory_mb = round(info[2] / (1024 ** 3), 2)
                 # used_memory_mb = info[1] / (1024 ** 2)
                 free_memory_mb = round(info[0] / (1024 ** 3), 2)
-                if total_memory_mb < 5:
+                if free_memory_mb < 1:
                     Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G,建议调整内存>6G")
                     sleep(0.5)
-                else:
-                    Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G")
+                # else:
+                #     Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G")
                 # counter += 1
                 # if counter % 3 == 0:
                 #     runThreadNotice()

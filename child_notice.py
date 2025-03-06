@@ -1,12 +1,16 @@
 # 导包
+import time
+
 from .baseUtils import *
 from .res.ui.ui import 功能开关
 from ascript.android.screen import FindColors
 from ascript.android import screen
 
-
+checkSkipTime = 0
 # 实例方法
 def main():
+    global checkSkipTime
+    checkSkipTime = time.time()
     while True:
         if 功能开关["fighting"] == 0:
             # print('空白弹窗处理线程 - 运行中')
@@ -48,25 +52,25 @@ def noticeCancel():
         # res3 = TomatoOcrTap(266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
         # res5 = TomatoOcrTap(268, 869, 359, 888, "点击空白处", 30, 100)
         # bitmap = screen.capture(107, 759, 603, 1257)
-        # res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
-        #                               offsetX=20, offsetY=40, bitmap=bitmap,
-        #                               keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
-        res = CompareColors.compare(
-            "341,872,#A09BA7|345,872,#A09BA7|339,884,#9E9AA5|344,884,#9E9AA5|359,872,#A49FAB|362,884,#A09BA7")
-        if not res:
-            res = CompareColors.compare(
-                "317,1232,#87838F|321,1232,#888490|320,1242,#A19CA8|335,1232,#9D98A4|336,1237,#A09BA7|336,1243,#615D69")
-        if not res:
-            res = CompareColors.compare(
-                "342,1122,#97939E|342,1129,#96929D|338,1134,#97929D|345,1134,#97929D|359,1123,#8B8791|361,1135,#6B6770")
-        if not res:
-            res = CompareColors.compare(
-                "343,1208,#A09CA7|359,1209,#948F9A|363,1209,#94909A|344,1216,#A6A1AD|360,1214,#96929D|345,1219,#9994A0")
-        if not res:
-            res = CompareColors.compare(
-                "314,873,#7C767F|331,873,#9A95A1|314,879,#A49FAC|332,879,#807A84|315,885,#6F6971|331,885,#7C767F")
+        res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
+                                      offsetX=20, offsetY=40,
+                                      keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
+        # res = CompareColors.compare(
+        #     "341,872,#A09BA7|345,872,#A09BA7|339,884,#9E9AA5|344,884,#9E9AA5|359,872,#A49FAB|362,884,#A09BA7")
+        # if not res:
+        #     res = CompareColors.compare(
+        #         "317,1232,#87838F|321,1232,#888490|320,1242,#A19CA8|335,1232,#9D98A4|336,1237,#A09BA7|336,1243,#615D69")
+        # if not res:
+        #     res = CompareColors.compare(
+        #         "342,1122,#97939E|342,1129,#96929D|338,1134,#97929D|345,1134,#97929D|359,1123,#8B8791|361,1135,#6B6770")
+        # if not res:
+        #     res = CompareColors.compare(
+        #         "343,1208,#A09CA7|359,1209,#948F9A|363,1209,#94909A|344,1216,#A6A1AD|360,1214,#96929D|345,1219,#9994A0")
+        # if not res:
+        #     res = CompareColors.compare(
+        #         "314,873,#7C767F|331,873,#9A95A1|314,879,#A49FAC|332,879,#807A84|315,885,#6F6971|331,885,#7C767F")
         if res:
-            tapSleep(35, 1260)
+            # tapSleep(35, 1260)
             Toast('关闭弹窗')
         # res = PaddleOcrFindRangeClick('空白', x1=107, y1=759, x2=603, y2=1257, offsetX=20, offsetY=40)
         # if res:
@@ -82,12 +86,16 @@ def noticeCancel():
         if res:
             Toast('战斗结算弹窗确认')
 
-        res = TomatoOcrTap(587, 66, 631, 89, "跳过", 10, 10)
-        if res:
-            res = TomatoOcrTap(432, 598, 475, 632, "是", 10, 10)
-            Toast('跳过教程')
+        global checkSkipTime
+        currTime = time.time() - checkSkipTime
+        if currTime > 20:
+            res = TomatoOcrTap(587, 66, 631, 89, "跳过", 10, 10)
+            if res:
+                res = TomatoOcrTap(432, 598, 475, 632, "是", 10, 10)
+                Toast('跳过教程')
+            checkSkipTime = time.time()
 
-        # res = TomatoOcrFindRange('本轮时长', 0.9, 113, 831, 720, 1280, whiteList='本轮时长', timeLock=3)
+        # res = TomatoOcrFindRange('本轮时长', 0.9, 113, 831, 720, 1280, whiteList='本轮时长', timeLock=10)
         # if res:
         # re = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=130, y1=294, x2=632, y2=1191, timeLock=5,
         #                              bitmap=bitmap, offsetX=10, offsetY=10)

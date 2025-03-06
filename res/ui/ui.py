@@ -61,7 +61,7 @@ import time
 
 
 class TimeoutLock:
-    def __init__(self, timeLock=3, lock=''):
+    def __init__(self, timeLock=10, lock=''):
         self.lock = lock
         if lock == '':
             self.lock = switch_lock
@@ -77,12 +77,13 @@ class TimeoutLock:
         return False
 
     def release_lock(self):
-        self.lock.release()
+        if self.lock.locked():
+            self.lock.release()
 
     def __enter__(self):
-        if not self.acquire_lock():
+        acquired = self.acquire_lock()
+        if not acquired:
             raise RuntimeError("无法在指定时间内获取锁")
-        # print("锁已成功获取")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -198,7 +199,10 @@ def 初始化任务记录(initAll=True):
         "祈福交好运": 0,
         "欢庆连五日": 0,
         "斗歌会-完成": 0,
+        "拾光奇旅": 0,
+        "黑猫虫游记": 0,
 
+        "繁星使者": 0,
         "盛大公演": 0,
         "逍遥大圣": 0,
         "来富巳": 0,
@@ -231,6 +235,7 @@ def 初始化任务记录(initAll=True):
 
         "旅人-猫猫果木-完成": 0,
         "旅人-秘宝升星-完成": 0,
+        "自动转职-完成": 0,
         "日常-招式创造-完成": 0,
         "日常-骑兽乐园-完成": 0,
         "日常-释放1次战术技能-完成": 0,

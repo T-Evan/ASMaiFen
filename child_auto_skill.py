@@ -55,6 +55,12 @@ class AutoSkill:
                 sleep(0.2)
                 continue
 
+            # 关闭进入战斗后启动时，依赖主线程判断是否进入战斗状态
+            if 功能开关['技能进入战斗后启动'] == 0:
+                if 功能开关["fighting"] == 0:
+                    sleep(2)
+                continue
+
             # 间隔2s检查战斗中状态
             if self.fighting == 0 or time.time() - self.lastCheckFighting > 5:
                 re1 = CompareColors.compare(
@@ -232,9 +238,8 @@ class AutoSkill:
                     Toast('释放三技能打断')
                     tapSleep(649, 953, 0.3)  # 3技能 # 打断技
                     tapSleep(659, 942, 0.3)  # 3技能 # 打断技
-                re2 = FindColors.find(
-                    "283,271,#6D6D6D|284,269,#7A7172|286,269,#7A7172|283,272,#696969|286,272,#696969|285,270,#7C7173",
-                    rect=[197, 200, 541, 333])  # 灰色技能条
+                re2 = FindColors.find("284,271,#746C6E|290,271,#746C6E|286,270,#7B7074|286,273,#656565|288,266,#726868",
+                                      rect=[205, 206, 497, 307])  # 灰色技能条
                 if re2:
                     Toast('释放三技能护盾')
                     tapSleep(649, 953, 0.3)  # 3技能 # 护盾技

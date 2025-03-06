@@ -57,7 +57,7 @@ import random
 #     return False
 #
 #
-# def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=3):
+# def ocrFindRange(keyword, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10):
 #     try:
 #         if whiteList == '':
 #             whiteList = keyword
@@ -154,11 +154,10 @@ import random
 #         return False
 #
 
-def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=3, bitmap=''):
+def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, bitmap=''):
     try:
-        lock = TimeoutLock(timeLock)
         try:
-            with lock:
+            with TimeoutLock(timeLock):
                 if bitmap == '':
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
@@ -225,16 +224,15 @@ def shijieShoutText():
     return player_messages
 
 
-def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=3,
+def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10,
                        match_mode='exact', bitmap='', keywords=None):
     try:
         if whiteList == '':
             whiteList = keyword
         if keywords is None:
             keywords = []
-        lock = TimeoutLock(timeLock)
         try:
-            with lock:
+            with TimeoutLock(timeLock):
                 if bitmap == '':
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
@@ -326,9 +324,8 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
             whiteList = keyword
         if keywords is None:
             keywords = []
-        lock = TimeoutLock(timeLock)
         try:
-            with lock:
+            with TimeoutLock(timeLock):
                 if bitmap == '':
                     ocrRe = tomatoOcr.find_all(
                         license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
@@ -403,9 +400,8 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
     try:
         # 传入图片路径或者Bitmap
         # res = ocr.ocrFile(R.img("logo.png"))
-        lock = TimeoutLock()
         try:
-            with lock:
+            with TimeoutLock():
                 bitmap = screen.capture(x1, y1, x2, y2)
                 tomatoOcr.setReturnType('json')
                 ocrText = tomatoOcr.ocrBitmap(bitmap, 2)
@@ -432,9 +428,8 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
 
 def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
     try:
-        lock = TimeoutLock()
         try:
-            with lock:
+            with TimeoutLock():
                 bitmap = screen.capture(x1, y1, x2, y2)
                 tomatoOcr.setReturnType('json')
                 ocrText = tomatoOcr.ocrBitmap(bitmap, 2)

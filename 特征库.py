@@ -36,11 +36,10 @@ def compareColors(colorStr, diff=0.9):
         return False
 
 
-def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=3):
+def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
     try:
-        lock = TimeoutLock(timeLock)
         try:
-            with lock:
+            with TimeoutLock(timeLock):
                 path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
                 res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
         except RuntimeError as e:
@@ -64,11 +63,10 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=3):
         return False, 0, 0
 
 
-def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=3):
+def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
     try:
-        lock = TimeoutLock(timeLock)
         try:
-            with lock:
+            with TimeoutLock(timeLock):
                 path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
                 res = FindImages.find_all_template(path, [x1, y1, x2, y2], confidence=confidence1)
         except RuntimeError as e:
@@ -88,9 +86,8 @@ def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=3)
 
 def imageFindClick(name, sleep1=1, confidence1=0.7, x1=0, y1=0, x2=720, y2=1280, offsetX=0, offsetY=0):
     try:
-        lock = TimeoutLock()
         try:
-            with lock:
+            with TimeoutLock():
                 path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
                 res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
         except RuntimeError as e:
