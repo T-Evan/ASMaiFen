@@ -33,7 +33,7 @@ def returnHome():
             if return1 or return2:
                 Toast('线程-返回首页1')
 
-        if not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
+        if i > 3 and not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 7, 1111, 176, 1243, timeLock=5,
                                               offsetX=20, offsetY=20,
                                               keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
@@ -61,7 +61,7 @@ def returnHome():
 
         # if i > 4:
         #     点击首页-冒险
-            # re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
+        # re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
 
         if 1:
             # 识别是否进入首页

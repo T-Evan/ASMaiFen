@@ -69,6 +69,11 @@ class DailyTask:
                 # 重启游戏
                 self.startupTask.start_app()
 
+            if tryTimes > 10:
+                login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
+                if login1:
+                    self.startupTask.start_app()
+
             if tryTimes > 18:
                 Toast(f'尝试返回游戏,{tryTimes}/20')
                 system.open(f"{功能开关['游戏包名']}")
@@ -3305,9 +3310,6 @@ class DailyTask:
                 return
             功能开关["needHome"] = 0
             功能开关["fighting"] = 1
-            teamStatus = TomatoOcrTap(632, 570, 684, 598, "匹配中", 10, 10)
-            if teamStatus:
-                Toast('取消匹配')
 
             teamExist = TomatoOcrTap(500, 184, 579, 214, "离开队伍", 20, 20)
             if not teamExist:
@@ -3319,8 +3321,8 @@ class DailyTask:
                     功能开关["fighting"] = 0
                     return True
 
-            res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
-            if res4:
+            teamStatus = TomatoOcrFindRangeClick(keyword='匹配中', x1=93, y1=509, x2=637, y2=1021)
+            if teamStatus:
                 Toast("取消匹配")
                 功能开关["fighting"] = 0
                 return True

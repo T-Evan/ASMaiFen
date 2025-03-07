@@ -54,10 +54,10 @@ class LvTuanTask:
         loopCount = 0
         needCount = safe_int(功能开关["调查队挑战次数"])
         if needCount == '':
-            needCount = 0
+            needCount = 1
         while loopCount < needCount:
-            loopCount = loopCount + 1
             Toast(f"旅团 - 调查队重复挑战第 {loopCount}/{needCount} 次")
+            loopCount = loopCount + 1
             res1, _ = TomatoOcrText(636, 97, 670, 119, "秘钥")  # 识别调查队组队中 - 右上角 - 每日补给调查秘钥
             res2, _ = TomatoOcrText(501, 191, 581, 218, "离开队伍")  # 识别调查队组队中 - 右上角 - 离开队伍
             if res1 or res2:
@@ -425,13 +425,16 @@ class LvTuanTask:
         chongWuName = ''
         if 功能开关['旅团自动许愿'] == 1:
             Toast("旅团 - 许愿墙 - 寻找主战宠物")
-            # 返回首页
-            self.dailyTask.homePage()
-            re = TomatoOcrTap(527, 1207, 593, 1232, '麦乐兽')
-            if re:
-                tapSleep(350, 359)  # 点击主战宠物
-                re, chongWuName = TomatoOcrText(287, 388, 437, 423, '主战宠物')
-                Toast(f"旅团 - 许愿墙 - 主战宠物{chongWuName}")
+            for p in range(3):
+                # 返回首页
+                self.dailyTask.homePage()
+                re = TomatoOcrTap(527, 1207, 593, 1232, '麦乐兽')
+                if re:
+                    tapSleep(350, 359)  # 点击主战宠物
+                    re, chongWuName = TomatoOcrText(287, 388, 437, 423, '主战宠物')
+                    if chongWuName != "":
+                        Toast(f"旅团 - 许愿墙 - 主战宠物{chongWuName}")
+                        break
 
         # 判断是否在旅团页面
         isLvtuan = False
