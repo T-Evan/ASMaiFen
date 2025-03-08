@@ -993,6 +993,7 @@
                                     <option value="石松沼泽">石松沼泽</option>
                                     <option value="天鹅仙宫">天鹅仙宫</option>
                                     <option value="妖精旷野">妖精旷野</option>
+                                    <option value="地底浓林">地底浓林</option>
                                 </select>
                             </div>
                         </div>
@@ -1070,6 +1071,9 @@
                                         <option value="沼泽">沼泽</option>
                                         <option value="仙宫">仙宫</option>
                                         <option value="迷梦">迷梦</option>
+                                        <option value="浓林">浓林</option>
+                                        <option value="翡翠">翡翠</option>
+                                        <option value="王都">王都</option>
                                     </select>
                                 </div>
                                 <div class="layui-input-inline">
@@ -2777,6 +2781,18 @@
 
         if(mjId === '迷梦') {
           $mjgqSelect.html('<option value="魇舞聚会厅">魇舞聚会厅</option><option value="黯淡冠冕的宝珠">黯淡冠冕的宝珠</option>');
+        }
+
+        if(mjId === '浓林') {
+          $mjgqSelect.html('<option value="暗河！激浪！大鱼！">暗河！激浪！大鱼！</option><option value="晨曦遗落在祭台">晨曦遗落在祭台</option>');
+        }
+
+        if(mjId === '翡翠') {
+          $mjgqSelect.html('<option value="盘道！烈夏伸鹫！">盘道！烈夏伸鹫！</option><option value="翡翠的黯夜呢喃">翡翠的黯夜呢喃</option>');
+        }
+
+        if(mjId === '王都') {
+          $mjgqSelect.html('<option value="狂热纵情魅影">狂热纵情魅影</option><option value="万世钟塔堕光芒">万世钟塔堕光芒</option>');
         }
 
         form.render('select'); // 更新城市选择框的UI

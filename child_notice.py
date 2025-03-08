@@ -5,22 +5,31 @@ from .baseUtils import *
 from .res.ui.ui import 功能开关
 from ascript.android.screen import FindColors
 from ascript.android import screen
+from .child_another_login import anotherLogin
 
 checkSkipTime = 0
+checkLoginTime = 0
+
+
 # 实例方法
 def main():
     global checkSkipTime
     checkSkipTime = time.time()
+    checkLoginTime = time.time()
     while True:
         if 功能开关["fighting"] == 0:
             # print('空白弹窗处理线程 - 运行中')
-            sleep(3)  # 等待 5 秒
+            sleep(2)  # 等待 5 秒
             noticeCancel()
         if 功能开关["fighting"] == 1 and 功能开关["needHome"] == 0:
             # print('空白弹窗处理线程 - 运行中')
-            sleep(5)  # 等待 5 秒
+            sleep(4)  # 等待 5 秒
             noticeCancel()
-
+        if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
+            currTime = time.time() - checkLoginTime
+            if currTime > 30:
+                anotherLogin()
+                checkLoginTime = time.time()
         # 如果 commonVar["fighting"] 为 1 ，则不做任何操作
 
 

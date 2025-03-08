@@ -21,7 +21,7 @@ class AutoMove:
             if 功能开关['AI进入战斗后启动'] == 0:
                 if 功能开关["fighting"] == 0:
                     sleep(2)
-                continue
+                    continue
 
             # 间隔2s检查战斗中状态
             if (self.fighting == 0 and time.time() - self.lastCheckFighting > 5) or (

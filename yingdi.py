@@ -487,7 +487,7 @@ class YingDiTask:
             findNL = False
             findNum = 0
             # 返回上半屏
-            if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野"]:
+            if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[44, 8, 626, 45],
                                      diff=0.96)
                 if not re:
@@ -667,7 +667,7 @@ class YingDiTask:
         selectMap = 功能开关["秘宝地图"]
         findMap = False
 
-        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野"]:
+        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
             re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                  diff=0.96)  # 底部牛皮纸
             if not re:
@@ -677,7 +677,7 @@ class YingDiTask:
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:
@@ -692,7 +692,7 @@ class YingDiTask:
 
         # 再找左侧
         if left < 4 and right == 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:

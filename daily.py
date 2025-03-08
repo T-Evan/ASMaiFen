@@ -58,7 +58,7 @@ class DailyTask:
                 if 功能开关["fighting"] == 0:
                     Toast(f'日常-返回首页-退出组队')
                     self.shilianTask.allQuit()
-                #     self.shilianTask.quitTeamFighting()
+                    self.shilianTask.quitTeamFighting()
                 # self.quitTeam()
 
             resConnErr, _ = TomatoOcrText(292, 691, 427, 722, "尝试重新连接")

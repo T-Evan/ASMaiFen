@@ -14,6 +14,7 @@ from ascript.android.screen import FindColors
 # 实例方法
 def main():
     while True:
+        # print(功能开关["needHome"],功能开关["noHomeMust"],功能开关["fighting"])
         if 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0 and 功能开关["fighting"] == 0:
             print("返回首页处理线程 - 运行中")
             returnHome()
@@ -29,7 +30,10 @@ def returnHome():
         return3 = False
         if 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
-            return2 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
+            if not return1:
+                return2 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
+            if not return2:
+                return2 = TomatoOcrTap(102, 1202, 132, 1229, '回', 10, 10)
             if return1 or return2:
                 Toast('线程-返回首页1')
 

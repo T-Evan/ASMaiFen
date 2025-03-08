@@ -53,8 +53,8 @@ class StartUp:
                     sleep(2)
                     continue
 
+            system.open(self.app_name)
             if tryTimes > 5:
-                system.open(self.app_name)
                 TomatoOcrTap(330, 828, 390, 871, '同意')  # 隐私政策更新
 
             # 识别是否进入登录页

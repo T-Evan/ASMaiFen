@@ -94,7 +94,7 @@ def main():
                             # print(tiliPoint)
                             x1 = tiliPoint.x - 280
                             y1 = tiliPoint.y - 25
-                            x2 = x1 + 175
+                            x2 = x1 + 235
                             y2 = y1 + 30
                             res, tmp = TomatoOcrText(x1, y1, x2, y2, "当前关卡")  # 关卡
                             if tmp != "":
@@ -412,6 +412,8 @@ def waitInvite():
                 break
 
             res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
+            if not res1:
+                res1 = TomatoOcrTap(625, 572, 678, 596, "匹配中")
             # 兜底入队失败
             res2, _ = TomatoOcrText(584, 651, 636, 678, "同意")
             if res2:

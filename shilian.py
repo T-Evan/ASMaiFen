@@ -1347,7 +1347,7 @@ class ShiLianTask:
             tapSleep(74, 160, 2)  # 点击地图列表
         # mapPoi = self.mapPoi[selectMap]
         maps_to_check = ('原野', '森林', '沙漠', '海湾', '深林', '冰原', '火山', '高原', '绿洲')
-        for k in range(3):
+        for k in range(4):
             if selectMap not in maps_to_check:
                 swipe(150, 1000, 150, 600)
                 sleep(2)
@@ -3661,25 +3661,18 @@ class ShiLianTask:
             sleep(0.5)
 
     def quitTeam(self):
-        # # 匹配组队中灰色底UI
-        # re = FindColors.find(
-        #     "610,560,#29392C|610,562,#293A2D|610,565,#293A2D|614,561,#293A2C|614,563,#29392C|613,568,#2A3A2D",
-        #     rect=[592, 531, 699, 680])
-        # if not re:
-        #     return
-
         res5 = False
         功能开关["needHome"] = 0
         功能开关["fighting"] = 1
         功能开关["noHomeMust"] = 1
 
         # 返回房间 - 队伍满员，开始挑战提醒
-        wait1, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
-        wait2 = False
-        if not wait1:
-            wait2, _ = TomatoOcrText(240, 610, 344, 653, "队伍已满员")  # 队伍已满员，准备开启挑战
-        if wait1 or wait2:
-            res5 = TomatoOcrTap(453, 727, 511, 760, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
+        # wait1, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
+        # wait2 = False
+        # if not wait1:
+        #     wait2, _ = TomatoOcrText(240, 610, 344, 653, "队伍已满员")  # 队伍已满员，准备开启挑战
+        # if wait1 or wait2:
+        res5 = TomatoOcrTap(453, 727, 511, 760, "确定", 10, 10)  # 队伍已满员，准备开启挑战 - 确定
 
         res1 = False
         res2 = False
@@ -3688,6 +3681,14 @@ class ShiLianTask:
 
         res6 = TomatoOcrTap(500, 184, 579, 214, "离开队伍", 20, 20)  # 已在队伍页面，直接退出
         if not res6:
+            # 匹配组队中灰色底UI
+            # tmp = FindColors.find(
+            #     "569,561,#354E67|572,560,#777D85|574,560,#767B81|578,561,#2E4964|583,562,#3C5067|597,575,#8C9093|549,580,#818792",
+            #     rect=[533, 490, 704, 681], diff=0.8)
+            # if not tmp:
+            #     功能开关["noHomeMust"] = 0
+            #     return False
+
             res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
             if not res1:
                 res2 = TomatoOcrFindRangeClick('正在组队', whiteList='正在组队', x1=549, y1=340, x2=699, y2=696)

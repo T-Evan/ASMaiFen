@@ -290,7 +290,7 @@ def main():
             runThreadReturnHome()
             runThreadBaoZouBoss()
             runThreadMijingTeam()
-            runThreadAnotherLogin()
+            # runThreadAnotherLogin()
             # runThreadCheckKami()
             runThreadAutoSkill()
             runThreadAutoSkill2()
