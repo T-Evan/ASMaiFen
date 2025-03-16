@@ -39,9 +39,9 @@ def compareColors(colorStr, diff=0.9):
 def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
     try:
         try:
-            with TimeoutLock(timeLock):
-                path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
-                res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
+            # with TimeoutLock(timeLock):
+            path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
+            res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
         except RuntimeError as e:
             print(f"imageFind获取锁超时")
             return False, 0, 0
@@ -66,9 +66,9 @@ def imageFind(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
 def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10):
     try:
         try:
-            with TimeoutLock(timeLock):
-                path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
-                res = FindImages.find_all_template(path, [x1, y1, x2, y2], confidence=confidence1)
+            # with TimeoutLock(timeLock):
+            path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
+            res = FindImages.find_all_template(path, [x1, y1, x2, y2], confidence=confidence1)
         except RuntimeError as e:
             print(f"imageFind获取锁超时")
             return False, []
@@ -87,9 +87,9 @@ def imageFindAll(name, confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, timeLock=10
 def imageFindClick(name, sleep1=1, confidence1=0.7, x1=0, y1=0, x2=720, y2=1280, offsetX=0, offsetY=0):
     try:
         try:
-            with TimeoutLock():
-                path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
-                res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
+            # with TimeoutLock():
+            path = R.res(f"/img/{name}.png")  # 这里替换为你的图片地址
+            res = FindImages.find_template(path, [x1, y1, x2, y2], confidence=confidence1)
         except RuntimeError as e:
             print(f"imageFindClick获取锁超时")
             return False

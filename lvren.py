@@ -45,6 +45,9 @@ class LvRenTask:
         # 自动升星秘宝
         self.updateMiBao()
 
+        # 自动点亮天赋
+        self.updateTianFu()
+
         # 猫猫包
         self.maomaobao()
 
@@ -106,6 +109,65 @@ class LvRenTask:
                         swipe(415, 795, 352, 526)
                         sleep(1)
                 tapSleep(347, 1256)  # 点击空白处
+
+    # 升级天赋
+    def updateTianFu(self):
+        if 功能开关["自动点亮天赋"] == 0:
+            return
+
+        if 任务记录['旅人-点亮天赋-完成']:
+            Toast('旅人 - 点亮天赋 - 已完成')
+            return
+
+        Toast('旅人 - 点亮天赋 - 开始')
+        self.dailyTask.homePage()
+        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
+        res, _ = TomatoOcrText(573, 498, 622, 522, "天赋")
+        if res:
+            re = CompareColors.compare("615,462,#F05D41|618,460,#F35E41|618,462,#F25E3E", diff=0.8)  # 天赋红点
+            if not re:
+                Toast('旅人 - 点亮天赋 - 已完成')
+                任务记录['旅人-点亮天赋-完成'] = 1
+                return
+        res = TomatoOcrTap(573, 498, 622, 522, "天赋", sleep1=2)
+        if not res:
+            Toast('旅人-点亮天赋-未找到入口')
+            return
+
+        # 匹配天赋1未装备
+        re = CompareColors.compare("118,160,#F56042|118,164,#F15E42")
+        if re:
+            tapSleep(156, 181)
+
+        for k in range(3):
+            re = TomatoOcrFindRangeClick('领取', x1=78, y1=295, x2=647, y2=1122)
+            if not re:
+                break
+            tapSleep(607, 1030)
+
+        tapSleep(210, 1243)  # 关闭领取技能弹窗
+        tapSleep(210, 1243)
+
+        # 匹配天赋1未装备
+        re, _ = TomatoOcrText(293, 625, 339, 650, '暂未')
+        if re:
+            tapSleep(156, 181, 0.8)  # 点击天赋1
+            tapSleep(173, 495, 0.8)  # 装备天赋
+            tapSleep(353, 864, 0.8)  # 确认装备
+
+        tapSleep(210, 1243)  # 关闭领取技能弹窗
+        tapSleep(210, 1243)
+
+        for p in range(5):
+            re = FindColors.find("358,677,#97999D|367,688,#F15C3E|371,686,#F45F42|375,699,#83868A",
+                                 rect=[82, 364, 682, 1164], diff=0.85, ori=1)  # 匹配可升星-未点击状态
+            if re:
+                tapSleep(re.x, re.y, 1)  # 点击天赋
+            res = TomatoOcrTap(320, 1122, 396, 1152, '解锁', sleep1=2)
+            if res:
+                tapSleep(108, 553, 1)  # 关闭解锁页面，继续点亮
+        tapSleep(90, 1199)  # 返回
+        tapSleep(90, 1199)
 
     # 秘宝
     def updateMiBao(self):
@@ -414,18 +476,28 @@ class LvRenTask:
             re = TomatoOcrTap(156, 1046, 203, 1073, '熔炼')
             if re:
                 # 用户未配置自动熔炼，仅删除一件
-                if 功能开关["满包裹分解装备"] == 0 and needDelete:
-                    # 未勾选史诗+
-                    re = CompareColors.compare(
-                        "120,861,#FEFCF7|121,868,#FEFCF7|121,869,#FEFCF7|127,871,#FEFCF7|124,869,#FEFCF7|131,868,#FEFCF7|126,864,#FEFBF5")
-                    if re:
-                        tapSleep(121, 866)
-                else:
-                    # 未勾选史诗+
-                    re = CompareColors.compare(
-                        "120,861,#FEFCF7|121,868,#FEFCF7|121,869,#FEFCF7|127,871,#FEFCF7|124,869,#FEFCF7|131,868,#FEFCF7|126,864,#FEFBF5")
-                    if re:
-                        tapSleep(121, 866)
+                # 未勾选史诗+
+                re = CompareColors.compare(
+                    "120,868,#4CAD3B|121,868,#4EB13A|126,864,#4EB03A|685,1197,#F4EEDE|685,1216,#F4EEDE")
+                if not re:
+                    tapSleep(121, 866)
+                # 未勾选常见
+                re = CompareColors.compare("494,899,#52AF41|497,904,#55B244|500,899,#64B655")
+                if not re:
+                    tapSleep(500, 896)
+                # 未勾选普通
+                re = CompareColors.compare("369,902,#4CAD3B|371,905,#6EB961|374,902,#51AD40")
+                if not re:
+                    tapSleep(375, 898)
+                # 未勾选优秀
+                re = CompareColors.compare("247,901,#4CAE39|251,904,#4EB13A|252,899,#62B653")
+                if not re:
+                    tapSleep(252, 894)
+                re = CompareColors.compare("118,901,#68B55C|121,902,#4EB13A|127,898,#4DB138")
+                # 未勾选史诗
+                if not re:
+                    tapSleep(124, 899)
+
                 # 判断是否有可选的分解装备
                 re = FindColors.find(
                     "132,314,#4EAE3B|131,320,#DAEFDA|131,323,#4DB039|129,329,#49AC38|129,323,#4EAF3A|135,322,#4CAE39",
@@ -488,8 +560,8 @@ class LvRenTask:
 
         if 任务记录["更换装备-倒计时"] > 0:
             diffTime = time.time() - 任务记录["更换装备-倒计时"]
-            if diffTime < 5 * 60:
-                Toast(f'日常 - 更换装备 - 倒计时{round((5 * 60 - diffTime) / 60, 2)}min')
+            if diffTime < 2 * 60:
+                Toast(f'日常 - 更换装备 - 倒计时{round((2 * 60 - diffTime) / 60, 2)}min')
                 sleep(1.5)
                 return
 
@@ -499,19 +571,20 @@ class LvRenTask:
         if not res:
             return
 
+        TomatoOcrTap(202, 762, 271, 798, '取消')
         任务记录["更换装备-倒计时"] = time.time()
 
-        for i in range(5):
+        for i in range(7):
             res1, x, y = imageFind('旅人-更换装备', x1=61, y1=101, x2=637, y2=568, confidence1=0.8)
             if res1:
                 tapSleep(x, y, 1)
                 tapSleep(544, 337, 2)  # 确认装备
 
-            res2 = FindColors.find("194,654,#FF6D49|189,653,#F66042|191,656,#F05C3F|189,658,#EE5432",
-                                   rect=[88, 620, 652, 825], diff=0.9)
+            res2 = FindColors.find("191,654,#F45F42|189,656,#F15D40|189,654,#F45F42|191,658,#F64E44",
+                                   rect=[64, 620, 644, 1085], diff=0.97)
             if res2:
                 tapSleep(res2.x - 5, res2.y + 10)  # 点击装备
-                tapSleep(366, 995, 2)  # 确认装备
+                tapSleep(366, 995, 5)  # 确认装备
 
             if not res1 and not res2:
                 break
@@ -546,7 +619,7 @@ class LvRenTask:
 
             任务记录["强化装备-倒计时"] = time.time()
 
-            yiJianRes = False
+            yiJianRes = True
             if 功能开关['仅强化武器戒指护腕'] == 0:
                 yiJianRes = imageFindClick('一键强化')
                 # if yiJianRes:

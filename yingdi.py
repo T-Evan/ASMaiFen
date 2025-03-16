@@ -243,8 +243,8 @@ class YingDiTask:
             if res:
                 任务记录["月卡-完成"] = 1
                 tapSleep(60, 1135)  # 点击空白处关闭
-            res2 = TomatoOcrFindRange('续卡')
-            res3 = TomatoOcrFindRange('未激活')
+            res2, _, _ = TomatoOcrFindRange('续卡')
+            res3, _, _ = TomatoOcrFindRange('未激活')
             if res2 or res3:
                 任务记录["月卡-完成"] = 1
             # 支付页兜底
@@ -442,7 +442,7 @@ class YingDiTask:
 
         # 判断秘宝已完成
         isDone = CompareColors.compare(
-            "254,176,#9FA8A8|240,175,#FFFFFF|247,186,#FFFFFF|258,189,#FFFFFF|263,178,#645A66")
+            "235,162,#334654|246,173,#A5A9AC|241,181,#FFFFFF|247,181,#9FA2A6|257,178,#8C9296|262,175,#384153")
         # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=10)
         if isDone:
             Toast('营地任务 - 秘宝领取 - 识别已完成')
@@ -452,18 +452,19 @@ class YingDiTask:
 
         # 点击秘宝
         re = False
-        for i in range(6):
+        for i in range(5):
             re, _ = TomatoOcrText(558, 168, 639, 194, '补充能源')
             if not re:
+                Toast('营地任务 - 秘宝收集 - 识别活动入口')
                 tapSleep(241, 192, 0.5)  # 秘宝
             else:
                 break
 
         if not re:
-            tapSleep(194, 178, 3.5)  # 秘宝
+            tapSleep(194, 178, 2.5)  # 秘宝
             re, _ = TomatoOcrText(630, 1210, 680, 1237, '秘宝')
             if not re:
-                tapSleep(282, 178, 3.5)  # 秘宝
+                tapSleep(282, 178, 2.5)  # 秘宝
                 re, _ = TomatoOcrText(527, 1212, 609, 1237, '秘宝产出')
                 if not re:
                     Toast('营地任务 - 秘宝领取 - 识别未开启')
@@ -486,57 +487,69 @@ class YingDiTask:
             # 领取秘宝能量
             findNL = False
             findNum = 0
-            # 返回上半屏
-            if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
-                re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[44, 8, 626, 45],
-                                     diff=0.96)
-                if not re:
-                    Toast("返回上半屏")
-                    swipe(361, 547, 380, 918)
-                    sleep(1)
 
-            for i in range(4):
+            for i in range(2):
                 Toast('寻找秘宝能量')
                 re, x, y = imageFind('秘宝能量', 0.78)
                 if re:
                     findNL = True
                     tapSleep(x, y, 2)
                     tapSleep(360, 1100)  # 点击空白处关闭
-                else:
-                    # 先找右侧
-                    swipe(525, 1070, 180, 1070)
-                    sleep(2.2)
-                    # 领取秘宝能量
+                if findNL:
+                    break
+
+            # 返回上半屏
+            if not findNL:
+                if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
+                    re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[44, 8, 626, 45],
+                                         diff=0.96)
+                    if not re:
+                        Toast("返回上半屏")
+                        swipe(361, 547, 380, 918)
+                        sleep(1)
+
+                for i in range(4):
+                    Toast('寻找秘宝能量')
                     re, x, y = imageFind('秘宝能量', 0.78)
                     if re:
                         findNL = True
                         tapSleep(x, y, 2)
                         tapSleep(360, 1100)  # 点击空白处关闭
-                if findNL:
-                    break
-                findNum = i
-
-            # 返回左侧
-            for j in range(1, findNum):
-                swipe(180, 1070, 525, 1070)
-                sleep(2.5)
-
-            if not findNL:
-                for i in range(4):
-                    re, x, y = imageFind('秘宝能量', 0.78)
-                    if re:
-                        tapSleep(x, y, 2.5)
-                        tapSleep(360, 1100)  # 点击空白处关闭
-                        break
                     else:
-                        # 再找左侧
-                        swipe(180, 1070, 525, 1070)
+                        # 先找右侧
+                        swipe(525, 1070, 180, 1070)
                         sleep(2.2)
                         # 领取秘宝能量
                         re, x, y = imageFind('秘宝能量', 0.78)
                         if re:
+                            findNL = True
                             tapSleep(x, y, 2)
                             tapSleep(360, 1100)  # 点击空白处关闭
+                    if findNL:
+                        break
+                    findNum = i
+
+                # 返回左侧
+                for j in range(1, findNum):
+                    swipe(180, 1070, 525, 1070)
+                    sleep(2.5)
+
+                if not findNL:
+                    for i in range(4):
+                        re, x, y = imageFind('秘宝能量', 0.78)
+                        if re:
+                            tapSleep(x, y, 2.5)
+                            tapSleep(360, 1100)  # 点击空白处关闭
+                            break
+                        else:
+                            # 再找左侧
+                            swipe(180, 1070, 525, 1070)
+                            sleep(2.2)
+                            # 领取秘宝能量
+                            re, x, y = imageFind('秘宝能量', 0.78)
+                            if re:
+                                tapSleep(x, y, 2)
+                                tapSleep(360, 1100)  # 点击空白处关闭
 
             # 返回下半屏地图
             # if 功能开关["秘宝地图"] == "白帆之都" or 功能开关["秘宝地图"] == "石松沼泽" or 功能开关[
@@ -660,14 +673,14 @@ class YingDiTask:
                         tapSleep(65, 1120, 1)  # 点击空白处关闭
         # 返回营地
         TomatoOcrTap(94, 1183, 125, 1220, "回")
-        sleep(2)
+        sleep(1)
 
     def miBaoChangeMap(self, left, right):
         # 抽取秘宝
         selectMap = 功能开关["秘宝地图"]
         findMap = False
 
-        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
+        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
             re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                  diff=0.96)  # 底部牛皮纸
             if not re:
@@ -677,7 +690,7 @@ class YingDiTask:
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:
@@ -692,7 +705,7 @@ class YingDiTask:
 
         # 再找左侧
         if left < 4 and right == 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野","地底浓林"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:
@@ -810,40 +823,96 @@ class YingDiTask:
 
                 # 原材料
                 if 功能开关['商店原材料'] == 1:
-                    Toast('营地任务 - 仓鼠百货 - 原材料')
-                    imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('原材料', x1=94, y1=560, x2=628, y2=950)
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            Toast('营地任务 - 仓鼠百货 - 原材料')
+                            imageFindClick('仓鼠-原材料', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                            self.shopBuy()
+                        else:
+                            Toast('原材料 - 已购买')
 
                 # 星星经验
                 if 功能开关['商店星星经验'] == 1:
-                    Toast('营地任务 - 仓鼠百货 - 星星经验')
-                    imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('星星经验', x1=94, y1=560, x2=628, y2=950)
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            Toast('营地任务 - 仓鼠百货 - 星星经验')
+                            imageFindClick('星星经验', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                            self.shopBuy()
+                        else:
+                            Toast('星星经验 - 已购买')
 
                 if 功能开关['商店全价兽粮'] == 1:
-                    Toast('营地任务 - 仓鼠百货 - 全价兽粮')
-                    imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('全价兽粮', x1=94, y1=560, x2=628, y2=950)
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            Toast('营地任务 - 仓鼠百货 - 全价兽粮')
+                            imageFindClick('全价兽粮', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                            self.shopBuy()
+                        else:
+                            Toast('全价兽粮 - 已购买')
 
                 if 功能开关['商店超级成长零食三折'] == 1:
-                    Toast('营地任务 - 仓鼠百货 - 超级成长零食三折')
-                    imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('超级成长零食', x1=94, y1=560, x2=628, y2=950)
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            Toast('营地任务 - 仓鼠百货 - 超级成长零食三折')
+                            imageFindClick('超级成长零食三折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                            self.shopBuy()
+                        else:
+                            Toast('超级成长零食三折 - 已购买')
 
                 if 功能开关['商店黑烬突破石五折'] == 1:
-                    Toast('营地任务 - 仓鼠百货 - 黑烬突破石五折')
-                    imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('黑烬突破石', x1=94, y1=560, x2=628, y2=950)
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            Toast('营地任务 - 仓鼠百货 - 黑烬突破石五折')
+                            imageFindClick('黑烬突破石五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                            self.shopBuy()
+                        else:
+                            Toast('黑烬突破石五折 - 已购买')
 
                 if 功能开关['商店经验补剂五折'] == 1:
-                    Toast('营地任务 - 仓鼠百货 - 经验补剂五折')
-                    imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('经验补剂', x1=94, y1=560, x2=628, y2=950)
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            Toast('营地任务 - 仓鼠百货 - 经验补剂五折')
+                            imageFindClick('经验补剂五折', x1=55, y1=479, x2=655, y2=951, confidence1=0.8)
+                            self.shopBuy()
+                        else:
+                            Toast('经验补剂五折 - 已购买')
 
                 if 功能开关['商店金币箱五折'] == 1:
-                    Toast('营地任务 - 仓鼠百货 - 金币箱五折')
-                    TomatoOcrFindRangeClick('金币箱', x1=78, y1=751, x2=637, y2=961, match_mode='fuzzy')
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('金币箱', x1=94, y1=560, x2=628, y2=950, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            Toast('营地任务 - 仓鼠百货 - 金币箱五折')
+                            TomatoOcrFindRangeClick('金币箱', x1=78, y1=751, x2=637, y2=961, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('金币箱五折 - 已购买')
 
         # 秘境补给
         if 功能开关['秘境补给'] == 1:
@@ -855,30 +924,92 @@ class YingDiTask:
                 Toast('秘境补给劵不足 - 跳过兑换')
             else:
                 if 功能开关['秘境补给星钻'] == 1:
-                    TomatoOcrFindRangeClick('星钻', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('星钻', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('星钻', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('星钻 - 已购买')
 
                 if 功能开关['秘境补给群星自选包'] == 1:
-                    TomatoOcrFindRangeClick('群星自选', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('群星自选', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('群星自选', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('群星自选 - 已购买')
 
                 if 功能开关['秘境补给史诗经验'] == 1:
-                    TomatoOcrFindRangeClick('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('史诗经验 - 已购买')
 
                 swipe(356, 954, 352, 511)  # 下滑
                 sleep(1)
+
+                # 兜底史诗经验在下一页
+                if 功能开关['秘境补给史诗经验'] == 1:
+                    re, x, y = TomatoOcrFindRange('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('史诗经验 - 已购买')
+
                 if 功能开关['秘境补给绮想妙成真'] == 1:
-                    TomatoOcrFindRangeClick('妙成真', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('妙成真', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('妙成真', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('妙成真 - 已购买')
 
                 if 功能开关['秘境补给黑烬突破石'] == 1:
-                    TomatoOcrFindRangeClick('突破石', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('突破石', x1=94, y1=560, x2=628, y2=950, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('突破石', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('突破石 - 已购买')
 
                 if 功能开关['秘境补给星星经验'] == 1:
-                    TomatoOcrFindRangeClick('星星经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
-                    self.shopBuy()
+                    re, x, y = TomatoOcrFindRange('星星经验', x1=94, y1=560, x2=628, y2=950, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('星星经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('星星经验 - 已购买')
 
         # 返回营地
         TomatoOcrTap(67, 1182, 121, 1221, "返回")
@@ -888,6 +1019,8 @@ class YingDiTask:
 
     def shopBuy(self):
         re1, _ = TomatoOcrText(282, 400, 434, 459, '购买道具')
+        if not re1:
+            re1, _ = TomatoOcrText(330, 836, 388, 858, '购买')
         re2 = False
         if re1:
             re = TomatoOcrTap(475, 785, 513, 811, '最大', offsetX=5, offsetY=5)
@@ -910,4 +1043,5 @@ class YingDiTask:
                 # tapSleep(360, 855, 0.6)  # 购买
                 if re:
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
+            tapSleep(360, 1100)  # 点击空白处关闭
             tapSleep(360, 1100)  # 点击空白处关闭

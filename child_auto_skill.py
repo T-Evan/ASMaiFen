@@ -57,7 +57,8 @@ class AutoSkill:
 
             # 关闭进入战斗后启动时，依赖主线程判断是否进入战斗状态
             if 功能开关['技能进入战斗后启动'] == 0:
-                if 功能开关["fighting"] == 0:
+                if 功能开关["fighting"] == 0 and 功能开关["home_fighting"] == 0:
+                    res = TomatoOcrTap(644, 878, 687, 902, "手动", 10, -10)
                     sleep(2)
                     continue
 
@@ -65,7 +66,7 @@ class AutoSkill:
             if self.fighting == 0 or time.time() - self.lastCheckFighting > 5:
                 re1 = CompareColors.compare(
                     "657,324,#F3EDDD|659,324,#F3EDDD|664,331,#F3EDDD|676,329,#F3EDDD|681,337,#F3EDDD|687,334,#F3EDDD")  # 战斗内队伍图标
-                if re1:
+                if re1 or 功能开关["home_fighting"] == 1:
                     res3, _ = TomatoOcrText(647, 879, 686, 904, '自动')  # 辅助施法-识别战斗状态
                     res4, _ = TomatoOcrText(647, 879, 686, 904, '手动')  # 辅助施法-识别战斗状态
                     # print('辅助施法-识别战斗状态')

@@ -224,14 +224,21 @@ def waitInvite():
         elif '深林' in 任务记录["战斗-关卡名称"]:
             功能开关['史莱姆选择'] = '暴走深林大王'
         # 判断带队为最新关卡，默认开启宝箱
-        if 任务记录["玩家-当前关卡"] != "" and len(任务记录["战斗-关卡名称"]) > 4 and (
-                任务记录["玩家-当前关卡"] in 任务记录["战斗-关卡名称"] or (
-                "挑战" in 任务记录["玩家-当前关卡"] and "挑战" in 任务记录["战斗-关卡名称"])) and tmpBx == 0:
+        needOpen = False
+        # 非挑战关卡，对比名称相同
+        if "挑战" not in 任务记录["战斗-关卡名称"] and has_common_chars(任务记录["玩家-当前关卡"],
+                                                                        任务记录["战斗-关卡名称"]):
+            needOpen = True
+        # 挑战关卡（当前仅一个），对比都有 挑战 关键字
+        if "挑战" in 任务记录["玩家-当前关卡"] and "挑战" in 任务记录["战斗-关卡名称"]:
+            needOpen = True
+        if needOpen and tmpBx == 0:
             # 若配置要求不开宝箱，则最新关卡也不开启
-            Toast('带队最新关卡，战斗后开启宝箱')
-            print(f'{任务记录["玩家-当前关卡"]}-{任务记录["战斗-关卡名称"]}')
+            Toast(f'带队最新关卡，战斗后开启宝箱,{任务记录["玩家-当前关卡"]}-{任务记录["战斗-关卡名称"]}')
             功能开关["秘境不开宝箱"] = 0
-            功能开关["补充体力次数"] = 3
+            # 功能开关["补充体力次数"] = 3
+        else:
+            Toast(f'非最新关卡,不开启宝箱,{任务记录["玩家-当前关卡"]}-{任务记录["战斗-关卡名称"]}')
 
         fight_type = checkFightType()
         if fight_type == '':
@@ -652,3 +659,15 @@ def checkFightType():
         # if fight_type == '':
         #     fight_type = '暴走带队'
     return fight_type
+
+
+def has_common_chars(A, B):
+    # 将字符串转换为集合以获取唯一字符
+    set_A = set(A)
+    set_B = set(B)
+
+    # 计算两个集合的交集
+    common_chars = set_A.intersection(set_B)
+
+    # 检查交集的大小是否至少为4
+    return len(common_chars) >= 4

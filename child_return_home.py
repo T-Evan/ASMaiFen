@@ -38,7 +38,7 @@ def returnHome():
                 Toast('线程-返回首页1')
 
         if i > 3 and not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
-            return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 7, 1111, 176, 1243, timeLock=5,
+            return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
                                               offsetX=20, offsetY=20,
                                               keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
                                                         {'keyword': '营地', 'match_mode': 'fuzzy'}])
@@ -77,7 +77,9 @@ def returnHome():
             if not res2:
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
-                    shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
+                    shou_ye2, _ = TomatoOcrText(545,381,628,404, "新手试炼")
+                    if not shou_ye2:
+                        shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
                 # 暂不处理，提高执行效率
                 # if not shou_ye1:
                 #     shou_ye2 = TomatoOcrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
@@ -173,10 +175,10 @@ def openTreasure(noNeedOpen=0):
                 if not res:
                     res = TomatoOcrFindRangeClick("全赞", x1=480, y1=490, x2=615, y2=768,
                                                   match_mode='fuzzy')  # 一键点赞
-            if not res:
-                for i in range(1, 4):
-                    imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
-                    imageFindClick('点赞2', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
+            # if not res:
+            #     for i in range(1, 4):
+            #         imageFindClick('点赞1', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
+            #         imageFindClick('点赞2', confidence1=0.8, x1=107, y1=279, x2=633, y2=809, sleep1=0.7)
 
     attempts = 0  # 初始化尝试次数
     maxAttempts = 3  # 设置最大尝试次数
@@ -254,7 +256,7 @@ def openTreasure(noNeedOpen=0):
         if not res:
             # 识别战斗结束页提前返回
             res1 = False
-            res1 = TomatoOcrFindRange("通关奖励", x1=112, y1=456, x2=620, y2=1032)  # 战斗结束页。宝箱提示
+            res1, _, _ = TomatoOcrFindRange("通关奖励", x1=112, y1=456, x2=620, y2=1032)  # 战斗结束页。宝箱提示
             if res1:
                 tapSleep(645, 1235, 3)  # 战斗结束页确认不领取
                 # res = TomatoOcrTap(329, 728, 386, 759, "确定")  # 战斗结束页确认退出

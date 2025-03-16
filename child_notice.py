@@ -19,11 +19,11 @@ def main():
     while True:
         if 功能开关["fighting"] == 0:
             # print('空白弹窗处理线程 - 运行中')
-            sleep(2)  # 等待 5 秒
+            sleep(4)  # 等待 5 秒
             noticeCancel()
         if 功能开关["fighting"] == 1 and 功能开关["needHome"] == 0:
             # print('空白弹窗处理线程 - 运行中')
-            sleep(4)  # 等待 5 秒
+            sleep(5)  # 等待 5 秒
             noticeCancel()
         if 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
             currTime = time.time() - checkLoginTime
@@ -64,6 +64,8 @@ def noticeCancel():
         res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
                                       offsetX=20, offsetY=40,
                                       keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
+        # res = PaddleOcrFindRangeClick('空白', 0.9, 0.9, 107, 759, 603, 1257, timeLock=5,
+        #                               offsetX=20, offsetY=40, match_mode='fuzzy')
         # res = CompareColors.compare(
         #     "341,872,#A09BA7|345,872,#A09BA7|339,884,#9E9AA5|344,884,#9E9AA5|359,872,#A49FAB|362,884,#A09BA7")
         # if not res:
@@ -104,6 +106,16 @@ def noticeCancel():
                 Toast('跳过教程')
             checkSkipTime = time.time()
 
+        # 跳过对话
+        re = CompareColors.compare(
+            "671,1253,#F4EEDE|666,1235,#F4EEDE|664,1201,#F4EEDE|685,1197,#F4EEDE|685,1216,#F4EEDE")
+        if re:
+            for k in range(10):
+                tapSleep(652, 1243)
+                tmp = CompareColors.compare(
+                    "671,1253,#F4EEDE|666,1235,#F4EEDE|664,1201,#F4EEDE|685,1197,#F4EEDE|685,1216,#F4EEDE")
+                if not tmp:
+                    break
         # res = TomatoOcrFindRange('本轮时长', 0.9, 113, 831, 720, 1280, whiteList='本轮时长', timeLock=10)
         # if res:
         # re = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=130, y1=294, x2=632, y2=1191, timeLock=5,

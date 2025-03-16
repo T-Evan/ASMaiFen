@@ -80,6 +80,8 @@ class StartUp:
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
+                    if not shou_ye2:
+                        shou_ye2, _ = TomatoOcrText(546,378,628,405, "新手试炼")
             if res2 or shou_ye1 or shou_ye2:
                 # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
                 return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)
@@ -105,7 +107,7 @@ class StartUp:
                     # 结束应用
                     r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
                     # 重启游戏
-                    self.start_app()
+                    return self.start_app()
 
             Toast(f'启动游戏，等待加载中，{attempt}/{max_attempt}')
 
@@ -192,8 +194,8 @@ class StartUp:
 
         shou_ye = False
         for loopCount in range(1, 4):  # 循环3次，从1到3
-            shou_ye1 = TomatoOcrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
-            shou_ye2 = TomatoOcrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
+            shou_ye1, _, _ = TomatoOcrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')
+            shou_ye2, _, _ = TomatoOcrFindRange('试炼', 0.9, 360, 0, 720, 1280, '试炼')
             # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
             return3 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
             if return3:
