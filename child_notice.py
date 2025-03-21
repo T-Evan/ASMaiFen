@@ -6,6 +6,8 @@ from .res.ui.ui import 功能开关
 from ascript.android.screen import FindColors
 from ascript.android import screen
 from .child_another_login import anotherLogin
+from ascript.android import system
+from ascript.android.system import ShellListener
 
 checkSkipTime = 0
 checkLoginTime = 0
@@ -106,16 +108,23 @@ def noticeCancel():
                 Toast('跳过教程')
             checkSkipTime = time.time()
 
-        # 跳过对话
-        re = CompareColors.compare(
-            "671,1253,#F4EEDE|666,1235,#F4EEDE|664,1201,#F4EEDE|685,1197,#F4EEDE|685,1216,#F4EEDE")
-        if re:
-            for k in range(10):
-                tapSleep(652, 1243)
-                tmp = CompareColors.compare(
-                    "671,1253,#F4EEDE|666,1235,#F4EEDE|664,1201,#F4EEDE|685,1197,#F4EEDE|685,1216,#F4EEDE")
-                if not tmp:
-                    break
+            # 跳过对话
+            re = CompareColors.compare(
+                "671,1253,#F4EEDE|666,1235,#F4EEDE|664,1201,#F4EEDE|685,1197,#F4EEDE|685,1216,#F4EEDE")
+            if re:
+                for k in range(10):
+                    Toast('跳过对话')
+                    tapSleep(652, 1243)
+                    tmp = CompareColors.compare(
+                        "671,1253,#F4EEDE|666,1235,#F4EEDE|664,1201,#F4EEDE|685,1197,#F4EEDE|685,1216,#F4EEDE")
+                    if not tmp:
+                        break
+
+            resConnErr, _ = TomatoOcrText(292, 691, 427, 722, "尝试重新连接")
+            if resConnErr:
+                Toast('网络断开，尝试重启游戏')
+                # 结束应用
+                r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
         # res = TomatoOcrFindRange('本轮时长', 0.9, 113, 831, 720, 1280, whiteList='本轮时长', timeLock=10)
         # if res:
         # re = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=130, y1=294, x2=632, y2=1191, timeLock=5,
@@ -142,3 +151,13 @@ def noticeCancel():
         #     Toast('关闭弹窗')
 
     return
+
+class L(ShellListener):
+    def commandOutput(self, i: int, s: str):
+        print('?', s)
+
+    def commandTerminated(self, i: int, s: str):
+        pass
+
+    def commandCompleted(self, i: int, i1: int):
+        pass

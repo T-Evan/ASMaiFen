@@ -90,12 +90,14 @@ class AutoSkill:
                 self.initAutoSkill()
                 continue
 
+            # print(self.SkillCount, self.SkillNeedCount)
             if self.SkillCount >= self.SkillNeedCount:
+                Toast(f'技能循环{self.SkillCount}次，切换自动施法')
                 res = TomatoOcrTap(644, 878, 687, 902, "手动", 10, -10)
                 self.SkillCount = 0
                 continue
 
-            if 功能开关["技能定时释放"] == 1:
+            if 功能开关["技能定时释放"] == 1 and 功能开关["三技能自动释放"] == 0:
                 re1 = CompareColors.compare(
                     "290,255,#FEDD45|292,258,#FEDD45|292,254,#FEDD45|295,257,#FEDD45")  # boss黄色血条
                 if not re1:
@@ -271,7 +273,7 @@ class AutoSkill:
                 continue
 
             sleep(0.05)
-            if 功能开关["技能定时释放"] == 1:
+            if 功能开关["技能定时释放"] == 1 and 功能开关["三技能自动释放"] == 0:
                 if 功能开关['技能2释放依赖'] == '1技能后释放':
                     re1 = True  # 2技能有前置依赖，不需要单独判断是否进入战斗
                 else:
@@ -514,7 +516,7 @@ class AutoSkill:
                 sleep(1)
                 continue
 
-            if 功能开关["技能定时释放"] == 1:
+            if 功能开关["技能定时释放"] == 1 and 功能开关["三技能自动释放"] == 0:
                 if 功能开关['技能3释放依赖'] == '2技能后释放':
                     re1 = True  # 3技能有前置依赖，不需要单独判断是否进入战斗
                 else:

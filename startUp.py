@@ -58,9 +58,9 @@ class StartUp:
                 TomatoOcrTap(330, 828, 390, 871, '同意')  # 隐私政策更新
 
             # 识别是否进入登录页
-            login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
-            login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
-            if login1 or login2:
+            login1, _ = TomatoOcrText(287, 1019, 339, 1049, "开始")  # 开始冒险之旅
+            # login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
+            if login1:
                 Toast('准备进入游戏')
                 self.login()
             else:
@@ -81,7 +81,7 @@ class StartUp:
                 if not shou_ye1:
                     shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
                     if not shou_ye2:
-                        shou_ye2, _ = TomatoOcrText(546,378,628,405, "新手试炼")
+                        shou_ye2, _ = TomatoOcrText(546, 378, 628, 405, "新手试炼")
             if res2 or shou_ye1 or shou_ye2:
                 # 避免首页识别到冒险手册，但存在未关闭的返回弹窗；兜底识别1次
                 return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)
@@ -123,12 +123,22 @@ class StartUp:
         功能开关["fighting"] = 1
         sleep(0.5)
         # 开始冒险之旅
-        login1, _ = TomatoOcrText(282, 1017, 437, 1051, "开始冒险之旅")
-        if login1:
-            # 切换区服
-            print(功能开关['选择启动区服'])
-            if 功能开关['选择启动区服'] != "":
-                启动区服 = safe_int_v2(功能开关['选择启动区服'])
+        for i in range(2):
+            login1, _ = TomatoOcrText(287, 1019, 339, 1049, "开始")  # 开始冒险之旅
+            if login1:
+                # 切换区服
+                print(功能开关['选择启动区服'])
+                print(任务记录['当前任务账号'])
+                启动区服 = 0
+                if 任务记录['当前任务账号'] != "":
+                    if isinstance(任务记录['当前任务账号'], str):
+                        当前账号 = 任务记录['当前任务账号'].replace('账号', '')
+                    else:
+                        当前账号 = 任务记录['当前任务账号']
+                    if 当前账号 != 0 and 当前账号 != "" and 当前账号 != "0":
+                        启动区服 = safe_int_v2(功能开关[f'账号{当前账号}启动区服'])
+                if 功能开关['选择启动区服'] != "":
+                    启动区服 = safe_int_v2(功能开关['选择启动区服'])
                 if 启动区服 > 0:
                     Toast(f'准备切换区服-{启动区服}区')
                     # 检查当前区服
@@ -167,10 +177,12 @@ class StartUp:
                                 if k == 9:
                                     Toast(f'未找到，{启动区服}区角色')
                                     tapSleep(325, 1117, 1)  # 关闭选区界面
+            if login1:
+                break
 
         login2 = False
         for i in range(5):
-            login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅", sleep1=0.5)
+            login1 = TomatoOcrTap(287, 1019, 339, 1049, "开始", sleep1=0.8)  # 开始冒险之旅
             # 开始冒险
             login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
             if login2:
@@ -231,7 +243,7 @@ class StartUp:
         #     system.reboot()  # 重启应用让配置生效
         sleep(0.5)
         # 判断是否在角色切换页
-        login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
+        login1 = TomatoOcrTap(287, 1019, 339, 1049, "开始")  # 开始冒险之旅
         login2, _ = TomatoOcrText(302, 1199, 414, 1231, "开始冒险")
         if not login1 and not login2:
             # 重启应用
@@ -242,9 +254,15 @@ class StartUp:
             sleep(5)
             for i in range(15):
                 system.open(self.app_name)
-                login1 = TomatoOcrTap(282, 1017, 437, 1051, "开始冒险之旅")
+                功能开关['fighting'] = 0
+                功能开关['needHome'] = 0
+                login1 = TomatoOcrTap(287, 1019, 339, 1049, "开始")  # 开始冒险之旅
                 if login1:
                     break
+                TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
+                                        offsetX=20, offsetY=20,
+                                        keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
+                                                  {'keyword': '营地', 'match_mode': 'fuzzy'}])
                 Toast(f'等待游戏加载{i}/15')
                 sleep(5)
             else:
@@ -344,6 +362,9 @@ class StartUp:
                 if 功能开关['账号' + str(i) + '开关'] == 1 or 功能开关['账号' + str(i) + '开关'] == "true":
                     任务记录['当前任务账号'] = i
                     return self.loadAccount(i)
+                return None
+            return None
+        return None
 
     def multiAccount(self):
         if 功能开关['账号1保存']:
@@ -444,14 +465,16 @@ class StartUp:
         return True
 
     def zhiYeZhanLi(self):
-        res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
-        任务记录["玩家名称"] = name
-        res, fightNum = TomatoOcrText(113, 101, 193, 117, '玩家战力')
-        if fightNum != "":
-            if "万" in fightNum:
-                任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
-            else:
-                任务记录["玩家战力"] = float(fightNum.replace("万", ""))
+        if 任务记录["玩家名称"] == "":
+            res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
+            任务记录["玩家名称"] = name
+        if 任务记录["玩家战力"] == "":
+            res, fightNum = TomatoOcrText(113, 101, 193, 117, '玩家战力')
+            if fightNum != "":
+                if "万" in fightNum:
+                    任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
+                else:
+                    任务记录["玩家战力"] = float(fightNum.replace("万", ""))
         # 识别当前职业
         if 任务记录['玩家-当前职业'] == '':
             re = CompareColors.compare(

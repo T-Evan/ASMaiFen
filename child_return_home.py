@@ -37,11 +37,19 @@ def returnHome():
             if return1 or return2:
                 Toast('线程-返回首页1')
 
+        if i > 3 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
+            # 返回上级页面时二次确认入口通用处理
+            res = openTreasure(noNeedOpen=1)
+
         if i > 3 and not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
-            return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
-                                              offsetX=20, offsetY=20,
-                                              keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
-                                                        {'keyword': '营地', 'match_mode': 'fuzzy'}])
+            return3 = TomatoOcrTap(76, 1161, 126, 1190, '返回', 10, 10)
+            if not return3:
+                return3 = TomatoOcrTap(93, 1190, 143, 1220, '返回', 10, 10)
+                if not return3:
+                    return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
+                                                      offsetX=20, offsetY=20,
+                                                      keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
+                                                                {'keyword': '营地', 'match_mode': 'fuzzy'}])
             # return3 = TomatoOcrTap(89, 1197, 136, 1220, '返回', 10, 10)
             # if not return3:
             #     return3 = TomatoOcrTap(77, 1161, 127, 1191, '营地', 10, 10)
@@ -53,9 +61,6 @@ def returnHome():
             if return3:
                 Toast('线程-返回首页2')
 
-        if i > 3 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
-            # 返回上级页面时二次确认入口通用处理
-            res = openTreasure(noNeedOpen=1)
             # if not res:
             #     re = TomatoOcrFindRangeClick(x1=39, y1=250, x2=674, y2=1205,
             #                                  keywords=[{'keyword': '确定', 'match_mode': 'exact'},
@@ -77,7 +82,7 @@ def returnHome():
             if not res2:
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if not shou_ye1:
-                    shou_ye2, _ = TomatoOcrText(545,381,628,404, "新手试炼")
+                    shou_ye2, _ = TomatoOcrText(545, 381, 628, 404, "新手试炼")
                     if not shou_ye2:
                         shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
                 # 暂不处理，提高执行效率
@@ -109,20 +114,14 @@ def openTreasure(noNeedOpen=0):
         res = TomatoOcrTap(99, 1199, 128, 1234, "回")  # 关闭确认弹窗，返回待领取页
 
     res1 = False
-    res2 = False
-    res3 = False
     tmp2 = False
     tmp3 = False
     tmp4 = False
     # 房间页 - 宝箱UI
     res1 = FindColors.find(
-        "228,569,#7DD7F1|228,580,#E4B76E|228,603,#FFECC5|228,629,#FBF9D4|227,666,#3C6AC4",
-        rect=[101, 260, 611, 1089], diff=0.95)
-    if not res1:
-        res1 = FindColors.find(
-            "299,764,#F3A84B|304,765,#F3A84B|313,763,#F3A84B|321,763,#F3A84B|425,791,#F3A84B|425,776,#F3A84B",
-            rect=[93, 154, 633, 1085])
-    if res1 or res2 or res3:
+        "323,666,#A16944|341,666,#B98353|350,664,#D5B589|369,658,#DAB889|386,658,#C4895B|410,667,#915F3E",
+        rect=[82, 279, 634, 1066], diff=0.9)
+    if res1:
         isTreasure = 1
         # 加锁兜底
 
