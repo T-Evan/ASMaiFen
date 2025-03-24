@@ -7,12 +7,14 @@ from .baseUtils import *
 from .res.ui.ui import 功能开关, 任务记录
 from .shilian import ShiLianTask
 from .daily import DailyTask
+from .yingdi import YingDiTask
 from ascript.android.screen import FindColors
 import pymysql
 import threading
 
 shilianTask = ShiLianTask()
 dailyTask = DailyTask()
+yingdiTask = YingDiTask()
 
 
 # 实例方法
@@ -43,6 +45,8 @@ def main():
                     # if 任务记录["玩家名称"] in {'咸鱼搜麦乐芬', '养只狐狸', '那双眼动人', '风尘三尺剑', '霸王夜引弓',
                     #                             '倚仗数昏鸦', '渡渡'}:
                     任务记录["AI发言-广告开关"] = 1
+
+                yingdiTask.HaoYouYinShen(needOpen=False)
 
                 # 识别玩家所在旅团，做特殊逻辑
                 if 功能开关["仅接收旅团成员邀请"] == 1 and (

@@ -607,6 +607,8 @@ class ShiLianTask:
             Toast("梦魇任务 - 未找到试炼入口 - 重新尝试")
             return
 
+        # 领取狂潮补给
+
         # 判断是否添加佣兵
         if 功能开关["梦魇添加佣兵"] == 1:
             Toast("梦魇任务 - 添加佣兵")
@@ -646,7 +648,10 @@ class ShiLianTask:
         # 判断正在匹配中 - 循环等待300s
         totalWait = 150  # 30000 毫秒 = 30 秒
         elapsed = 0
+        start_time = int(time.time())
         while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
             if elapsed > totalWait:
                 Toast("梦魇任务 - 匹配超时")
                 teamStatus1 = TomatoOcrFindRangeClick('匹配中', whiteList='匹配中', x1=85, y1=288, x2=647, y2=1120)
@@ -654,6 +659,16 @@ class ShiLianTask:
                     teamStatus1 = imageFindClick('队伍-匹配中', x1=85, y1=288, x2=647, y2=1120)
                 if teamStatus1:
                     Toast('梦魇任务 - 匹配超时 - 取消匹配')
+                break
+
+            allQuit, _ = TomatoOcrText(325, 558, 393, 585, "等待加入")
+            if allQuit:
+                Toast("梦魇任务 - 队友全部离队")
+                teamStatus1 = TomatoOcrFindRangeClick('匹配中', whiteList='匹配中', x1=85, y1=288, x2=647, y2=1120)
+                if not teamStatus1:
+                    teamStatus1 = imageFindClick('队伍-匹配中', x1=85, y1=288, x2=647, y2=1120)
+                if teamStatus1:
+                    Toast('梦魇任务 - 队友全部离队 - 取消匹配')
                 break
 
             # 判断无合适队伍，重新开始匹配
@@ -703,10 +718,8 @@ class ShiLianTask:
             res1 = self.WaitFight('梦魇挑战')
             if res1 == True or (not waitStatus1 and not waitStatus2 and not waitStatus3):  # 成功准备战斗 或 未匹配到 或 未进入房间
                 break
-
-            elapsed = elapsed + 5
             Toast(f"匹配中,已等待{round(elapsed / 60, 2)}/{totalWait / 60}分")
-            sleep(5)
+            sleep(0.5)
 
     # 恶龙大通缉
     def elong(self):
@@ -781,8 +794,10 @@ class ShiLianTask:
 
         # 判断正在匹配中 - 循环等待300s
         totalWait = 150  # 30000 毫秒 = 30 秒
-        elapsed = 0
+        start_time = int(time.time())
         while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
             if elapsed > totalWait:
                 Toast("恶龙任务 - 匹配超时")
                 teamStatus1 = TomatoOcrFindRangeClick('匹配中', whiteList='匹配中', x1=85, y1=288, x2=647, y2=1120)
@@ -790,6 +805,19 @@ class ShiLianTask:
                     teamStatus1 = imageFindClick('队伍-匹配中', x1=85, y1=288, x2=647, y2=1120)
                 if teamStatus1:
                     Toast('恶龙任务 - 匹配超时 - 取消匹配')
+                break
+
+            allQuit, _ = TomatoOcrText(325, 558, 393, 585, "等待加入")
+            if not allQuit:
+                allQuit = CompareColors.compare(
+                    "186,405,#F2C173|189,405,#F2C173|192,405,#FFF5B4|194,405,#F4C376|192,399,#FCF1B3")  # 判断是否成为房主
+            if allQuit:
+                Toast("恶龙任务 - 队友全部离队")
+                teamStatus1 = TomatoOcrFindRangeClick('匹配中', whiteList='匹配中', x1=85, y1=288, x2=647, y2=1120)
+                if not teamStatus1:
+                    teamStatus1 = imageFindClick('队伍-匹配中', x1=85, y1=288, x2=647, y2=1120)
+                if teamStatus1:
+                    Toast('恶龙任务 - 队友全部离队 - 取消匹配')
                 break
 
             waitStatus3, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
@@ -842,10 +870,8 @@ class ShiLianTask:
                 任务记录["试炼-恶龙-完成次数"] = 任务记录["试炼-恶龙-完成次数"] + 1
             if res1 == True or (not waitStatus1 and not waitStatus2 and not waitStatus3):  # 成功准备战斗 或 未匹配到
                 break
-
-            sleep(5)
-            elapsed = elapsed + 5
             Toast(f"匹配中,已等待{round(elapsed / 60, 2)}/{totalWait / 60}分")
+            sleep(0.5)
 
     def mijing(self):
         if 任务记录['试炼-秘境-体力消耗完成'] == 1 and 功能开关["秘境无体力继续"] == 0:
@@ -3354,7 +3380,7 @@ class ShiLianTask:
                             Toast('原地不动')
 
     def teamShoutAI(self, content="", shoutType="fight"):
-        sleep(0.5)
+        # sleep(0.3)
         if 功能开关["队伍AI发言"] == 0:
             return
 
@@ -3465,7 +3491,7 @@ class ShiLianTask:
                         res3 = TomatoOcrTap(25, 1096, 104, 1133, "点击输入", 10, 10, sleep1=0.6)
 
                 # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-                sleep(0.3)
+                sleep(0.2)
                 # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
                 # if content != "":
                 #     AI 喊话发送彩色字符
@@ -3488,37 +3514,36 @@ class ShiLianTask:
 
                 res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=52)
                 if not res:
-                    sleep(0.5)
+                    sleep(0.3)
                     res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=52)
+                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=52)
                 if res:
+                    sleep(0.3)
                     res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=52)
-                    if res:
-                        sleep(0.8)
-                        res = TomatoOcrTap(555, 1156, 603, 1188, "发送", offsetX=52)
-                    # 关闭喊话窗口
-                    point = FindColors.find(
-                        "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-                        rect=[11, 26, 364, 489])
-                    if point:
-                        tapSleep(point.x, point.y, 1)
-
-                    # 关闭喊话窗口
-                    point = CompareColors.compare(
-                        "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
-                    if point:
-                        Toast('收起喊话窗口')
-                        tapSleep(107, 93)
-                    # 关闭喊话窗口
-                    point = FindColors.find(
-                        "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-                        rect=[11, 26, 364, 489])
-                    if point:
-                        Toast('收起喊话窗口')
-                        tapSleep(point.x, point.y, 1)
-                    if content == "":
-                        任务记录["队伍喊话-倒计时"] = time.time()
-                    success = 1
-                    continue
+                # # 关闭喊话窗口
+                # point = FindColors.find(
+                #     "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                #     rect=[11, 26, 364, 489])
+                # if point:
+                #     tapSleep(point.x, point.y, 1)
+                #
+                # # 关闭喊话窗口
+                # point = CompareColors.compare(
+                #     "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+                # if point:
+                #     Toast('收起喊话窗口')
+                #     tapSleep(107, 93)
+                # # 关闭喊话窗口
+                # point = FindColors.find(
+                #     "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                #     rect=[11, 26, 364, 489])
+                # if point:
+                #     Toast('收起喊话窗口')
+                #     tapSleep(point.x, point.y, 1)
+                if content == "":
+                    任务记录["队伍喊话-倒计时"] = time.time()
+                success = 1
+                continue
 
             # 关闭喊话窗口
             for i in range(2):
@@ -3754,28 +3779,29 @@ class ShiLianTask:
                 content = ""
                 任务记录['AI发言-检测队友关注'] = 1
                 tapSleep(30, 134, 0.8)  # 点击队友1
-                re, _ = TomatoOcrText(293, 988, 336, 1011, '回关')
-                if not re:
-                    colors = generate_random_color()
-                    content += f"<color={colors}>您还没有关注我喔,麻烦给个关注吧~</COLOR>"
+                re, _ = TomatoOcrText(536, 1060, 595, 1090, '养成')
+                if re:
+                    re, _ = TomatoOcrText(293, 988, 336, 1011, '回关')
+                    if not re:
+                        colors = generate_random_color()
+                        content += f"<color={colors}>您还没有关注我喔,麻烦给个关注吧~</COLOR>"
 
                 if content == "":
                     re, teamName = TomatoOcrText(125, 822, 313, 856, '队友名称')
                     if teamName != "":
-                        tapSleep(448, 1076, 0.3)  # 点击属性页
-                        tapSleep(448, 1076, 0.5)  # 点击属性页
+                        tapSleep(448, 1076, 0.2)  # 点击属性页
+                        # tapSleep(448, 1076, 0.1)  # 点击属性页
                         re, teamFightText = TomatoOcrText(159, 596, 261, 629, '队友战力')
                         # 检查是否包含“万”
-                        print(teamFightText)
+                        # print(teamFightText)
                         teamFightNum = 0
-                        if "万" in teamFightText or "厰" in teamFightText or "廠" in teamFightText or "個" in teamFightText or "麺" in teamFightText or "時" in teamFightText:
-                            teamFightNum = safe_float_v2(
-                                teamFightText.replace("万", "").replace("厰", "").replace("廠", "").replace("個",
-                                                                                                            "").replace(
-                                    "麺", "").replace("時", "").replace("闇", "").replace("間", "")) * 10000
-                        print(teamFightNum)
+                        teamFightNum = safe_float_v2(
+                            teamFightText.replace("万", "").replace("厰", "").replace("廠", "").replace("個",
+                                                                                                        "").replace(
+                                "麺", "").replace("時", "").replace("闇", "").replace("間", "")) * 10000
+                        # print(teamFightNum)
                         print(任务记录['战斗-房主战力'])
-                        tapSleep(96, 1235)  # 返回
+                        tapSleep(96, 1235, 0.1)  # 返回
                         tapSleep(96, 1235, 0.1)  # 返回
                         任务记录['战斗-房主战力'] = safe_int_v2(任务记录['战斗-房主战力'])
                         if 任务记录['战斗-房主战力'] != 0 and teamFightNum != 0:

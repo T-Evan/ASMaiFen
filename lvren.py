@@ -135,8 +135,14 @@ class LvRenTask:
 
         TomatoOcrTap(333, 923, 386, 956, '解锁', sleep1=0.8)  # 首次解锁
         if 功能开关["稚星道途领取"] == 1:
-            re = TomatoOcrTap(614, 1090, 660, 1112, '领取')
-            tapSleep(345, 1238)  # 点击空白处
+            re, time = TomatoOcrText(596, 1055, 626, 1075, '累计时间')
+            time = time.replace(':', '')
+            time = safe_float_v2(time)
+            if time > 13:
+                re = TomatoOcrTap(614, 1090, 660, 1112, '领取')
+                tapSleep(345, 1238)  # 点击空白处
+            else:
+                Toast('集忆时间不足14h，跳过领取')
 
         if 功能开关["稚星道途升级"] == 1:
             for i in range(3):
@@ -353,12 +359,27 @@ class LvRenTask:
                         Toast('猫猫包 - 剩余次数不足')
                         break
 
+                    # 匹配第一个格子空白
                     noMaoBao = CompareColors.compare(
-                        "457,814,#FCF8EE|470,815,#7B6347|480,815,#7C6347|491,819,#FCF8EE|502,820,#FCF8EE|492,833,#FCF8EE")
+                        "233,812,#7C6347|249,817,#DBD5C9|247,823,#FCF8EE|221,825,#FCF8EE|247,801,#FCF8EE|247,801,#FCF8EE")
                     if noMaoBao:
                         Toast('猫猫包 - 剩余猫包不足')
                         break
+
                     Toast('猫猫包 - 自动融合')
+
+                    # 五代猫包手动选择四代猫包融合
+                    re = CompareColors.compare(
+                        "489,803,#B2A799|487,812,#7C6347|487,825,#7C6347|473,823,#FCF8EE|500,820,#FCF8EE")  # 第二个猫包为空
+                    if re:
+                        tapSleep(233, 825, 0.8)  # 点击空白猫包1
+                        tapSleep(549, 915, 0.8)  # 选择最后一个猫包
+                        tapSleep(355, 976, 0.8)  # 确认选择
+
+                        tapSleep(481, 812, 0.8)  # 点击空白猫包2
+                        tapSleep(549, 915, 0.8)  # 选择最后一个猫包
+                        tapSleep(355, 976, 0.8)  # 确认选择
+
                     res = TomatoOcrTap(453, 1016, 510, 1049, "融合", offsetX=5, offsetY=5)
                     res = TomatoOcrTap(333, 1019, 385, 1047, "融合", offsetX=5, offsetY=5)
                     TomatoOcrTap(600, 31, 642, 53, '跳过', offsetX=5, offsetY=5)

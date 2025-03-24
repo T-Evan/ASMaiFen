@@ -385,12 +385,12 @@ class DailyTask:
                 #     content = [f"<color={colors}>{player}~元旦快乐~</COLOR>",
                 #                f"<color={colors}>{player}~新年快乐~</COLOR>", ]
                 #     return self.shijieShout(random.choice(content))
-                blackContent = ['其他区也收']
+                blackContent = ['其他区也收', '不想玩的', '茁', '全区收']
                 contains_zan = any(any(zan in text for zan in blackContent) for text in team_texts)
                 if contains_zan:
-                    res, x, y = TomatoOcrFindRangeClick(player, x1=6, y1=781, x2=295, y2=1098, match_mode='fuzzy')
+                    res, x, y = TomatoOcrFindRange(player, x1=6, y1=781, x2=295, y2=1098, match_mode='fuzzy')
                     if res:
-                        tapSleep(33, y + 20, 0.8)
+                        tapSleep(30, y + 30, 0.8)
                         re = TomatoOcrText(113, 819, 312, 858, player)
                         if re:
                             tapSleep(585, 1006, 0.6)
@@ -545,7 +545,7 @@ class DailyTask:
                 res2 = TomatoOcrTap(17, 1103, 96, 1134, "点击输入", 10, 10)
             if res1 or res2:
                 # 延迟 1 秒以便获取焦点，注意某些应用不获取焦点无法输入
-                sleep(0.5)
+                sleep(0.3)
                 # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
                 action.input(content)
                 tapSleep(360, 104, 0.5)  # 点击空白处确认输入
@@ -555,13 +555,12 @@ class DailyTask:
                     tapSleep(360, 104, 0.5)  # 点击空白处确认输入
                 res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
                 if res:
+                    res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
                     if contentAI == "":
                         任务记录["世界喊话-倒计时"] = time.time()
                     if contentAI != "":
                         任务记录["世界喊话AI-倒计时"] = time.time()
                     # tapSleep(472, 771, 0.5)
-            # 关闭喊话窗口
-            tapSleep(472, 771, 0.8)
 
         if 功能开关['自动切换喊话频道'] == 1 and contentAI == "":
             for i in range(3):
@@ -771,12 +770,19 @@ class DailyTask:
                         break
 
         # 关闭喊话窗口
-        point = FindColors.find(
-            "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-            rect=[11, 26, 364, 489])
-        if point:
-            Toast('关闭喊话窗口')
-            tapSleep(point.x, point.y, 1)
+        for i in range(2):
+            point = FindColors.find(
+                "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                rect=[11, 26, 364, 489])
+            if point:
+                Toast('收起喊话窗口')
+                tapSleep(point.x, point.y, 1)
+
+            point = CompareColors.compare(
+                "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+            if point:
+                Toast('收起喊话窗口')
+                tapSleep(107, 93)
         # 功能开关["fighting"] = 0
         return 0
 
@@ -3405,7 +3411,7 @@ class DailyTask:
                 # 返回首页
                 Toast('营地任务 - 邮件领取 - 重新寻找活动入口')
                 self.homePage()
-                res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.8)
+                res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.6)
             else:
                 break
         if not res:
