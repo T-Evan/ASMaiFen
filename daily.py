@@ -114,13 +114,13 @@ class DailyTask:
                 # 点击首页-冒险
                 re = TomatoOcrTap(330, 1201, 389, 1238, '冒险', sleep1=0.2)
             if res2 or shou_ye1 or shou_ye2:
-                # 关闭喊话窗口
-                point = FindColors.find(
-                    "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-                    rect=[11, 26, 364, 489])
-                if point:
-                    Toast('关闭喊话窗口')
-                    tapSleep(point.x, point.y, 1)
+                # # 关闭喊话窗口
+                # point = FindColors.find(
+                #     "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
+                #     rect=[11, 26, 364, 489])
+                # if point:
+                #     Toast('关闭喊话窗口')
+                #     tapSleep(point.x, point.y, 1)
                 # if TimeoutLock(switch_lock).acquire_lock():
                 功能开关["needHome"] = 0
                 # 功能开关["fighting"] = 0
@@ -402,7 +402,7 @@ class DailyTask:
                                 tapSleep(71, 1223)
                                 tapSleep(71, 1223)
                                 任务记录["世界喊话AI-倒计时"] = 0
-                                return self.shijieShout(f"<color={colors}>已举报{player}，请文明发言</COLOR>")
+                                return self.shijieShout(f"<color={colors}>已举报，{player}，请文明发言</COLOR>")
 
                 zanList3 = ['早安', '早上好']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
@@ -441,7 +441,7 @@ class DailyTask:
                     else:
                         return
                 zanList3 = ['来t', '来T', '来个t', '来个T', '挂个t', '挂个T', '有t', '有T', '找个t', '找个T', '差个t',
-                            '差t', '缺t', '缺T', '缺个t']
+                            '差t', '缺t', '缺T', '缺个t', '来人']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
                     if zhiye == '战':
@@ -481,7 +481,7 @@ class DailyTask:
                                f"<color={colors}>{player}~有的~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~来啦~新年快乐~{extraContent}</COLOR>"]
                     return self.shijieShout(random.choice(content))
-                zanList = ['影子', '求带', '带个', '带带', '差个', '有大哥', '求求']
+                zanList = ['影子', '求带', '带个', '带带', '差个', '有大哥', '求个']
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 if contains_zan:
                     content = [f"<color={colors}>{player}~拉我拉我~{extraContent}</COLOR>",
@@ -548,19 +548,23 @@ class DailyTask:
                 sleep(0.3)
                 # 在输入框中输入字符串 "Welcome." 并回车；此函数在某些应用中无效，如支付宝、密码输入框等位置，甚至可能会导致目标应用闪退
                 action.input(content)
-                tapSleep(360, 104, 0.5)  # 点击空白处确认输入
+                tapSleep(360, 104, 0.2)  # 点击空白处确认输入
                 shuru = TomatoOcrTap(78, 1156, 157, 1191, '点击输入')
                 if shuru:
                     action.input(content)
                     tapSleep(360, 104, 0.5)  # 点击空白处确认输入
-                res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
-                if res:
+                isFaSong = False
+                for k in range(4):
                     res = TomatoOcrTap(555, 1156, 603, 1188, "发送", 10, 10)
-                    if contentAI == "":
-                        任务记录["世界喊话-倒计时"] = time.time()
-                    if contentAI != "":
-                        任务记录["世界喊话AI-倒计时"] = time.time()
-                    # tapSleep(472, 771, 0.5)
+                    if not res and isFaSong:
+                        break
+                    isFaSong = True
+                    sleep(0.3)
+                if contentAI == "":
+                    任务记录["世界喊话-倒计时"] = time.time()
+                if contentAI != "":
+                    任务记录["世界喊话AI-倒计时"] = time.time()
+                # tapSleep(472, 771, 0.5)
 
         if 功能开关['自动切换喊话频道'] == 1 and contentAI == "":
             for i in range(3):
@@ -776,7 +780,7 @@ class DailyTask:
                 rect=[11, 26, 364, 489])
             if point:
                 Toast('收起喊话窗口')
-                tapSleep(point.x, point.y, 1)
+                tapSleep(point.x, point.y)
 
             point = CompareColors.compare(
                 "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
@@ -1024,11 +1028,10 @@ class DailyTask:
             if res1:
                 needNewMap = True
                 tapSleep(93, 1212, 1)  # 返回
-            tapSleep(93, 1212, 1)  # 返回
-            tapSleep(93, 1212, 0.5)  # 返回
+                tapSleep(93, 1212)  # 返回
 
             # 队员不满足时，才会不展示首页的前往下一关快速入口；因此判断开了单飞再从地图跳转下一关
-            if (not newMapOK and 功能开关["队员不满足单飞"] == 1) or newMapOK or needNewMap:
+            if (not newMapOK and 功能开关["队员不满足单飞"] == 1) or needNewMap:
                 res1, _ = TomatoOcrText(573, 200, 694, 238, "新关卡")
                 res2 = False
                 if not res1:
@@ -1082,6 +1085,8 @@ class DailyTask:
                                         res = TomatoOcrTap(435, 729, 532, 759, "留在队伍")
                                     break
                                 break
+                            swipe(500, 800, 500, 600)
+                            sleep(2)
                         else:
                             Toast('前往下一关-关卡大厅-寻找中')
                             res = TomatoOcrTap(373, 1106, 471, 1141, "关卡大厅", offsetX=10, offsetY=10, sleep1=0.7)

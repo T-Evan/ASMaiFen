@@ -86,6 +86,7 @@ class LvRenTask:
             if re:
                 Toast('自动转职 - 开始转职')
                 tapSleep(360, 1077, 0.8)  # 点击转职
+                tapSleep(360, 1077, 0.8)  # 点击转职
                 for t in range(10):
                     re = TomatoOcrTap(293, 1237, 421, 1257, '点击空白处关闭')
                     if re:
@@ -207,7 +208,7 @@ class LvRenTask:
 
         for p in range(5):
             re = FindColors.find("358,677,#97999D|367,688,#F15C3E|371,686,#F45F42|375,699,#83868A",
-                                 rect=[82, 364, 682, 1164], diff=0.85, ori=1)  # 匹配可升星-未点击状态
+                                 rect=[82, 364, 682, 1164], diff=0.8, ori=1)  # 匹配可升星-未点击状态
             if re:
                 tapSleep(re.x, re.y, 1)  # 点击天赋
             res = TomatoOcrTap(320, 1122, 396, 1152, '解锁', sleep1=2)
@@ -363,8 +364,13 @@ class LvRenTask:
                     noMaoBao = CompareColors.compare(
                         "233,812,#7C6347|249,817,#DBD5C9|247,823,#FCF8EE|221,825,#FCF8EE|247,801,#FCF8EE|247,801,#FCF8EE")
                     if noMaoBao:
-                        Toast('猫猫包 - 剩余猫包不足')
-                        break
+                        tapSleep(238, 809, 1)  # 点击第一个格子
+                        re, _ = TomatoOcrText(183, 438, 211, 457, '等级')
+                        if not re:
+                            Toast('猫猫包 - 剩余猫包不足')
+                            break
+                        else:
+                            tapSleep(216,1232)  # 点击空白处
 
                     Toast('猫猫包 - 自动融合')
 
@@ -752,27 +758,30 @@ class LvRenTask:
 
             # 识别可强化标识
             needUpdate = FindColors.find_all(
-                "537,132,#FB7966|541,127,#FA674C|547,132,#FF6655|540,134,#FFFFFF|543,129,#FAEAEA|547,138,#FD6A4F|546,146,#FC6D55|546,145,#F18383|551,134,#FC674A",
-                rect=[86, 119, 623, 495], diff=0.8)
+                "326,463,#F0706D|318,468,#FFFFFF|315,461,#FC694C|319,463,#FDFDFD|331,464,#FC694C|323,471,#F9715A|322,478,#FC694C|333,468,#FC694C",
+                rect=[69, 110, 650, 566], diff=0.85)
             if not needUpdate:
                 Toast('旅人 - 装备进阶 - 无可进阶装备')
             if needUpdate:
                 for p in needUpdate:
                     tapSleep(p.x, p.y, 0.8)
                     # 识别可进阶标识
-                    for i in range(3):
+                    for i in range(4):
                         re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043", diff=0.7)
                         if re:
-                            tapSleep(554, 1076, 0.6)
+                            tapSleep(554, 1076, 1)
                             TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
-                            TomatoOcrTap(200, 762, 301, 797, '继续进阶')
-                            tapSleep(483, 778, 2)  # 确认进阶
-                            tapSleep(129, 1023, 0.3)
+                            if res:
+                                TomatoOcrTap(200, 762, 301, 797, '继续进阶')
+                                tapSleep(483, 778, 1)  # 确认进阶
+                                tapSleep(129, 1023, 0.3)
+                                tapSleep(129, 1023, 0.3)
                             TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
-                            TomatoOcrTap(200, 762, 301, 797, '继续进阶')
-                            tapSleep(483, 778, 2)  # 确认进阶
-                            tapSleep(129, 1023, 0.3)
-                            TomatoOcrTap(94, 1188, 127, 1216, "回")
+                            if res:
+                                TomatoOcrTap(200, 762, 301, 797, '继续进阶')
+                                tapSleep(483, 778, 1)  # 确认进阶
+                                tapSleep(129, 1023, 0.3)
+                                tapSleep(129, 1023, 0.3)
                     tapSleep(652, 1234, 0.2)
                     tapSleep(652, 1234, 0.2)
 

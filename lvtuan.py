@@ -123,10 +123,12 @@ class LvTuanTask:
     # 判断是否战斗中
     def fighting(self):
         attempts = 0  # 初始化尝试次数
-        maxAttempts = 66  # 设置最大尝试次数
+        maxAttempts = 200  # 设置最大尝试次数
         totalWait = maxAttempts * 5
+        start_time = int(time.time())
         while attempts < maxAttempts:
-            elapsed = attempts * 5
+            current_time = int(time.time())
+            elapsed = current_time - start_time
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
@@ -135,7 +137,7 @@ class LvTuanTask:
             else:
                 break  # 识别失败，退出循环
             attempts = attempts + 1
-            sleep(5)
+            sleep(2)
 
         # 战斗结束
         self.openTreasure()
@@ -147,13 +149,13 @@ class LvTuanTask:
 
         Toast("战斗结束 - 开启宝箱")
         while attempts < maxAttempts:
-            attempts = attempts + 3
+            attempts = attempts + 1
             # 调查队宝箱
             # 战斗结束页
             res1 = TomatoOcrTap(340, 1019, 378, 1039, "开启", 10, 20)
             res2 = TomatoOcrTap(340, 1019, 378, 1039, "开户", 10, 20)
             if res1 or res2:
-                sleep(2)
+                sleep(3)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
                 tapSleep(56, 1237)
@@ -162,7 +164,7 @@ class LvTuanTask:
             res1 = TomatoOcrTap(339, 756, 379, 776, "开启")
             res2 = TomatoOcrTap(339, 756, 379, 776, "开户")
             if res1 or res2:
-                sleep(1)
+                sleep(2)
                 tapSleep(340, 930)
                 tapSleep(60, 1150)  # 点击空白处
             if not res1 and not res2:
@@ -173,14 +175,15 @@ class LvTuanTask:
             res1, _ = TomatoOcrText(535, 767, 566, 798, "0")
             res2, _ = TomatoOcrText(301, 1023, 417, 1048, "调查秘钥不足")
             res3, _ = TomatoOcrText(303, 755, 414, 778, "调查秘钥不足")
-            if res1 or res2 or res3:
+            res4, _ = TomatoOcrText(295, 992, 421, 1019, "调查秘钥不足")
+            if res1 or res2 or res3 or res4:
                 Toast("钥匙不足")
-                res = TomatoOcrTap(68, 1201, 130, 1232, "返回")
+                res = TomatoOcrTap(68, 1201, 130, 1232, "返回", sleep1=0.8)
                 if res:
                     res = TomatoOcrTap(329, 723, 391, 762, "确定")
                 else:
                     # 提前退出
-                    tapSleep(60, 1150)  # 点击空白处
+                    tapSleep(60, 1150, 0.8)  # 点击空白处
                     res = TomatoOcrTap(329, 727, 388, 759, "确定")
 
     # 旅团商店
@@ -233,50 +236,131 @@ class LvTuanTask:
                                  rect=[85, 538, 491, 1092], diff=0.9)
             if re:  # 有可购买商品时，继续判断
                 if 功能开关['旅团唤兽琴弦']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '唤兽', 'match_mode': 'fuzzy'}], x1=93, y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '唤兽', 'match_mode': 'fuzzy'}], x1=93, y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '唤兽', 'match_mode': 'fuzzy'}], x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('唤兽 - 已购买')
+
                 if 功能开关['旅团全价兽粮']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '全价兽粮', 'match_mode': 'fuzzy'}], x1=93,
-                                                 y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '全价兽粮', 'match_mode': 'fuzzy'}], x1=93,
+                                                  y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '全价兽粮', 'match_mode': 'fuzzy'}], x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('全价兽粮 - 已购买')
+
                 if 功能开关['旅团超级成长零食']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '超级成长零食', 'match_mode': 'fuzzy'}], x1=93,
-                                                 y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '超级成长零食', 'match_mode': 'fuzzy'}], x1=93,
+                                                  y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '超级成长零食', 'match_mode': 'fuzzy'}],
+                                                    x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('超级成长零食 - 已购买')
+
                 if 功能开关['旅团原材料']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '原材料', 'match_mode': 'fuzzy'}], x1=93, y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '原材料', 'match_mode': 'fuzzy'}], x1=93,
+                                                  y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '原材料', 'match_mode': 'fuzzy'}], x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('原材料 - 已购买')
+
                 if 功能开关['旅团史诗经验']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '史诗经验', 'match_mode': 'fuzzy'}], x1=93,
-                                                 y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '史诗经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                  y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '史诗经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('史诗经验 - 已购买')
+
                 if 功能开关['旅团优秀经验']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '优秀经验', 'match_mode': 'fuzzy'}], x1=93,
-                                                 y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '优秀经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                  y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '优秀经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('优秀经验 - 已购买')
+
                 if 功能开关['旅团普通经验']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '普通经验', 'match_mode': 'fuzzy'}], x1=93,
-                                                 y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '普通经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                  y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '普通经验', 'match_mode': 'fuzzy'}], x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('普通经验 - 已购买')
+
                 if 功能开关['旅团金币']:
-                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '金币', 'match_mode': 'fuzzy'}], x1=93, y1=561,
-                                                 x2=630, y2=1084)
+                    re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '金币', 'match_mode': 'fuzzy'}], x1=93, y1=561,
+                                                  x2=630, y2=1084)
                     if re:
-                        self.shopBuy()
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick(keywords=[{'keyword': '金币', 'match_mode': 'fuzzy'}], x1=93,
+                                                    y1=561,
+                                                    x2=630, y2=1084)
+                            self.shopBuy()
+                        else:
+                            Toast('金币 - 已购买')
 
             # 检查剩余叶子
             res, availableCount = TomatoOcrText(448, 80, 514, 104, "叶子")

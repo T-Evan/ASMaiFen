@@ -40,6 +40,7 @@ def returnHome():
         if i > 3 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             # 返回上级页面时二次确认入口通用处理
             res = openTreasure(noNeedOpen=1)
+            res = TomatoOcrTap(454, 727, 508, 758, "确定")
 
         if i > 3 and not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             return3 = TomatoOcrTap(76, 1161, 126, 1190, '返回', 10, 10)

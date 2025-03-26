@@ -380,7 +380,7 @@ def main():
                     res = dailyTask.newMap(forceCheck=True)
 
                 # 检查背包是否已满
-                lvrenTask.deleteEquip(needDelete=True)
+                lvrenTask.deleteEquip()
 
                 # 试炼
                 shilianTask.shilian()
