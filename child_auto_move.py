@@ -109,8 +109,6 @@ class AutoMove:
                     continue
 
                 if '暴走' in 任务记录['战斗-恶龙名称']:
-                    if '烈焰' in 任务记录['战斗-恶龙名称']:
-                        功能开关["史莱姆选择"] = "暴走烈焰大王"
                     sleep(5)
                     continue
 

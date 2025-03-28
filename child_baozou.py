@@ -32,7 +32,7 @@ def main():
     功能开关['bossLastNumber0'] = ''
     功能开关['bossLastNumber1'] = ''
     功能开关['bossLastNumber2'] = ''
-    功能开关['当前职业'] = ''
+    # 功能开关['当前职业'] = ''
     while True:
         if 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走烈焰大王":
             global yolo

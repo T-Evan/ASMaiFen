@@ -998,7 +998,7 @@ class DailyTask:
                         break
                     功能开关["home_fighting"] = 0
 
-        if 功能开关["自动换图"] == 1 and 功能开关["fighting"] == 0:
+        if 功能开关["自动换图"] == 1:
             Toast("日常 - 前往新地图 - 开始")
             self.homePage()
             # 直接点击图标切换

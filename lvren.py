@@ -208,12 +208,15 @@ class LvRenTask:
 
         for p in range(5):
             re = FindColors.find("358,677,#97999D|367,688,#F15C3E|371,686,#F45F42|375,699,#83868A",
-                                 rect=[82, 364, 682, 1164], diff=0.8, ori=1)  # 匹配可升星-未点击状态
+                                 rect=[82, 364, 682, 1164], diff=0.85, ori=1)  # 匹配可升星-未点击状态
+            if not re:
+                re = FindColors.find("296,675,#F56143|298,678,#F25E41|300,680,#EF5A3D|293,678,#F35C42|290,670,#83878C",
+                                     rect=[53, 252, 623, 1130], diff=0.9, ori=1)  # 匹配可升星-未点击状态
             if re:
-                tapSleep(re.x, re.y, 1)  # 点击天赋
-            res = TomatoOcrTap(320, 1122, 396, 1152, '解锁', sleep1=2)
-            if res:
-                tapSleep(108, 553, 1)  # 关闭解锁页面，继续点亮
+                tapSleep(re.x, re.y + 10, 1)  # 点击天赋
+                res = TomatoOcrTap(320, 1122, 396, 1152, '解锁', sleep1=2)
+                if res:
+                    tapSleep(108, 553, 1)  # 关闭解锁页面，继续点亮
         tapSleep(90, 1199)  # 返回
         tapSleep(90, 1199)
 
@@ -370,7 +373,7 @@ class LvRenTask:
                             Toast('猫猫包 - 剩余猫包不足')
                             break
                         else:
-                            tapSleep(216,1232)  # 点击空白处
+                            tapSleep(216, 1232)  # 点击空白处
 
                     Toast('猫猫包 - 自动融合')
 
