@@ -114,26 +114,9 @@ class DailyTask:
                 # 点击首页-冒险
                 re = TomatoOcrTap(330, 1201, 389, 1238, '冒险', sleep1=0.2)
             if res2 or shou_ye1 or shou_ye2:
-                # # 关闭喊话窗口
-                # point = FindColors.find(
-                #     "107,85,#94A8C4|104,97,#8EA2C2|105,96,#6485B8|115,93,#F3EDDF|121,96,#6584B9|105,107,#6584B9",
-                #     rect=[11, 26, 364, 489])
-                # if point:
-                #     Toast('关闭喊话窗口')
-                #     tapSleep(point.x, point.y, 1)
-                # if TimeoutLock(switch_lock).acquire_lock():
                 功能开关["needHome"] = 0
-                # 功能开关["fighting"] = 0
-                # TimeoutLock(switch_lock).release_lock()
-                # if 任务记录["玩家名称"] == "":
-                #     res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
-                #     任务记录["玩家名称"] = name
-                #     res, fightNum = TomatoOcrText(110, 99, 200, 118, '玩家战力')
-                #     if "万" in fightNum:
-                #         任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
-                #     else:
-                #         任务记录["玩家战力"] = float(fightNum.replace("万", ""))
                 Toast('日常 - 已返回首页')
+                res = TomatoOcrTap(210, 727, 262, 758, "取消")  # 临时兜底匹配超时未关闭确定
                 # sleep(0.5)
                 if 功能开关["fighting"] == 0 and needQuitTeam:
                     quitTeamRe = self.quitTeam()
@@ -3357,7 +3340,7 @@ class DailyTask:
 
         Toast('日常 - 兑换码领取 - 开始')
 
-        duihuanmas = []
+        duihuanmas = ["congmingm"]
         for duihuanma in duihuanmas:
             # 判断是否在营地页面
             res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")

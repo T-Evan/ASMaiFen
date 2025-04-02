@@ -168,8 +168,13 @@ class LvTuanTask:
                 tapSleep(340, 930)
                 tapSleep(60, 1150)  # 点击空白处
             if not res1 and not res2:
-                TomatoOcrFindRangeClick('开启', x1=99, y1=697, x2=626, y2=1152)
-                tapSleep(60, 1150)  # 点击空白处
+                re = TomatoOcrFindRangeClick('开启', x1=99, y1=697, x2=626, y2=1152)
+                if re:
+                    sleep(3)
+                    tapSleep(56, 1237)
+                    tapSleep(56, 1237)
+                    tapSleep(56, 1237)
+
 
             # -- 钥匙不足退出
             res1, _ = TomatoOcrText(535, 767, 566, 798, "0")

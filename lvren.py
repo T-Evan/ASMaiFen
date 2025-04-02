@@ -382,11 +382,11 @@ class LvRenTask:
                         "489,803,#B2A799|487,812,#7C6347|487,825,#7C6347|473,823,#FCF8EE|500,820,#FCF8EE")  # 第二个猫包为空
                     if re:
                         tapSleep(233, 825, 0.8)  # 点击空白猫包1
-                        tapSleep(549, 915, 0.8)  # 选择最后一个猫包
+                        tapSleep(172, 781, 0.8)  # 选择最后一个猫包
                         tapSleep(355, 976, 0.8)  # 确认选择
 
                         tapSleep(481, 812, 0.8)  # 点击空白猫包2
-                        tapSleep(549, 915, 0.8)  # 选择最后一个猫包
+                        tapSleep(296, 785, 0.8)  # 选择最后一个猫包
                         tapSleep(355, 976, 0.8)  # 确认选择
 
                     res = TomatoOcrTap(453, 1016, 510, 1049, "融合", offsetX=5, offsetY=5)
@@ -395,6 +395,16 @@ class LvRenTask:
                     tapSleep(136, 1051)  # 点击空白处
                     tapSleep(136, 1051)  # 点击空白处
                     tapSleep(136, 1051)  # 点击空白处
+
+        # 返回猫包首页
+        TomatoOcrTap(99, 1188, 128, 1216, '回', offsetX=5, offsetY=5, sleep1=1)
+        re = CompareColors.compare("468,170,#F35F42|468,167,#F66143|468,173,#F05A3F")  # 匹配烘焙坊红点
+        if re:
+            # 升级烘焙坊
+            tapSleep(362, 197, 1)
+            TomatoOcrTap(326, 1130, 394, 1158, '升级')
+            TomatoOcrTap(99, 1188, 128, 1216, '回', offsetX=5, offsetY=5, sleep1=1)
+        TomatoOcrTap(99, 1188, 128, 1216, '回', offsetX=5, offsetY=5, sleep1=1)
 
     # 自动升级技能
     def updateSkill(self):
@@ -658,6 +668,7 @@ class LvRenTask:
         TomatoOcrTap(202, 762, 271, 798, '取消')
         任务记录["更换装备-倒计时"] = time.time()
 
+        # 识别战力提升红点
         for i in range(7):
             res1, x, y = imageFind('旅人-更换装备', x1=61, y1=101, x2=637, y2=568, confidence1=0.8)
             if res1:
@@ -672,6 +683,66 @@ class LvRenTask:
 
             if not res1 and not res2:
                 break
+
+        # 识别装备等级提升
+        tapSleep(135, 173, 0.8)  # 点击武器
+        self.changeEquipUtil()
+        tapSleep(576, 176, 0.8)  # 点击头盔
+        self.changeEquipUtil()
+        tapSleep(140, 287, 0.8)  # 点击胸甲
+        self.changeEquipUtil()
+        tapSleep(577, 284, 0.8)  # 点击护腕
+        self.changeEquipUtil()
+        tapSleep(134, 396, 0.8)  # 点击腿甲
+        self.changeEquipUtil()
+        tapSleep(579, 394, 0.8)  # 点击鞋子
+        self.changeEquipUtil()
+        tapSleep(227, 503, 0.8)  # 点击戒指
+        self.changeEquipUtil()
+        tapSleep(356, 505, 0.8)  # 点击项链
+        self.changeEquipUtil()
+        tapSleep(486, 505, 0.8)  # 点击护符
+        self.changeEquipUtil()
+
+    def changeEquipUtil(self):
+        re = TomatoOcrTap(503, 312, 581, 337, '更换装备')
+        if re:
+            re, nowLevel = TomatoOcrText(210, 337, 339, 380, '当前等级')
+            nowLevel = safe_int_v2(nowLevel.replace('等级', ''))
+            if nowLevel > 0:
+                _, newLevel1 = TomatoOcrText(232, 754, 328, 784, '新装备1等级')
+                if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
+                    _, newLevel1 = TomatoOcrText(240, 722, 317, 757, '新装备1等级')
+                if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
+                    _, newLevel1 = TomatoOcrText(236, 626, 330, 664, '新装备1等级')
+                if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
+                    _, newLevel1 = TomatoOcrText(232, 661, 330, 697, '新装备1等级')
+                if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
+                    _, newLevel1 = TomatoOcrText(233, 669, 328, 697, '新装备1等级')
+                newLevel1 = safe_int_v2(newLevel1.replace('等级', ''))
+                if newLevel1 > nowLevel:
+                    TomatoOcrFindRangeClick(keyword='装备', x1=457, y1=525, x2=598, y2=804)
+                    return
+                _, newLevel2 = TomatoOcrText(236, 991, 322, 1022, '新装备2等级')
+                if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
+                    _, newLevel2 = TomatoOcrText(238, 962, 320, 994, '新装备2等级')
+                if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
+                    _, newLevel2 = TomatoOcrText(232, 995, 326, 1022, '新装备2等级')
+                if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
+                    _, newLevel2 = TomatoOcrText(228, 945, 326, 973, '新装备2等级')
+                if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
+                    _, newLevel2 = TomatoOcrText(227, 940, 325, 975, '新装备2等级')
+                newLevel2 = safe_int_v2(newLevel2.replace('等级', ''))
+                if newLevel2 > nowLevel:
+                    TomatoOcrFindRangeClick(keyword='装备', x1=462, y1=817, x2=604, y2=1041)
+                    return
+                if newLevel1 == 0 and newLevel2 == 0:
+                    Toast('未识别到新装备等级')
+                else:
+                    Toast(f'新装备等级{newLevel1}低于当前装备{nowLevel}')
+            if nowLevel == 0:
+                Toast('未识别到当前装备等级')
+        TomatoOcrTap(97, 1188, 129, 1220, '回')
 
     # 自动强化装备
     def updateEquip(self):
@@ -773,16 +844,17 @@ class LvRenTask:
                         re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043", diff=0.7)
                         if re:
                             tapSleep(554, 1076, 1)
-                            TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
+                            res = TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
                             if res:
                                 TomatoOcrTap(200, 762, 301, 797, '继续进阶')
+                                TomatoOcrTap(442, 760, 516, 797, '确认')
                                 tapSleep(483, 778, 1)  # 确认进阶
                                 tapSleep(129, 1023, 0.3)
                                 tapSleep(129, 1023, 0.3)
-                            TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
+                            res = TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
                             if res:
                                 TomatoOcrTap(200, 762, 301, 797, '继续进阶')
-                                tapSleep(483, 778, 1)  # 确认进阶
+                                TomatoOcrTap(442, 760, 516, 797, '确认')
                                 tapSleep(129, 1023, 0.3)
                                 tapSleep(129, 1023, 0.3)
                     tapSleep(652, 1234, 0.2)

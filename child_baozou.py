@@ -49,7 +49,8 @@ def main():
             if 功能开关["fighting"] == 1:
                 # 异步识别boss状态
                 re = CompareColors.compare(
-                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF")  # 匹配boss名称包含大王
+                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF",
+                    diff=0.95)  # 匹配boss名称包含大王
                 if re:
                     daBaoZouLieYanBoss()
                 else:
@@ -66,7 +67,8 @@ def main():
                 # 检测战斗状态
                 # 异步识别boss状态
                 re = CompareColors.compare(
-                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF")  # 匹配boss名称包含大王
+                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF",
+                    diff=0.95)  # 匹配boss名称包含大王
                 if re:
                     daBaoZouShuiBoBoss()
             else:
@@ -74,7 +76,8 @@ def main():
         elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走雷电大王":
             if 功能开关["fighting"] == 1:
                 re = CompareColors.compare(
-                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF")  # 匹配boss名称包含大王
+                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF",
+                    diff=0.95)  # 匹配boss名称包含大王
                 if re:
                     daBaoZouLeiDianBoss()
             else:
@@ -82,7 +85,8 @@ def main():
         elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走深林大王":
             if 功能开关["fighting"] == 1:
                 re = CompareColors.compare(
-                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF")  # 匹配boss名称包含大王
+                    "385,230,#FFFFFF|393,230,#FFFFFF|398,230,#FFFFFF|415,226,#FFFFFF|411,242,#FFFFFF|421,242,#FFFFFF",
+                    diff=0.95)  # 匹配boss名称包含大王
                 if re:
                     daBaoZouShenLinBoss()
             else:

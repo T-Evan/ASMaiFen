@@ -125,65 +125,71 @@ class AutoMove:
                             tapSleep(424, 975)
                         if time.time() - 任务记录['战斗-上一次移动'] > 5:
                             # 黄色牛头boss
-                            re = FindColors.find("98,628,#863F2D|103,628,#853E30|106,628,#873F30",
-                                                 rect=[13, 585, 196, 774], diff=0.93)
+                            re = FindColors.find(
+                                "146,686,#FCBD65|148,694,#FBE193|138,699,#FAF5A9|148,700,#C55B34|150,711,#FAF8CB",
+                                rect=[11, 596, 197, 785], diff=0.93)
                             if re:
                                 任务记录['战斗-上一次移动'] = time.time()
-                                Toast('前往战斗地块')
+                                Toast('前往战斗地块 - 黄')
                                 tapSleep(re.x, re.y)
                                 tapSleep(re.x, re.y)
                                 continue
                             # 蓝色精英兵
-                            re = FindColors.find("151,688,#83E5E8|153,684,#67D1E0|146,691,#98F2EF",
-                                                 rect=[13, 585, 196, 774], diff=0.93)
+                            re = FindColors.find("150,691,#87DBE2|146,694,#A3F7F2|154,691,#89EAED|157,700,#B7FAF5",
+                                                 rect=[11, 596, 197, 785], diff=0.9)
                             if re:
                                 任务记录['战斗-上一次移动'] = time.time()
-                                Toast('前往战斗地块')
+                                Toast('前往战斗地块 - 蓝')
                                 tapSleep(re.x, re.y)
                                 tapSleep(re.x, re.y)
                                 continue
                             re = FindColors.find("105,612,#F05941|72,636,#EE4038|138,634,#E14A4F",
                                                  rect=[11, 585, 210, 798], diff=0.9)
                             # 爆炸图标
-                            re = FindColors.find("56,683,#F6C27D|57,683,#F8C07B|68,691,#FAD395|69,699,#FEEEC9")
+                            re = FindColors.find(
+                                "45,689,#A47466|45,699,#787087|48,703,#966E70|52,699,#F6E5CB|64,697,#9C6863|67,694,#FFDFAE|33,694,#5A638E",
+                                rect=[11, 596, 197, 785], diff=0.93)
                             if re:
                                 任务记录['战斗-上一次移动'] = time.time()
-                                Toast('前往战斗地块')
+                                Toast('前往战斗地块 - 爆炸')
                                 tapSleep(re.x, re.y)
                                 tapSleep(re.x, re.y)
                                 continue
-                            re = FindColors.find("105,612,#F05941|72,636,#EE4038|138,634,#E14A4F",
-                                                 rect=[11, 585, 210, 798], diff=0.9)
+                            re = FindColors.find(
+                                "126,681,#B55150|123,684,#CB2D24|120,686,#C92D24|118,694,#CA2C24|124,705,#CE2D23",
+                                rect=[26, 607, 194, 778], diff=0.9)
                             if re:
                                 任务记录['战斗-上一次移动'] = time.time()
-                                tapSleep(re.x + 20, re.y + 30)  # 移动-红色地块
-                                tapSleep(re.x + 20, re.y + 30)  # 移动-红色地块
-                                Toast('前往战斗地块')
-                            if not re:
-                                re = FindColors.find("105,610,#AD414C|72,637,#B64B48|140,642,#A95863",
-                                                     rect=[11, 585, 210, 798], diff=0.9)
-                                if re:
-                                    任务记录['战斗-上一次移动'] = time.time()
-                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
-                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
-                                    Toast('前往战斗地块')
-                            if not re:
-                                re = FindColors.find("104,708,#BE6D6E|75,735,#A94E4E|138,738,#A94C4D",
-                                                     rect=[17, 590, 200, 789], diff=0.9)
-                                if re:
-                                    任务记录['战斗-上一次移动'] = time.time()
-                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
-                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
-                                    Toast('前往战斗地块')
+                                tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                Toast('前往战斗地块 - 红1')
                             if not re:
                                 re = FindColors.find(
-                                    "154,661,#A76B6C|121,684,#9F5051|186,689,#8E4B4D|184,689,#8D4A4C",
-                                    rect=[23, 598, 194, 784], diff=0.9)
+                                    "28,683,#FF2626|28,683,#FF2626|25,681,#F62826|22,692,#F22A26|26,699,#FE2525|24,696,#FF2727",
+                                    rect=[11, 596, 197, 785], diff=0.9)
                                 if re:
                                     任务记录['战斗-上一次移动'] = time.time()
-                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
-                                    tapSleep(re.x, re.y + 30)  # 移动-红色地块
-                                    Toast('前往战斗地块')
+                                    tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                    tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                    Toast('前往战斗地块 - 红2')
+                            if not re:
+                                re = FindColors.find(
+                                    "28,683,#D52F25|26,686,#D32E24|26,692,#D53026|26,697,#D42E24|28,699,#D42C22|47,714,#7E84B4",
+                                    rect=[11, 596, 197, 785], diff=0.93)
+                                if re:
+                                    任务记录['战斗-上一次移动'] = time.time()
+                                    tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                    tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                    Toast('前往战斗地块 - 红3')
+                            if not re:
+                                re = FindColors.find(
+                                    "31,675,#FC2626|31,680,#FD2929|25,684,#FE282B|28,692,#A099B9|26,707,#E32C25|33,710,#FC2827",
+                                    rect=[11, 596, 197, 785], diff=0.93)
+                                if re:
+                                    任务记录['战斗-上一次移动'] = time.time()
+                                    tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                    tapSleep(re.x + 10, re.y + 10)  # 移动-红色地块
+                                    Toast('前往战斗地块 - 红4')
                         sleep(0.5)
                         continue
                     sleep(0.5)
