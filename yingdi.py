@@ -488,6 +488,8 @@ class YingDiTask:
         # 判断秘宝已完成
         isDone = CompareColors.compare(
             "235,162,#334654|246,173,#A5A9AC|241,181,#FFFFFF|247,181,#9FA2A6|257,178,#8C9296|262,175,#384153")
+        if not isDone:
+            isDone = CompareColors.compare("266,162,#425D7A|249,179,#FFFFFF|255,173,#FFFFFF|247,162,#FEFEFE|258,170,#FFFFFF|262,187,#FFFFFF|271,165,#3D5775")
         # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=10)
         if isDone:
             Toast('营地任务 - 秘宝领取 - 识别已完成')

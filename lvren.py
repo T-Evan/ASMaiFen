@@ -142,20 +142,26 @@ class LvRenTask:
             if time > 13:
                 re = TomatoOcrTap(614, 1090, 660, 1112, '领取')
                 tapSleep(345, 1238)  # 点击空白处
+                tapSleep(345, 1238)  # 点击空白处
             else:
                 Toast('集忆时间不足14h，跳过领取')
 
         if 功能开关["稚星道途升级"] == 1:
-            for i in range(3):
+            for i in range(30):
                 reAll = FindColors.find_all("133,460,#EC5535|134,455,#F45F42|131,456,#F25E41|136,456,#F25E41",
                                             rect=[16, 324, 701, 874])
                 if reAll:
                     for re in reAll:
                         tapSleep(re.x, re.y)
-                        tapSleep(360, 945)  # 点击升级
-                        tapSleep(360, 945)  # 点击升级
-                        tapSleep(360, 945)  # 点击升级
+                        TomatoOcrTap(333, 1077, 387, 1102, '升星')
+                        tapSleep(360, 945, 0.2)  # 点击升级
+                        tapSleep(360, 945, 0.2)  # 点击升级
+                        tapSleep(360, 945, 0.2)  # 点击升级
+                        tapSleep(360, 945, 0.2)  # 点击升级
+                        tapSleep(360, 945, 0.2)  # 点击升级
                         tapSleep(345, 1238)  # 点击空白处
+                else:
+                    break
         任务记录['旅人-稚星道途-完成'] = 1
 
     # 升级天赋
@@ -242,10 +248,9 @@ class LvRenTask:
             Toast('旅人 - 秘宝升星 - 未找到秘宝入口')
             return
 
-        re = CompareColors.compare(
-            "391,143,#DACCB5|394,148,#DACCB5|394,146,#DACCB5|401,142,#DACCB5|401,143,#DACCB5|401,148,#DACCB5")  # 匹配可升星-未点击状态
-        if re:
-            tapSleep(393, 142, 0.8)  # 点击可升星
+        re = CompareColors.compare("344,149,#4DAE3A|348,149,#4EAF3A|350,146,#4BAF39")  # 匹配可升星- 点击状态
+        if not re:
+            tapSleep(348, 143, 0.8)  # 点击可升星
 
         reAll = FindColors.find_all("235,363,#F46042|237,363,#F46042|236,366,#ED5B40", rect=[91, 222, 639, 956])
         if reAll:
@@ -839,10 +844,22 @@ class LvRenTask:
             if needUpdate:
                 for p in needUpdate:
                     tapSleep(p.x, p.y, 0.8)
+                    # 识别可打造标识
+                    re = FindColors.find("587,967,#F25E41|587,967,#F25E41|587,967,#F25E41", diff=0.95)
+                    if re:
+                        Toast('旅人 - 装备进阶 - 准备打造装备')
+                        tmp = TomatoOcrTap(525, 965, 574, 988, '打造', sleep1=4)
+                        if tmp:
+                            Toast('旅人 - 装备进阶 - 开始打造装备')
+                            TomatoOcrTap(326, 991, 391, 1021, '打造', sleep1=3)
+                            tapSleep(167, 1090, 0.8)  # 点击空白处
+                            TomatoOcrTap(330, 825, 385, 855, '装备')  # 装备
+
                     # 识别可进阶标识
                     for i in range(4):
                         re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043", diff=0.7)
                         if re:
+                            Toast('旅人 - 装备进阶 - 开始进阶装备')
                             tapSleep(554, 1076, 1)
                             res = TomatoOcrTap(328, 980, 391, 1008, "进阶", sleep1=0.8)
                             if res:

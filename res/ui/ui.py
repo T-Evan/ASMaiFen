@@ -25,9 +25,9 @@ config = None
 
 def tunner(k, v):
     global config
-    print(k, v)
-    print(k)
-    print(v)
+    # print(k, v)
+    # print(k)
+    # print(v)
 
     if k == "guan" and v == "关闭":
         config = "exit"
@@ -47,7 +47,7 @@ formW.show()
 from threading import Lock
 
 while True:
-    print("循环等待中")
+    # print("循环等待中")
     time.sleep(1)
     if config == "exit":
         Dialog.toast('取消执行', 5, 3 | 48, 200, 0)
@@ -93,9 +93,9 @@ class TimeoutLock:
 
 # 初始化锁
 global switch_lock
-switch_lock = Lock()
-global switch_ocr_apk_lock  # apk ocr 识别锁
-switch_ocr_apk_lock = Lock()
+switch_lock = threading.Lock()
+# global switch_ocr_apk_lock  # apk ocr 识别锁
+# switch_ocr_apk_lock = Lock()
 功能开关 = {}
 功能开关 = config
 功能配置 = {'配置1': config['配置1'], '配置2': config['配置2'], '配置3': config['配置3'], '配置4': config['配置4'],
@@ -208,6 +208,7 @@ def 初始化任务记录(initAll=True):
         "盛大公演": 0,
         "逍遥大圣": 0,
         "来富巳": 0,
+        "魔咒": 0,
         "BBQ派对": 0,
     })
 

@@ -96,7 +96,6 @@ def noticeCancel():
             if res:
                 res = TomatoOcrTap(432, 598, 475, 632, "是", 10, 10)
                 Toast('跳过教程')
-            checkSkipTime = time.time()
 
             # 跳过对话
             re = CompareColors.compare(
@@ -126,6 +125,8 @@ def noticeCancel():
                 if res2:
                     tapSleep(489, 664)  # 点击拒绝
                     Toast('日常任务执行中 - 拒绝邀请')
+
+            checkSkipTime = time.time()
         # res = TomatoOcrFindRange('本轮时长', 0.9, 113, 831, 720, 1280, whiteList='本轮时长', timeLock=10)
         # if res:
         # re = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=130, y1=294, x2=632, y2=1191, timeLock=5,

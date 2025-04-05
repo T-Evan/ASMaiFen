@@ -380,8 +380,8 @@ def waitInvite():
     waitFight = False
     findDoneStatus = False
     teamShout = False
-    waitTime = 0
     totalWait = 50
+    checkTreasure = False
     if 功能开关["自动离房等待时间"] != "":
         totalWait = safe_int_v2(功能开关["自动离房等待时间"])
     start_time = int(time.time())
@@ -403,7 +403,9 @@ def waitInvite():
             Toast('行李页-返回首页')
             tapSleep(355, 1202)
         Toast(f'{fight_type}-等待队长开始{elapsed}/{totalWait}s')
-        shilianTask.openTreasure(noNeedOpen=1)
+        if not checkTreasure:
+            shilianTask.openTreasure(noNeedOpen=1)
+            checkTreasure = True
 
         # 兜底，已在队伍中时，停止返回操作
         功能开关["fighting"] = 1

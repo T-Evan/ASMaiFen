@@ -6,7 +6,7 @@ from ascript.android.ui import Dialog
 from .tomato_ocr import tomatoOcr
 from ascript.android import screen
 from .res.ui.ui import switch_lock
-from .res.ui.ui import switch_ocr_apk_lock
+# from .res.ui.ui import switch_ocr_apk_lock
 from ascript.android.system import R
 from ascript.android import plug
 from .res.ui.ui import TimeoutLock
@@ -157,17 +157,17 @@ import random
 def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='', timeLock=10, bitmap=''):
     try:
         try:
-            # with TimeoutLock(timeLock):
-            if bitmap == '':
-                ocrRe = tomatoOcr.find_all(
-                    license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    run_mode='fast', capture=[x1, y1, x2, y2])
-            else:
-                ocrRe = tomatoOcr.find_all(
-                    license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    run_mode='fast', bitmap=bitmap)
+            with TimeoutLock(timeLock):
+                if bitmap == '':
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        run_mode='fast', capture=[x1, y1, x2, y2])
+                else:
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        run_mode='fast', bitmap=bitmap)
             # print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrTextRange获取锁超时")
@@ -232,17 +232,17 @@ def TomatoOcrFindRange(keyword='T^&*', confidence1=0.9, x1=0, y1=0, x2=720, y2=1
         if keywords is None:
             keywords = []
         try:
-            # with TimeoutLock(timeLock):
-            if bitmap == '':
-                ocrRe = tomatoOcr.find_all(
-                    license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    run_mode='fast', capture=[x1, y1, x2, y2])
-            else:
-                ocrRe = tomatoOcr.find_all(
-                    license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    run_mode='fast', bitmap=bitmap)
+            with TimeoutLock(timeLock):
+                if bitmap == '':
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        run_mode='fast', capture=[x1, y1, x2, y2])
+                else:
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        run_mode='fast', bitmap=bitmap)
             # print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrFindRange获取锁超时-{keyword}")
@@ -330,17 +330,17 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
         if keywords is None:
             keywords = []
         try:
-            # with TimeoutLock(timeLock):
-            if bitmap == '':
-                ocrRe = tomatoOcr.find_all(
-                    license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    run_mode='fast', capture=[x1, y1, x2, y2])
-            else:
-                ocrRe = tomatoOcr.find_all(
-                    license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
-                    rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
-                    run_mode='fast', bitmap=bitmap)
+            with TimeoutLock(timeLock):
+                if bitmap == '':
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        run_mode='fast', capture=[x1, y1, x2, y2])
+                else:
+                    ocrRe = tomatoOcr.find_all(
+                        license="DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO", remark="挂机吧麦芬",
+                        rec_type="ch-3.0", box_type="rect", ratio=1.9, threshold=0.3, return_type='json', ocr_type=3,
+                        run_mode='fast', bitmap=bitmap)
             # print(ocrRe)
         except RuntimeError as e:
             print(f"TomatoOcrFindRangeClick获取锁超时-{keyword}")
@@ -406,10 +406,10 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
         # 传入图片路径或者Bitmap
         # res = ocr.ocrFile(R.img("logo.png"))
         try:
-            # with TimeoutLock():
-            bitmap = screen.capture(x1, y1, x2, y2)
-            tomatoOcr.setReturnType('json')
-            ocrText = tomatoOcr.ocrBitmap(bitmap, 2)
+            with TimeoutLock():
+                bitmap = screen.capture(x1, y1, x2, y2)
+                tomatoOcr.setReturnType('json')
+                ocrText = tomatoOcr.ocrBitmap(bitmap, 2)
             # print(ocrText)
         except RuntimeError as e:
             print(f"TomatoOcrText获取锁超时")
@@ -434,10 +434,10 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
 def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
     try:
         try:
-            # with TimeoutLock():
-            bitmap = screen.capture(x1, y1, x2, y2)
-            tomatoOcr.setReturnType('json')
-            ocrText = tomatoOcr.ocrBitmap(bitmap, 2)
+            with TimeoutLock():
+                bitmap = screen.capture(x1, y1, x2, y2)
+                tomatoOcr.setReturnType('json')
+                ocrText = tomatoOcr.ocrBitmap(bitmap, 2)
             # print(ocrText)
         except RuntimeError as e:
             print(f"TomatoOcrTap获取锁超时")

@@ -31,7 +31,7 @@ class StartUp:
         # r = system.shell(f"start -n com.xd.cfbmf")
         tryTimes = 0
 
-        max_attempt = 14
+        max_attempt = 18
         for attempt in range(max_attempt):
             tryTimes = tryTimes + 1
             if 功能开关["fighting"] == 1:

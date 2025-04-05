@@ -85,6 +85,8 @@ class LvTuanTask:
                         break
 
             sleep(1)
+            # 领取前一次宝箱
+            self.openTreasure()
 
             # 检查剩余钥匙
             if 功能开关['调查队无钥匙继续'] == "" or 功能开关['调查队无钥匙继续'] == 0:
@@ -122,13 +124,15 @@ class LvTuanTask:
 
     # 判断是否战斗中
     def fighting(self):
-        attempts = 0  # 初始化尝试次数
-        maxAttempts = 200  # 设置最大尝试次数
-        totalWait = maxAttempts * 5
+        totalWait = 500
         start_time = int(time.time())
-        while attempts < maxAttempts:
+        while 1:
             current_time = int(time.time())
             elapsed = current_time - start_time
+            if elapsed > totalWait:
+                Toast(f'调查队战斗超时 - 退出组队')
+                self.quitTeamFighting()
+                break
             res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
             res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
             res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
@@ -136,18 +140,32 @@ class LvTuanTask:
                 Toast(f'调查队战斗中,战斗时长{elapsed}/{totalWait}秒')
             else:
                 break  # 识别失败，退出循环
-            attempts = attempts + 1
-            sleep(2)
+            self.fight_fail_alert()
 
         # 战斗结束
         self.openTreasure()
+
+    # 战斗中退出组队
+    def quitTeamFighting(self):
+        for i in range(2):
+            # sleep(0.5)
+            self.fight_fail_alert()
+            res = TomatoOcrTap(649, 319, 694, 342, "队伍", sleep1=0.8)
+            res = TomatoOcrTap(501, 191, 581, 217, "离开队伍", sleep1=0.8)
+            res = TomatoOcrTap(329, 726, 391, 761, "确定", sleep1=0.8)
+        quitRes = self.dailyTask.quitTeam()
+        # sleep(0.5)
+
+    def fight_fail_alert(self):
+        res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认战败
+        res = TomatoOcrTap(588, 637, 630, 661, "同意")  # 点击同意重新开始
+        res = TomatoOcrTap(453, 961, 549, 989, "再次挑战")  # 点击同意再次挑战
 
     # 领取宝箱（调查队）
     def openTreasure(self):
         attempts = 0
         maxAttempts = 2
 
-        Toast("战斗结束 - 开启宝箱")
         while attempts < maxAttempts:
             attempts = attempts + 1
             # 调查队宝箱
@@ -164,17 +182,19 @@ class LvTuanTask:
             res1 = TomatoOcrTap(339, 756, 379, 776, "开启")
             res2 = TomatoOcrTap(339, 756, 379, 776, "开户")
             if res1 or res2:
+                Toast("战斗结束 - 开启宝箱")
                 sleep(2)
-                tapSleep(340, 930)
-                tapSleep(60, 1150)  # 点击空白处
+                tapSleep(129, 995)
+                tapSleep(129, 995)  # 点击空白处
+                tapSleep(129, 995)  # 点击空白处
             if not res1 and not res2:
                 re = TomatoOcrFindRangeClick('开启', x1=99, y1=697, x2=626, y2=1152)
                 if re:
+                    Toast("战斗结束 - 开启宝箱")
                     sleep(3)
                     tapSleep(56, 1237)
                     tapSleep(56, 1237)
                     tapSleep(56, 1237)
-
 
             # -- 钥匙不足退出
             res1, _ = TomatoOcrText(535, 767, 566, 798, "0")
@@ -528,13 +548,13 @@ class LvTuanTask:
         # 判断是否在旅团页面
         isLvtuan = False
         for i in range(2):
-            res = TomatoOcrFindRangeClick("许愿墙", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+            res = TomatoOcrFindRangeClick("许愿墙", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-30)
             if not res:
                 # 返回首页
                 self.dailyTask.homePage()
                 res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                 # 判断是否在旅团页面
-                res = TomatoOcrFindRangeClick("许愿墙", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
+                res = TomatoOcrFindRangeClick("许愿墙", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-30)
                 if res:
                     isLvtuan = True
                     break
@@ -654,4 +674,4 @@ class LvTuanTask:
                         tapSleep(510, 1216, 0.3)  # 点击空白处关闭
                         # tapSleep(510,1216,0.3)  # 点击空白处关闭
 
-            res = TomatoOcrTap(167, 1183, 205, 1223, "回")  # 返回旅团首页
+            res = TomatoOcrTap(172, 1190, 206, 1216, "回")  # 返回旅团首页
