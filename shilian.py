@@ -1765,8 +1765,8 @@ class ShiLianTask:
         res4 = False
         if not res1:
             res2 = TomatoOcrTap(453, 650, 505, 684, "准备")  # 恶龙准备
-        if not res1 and not res2:
-            res4 = TomatoOcrFindRangeClick('准备', x1=94, y1=276, x2=633, y2=1089)  # 全屏识别准备按钮
+        # if not res1 and not res2:
+        #     res4 = TomatoOcrFindRangeClick('准备', x1=94, y1=276, x2=633, y2=1089)  # 全屏识别准备按钮
 
         # 队伍满员，开始挑战
         res, _ = TomatoOcrText(396, 622, 468, 650, "开启挑战")  # 队伍已满员，准备开启挑战
@@ -2001,7 +2001,10 @@ class ShiLianTask:
                 totalWait = 360
         Toast("战斗开始 - 三魔头组队邀请")
         failNum = 0  # 战斗中状态识别失败次数
+        start_time = int(time.time())
         while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
             if elapsed >= totalWait:
                 Toast("战斗结束 - 三魔头超时退出组队")
                 self.teamShoutAI(f'三魔头-即将离队-期待下次相遇', shoutType="fight")
@@ -2034,11 +2037,11 @@ class ShiLianTask:
                 res3 = TomatoOcrTap(323, 1106, 391, 1137, "开启")  # 领取宝箱
                 res4 = CompareColors.compare(
                     "448,803,#FFE298|445,782,#F8D37E|448,770,#FBD682|426,770,#D0714C|483,763,#9C3B43")  # 匹配宝箱颜色
-                res5 = TomatoOcrText(513, 899, 590, 923, '战斗统计')
+                res5 = TomatoOcrText(513, 885, 592, 905, '战斗统计')
                 if res1 or res2 or res3 or res4 or res5:
                     Toast("三打三守三魔头 - 战斗结束 - 战斗胜利")
                     功能开关["fighting"] = 0
-                    sleep(2)
+                    sleep(1)
                     tapSleep(55, 1140)  # 领取后，点击空白
                     tapSleep(60, 1100)  # 领取后，点击空白
                     tapSleep(50, 1234)  # 领取后，点击空白
@@ -2059,6 +2062,7 @@ class ShiLianTask:
             if elapsed > 180 or (
                     "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 Toast(f"三魔头战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                sleep(1)
                 failNum = failNum + 1
                 if failNum > 4:
                     Toast(f"三魔头战斗中状态 - 识别失败 - 退出战斗")
@@ -2067,8 +2071,6 @@ class ShiLianTask:
                     failStatus = self.fight_fail()
                     break
             self.fight_fail_alert()
-            sleep(3)
-            elapsed = elapsed + 4
 
     def fightingBaoZouTeam(self):
         try:
@@ -2173,7 +2175,8 @@ class ShiLianTask:
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                 if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
-                    Toast(f"暴走战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                    Toast(f"暴走战斗中状态 - 识别失败 - 次数 {failNum}/7")
+                    sleep(1)
                     shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                     failNum = failNum + 1
                     if shou_ye1 or failNum > 4:
@@ -2316,6 +2319,7 @@ class ShiLianTask:
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
                 Toast(f"绝境战斗中状态 - 识别失败 - 次数 {failNum}/5")
+                sleep(1)
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 failNum = failNum + 1
                 if failNum > 8:
@@ -2390,10 +2394,7 @@ class ShiLianTask:
                 res2, _ = TomatoOcrText(502, 187, 582, 213, '离开队伍')
                 res3, _ = TomatoOcrText(512, 999, 596, 1024, '战斗统计')
                 if not res3:
-                    res3, tmp1 = TomatoOcrText(514, 517, 592, 542, "战斗统计")  # 战斗结束页。宝箱提示
-                if not res1:
-                    res3, tmp2 = TomatoOcrText(510, 547, 592, 572, "一键全赞")  # 战斗结束页。宝箱提示
-
+                    res3, tmp1 = TomatoOcrText(513, 939, 595, 964, "战斗统计")  # 战斗结束页。宝箱提示
                 if res1 or res2 or res3:
                     tapSleep(364, 1136, 0.3)
                     tapSleep(364, 1136, 0.3)
@@ -2406,9 +2407,10 @@ class ShiLianTask:
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
                 Toast(f"终末战战斗中状态 - 识别失败 - 次数 {failNum}/8")
+                sleep(1)
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 failNum = failNum + 1
-                if failNum > 7:
+                if failNum > 8:
                     Toast(f"终末战战斗中状态 - 识别失败 - 退出战斗")
                 if shou_ye1 or failNum > 9:
                     self.fight_fail()
@@ -2420,7 +2422,6 @@ class ShiLianTask:
             if allQuit:
                 break
             self.fight_fail_alert()
-            sleep(3)
 
     def fightingZhiGuTeam(self, fightType='桎梏之形'):
         totalWait = 260
@@ -2530,7 +2531,8 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
-                Toast(f"桎梏之形战斗中状态 - 识别失败 - 次数 {failNum}/6")
+                Toast(f"桎梏之形战斗中状态 - 识别失败 - 次数 {failNum}/12")
+                sleep(1)
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 failNum = failNum + 1
                 if failNum > 10:
@@ -2543,7 +2545,6 @@ class ShiLianTask:
                 if res6:
                     Toast(f"桎梏之形战斗中状态 - 识别失败 - 退出战斗")
                     break
-            sleep(3)
 
     def fightingELongTeam(self, fightType='恶龙带队'):
         totalWait = 30
@@ -2657,7 +2658,8 @@ class ShiLianTask:
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
             if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
-                Toast(f"恶龙战斗中状态 - 识别失败 - 次数 {failNum}/6")
+                Toast(f"恶龙战斗中状态 - 识别失败 - 次数 {failNum}/12")
+                sleep(1)
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 failNum = failNum + 1
                 if failNum > 10:
@@ -2672,7 +2674,6 @@ class ShiLianTask:
                     功能开关["fighting"] = 0
                     break
             self.fight_fail_alert()
-            sleep(3)
 
     def fightingMengYanTeam(self, fightType='梦魇带队'):
         totalWait = 28  # 30000 毫秒 = 30 秒
@@ -2764,6 +2765,7 @@ class ShiLianTask:
             # res7, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
             if "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2:
                 Toast(f"梦魇战斗中状态 - 识别失败 - 次数 {failNum}/4")
+                sleep(1)
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 failNum = failNum + 1
                 if shou_ye1 or failNum > 3:
@@ -2772,7 +2774,6 @@ class ShiLianTask:
                 if failNum > 6:
                     failStatus = self.fight_fail()
                     break
-            sleep(3)
 
     def fighting(self, fightType='秘境'):
         totalWait = 500  # 30000 毫秒 = 30 秒
@@ -3622,7 +3623,7 @@ class ShiLianTask:
             if 功能开关['队伍喊话'] != "":
                 contentTemp = 功能开关['队伍喊话']
 
-            need_dur_minute = safe_int(功能开关.get("队伍喊话间隔", 0))  # 分钟
+            need_dur_minute = safe_int(功能开关.get("队伍喊话间隔", 0).replace("分钟", "").replace("分", "").replace("秒", "").replace("s", ""))  # 分钟
             if need_dur_minute == '':
                 need_dur_minute = 0
             if need_dur_minute > 0 and 任务记录["队伍喊话-倒计时"] > 0:
@@ -3938,6 +3939,7 @@ class ShiLianTask:
                 Toast('试炼-退出组队')
                 sleep(0.3)
                 TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
+                return3 = TomatoOcrTap(76, 1161, 126, 1190, '返回', 10, 10)
                 功能开关["fighting"] = 0
                 功能开关["noHomeMust"] = 0
                 return True
@@ -3959,8 +3961,6 @@ class ShiLianTask:
             #     TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
             #     功能开关["fighting"] = 0
             #     return True
-        TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
-        return3 = TomatoOcrTap(76, 1161, 126, 1190, '返回', 10, 10)
         功能开关["fighting"] = 0
         功能开关["noHomeMust"] = 0
         return False

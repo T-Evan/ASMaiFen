@@ -489,7 +489,8 @@ class YingDiTask:
         isDone = CompareColors.compare(
             "235,162,#334654|246,173,#A5A9AC|241,181,#FFFFFF|247,181,#9FA2A6|257,178,#8C9296|262,175,#384153")
         if not isDone:
-            isDone = CompareColors.compare("266,162,#425D7A|249,179,#FFFFFF|255,173,#FFFFFF|247,162,#FEFEFE|258,170,#FFFFFF|262,187,#FFFFFF|271,165,#3D5775")
+            isDone = CompareColors.compare(
+                "266,162,#425D7A|249,179,#FFFFFF|255,173,#FFFFFF|247,162,#FEFEFE|258,170,#FFFFFF|262,187,#FFFFFF|271,165,#3D5775")
         # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=10)
         if isDone:
             Toast('营地任务 - 秘宝领取 - 识别已完成')
@@ -504,6 +505,7 @@ class YingDiTask:
             if not re:
                 Toast('营地任务 - 秘宝收集 - 识别活动入口')
                 tapSleep(241, 192, 0.5)  # 秘宝
+                tapSleep(67, 33)  # 兜底点击太快，错误进入寻宝页
             else:
                 break
 
@@ -547,13 +549,15 @@ class YingDiTask:
 
             # 返回上半屏
             if not findNL:
-                if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
+                if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林",
+                                            "翡翠浦"]:
                     re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[44, 8, 626, 45],
                                          diff=0.96)
                     if not re:
                         Toast("返回上半屏")
-                        swipe(361, 547, 380, 918)
+                        swipe(361, 547, 380, 918, 800)
                         sleep(1)
+                        tapSleep(67, 33)
 
                 for i in range(4):
                     Toast('寻找秘宝能量')
@@ -564,7 +568,7 @@ class YingDiTask:
                         tapSleep(360, 1100)  # 点击空白处关闭
                     else:
                         # 先找右侧
-                        swipe(525, 1070, 180, 1070)
+                        swipe(525, 1070, 180, 1070, 800)
                         sleep(2.2)
                         # 领取秘宝能量
                         re, x, y = imageFind('秘宝能量', 0.78)
@@ -578,7 +582,7 @@ class YingDiTask:
 
                 # 返回左侧
                 for j in range(1, findNum):
-                    swipe(180, 1070, 525, 1070)
+                    swipe(180, 1070, 525, 1070, 800)
                     sleep(2.5)
 
                 if not findNL:
@@ -590,7 +594,7 @@ class YingDiTask:
                             break
                         else:
                             # 再找左侧
-                            swipe(180, 1070, 525, 1070)
+                            swipe(180, 1070, 525, 1070, 800)
                             sleep(2.2)
                             # 领取秘宝能量
                             re, x, y = imageFind('秘宝能量', 0.78)
@@ -714,55 +718,68 @@ class YingDiTask:
                             tapSleep(65, 1120, 1)  # 点击空白处关闭
                             tapSleep(65, 1120, 1)  # 点击空白处关闭
                             break
-                        TomatoOcrTap(587, 78, 631, 105, "跳过")
-                        TomatoOcrTap(586, 77, 631, 105, "跳过")
+                        TomatoOcrTap(584, 58, 633, 83, "跳过")
                         tapSleep(65, 1120, 1)  # 点击空白处关闭
                         tapSleep(65, 1120, 1)  # 点击空白处关闭
         # 返回营地
         TomatoOcrTap(94, 1183, 125, 1220, "回")
         sleep(1)
 
+    def has_common_chars(self, A, B):
+        # 将字符串转换为集合以获取唯一字符
+        set_A = set(A)
+        set_B = set(B)
+
+        # 计算两个集合的交集
+        common_chars = set_A.intersection(set_B)
+
+        # 检查交集的大小是否至少为2
+        return len(common_chars) >= 2
+
     def miBaoChangeMap(self, left, right):
         # 抽取秘宝
         selectMap = 功能开关["秘宝地图"]
         findMap = False
 
-        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
+        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦"]:
             re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                  diff=0.96)  # 底部牛皮纸
             if not re:
                 Toast("返回下半屏")
-                swipe(380, 918, 361, 547)
+                swipe(380, 918, 361, 547, 800)
                 sleep(1)
+                tapSleep(67, 33)
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:
                     Toast("返回下半屏")
-                    swipe(380, 918, 361, 547)
+                    swipe(380, 918, 361, 547, 800)
                     sleep(1)
+                    tapSleep(67, 33)
             else:
-                swipe(420, 200, 420, 600)
+                swipe(420, 200, 420, 600, 800)
                 sleep(2)
-            swipe(600, 1070, 100, 1070)
+            swipe(600, 1070, 100, 1070, 800)
             sleep(2)
 
         # 再找左侧
         if left < 4 and right == 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:
                     Toast("返回下半屏")
-                    swipe(380, 918, 361, 547)
+                    swipe(380, 918, 361, 547, 800)
                     sleep(1)
+                    tapSleep(67, 33)
             else:
-                swipe(420, 200, 420, 600)
+                swipe(420, 200, 420, 600, 800)
                 sleep(2)
-            swipe(100, 1070, 600, 1070)
+            swipe(100, 1070, 600, 1070, 800)
             sleep(2)
 
         if selectMap == "暗月深林":
@@ -790,7 +807,10 @@ class YingDiTask:
                 findMap = True
 
         if not findMap:
-            re = TomatoOcrFindRangeClick(selectMap, sleep1=2, whiteList=selectMap)
+            re = TomatoOcrFindRangeClick(keywords=[{'keyword': selectMap, 'match_mode': 'fuzzy'},
+                                                   {'keyword': selectMap[:2], 'match_mode': 'fuzzy'},
+                                                   {'keyword': selectMap[-2:], 'match_mode': 'fuzzy'}], sleep1=2,
+                                         whiteList=selectMap)
             if re:
                 findMap = True
 

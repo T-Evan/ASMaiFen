@@ -188,7 +188,7 @@ def TomatoOcrTextRange(confidence1=0.9, x1=0, y1=0, x2=720, y2=1280, whiteList='
 
 def shijieShoutText():
     res, ocrReJson = TomatoOcrTextRange(x1=61, y1=781, x2=287, y2=1090)
-    print(res, ocrReJson)
+    # print(res, ocrReJson)
     player_messages = {}
     if res:
         current_player = '默认'

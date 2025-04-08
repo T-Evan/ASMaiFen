@@ -28,6 +28,12 @@ def returnHome():
         return1 = False
         return2 = False
         return3 = False
+
+        if i > 3 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
+            # 返回上级页面时二次确认入口通用处理
+            res = openTreasure(noNeedOpen=1)
+            res = TomatoOcrTap(454, 727, 508, 758, "确定")
+
         if 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
             if not return1:
@@ -36,11 +42,6 @@ def returnHome():
                 return2 = TomatoOcrTap(102, 1202, 132, 1229, '回', 10, 10)
             if return1 or return2:
                 Toast('线程-返回首页1')
-
-        if i > 3 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
-            # 返回上级页面时二次确认入口通用处理
-            res = openTreasure(noNeedOpen=1)
-            res = TomatoOcrTap(454, 727, 508, 758, "确定")
 
         if i > 3 and not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
             return3 = TomatoOcrTap(76, 1161, 126, 1190, '返回', 10, 10)
@@ -75,17 +76,14 @@ def returnHome():
 
         if 1:
             # 识别是否进入首页
-
             # 判断底部冒险图标
             res2, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
-                shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
-                if not shou_ye1:
-                    shou_ye2, _ = TomatoOcrText(545, 381, 628, 404, "新手试炼")
-                    if not shou_ye2:
-                        shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
+                shou_ye2, _ = TomatoOcrText(545, 381, 628, 404, "新手试炼")
+                if not shou_ye2:
+                    shou_ye2, _ = TomatoOcrText(627, 381, 710, 403, "新手试炼")
                 # 暂不处理，提高执行效率
                 # if not shou_ye1:
                 #     shou_ye2 = TomatoOcrFindRange('冒险手册', 0.9, 360, 0, 720, 1280, '冒险手册')

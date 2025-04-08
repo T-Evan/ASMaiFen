@@ -330,6 +330,7 @@ def main():
                 # 获取当前设备运行的APP信息
                 gc.collect()
                 info = Device.memory()
+                print(info)
                 # # 返回单位是字节
                 total_memory_mb = round(info[2] / (1024 ** 3), 2)
                 # used_memory_mb = info[1] / (1024 ** 2)

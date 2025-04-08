@@ -1,4 +1,6 @@
 # 导包
+import time
+
 from ascript.android import system
 
 from .特征库 import *
@@ -19,6 +21,10 @@ yingdiTask = YingDiTask()
 
 # 实例方法
 def main():
+    global checkZBTime
+    global checkQuitTeamTime
+    checkZBTime = time.time()  # 兜底接收准备页面
+    checkQuitTeamTime = time.time()  # 退队检查倒计时
     while True:
         if 功能开关["秘境自动接收邀请"] == 1 or 功能开关['梦魇自动接收邀请'] == 1 or 功能开关[
             '恶龙自动接收邀请'] == 1 or \
@@ -135,13 +141,19 @@ def waitInvite():
     tmpBx = 功能开关["秘境不开宝箱"]
     功能开关["秘境不开宝箱"] = 1
 
+    global checkZBTime
+    global checkQuitTeamTime
     res1, _ = TomatoOcrText(584, 651, 636, 678, "同意")
-    res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
-    res3, _ = TomatoOcrText(450, 651, 506, 683, "准备")  # 恶龙准备
+    res2 = False
+    res3 = False
+    if time.time() - checkZBTime > 5:
+        res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
+        res3, _ = TomatoOcrText(450, 651, 506, 683, "准备")  # 恶龙准备
+        checkZBTime = time.time()
 
     fight_type = ''
     if not res1 and not res2 and not res3:
-        res = TomatoOcrTap(615, 558, 686, 582, "正在组队")
+        # res = TomatoOcrTap(615, 558, 686, 582, "正在组队")
         # sleep(1)
         # res, _ = TomatoOcrText(402, 337, 442, 361, "险境")
         # if res:
@@ -151,11 +163,13 @@ def waitInvite():
         #     Toast('不退出房间')
         # else:
         # 房间 - 关闭邀请玩家
-        re, _ = TomatoOcrText(318, 222, 401, 247, '邀请玩家')
-        if re:
-            tapSleep(590, 1076)
-            tapSleep(590, 1076)
-        quitTeamRe = shilianTask.quitTeam()
+        # re, _ = TomatoOcrText(318, 222, 401, 247, '邀请玩家')
+        # if re:
+        #     tapSleep(590, 1076)
+        #     tapSleep(590, 1076)
+        if time.time() - checkQuitTeamTime > 3:
+            quitTeamRe = shilianTask.quitTeam()
+            checkQuitTeamTime = time.time()
         功能开关["秘境不开宝箱"] = tmpBx
         return
 
@@ -375,13 +389,14 @@ def waitInvite():
             res, _ = TomatoOcrText(333, 744, 385, 771, "确定")
             if res:
                 tapSleep(285, 710)  # 点击不再提醒
-            res = TomatoOcrTap(333, 744, 385, 771, "确定")
+            res = TomatoOcrTap(333, 744, 385, 771, "确定", sleep1=0.8)
 
     waitFight = False
     findDoneStatus = False
     teamShout = False
     totalWait = 50
-    checkTreasure = False
+    checkTreasure = time.time()  # 兜底房间宝箱检查页面
+    checkYaoQingTime = time.time()  # 兜底检查邀请玩家页面
     if 功能开关["自动离房等待时间"] != "":
         totalWait = safe_int_v2(功能开关["自动离房等待时间"])
     start_time = int(time.time())
@@ -403,9 +418,9 @@ def waitInvite():
             Toast('行李页-返回首页')
             tapSleep(355, 1202)
         Toast(f'{fight_type}-等待队长开始{elapsed}/{totalWait}s')
-        if not checkTreasure:
+        if time.time() - checkYaoQingTime > 3:
             shilianTask.openTreasure(noNeedOpen=1)
-            checkTreasure = True
+            checkTreasure = time.time()
 
         # 兜底，已在队伍中时，停止返回操作
         功能开关["fighting"] = 1
@@ -416,7 +431,7 @@ def waitInvite():
         for j in range(5):
             res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
             if not res6:
-                res6, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+                res6, _ = TomatoOcrText(503, 186, 582, 213, "开队伍")  # 已在队伍页面，直接退出
             if res6:
                 break
 
@@ -447,10 +462,12 @@ def waitInvite():
             break
 
         # 房间 - 关闭邀请玩家
-        re, _ = TomatoOcrText(318, 222, 401, 247, '邀请玩家')
-        if re:
-            tapSleep(590, 1076)
-            tapSleep(590, 1076)
+        if time.time() - checkYaoQingTime > 5:
+            re, _ = TomatoOcrText(318, 222, 401, 247, '邀请玩家')
+            if re:
+                tapSleep(590, 1076)
+                tapSleep(590, 1076)
+            checkYaoQingTime = time.time()
 
         # 房间 - 特殊状态识别
         if fight_type == '梦魇带队' and not findDoneStatus:
@@ -473,8 +490,8 @@ def waitInvite():
         if fight_type == '恶龙带队' and not findDoneStatus:
             # 判断是否为当前等级地图
             re, levelName1 = TomatoOcrText(365, 283, 440, 307, '建议职业')
-            re, levelName2 = TomatoOcrText(142, 602, 200, 621, '当前职业')
-            if levelName1 == levelName2:
+            re, levelName2 = TomatoOcrText(125, 602, 254, 621, '当前职业')
+            if levelName1 in levelName2:
                 # 判断是否未开宝箱
                 re1 = CompareColors.compare(
                     "532,358,#F4D387|535,347,#FAE69D|535,336,#D48D2F|544,334,#FDF5BC|544,348,#E7C783|555,355,#F9E79F")
@@ -563,7 +580,7 @@ def waitInvite():
             start_time = int(time.time())
             teamShout = False
             # 恶龙/绝境/终末，仅挑战1次，可直接退队
-            if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队' or fight_type == '桎梏之形带队' or fight_type == '桎梏之形挑战':
+            if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队' or fight_type == '桎梏之形带队' or fight_type == '桎梏之形挑战' or fight_type == '三魔头带队':
                 Toast('退出组队')
                 for z in range(2):
                     quitRes = shilianTask.quitTeam()

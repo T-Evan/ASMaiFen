@@ -139,12 +139,12 @@ class LvRenTask:
             re, time = TomatoOcrText(596, 1055, 626, 1075, '累计时间')
             time = time.replace(':', '')
             time = safe_float_v2(time)
-            if time > 13:
+            if time > 8:
                 re = TomatoOcrTap(614, 1090, 660, 1112, '领取')
                 tapSleep(345, 1238)  # 点击空白处
                 tapSleep(345, 1238)  # 点击空白处
             else:
-                Toast('集忆时间不足14h，跳过领取')
+                Toast('集忆时间不足8h，跳过领取')
 
         if 功能开关["稚星道途升级"] == 1:
             for i in range(30):
@@ -840,7 +840,11 @@ class LvRenTask:
                 "326,463,#F0706D|318,468,#FFFFFF|315,461,#FC694C|319,463,#FDFDFD|331,464,#FC694C|323,471,#F9715A|322,478,#FC694C|333,468,#FC694C",
                 rect=[69, 110, 650, 566], diff=0.85)
             if not needUpdate:
-                Toast('旅人 - 装备进阶 - 无可进阶装备')
+                needUpdate = FindColors.find_all(
+                    "554,357,#FF0000|561,357,#FDC1BA|573,359,#FF100F|578,361,#FF4542|584,364,#FF6863|602,359,#FF5754",
+                    rect=[91, 118, 631, 566], diff=0.9)
+                if not needUpdate:
+                    Toast('旅人 - 装备进阶 - 无可进阶装备')
             if needUpdate:
                 for p in needUpdate:
                     tapSleep(p.x, p.y, 0.8)

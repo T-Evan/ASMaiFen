@@ -56,6 +56,7 @@ class StartUp:
             system.open(self.app_name)
             if tryTimes > 5:
                 TomatoOcrTap(330, 828, 390, 871, '同意')  # 隐私政策更新
+                TomatoOcrTap(90, 1194, 145, 1224, '返回')  # 公告返回
 
             # 识别是否进入登录页
             login1, _ = TomatoOcrText(287, 1019, 339, 1049, "开始")  # 开始冒险之旅
@@ -408,7 +409,7 @@ class StartUp:
             if configNum != 0 and configNum != '' and configNum != '0':
                 Toast(f'加载账号{account_name} + 加载配置{configNum}')
                 功能开关 = loadConfig(configNum, account_name)
-                print(功能开关)
+                # print(功能开关)
             # system.open("com.xd.cfbmf")
             # r = system.shell(f"am start -n com.xd.cfbmf")
             # r = system.shell("am kill com.xd.cfbmf")
@@ -469,7 +470,7 @@ class StartUp:
             res, name = TomatoOcrText(94, 78, 210, 102, '玩家名称')
             任务记录["玩家名称"] = name
         if 任务记录["玩家战力"] == "":
-            res, fightNum = TomatoOcrText(113, 101, 193, 117, '玩家战力')
+            res, fightNum = TomatoOcrText(106, 101, 192, 118, '玩家战力')
             if fightNum != "":
                 if "万" in fightNum:
                     任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
