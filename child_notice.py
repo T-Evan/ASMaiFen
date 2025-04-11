@@ -53,13 +53,14 @@ def noticeCancel():
         # res3 = TomatoOcrTap(266, 863, 453, 890, "点击空白处可领取奖励", 30, 100)
         # res5 = TomatoOcrTap(268, 869, 359, 888, "点击空白处", 30, 100)
         # bitmap = screen.capture(107, 759, 603, 1257)
-        res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
-                                      offsetX=20, offsetY=40,
-                                      keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
+        # res = TomatoOcrFindRangeClick('', 0.9, 0.9, 107, 759, 603, 1257, whiteList='点击空白处', timeLock=5,
+        #                               offsetX=20, offsetY=40,
+        #                               keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
         # res = PaddleOcrFindRangeClick('空白', 0.9, 0.9, 107, 759, 603, 1257, timeLock=5,
         #                               offsetX=20, offsetY=40, match_mode='fuzzy')
-        # res = CompareColors.compare(
-        #     "341,872,#A09BA7|345,872,#A09BA7|339,884,#9E9AA5|344,884,#9E9AA5|359,872,#A49FAB|362,884,#A09BA7")
+        res = FindColors.find(
+            "345,1209,#8A858F|344,1217,#A6A1AD|346,1219,#9994A0|356,1213,#9E99A5|365,1215,#A6A1AD|361,1220,#5B585D",
+            rect=[112, 613, 603, 1253], diff=0.97)
         # if not res:
         #     res = CompareColors.compare(
         #         "317,1232,#87838F|321,1232,#888490|320,1242,#A19CA8|335,1232,#9D98A4|336,1237,#A09BA7|336,1243,#615D69")
@@ -73,7 +74,7 @@ def noticeCancel():
         #     res = CompareColors.compare(
         #         "314,873,#7C767F|331,873,#9A95A1|314,879,#A49FAC|332,879,#807A84|315,885,#6F6971|331,885,#7C767F")
         if res:
-            # tapSleep(35, 1260)
+            tapSleep(35, 1260)
             Toast('关闭弹窗')
         # res = PaddleOcrFindRangeClick('空白', x1=107, y1=759, x2=603, y2=1257, offsetX=20, offsetY=40)
         # if res:
@@ -117,7 +118,8 @@ def noticeCancel():
 
             # 自动拒绝，避免影响日常任务进行
             if 功能开关["秘境自动接收邀请"] == 0 and 功能开关['梦魇自动接收邀请'] == 0 and 功能开关[
-                '恶龙自动接收邀请'] == 0 and 功能开关['暴走自动接收邀请'] == 0 and 功能开关['终末战自动接收邀请'] == 0 and \
+                '恶龙自动接收邀请'] == 0 and 功能开关['暴走自动接收邀请'] == 0 and 功能开关[
+                '终末战自动接收邀请'] == 0 and \
                     功能开关['绝境自动接收邀请'] == 0 and 功能开关['调查队自动接收邀请'] == 0:
                 # 匹配拒绝提示
                 res2 = CompareColors.compare(
@@ -153,6 +155,7 @@ def noticeCancel():
         #     Toast('关闭弹窗')
 
     return
+
 
 class L(ShellListener):
     def commandOutput(self, i: int, s: str):

@@ -499,7 +499,7 @@ def safe_int(value):
     """
     try:
         # 兜底子母o
-        if value == "o" or value == "O" or value == "c" or value == "C":
+        if value == "。" or value == "o" or value == "O" or value == "c" or value == "C":
             return 0
         return int(value)
     except (TypeError, ValueError):

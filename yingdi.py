@@ -491,6 +491,9 @@ class YingDiTask:
         if not isDone:
             isDone = CompareColors.compare(
                 "266,162,#425D7A|249,179,#FFFFFF|255,173,#FFFFFF|247,162,#FEFEFE|258,170,#FFFFFF|262,187,#FFFFFF|271,165,#3D5775")
+        if not isDone:
+            isDone = CompareColors.compare(
+                "247,176,#E9EAEA|251,181,#F4F5F5|241,184,#FFFFFF|252,183,#F2F3F3|262,190,#E4E6E6|257,168,#FFFFFF")
         # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=10)
         if isDone:
             Toast('营地任务 - 秘宝领取 - 识别已完成')
@@ -501,12 +504,13 @@ class YingDiTask:
         # 点击秘宝
         re = False
         for i in range(5):
-            re, _ = TomatoOcrText(558, 168, 639, 194, '补充能源')
+            re, _ = TomatoOcrText(613,172,695,191, '补充能源')
             if not re:
                 Toast('营地任务 - 秘宝收集 - 识别活动入口')
                 tapSleep(241, 192, 0.5)  # 秘宝
                 tapSleep(67, 33)  # 兜底点击太快，错误进入寻宝页
             else:
+                tapSleep(67, 33)  # 兜底点击太快，错误进入寻宝页
                 break
 
         if not re:
@@ -619,7 +623,7 @@ class YingDiTask:
 
         # 购买秘宝能量
         needNengLiang = False
-        res, availableNengLiang = TomatoOcrText(603, 80, 667, 104, "剩余能量")  # 210
+        res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
         availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
         if availableNengLiang != '' and availableNengLiang < 200:  # 识别剩余体力不足200时，尝试补充
             needNengLiang = True
@@ -652,7 +656,7 @@ class YingDiTask:
 
         tapSleep(326, 1216)  # 点击空白处
         tapSleep(326, 1216)
-        res, availableNengLiang = TomatoOcrText(604, 80, 667, 105, "剩余能量")  # 210
+        res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
         availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
         if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足50时，退出寻宝循环
             Toast('秘宝能量不足 - 跳过寻宝')
@@ -666,7 +670,7 @@ class YingDiTask:
         findMap = self.miBaoChangeMap(0, 0)
         if findMap:
             for i in range(3):
-                res, availableNengLiang = TomatoOcrText(604, 80, 667, 105, "剩余能量")  # 210
+                res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
                 availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
                 if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
                     # 购买秘宝能量
@@ -694,7 +698,7 @@ class YingDiTask:
                             if ct < needCount:
                                 tapSleep(527, 571)  # 点击+1
                             re = TomatoOcrTap(445, 642, 511, 669, "购买", 10, 10, sleep1=0.8)
-                    res, availableNengLiang = TomatoOcrText(603, 80, 672, 101, "剩余能量")  # 210
+                    res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
                     availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
                     if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
                         break

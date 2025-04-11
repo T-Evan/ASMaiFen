@@ -39,7 +39,7 @@ class DailyTask:
                     sleep(2)
                 continue
 
-            if tryTimes < 20:
+            if tryTimes < 50:
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 if "等级" in teamName1:
                     for k in range(3):
@@ -424,7 +424,7 @@ class DailyTask:
                     else:
                         return
                 zanList3 = ['来t', '来T', '来个t', '来个T', '挂个t', '挂个T', '有t', '有T', '找个t', '找个T', '差个t',
-                            '差t', '缺t', '缺T', '缺个t', '来人','匹配不到人']
+                            '差t', '缺t', '缺T', '缺个t', '来人', '匹配不到人']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
                     if zhiye == '战':
@@ -448,7 +448,7 @@ class DailyTask:
                     content = [f"<color={colors}>{player}~来了~(*^▽^*)~</COLOR>",
                                f"<color={colors}>{player}~在呢~辛苦啦~(*^▽^*)~</COLOR>"]
                     return self.shijieShout(random.choice(content))
-                zanList3 = ['在哪里', '来一个', '来人', '求个', '来个', '来打工', '来黑工', '来打工']
+                zanList3 = ['在哪里', '来一个', '来人', '求个', '来个', '来打工', '来黑工', '来打工', '求大佬']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
                     content = [f"<color={colors}>{player}~来了来了~{extraContent}</COLOR>",
@@ -1732,11 +1732,61 @@ class DailyTask:
                                     break
         功能开关['fighting'] = 0
 
+    # 踏青签到簿 - 清明活动
+    def QiTaQianDaoTaQing(self):
+        if 任务记录["踏青签到簿"] == 0:
+            Toast('其他签到-踏青签到簿-开始')
+            # 判断是否在营地页面
+            res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            if not res1:
+                hd1 = False
+                hd2 = False
+                for k in range(3):
+                    # 返回首页
+                    self.homePage()
+                    res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
+                    # 判断是否在营地页面
+                    hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+                    hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
+                    if hd1 or hd2:
+                        break
+
+                if not hd1 and not hd2:
+                    Toast('其他签到-踏青签到簿-未找到活动入口')
+                    return
+
+            isFind = TomatoOcrFindRangeClick('踏青', match_mode='fuzzy', x1=82, y1=61, x2=653, y2=1153)
+            if not isFind:
+                # -- 返回活动最后一屏
+                self.huoDongSwipeDown()
+
+                for i in range(1, 5):
+                    # 上翻第二屏，继续识别
+                    swipe(680, 451, 680, 804)
+                    sleep(3)
+                    isFind = TomatoOcrFindRangeClick('踏青', x1=82, y1=61, x2=653, y2=1153)
+                    if isFind:
+                        break
+            if isFind:
+                sleep(1.5)
+                for k in range(10):
+                    re = TomatoOcrTap(507, 560, 572, 586, "领取")
+                    if re:
+                        tapSleep(323, 1217)  # 点击空白处关闭
+                        tapSleep(323, 1217)  # 点击空白处关闭
+                    else:
+                        break
+                任务记录["踏青签到簿"] = 1
+                tapSleep(98, 1194)  # 点击返回
+                tapSleep(98, 1194)  # 点击返回
+            return
+
     # 其他签到活动（简单活动合集）
     def QiTaQianDao(self):
         if 功能开关["其他签到活动"] == 0:
             return
-
+        # 踏青签到簿 - 清明活动
+        self.QiTaQianDaoTaQing()
         # 欢庆连五日
         # if 任务记录["欢庆连五日"] == 0:
         #     Toast('欢庆连五日 - 开始')
@@ -3345,7 +3395,7 @@ class DailyTask:
                 res, _ = TomatoOcrText(317, 1054, 401, 1082, "讲述故事")
                 if res:
                     tapSleep(515, 1088)
-                for k in range(15):
+                for k in range(10):
                     # 识别剩余可领取次数
                     res, availableCount = TomatoOcrText(91, 254, 205, 285, " 可领取次数")
                     availableCount = safe_int_v2(availableCount.replace("可领取", "").replace("次", ""))
@@ -3586,6 +3636,11 @@ class DailyTask:
             if not needForceCheck and 功能开关["fighting"] == 1 and diffTime < 4 * 60:
                 return True
 
+            res1, _ = TomatoOcrText(311, 588, 408, 637, "异地登录")
+            if res1 and 功能开关["顶号等待"] != "" and 功能开关["顶号等待"] != "0":
+                Toast('顶号等待中，跳过卡死检测')
+                return True
+
             # 匹配行李图标亮着，新号为灰色，不处理
             if not needForceCheck:
                 re = CompareColors.compare("287,1224,#AC8B62|285,1218,#AC8B62|285,1199,#9F7C55|287,1210,#9F7C55")
@@ -3632,7 +3687,8 @@ class DailyTask:
                         self.closeLiaoTian()
                         sleep(0.5)
                         Toast(f'游戏卡死，等待{i + 1}/6')
-                        res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
+                        return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
+                        return3 = TomatoOcrTap(93, 1186, 126, 1220, '回', 10, 10)
                         res = TomatoOcrTap(233, 1205, 281, 1234, "行李")
                         if res:
                             re1 = CompareColors.compare(

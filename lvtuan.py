@@ -119,13 +119,14 @@ class LvTuanTask:
                 if res:
                     # 战斗中
                     self.fighting()
-                    sleep(5)
+                    sleep(2)
         任务记录['旅团-调查队-完成'] = 1
 
     # 判断是否战斗中
     def fighting(self):
         totalWait = 500
         start_time = int(time.time())
+        failNum = 0  # 战斗中状态识别失败次数
         while 1:
             current_time = int(time.time())
             elapsed = current_time - start_time
@@ -139,8 +140,12 @@ class LvTuanTask:
             if res1 or (teamName1 != "" or teamName2 != ""):
                 Toast(f'调查队战斗中,战斗时长{elapsed}/{totalWait}秒')
             else:
-                break  # 识别失败，退出循环
+                if failNum > 3:
+                    Toast(f"调查队战斗中状态 - 识别失败 - 退出战斗")
+                    break  # 识别失败，退出循环
+                failNum = failNum + 1
             self.fight_fail_alert()
+            sleep(0.5)
 
         # 战斗结束
         self.openTreasure()
