@@ -248,7 +248,10 @@ class LvTuanTask:
         sleep(3)  # 等待跳转动画
 
         # 检查剩余叶子
-        res, availableCount = TomatoOcrText(448, 80, 514, 104, "叶子")
+        availableCount = ''
+        re = CompareColors.compare("573,91,#F2D44F|577,89,#F7E769|579,96,#E9B63A")
+        if re:
+            res, availableCount = TomatoOcrText(598, 80, 682, 104, "叶子")
         if availableCount == '':
             res, availableCount = TomatoOcrText(607, 82, 669, 102, "叶子")
         availableCount = safe_int_v2(availableCount)
@@ -523,7 +526,7 @@ class LvTuanTask:
         tapSleep(330, 390)
         tapSleep(250, 390)
 
-        res = tapSleep(96, 1183)  # 返回旅团首页
+        res = tapSleep(97, 1218)  # 返回旅团首页
         任务记录["旅团-任务-完成"] = 1
 
     # 旅团许愿墙

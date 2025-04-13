@@ -1786,7 +1786,7 @@ class DailyTask:
         if 功能开关["其他签到活动"] == 0:
             return
         # 踏青签到簿 - 清明活动
-        self.QiTaQianDaoTaQing()
+        # self.QiTaQianDaoTaQing()
         # 欢庆连五日
         # if 任务记录["欢庆连五日"] == 0:
         #     Toast('欢庆连五日 - 开始')
@@ -2158,23 +2158,37 @@ class DailyTask:
             self.homePage()
             res = TomatoOcrFindRangeClick('忆战', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
                                           sleep1=1.5, match_mode='fuzzy')
+            # 选择默认职业
+            re = CompareColors.compare("241,1103,#F15C3F|241,1106,#F45344")  # 职业选择红点
+            if re:
+                Toast('忆战回环签到 - 选择职业')
+                tapSleep(186, 1112, 0.8)
+                TomatoOcrTap(221, 1015, 259, 1036, '输出')
+                TomatoOcrTap(328, 1120, 391, 1150, '确认')
+
             if res:
-                Toast('忆战回环签到 - 任务开始')
                 任务记录["忆战回环签到"] = 1
                 res = CompareColors.compare("620,110,#F66042|620,115,#F05E41|620,118,#EF5435")  # 匹配红点
                 if res:
+                    Toast('忆战回环签到 - 任务开始')
                     tapSleep(593, 127, 3)  # 点击排行榜
-                    tapSleep(574, 1051, 0.1)  # 点击奖励
-                    tapSleep(570, 1062, 0.1)  # 点击奖励
-                    tapSleep(558, 1063, 0.1)  # 点击奖励
-                    tapSleep(356, 1038, 0.1)  # 点击奖励
-                    tapSleep(356, 1065, 0.1)  # 点击奖励
-                    tapSleep(352, 1062, 0.1)  # 点击奖励
-                    tapSleep(195, 1038, 0.1)  # 点击奖励
-                    tapSleep(191, 1063, 0.1)  # 点击奖励
-                    tapSleep(181, 1059, 0.1)  # 点击奖励
-                    tapSleep(195, 1043, 0.1)  # 点击奖励
-                    tapSleep(192, 1062, 0.1)  # 点击奖励
+                    tapSleep(568, 1044, 0.2)
+                    tapSleep(358, 1043, 0.2)
+                    tapSleep(189, 1049, 0.2)
+                    tapSleep(574, 1051, 0.2)  # 点击奖励
+                    tapSleep(570, 1062, 0.2)  # 点击奖励
+                    tapSleep(558, 1063, 0.2)  # 点击奖励
+                    tapSleep(356, 1038, 0.2)  # 点击奖励
+                    tapSleep(356, 1065, 0.2)  # 点击奖励
+                    tapSleep(352, 1062, 0.2)  # 点击奖励
+                    tapSleep(195, 1038, 0.2)  # 点击奖励
+                    tapSleep(191, 1063, 0.2)  # 点击奖励
+                    tapSleep(181, 1059, 0.2)  # 点击奖励
+                    tapSleep(195, 1043, 0.2)  # 点击奖励
+                    tapSleep(192, 1062, 0.2)  # 点击奖励
+                    tapSleep(568,1090, 0.2)  # 点击奖励
+                    tapSleep(355,1085, 0.2)  # 点击奖励
+                    tapSleep(191,1089, 0.2)  # 点击奖励
                     tapSleep(92, 1218)  # 返回
                     tapSleep(92, 1218)
             else:
