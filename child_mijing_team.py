@@ -625,6 +625,8 @@ def checkFightType():
         fight_type = "暴走带队"
     if fight_type == '' and has_common_chars("斗歌会", fightName, 2):
         fight_type = "斗歌会带队"
+    if fight_type == '' and has_common_chars("莱茵幻境", fightName, 2):
+        fight_type = "斗歌会带队"
     if fight_type == '' and has_common_chars("桎梏之形", fightName, 2):
         fight_type = "桎梏之形带队"
     if fight_type == '' and has_common_chars("三打三守三魔头", fightName, 2):

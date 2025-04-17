@@ -58,10 +58,9 @@ def noticeCancel():
         #                               keywords=[{'keyword': '空白', 'match_mode': 'fuzzy'}])
         # res = PaddleOcrFindRangeClick('空白', 0.9, 0.9, 107, 759, 603, 1257, timeLock=5,
         #                               offsetX=20, offsetY=40, match_mode='fuzzy')
-        with TimeoutLock():
-            res = FindColors.find(
-                "345,1209,#8A858F|344,1217,#A6A1AD|346,1219,#9994A0|356,1213,#9E99A5|365,1215,#A6A1AD|361,1220,#5B585D",
-                rect=[112, 613, 603, 1253], diff=0.97)
+        res = FindColors.find(
+            "345,1209,#8A858F|344,1217,#A6A1AD|346,1219,#9994A0|356,1213,#9E99A5|365,1215,#A6A1AD|361,1220,#5B585D",
+            rect=[112, 613, 603, 1253], diff=0.97)
         # if not res:
         #     res = CompareColors.compare(
         #         "317,1232,#87838F|321,1232,#888490|320,1242,#A19CA8|335,1232,#9D98A4|336,1237,#A09BA7|336,1243,#615D69")

@@ -570,16 +570,15 @@ class LvRenTask:
             return
 
         # 超过140件时分解
-        if (needDelete and equipNum > 195) or (not needDelete and equipNum > 190):
+        if (needDelete and equipNum > 185) or (not needDelete and equipNum > 190):
             Toast('旅人 - 分解装备')
             re = TomatoOcrTap(156, 1046, 203, 1073, '熔炼')
             if re:
                 # 用户未配置自动熔炼，仅删除一件
                 # 未勾选史诗+
-                re = CompareColors.compare(
-                    "120,868,#4CAD3B|121,868,#4EB13A|126,864,#4EB03A|685,1197,#F4EEDE|685,1216,#F4EEDE")
+                re = CompareColors.compare("121,869,#4EAE3C|359,1183,#F8F7FB")
                 if not re:
-                    tapSleep(121, 866)
+                    tapSleep(123, 864)
                 # 未勾选常见
                 re = CompareColors.compare("494,899,#52AF41|497,904,#55B244|500,899,#64B655")
                 if not re:

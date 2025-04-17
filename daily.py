@@ -39,7 +39,7 @@ class DailyTask:
                     sleep(2)
                 continue
 
-            if tryTimes < 50:
+            if tryTimes < 40:
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 if "等级" in teamName1:
                     for k in range(3):
@@ -1114,28 +1114,30 @@ class DailyTask:
             if 任务记录["斗歌会-完成"] == 1:
                 return
 
-            Toast('日常 - 斗歌会 - 开始')
+            Toast('日常 - 莱茵幻境 - 开始')
 
             self.homePage()
             self.quitTeam()
-            res = TomatoOcrFindRangeClick('斗歌会', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+            res = TomatoOcrFindRangeClick('幻境', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
                                           sleep1=2.5, match_mode='fuzzy')
+            # res = TomatoOcrFindRangeClick('斗歌会', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+            #                               sleep1=2.5, match_mode='fuzzy')
             if not res:
-                Toast('日常 - 斗歌会 - 未找到入口')
+                Toast('日常 - 莱茵幻境 - 未找到入口')
                 return
 
             # 领取上把奖励
             re = TomatoOcrTap(332, 710, 384, 736, '开启', offsetX=10, offsetY=10, sleep1=1.5)
             if re:
-                Toast('斗歌会 - 开启上一把宝箱')
+                Toast('莱茵幻境 - 开启上一把宝箱')
                 tapSleep(348, 1235)  # 空白
                 tapSleep(348, 1235)  # 空白
                 tapSleep(348, 1235)  # 空白
 
             # 领取全服榜奖励
-            re = CompareColors.compare("178,263,#F36042|178,261,#F36141|178,265,#F15E40")
+            re = CompareColors.compare("169,270,#EE5B3D|171,270,#EE5B3F|171,270,#EE5B3F")
             if re:
-                Toast('斗歌会 - 领取共享战利品')
+                Toast('莱茵幻境 - 领取共享战利品')
                 tapSleep(146, 280, 0.8)
                 for j in range(6):
                     re = FindColors.find("580,266,#F05C40|583,268,#F15A41|585,265,#F35E41", rect=[481, 239, 622, 1076],
@@ -1167,7 +1169,7 @@ class DailyTask:
             # 领取累积奖励
             re = CompareColors.compare("622,703,#F25E41|622,700,#F46042")
             if re:
-                Toast("斗歌会 - 领取累积奖励")
+                Toast("莱茵幻境 - 领取累积奖励")
                 tapSleep(611, 732)
                 for i in range(4):
                     res = TomatoOcrFindRangeClick("领取", sleep1=0.5, whiteList='领取', x1=108, y1=342, x2=603, y2=983)
@@ -1186,7 +1188,7 @@ class DailyTask:
                 level = level.replace("阶", "")
                 level = safe_int_v2(level)
                 if level >= toLevel:
-                    Toast("斗歌会 - 已达到目标等阶")
+                    Toast("莱茵幻境 - 已达到目标等阶")
                     sleep(1.5)
                     任务记录["斗歌会-完成"] = 1
                     return
@@ -1195,16 +1197,18 @@ class DailyTask:
 
     def startFightDouGeHui(self):
         # 直接开始匹配
-        res = TomatoOcrTap(306, 1156, 413, 1186, "开始匹配", 40, -40)
-        Toast("斗歌会 - 开始匹配")
+        res = TomatoOcrTap(312, 1147, 408, 1175, "开始匹配", 40, -40, sleep1=1)
+        if not res:
+            Toast("莱茵幻境 - 开始匹配失败 - 重试")
+        Toast("莱茵幻境 - 开始匹配")
 
         # 判断职业选择
-        res, _ = TomatoOcrText(321, 491, 397, 514, "选择职业")
+        res, _ = TomatoOcrText(317, 486, 402, 519, "选择职业")
         if res:
-            Toast("斗歌会 - 选择职业")
-            if 功能开关["职能优先输出"] == 1:
+            Toast("莱茵幻境 - 选择职业")
+            if 功能开关["斗歌会职能优先输出"] == 1:
                 tapSleep(280, 665, 0.8)  # 职能输出
-            elif 功能开关["职能优先坦克"] == 1 or 功能开关["职能优先治疗"] == 1:
+            elif 功能开关["斗歌会职能优先坦克"] == 1:
                 tapSleep(435, 665, 0.8)  # 坦克
             else:
                 tapSleep(280, 665, 0.8)  # 职能输出
@@ -1213,23 +1217,65 @@ class DailyTask:
         # 判断正在匹配中 - 循环等待300s
         totalWait = 150  # 30000 毫秒 = 30 秒
         elapsed = 0
+        start_time = int(time.time())
         while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
             if elapsed > totalWait:
                 # 超时取消匹配
-                res = TomatoOcrTap(322, 1152, 394, 1178, "匹配中", 40, -40)
+                res = TomatoOcrTap(323, 1147, 394, 1172, "匹配中", 40, -40)
                 if not res:
-                    res = TomatoOcrTap(325, 1156, 390, 1182, "匹配中", 40, -40)
-                    if not res:
-                        res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
-                break
+                    Toast("莱茵幻境 - 匹配状态识别失败")
+                    break
 
-            Toast(f"斗歌会任务 - 匹配中 - 等待{elapsed}/150s")
+            Toast(f"莱茵幻境 - 匹配中 - 等待{elapsed}/150s")
             # 判断无合适队伍，重新开始匹配
             res = TomatoOcrTap(306, 1156, 413, 1186, "开始匹配", 40, -40)
             res, _ = TomatoOcrText(224, 617, 307, 650, "匹配超时")
             if res:
-                Toast("斗歌会 - 匹配超时 - 无合适队伍 - 重新匹配")
+                Toast("莱茵幻境 - 匹配超时 - 无合适队伍 - 重新匹配")
                 res = TomatoOcrTap(454, 729, 510, 7598, "确定")
+
+            waitStatus3, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
+            if 20 < elapsed and not waitStatus3:
+                Toast("莱茵幻境 - 尝试寻找房间")
+                re = TomatoOcrFindRangeClick('更多队伍', x1=453, y1=464, x2=623, y2=1171)
+                if re:
+                    findTeam = False
+                    for k in range(1):
+                        re = TomatoOcrFindRangeClick(keywords=[{'keyword': '加', 'match_mode': 'fuzzy'}], x1=470,
+                                                     y1=249,
+                                                     x2=601, y2=988, sleep1=1)
+                        if not re:
+                            re = TomatoOcrFindRangeClick(keywords=[{'keyword': '申请', 'match_mode': 'fuzzy'}], x1=470,
+                                                         y1=249,
+                                                         x2=601, y2=988, sleep1=1)
+                        re1, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
+                        if re1:
+                            findTeam = True
+                            # elapsed = 0
+                            break
+                    if not findTeam:
+                        Toast("莱茵幻境 - 无可进入房间")
+            re2, _ = TomatoOcrText(307, 1019, 407, 1046, '创建队伍')
+            if re2:
+                TomatoOcrTap(210, 727, 262, 758, "取消")
+                TomatoOcrTap(74, 1202, 129, 1229, '返回', sleep1=0.8)  # 点击返回匹配页
+
+            res = TomatoOcrTap(312, 1147, 408, 1175, "开始匹配", 40, -40, sleep1=1)
+            if res:
+                Toast("莱茵幻境 - 开始匹配")
+                # 判断职业选择
+                res, _ = TomatoOcrText(317, 486, 402, 519, "选择职业")
+                if res:
+                    Toast("莱茵幻境 - 选择职业")
+                    if 功能开关["斗歌会职能优先输出"] == 1:
+                        tapSleep(280, 665, 0.8)  # 职能输出
+                    elif 功能开关["斗歌会职能优先坦克"] == 1:
+                        tapSleep(435, 665, 0.8)  # 坦克
+                    else:
+                        tapSleep(280, 665, 0.8)  # 职能输出
+                    res = TomatoOcrTap(332, 754, 387, 789, "确定")
 
             waitStatus, _ = TomatoOcrText(322, 1152, 394, 1178, "匹配中")
             if not waitStatus:
@@ -1249,8 +1295,7 @@ class DailyTask:
                         res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
                 break
 
-            sleep(5)
-            elapsed = elapsed + 5
+            sleep(0.5)
 
     # 派对大师
     def PaiDuiDaShi(self):
@@ -2186,9 +2231,9 @@ class DailyTask:
                     tapSleep(181, 1059, 0.2)  # 点击奖励
                     tapSleep(195, 1043, 0.2)  # 点击奖励
                     tapSleep(192, 1062, 0.2)  # 点击奖励
-                    tapSleep(568,1090, 0.2)  # 点击奖励
-                    tapSleep(355,1085, 0.2)  # 点击奖励
-                    tapSleep(191,1089, 0.2)  # 点击奖励
+                    tapSleep(568, 1090, 0.2)  # 点击奖励
+                    tapSleep(355, 1085, 0.2)  # 点击奖励
+                    tapSleep(191, 1089, 0.2)  # 点击奖励
                     tapSleep(92, 1218)  # 返回
                     tapSleep(92, 1218)
             else:
