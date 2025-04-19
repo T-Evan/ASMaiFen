@@ -264,7 +264,7 @@ class LvTuanTask:
         # 翻页（先返回上面）
         swipe(360, 750, 360, 850)
         sleep(2.5)
-        for i in range(13):
+        for i in range(11):
             re = FindColors.find("258,928,#DBA636|259,921,#FDEF88|263,923,#F7DD62|257,932,#CC8F30",
                                  rect=[85, 538, 491, 1092], diff=0.9)
             if re:  # 有可购买商品时，继续判断
@@ -396,7 +396,10 @@ class LvTuanTask:
                             Toast('金币 - 已购买')
 
             # 检查剩余叶子
-            res, availableCount = TomatoOcrText(448, 80, 514, 104, "叶子")
+            availableCount = ''
+            re = CompareColors.compare("573,91,#F2D44F|577,89,#F7E769|579,96,#E9B63A")
+            if re:
+                res, availableCount = TomatoOcrText(598, 80, 682, 104, "叶子")
             if availableCount == '':
                 res, availableCount = TomatoOcrText(607, 82, 669, 102, "叶子")
             availableCount = safe_int_v2(availableCount)
@@ -682,4 +685,4 @@ class LvTuanTask:
                         tapSleep(510, 1216, 0.3)  # 点击空白处关闭
                         # tapSleep(510,1216,0.3)  # 点击空白处关闭
 
-            res = TomatoOcrTap(172, 1190, 206, 1216, "回")  # 返回旅团首页
+            res = TomatoOcrTap(173,1186,205,1218, "回")  # 返回旅团首页

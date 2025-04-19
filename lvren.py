@@ -124,6 +124,98 @@ class LvRenTask:
             Toast('旅人 - 稚星道途 - 已完成')
             return
 
+        Toast('旅人 - 星墟文物 - 开始')
+        self.dailyTask.homePage()
+        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
+        res = TomatoOcrFindRangeClick("星墟文物", x1=448, y1=233, x2=560, y2=528, sleep1=2, offsetX=10,
+                                      offsetY=-10)
+        if not res:
+            任务记录['旅人-稚星道途-完成'] = 1
+            Toast('稚星道途 - 未找到任务入口')
+        if res:
+            tapSleep(273, 1115)  # 点击激活阶段
+            re = TomatoOcrTap(554, 689, 636, 710, '充能任务', sleep1=0.8, offsetX=10, offsetY=-20)
+            if re:
+                Toast('旅人 - 星墟文物 - 领取激活任务')
+                for i in range(5):
+                    TomatoOcrTap(486, 299, 540, 329, '领取')
+                    tapSleep(358, 1049)  # 点击空白处
+                    tapSleep(358, 1049)  # 点击空白处
+                tapSleep(323, 1199, 0.8)  # 点击空白处返回
+                re = FindColors.find("497,765,#EF5C40|500,765,#F05E40|502,765,#EF5C40", rect=[86, 741, 623, 988],
+                                     diff=0.9)  # 领取累积奖励
+                if re:
+                    Toast('旅人 - 星墟文物 - 领取累积奖励')
+                    tapSleep(re.x - 20, re.y + 20)
+                    tapSleep(323, 1199, 0.8)  # 点击空白处
+                    tapSleep(323, 1199)  # 点击空白处
+
+            re = CompareColors.compare("505,1104,#EF5D40|510,1103,#EF5C40")  # 充盈阶段红点
+            if re:
+                tapSleep(440, 1119)  # 点击充盈阶段
+                re = TomatoOcrTap(554, 689, 636, 710, '充能任务', sleep1=0.8, offsetX=10, offsetY=-20)
+                if re:
+                    Toast('旅人 - 星墟文物 - 领取充盈任务')
+                    for i in range(5):
+                        TomatoOcrTap(486, 299, 540, 329, '领取')
+                        tapSleep(358, 1049)  # 点击空白处
+                        tapSleep(358, 1049)  # 点击空白处
+                    tapSleep(323, 1199, 0.8)  # 点击空白处返回
+                    re = FindColors.find("497,765,#EF5C40|500,765,#F05E40|502,765,#EF5C40", rect=[86, 741, 623, 988],
+                                         diff=0.9)  # 领取累积奖励
+                    if re:
+                        Toast('旅人 - 星墟文物 - 领取累积奖励')
+                        tapSleep(re.x - 20, re.y + 20)
+                        tapSleep(323, 1199, 0.8)  # 点击空白处
+                        tapSleep(323, 1199)  # 点击空白处
+
+            for k in range(4):
+                re = CompareColors.compare("606,1185,#EF5C40|603,1185,#F05D40")  # 文物库红点
+                if re:
+                    Toast('旅人 - 星墟文物 - 切换文物')
+                    tapSleep(582, 1207, 1)  # 点击文物
+                    tapSleep(281, 1119)
+                    re = CompareColors.compare("498,763,#F45F42|500,765,#F05E40")  # 激活阶段红点
+                    if re:
+                        tapSleep(281, 1115)  # 点击激活阶段
+                        re = TomatoOcrTap(554, 689, 636, 710, '充能任务', sleep1=0.8, offsetX=10, offsetY=-20)
+                        if re:
+                            Toast('旅人 - 星墟文物 - 领取激活任务')
+                            for i in range(5):
+                                TomatoOcrTap(486, 299, 540, 329, '领取')
+                                tapSleep(358, 1049)  # 点击空白处
+                                tapSleep(358, 1049)  # 点击空白处
+                            tapSleep(323, 1199, 0.8)  # 点击空白处返回
+                            re = FindColors.find("497,765,#EF5C40|500,765,#F05E40|502,765,#EF5C40",
+                                                 rect=[86, 741, 623, 988], diff=0.9)  # 领取累积奖励
+                            if re:
+                                Toast('旅人 - 星墟文物 - 领取累积奖励')
+                                tapSleep(re.x - 20, re.y + 20)
+                                tapSleep(323, 1199, 0.8)  # 点击空白处
+                                tapSleep(323, 1199)  # 点击空白处
+                    re = CompareColors.compare("505,1104,#EF5D40|510,1103,#EF5C40")  # 充盈阶段红点
+                    if re:
+                        tapSleep(440, 1119)  # 点击充盈阶段
+                        re = TomatoOcrTap(554, 689, 636, 710, '充能任务', sleep1=0.8, offsetX=10, offsetY=-20)
+                        if re:
+                            Toast('旅人 - 星墟文物 - 领取充盈任务')
+                            for i in range(5):
+                                TomatoOcrTap(486, 299, 540, 329, '领取')
+                                tapSleep(358, 1049)  # 点击空白处
+                                tapSleep(358, 1049)  # 点击空白处
+                            tapSleep(323, 1199, 0.8)  # 点击空白处返回
+                            re = FindColors.find("497,765,#EF5C40|500,765,#F05E40|502,765,#EF5C40",
+                                                 rect=[86, 741, 623, 988], diff=0.9)  # 领取累积奖励
+                            if re:
+                                Toast('旅人 - 星墟文物 - 领取累积奖励')
+                                tapSleep(re.x - 20, re.y + 20)
+                                tapSleep(323, 1199, 0.8)  # 点击空白处
+                                tapSleep(323, 1199)  # 点击空白处
+                else:
+                    Toast('旅人 - 星墟文物 - 无需切换文物')
+
+            tapSleep(112, 1201)  # 返回首页
+
         Toast('旅人 - 稚星道途 - 开始')
         self.dailyTask.homePage()
         res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
@@ -148,6 +240,7 @@ class LvRenTask:
 
         if 功能开关["稚星道途升级"] == 1:
             for i in range(30):
+                Toast('旅人 - 稚星道途 - 启明升级')
                 reAll = FindColors.find_all("133,460,#EC5535|134,455,#F45F42|131,456,#F25E41|136,456,#F25E41",
                                             rect=[16, 324, 701, 874])
                 if reAll:
@@ -162,6 +255,29 @@ class LvRenTask:
                         tapSleep(345, 1238)  # 点击空白处
                 else:
                     break
+
+            # 匹配权能红点
+            re = CompareColors.compare("683,1169,#F15E41|686,1167,#F46042")
+            if re:
+                tapSleep(661, 1204)  # 点击权能
+                for i in range(30):
+                    reAll = FindColors.find_all(
+                        "119,301,#F66043|121,303,#F35E42|119,305,#EF5D40|116,305,#EF5C40|122,300,#FA6243",
+                        rect=[80, 274, 704, 915])
+                    if reAll:
+                        Toast('旅人 - 稚星道途 - 权能进阶')
+                        for re in reAll:
+                            tapSleep(re.x, re.y)
+                            TomatoOcrTap(339, 1084, 380, 1107, '升星')
+                            tapSleep(360, 945, 0.2)  # 点击升级
+                            tapSleep(360, 945, 0.2)  # 点击升级
+                            tapSleep(360, 945, 0.2)  # 点击升级
+                            tapSleep(360, 945, 0.2)  # 点击升级
+                            tapSleep(360, 945, 0.2)  # 点击升级
+                            tapSleep(345, 1238)  # 点击空白处
+                    else:
+                        break
+
         任务记录['旅人-稚星道途-完成'] = 1
 
     # 升级天赋
@@ -375,10 +491,10 @@ class LvRenTask:
                         tapSleep(238, 809, 1)  # 点击第一个格子
                         re, _ = TomatoOcrText(183, 438, 211, 457, '等级')
                         if not re:
-                            Toast('猫猫包 - 剩余猫包不足')
+                            Toast('猫猫包融合 - 剩余猫包不足')
                             break
                         else:
-                            tapSleep(216, 1232)  # 点击空白处
+                            tapSleep(241, 1224)  # 点击空白处
 
                     Toast('猫猫包 - 自动融合')
 
@@ -386,20 +502,26 @@ class LvRenTask:
                     re = CompareColors.compare(
                         "489,803,#B2A799|487,812,#7C6347|487,825,#7C6347|473,823,#FCF8EE|500,820,#FCF8EE")  # 第二个猫包为空
                     if re:
-                        tapSleep(233, 825, 0.8)  # 点击空白猫包1
-                        tapSleep(172, 781, 0.8)  # 选择最后一个猫包
-                        tapSleep(355, 976, 0.8)  # 确认选择
+                        tapSleep(233, 825, 0.6)  # 点击空白猫包1
+                        tapSleep(172, 781, 0.6)  # 选择最后一个猫包
+                        TomatoOcrTap(323, 967, 361, 995, '选')  # 确认选择
+                        tapSleep(241, 1224)  # 点击空白处
 
-                        tapSleep(481, 812, 0.8)  # 点击空白猫包2
-                        tapSleep(296, 785, 0.8)  # 选择最后一个猫包
-                        tapSleep(355, 976, 0.8)  # 确认选择
+                        tapSleep(481, 812, 0.6)  # 点击空白猫包2
+                        re, _ = TomatoOcrText(296, 633, 333, 652, '空空')
+                        if re:
+                            Toast('猫猫包融合 - 剩余猫包不足')
+                            break
+                        tapSleep(296, 785, 0.6)  # 选择最后一个猫包
+                        TomatoOcrTap(323, 967, 361, 995, '选')  # 确认选择
+                        tapSleep(241, 1224)  # 点击空白处
 
                     res = TomatoOcrTap(453, 1016, 510, 1049, "融合", offsetX=5, offsetY=5)
                     res = TomatoOcrTap(333, 1019, 385, 1047, "融合", offsetX=5, offsetY=5)
                     TomatoOcrTap(600, 31, 642, 53, '跳过', offsetX=5, offsetY=5)
-                    tapSleep(136, 1051)  # 点击空白处
-                    tapSleep(136, 1051)  # 点击空白处
-                    tapSleep(136, 1051)  # 点击空白处
+                    tapSleep(217, 1204)  # 点击空白处
+                    tapSleep(217, 1204)  # 点击空白处
+                    tapSleep(217, 1204)  # 点击空白处
 
         # 返回猫包首页
         TomatoOcrTap(99, 1188, 128, 1216, '回', offsetX=5, offsetY=5, sleep1=1)
@@ -572,7 +694,7 @@ class LvRenTask:
         # 超过140件时分解
         if (needDelete and equipNum > 185) or (not needDelete and equipNum > 190):
             Toast('旅人 - 分解装备')
-            re = TomatoOcrTap(156, 1046, 203, 1073, '熔炼')
+            re = TomatoOcrTap(156, 1046, 203, 1073, '熔炼', sleep1=1)
             if re:
                 # 用户未配置自动熔炼，仅删除一件
                 # 未勾选史诗+
@@ -597,9 +719,8 @@ class LvRenTask:
                     tapSleep(124, 899)
 
                 # 判断是否有可选的分解装备
-                re = FindColors.find(
-                    "132,314,#4EAE3B|131,320,#DAEFDA|131,323,#4DB039|129,329,#49AC38|129,323,#4EAF3A|135,322,#4CAE39",
-                    rect=[104, 282, 606, 806], diff=0.9)
+                re = FindColors.find("138,329,#4EAE3B|134,336,#FFFFFF|130,343,#4EAF3A|127,339,#4EAF3A",
+                                     rect=[91, 232, 612, 808], diff=0.9)
                 if not re:
                     # 选中低等级装备
                     swipe(358, 722, 360, 574)
@@ -779,11 +900,11 @@ class LvRenTask:
             任务记录["强化装备-倒计时"] = time.time()
 
             yiJianRes = True
-            if 功能开关['仅强化武器戒指护腕'] == 0:
+            if 功能开关['仅强化武器戒指护腕'] == 0 and 功能开关['仅强化防御装备'] == 0:
                 yiJianRes = imageFindClick('一键强化')
                 # if yiJianRes:
                 #     return
-            if 功能开关['仅强化武器戒指护腕'] == 1 or not yiJianRes:
+            if 功能开关['仅强化武器戒指护腕'] == 1:
                 for i in range(2):
                     tapSleep(140, 175, 0.6)  # 点击武器
                     self.updateEquipTool()
@@ -793,27 +914,30 @@ class LvRenTask:
 
                     tapSleep(228, 506, 0.6)  # 点击戒指
                     self.updateEquipTool()
+            if 功能开关['仅强化防御装备'] == 1:
+                for i in range(2):
+                    tapSleep(574, 178, 0.6)  # 点击头盔
+                    self.updateEquipTool()
+                    tapSleep(140, 285, 0.6)  # 点击胸甲
+                    self.updateEquipTool()
+                    tapSleep(135, 394, 0.6)  # 点击腿甲
+                    self.updateEquipTool()
+                    tapSleep(577, 391, 0.6)  # 点击鞋子
+                    self.updateEquipTool()
+                    tapSleep(352, 505, 0.6)  # 点击项链
+                    self.updateEquipTool()
+                    tapSleep(489, 505, 0.6)  # 点击护符
+                    self.updateEquipTool()
 
-                    if not yiJianRes:
-                        waitUpdate = FindColors.find_all(
-                            "326,463,#F0706D|318,468,#FFFFFF|315,461,#FC694C|319,463,#FDFDFD|331,464,#FC694C|323,471,#F9715A|322,478,#FC694C|333,468,#FC694C",
-                            rect=[69, 110, 650, 566], diff=0.9)
-                        if waitUpdate:
-                            for p in waitUpdate:
-                                tapSleep(p.x, p.y, 0.6)  # 点击待操作装备
-                                self.updateEquipTool()
-                        # tapSleep(574, 178, 0.6)  # 点击面具
-                        # self.updateEquipTool()
-                        #
-                        #
-                        # tapSleep(140, 285, 0.6)  # 点击胸甲
-                        # self.updateEquipTool()
-                        #
-                        # tapSleep(135, 394, 0.6)  # 点击腿甲
-                        # self.updateEquipTool()
-                        #
-                        # tapSleep(577, 391, 0.6)  # 点击鞋子
-                        # self.updateEquipTool()
+            # 适配新手无一键强化按钮
+            if 功能开关['仅强化武器戒指护腕'] == 0 and 功能开关['仅强化防御装备'] == 0 and not yiJianRes:
+                waitUpdate = FindColors.find_all(
+                    "326,463,#F0706D|318,468,#FFFFFF|315,461,#FC694C|319,463,#FDFDFD|331,464,#FC694C|323,471,#F9715A|322,478,#FC694C|333,468,#FC694C",
+                    rect=[69, 110, 650, 566], diff=0.9)
+                if waitUpdate:
+                    for p in waitUpdate:
+                        tapSleep(p.x, p.y, 0.6)  # 点击待操作装备
+                        self.updateEquipTool()
 
         if 功能开关["自动进阶装备"] == 1:
             Toast('旅人 - 装备进阶 - 开始')

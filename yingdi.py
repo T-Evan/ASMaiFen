@@ -504,7 +504,7 @@ class YingDiTask:
         # 点击秘宝
         re = False
         for i in range(5):
-            re, _ = TomatoOcrText(613,172,695,191, '补充能源')
+            re, _ = TomatoOcrText(613, 172, 695, 191, '补充能源')
             if not re:
                 Toast('营地任务 - 秘宝收集 - 识别活动入口')
                 tapSleep(241, 192, 0.5)  # 秘宝
@@ -529,7 +529,9 @@ class YingDiTask:
         if 功能开关["秘宝地图"] == "最新地图":
             res = TomatoOcrTap(527, 1212, 609, 1237, "秘宝产出", sleep1=2.5)
             if res:
-                res, 功能开关["秘宝地图"] = TomatoOcrText(270, 1008, 475, 1055, '秘宝地图')
+                res, 功能开关["秘宝地图"] = TomatoOcrText(465, 1014, 581, 1046, '秘宝地图')
+                if 功能开关["秘宝地图"] == "":
+                    res, 功能开关["秘宝地图"] = TomatoOcrText(270, 1008, 475, 1055, '秘宝地图')
                 tapSleep(373, 1166)  # 返回
                 Toast(f'识别最新地图 - {功能开关["秘宝地图"]}')
 
@@ -554,7 +556,7 @@ class YingDiTask:
             # 返回上半屏
             if not findNL:
                 if 功能开关["秘宝地图"] in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林",
-                                            "翡翠浦"]:
+                                            "翡翠浦", "罗马尼安"]:
                     re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[44, 8, 626, 45],
                                          diff=0.96)
                     if not re:
@@ -623,7 +625,7 @@ class YingDiTask:
 
         # 购买秘宝能量
         needNengLiang = False
-        res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
+        res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
         availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
         if availableNengLiang != '' and availableNengLiang < 200:  # 识别剩余体力不足200时，尝试补充
             needNengLiang = True
@@ -656,7 +658,7 @@ class YingDiTask:
 
         tapSleep(326, 1216)  # 点击空白处
         tapSleep(326, 1216)
-        res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
+        res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
         availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
         if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足50时，退出寻宝循环
             Toast('秘宝能量不足 - 跳过寻宝')
@@ -670,7 +672,7 @@ class YingDiTask:
         findMap = self.miBaoChangeMap(0, 0)
         if findMap:
             for i in range(3):
-                res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
+                res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
                 availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
                 if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
                     # 购买秘宝能量
@@ -698,7 +700,7 @@ class YingDiTask:
                             if ct < needCount:
                                 tapSleep(527, 571)  # 点击+1
                             re = TomatoOcrTap(445, 642, 511, 669, "购买", 10, 10, sleep1=0.8)
-                    res, availableNengLiang = TomatoOcrText(593,82,672,104, "剩余能量")  # 210
+                    res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
                     availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
                     if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
                         break
@@ -745,7 +747,8 @@ class YingDiTask:
         selectMap = 功能开关["秘宝地图"]
         findMap = False
 
-        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦"]:
+        if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦",
+                         "罗马尼安"]:
             re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                  diff=0.96)  # 底部牛皮纸
             if not re:
@@ -756,7 +759,8 @@ class YingDiTask:
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦",
+                             "罗马尼安"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:
@@ -772,7 +776,8 @@ class YingDiTask:
 
         # 再找左侧
         if left < 4 and right == 4:
-            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦"]:
+            if selectMap in ["巨像的旷野", "白帆之都", "石松沼泽", "天鹅仙宫", "妖精旷野", "地底浓林", "翡翠浦",
+                             "罗马尼安"]:
                 re = FindColors.find("186,1262,#B18457|191,1262,#AD8053|195,1265,#AE8155", rect=[103, 1245, 573, 1273],
                                      diff=0.96)  # 底部牛皮纸
                 if not re:
@@ -1032,6 +1037,53 @@ class YingDiTask:
                             self.shopBuy()
                         else:
                             Toast('无限棱镜 - 已购买')
+
+                if 功能开关['秘境补给善意野兽积点卡'] == 1:
+                    re, x, y = TomatoOcrFindRange('野兽积点', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('野兽积点', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('善意野兽积点卡 - 已购买')
+
+                if 功能开关['秘境补给焕新刷具'] == 1:
+                    re, x, y = TomatoOcrFindRange('焕新刷具', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('焕新刷具', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('焕新刷具 - 已购买')
+
+                if 功能开关['秘境补给骑行兽基础晶石'] == 1:
+                    re, x, y = TomatoOcrFindRange('基础晶石', x1=72, y1=542, x2=363, y2=959, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('基础晶石', x1=72, y1=542, x2=363, y2=959, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('焕新刷具 - 已购买')
+
+                    re, x, y = TomatoOcrFindRange('基础晶石', x1=358, y1=550, x2=633, y2=959, match_mode='fuzzy')
+                    if re:
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        if '已售' in tmpText:  # 兜底售罄->售馨
+                            res = True
+                        if not res:
+                            TomatoOcrFindRangeClick('基础晶石', x1=358, y1=550, x2=633, y2=959, match_mode='fuzzy')
+                            self.shopBuy()
+                        else:
+                            Toast('焕新刷具 - 已购买')
 
                 if 功能开关['秘境补给群星自选包'] == 1:
                     re, x, y = TomatoOcrFindRange('群星自选', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')

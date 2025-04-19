@@ -905,6 +905,9 @@ class ShiLianTask:
             re1 = FindColors.find(
                 "210,667,#EAD098|191,672,#5F4319|199,675,#5F4319|189,692,#D59938|192,696,#E0A93E|199,696,#2E8CF4|202,695,#1155DD",
                 rect=[126, 647, 252, 713], diff=0.95)
+        if not re1:
+            re1 = CompareColors.compare(
+                "164,858,#EB9D50|167,860,#E9AB7B|178,860,#E36B3B|161,887,#DB6839|183,890,#D87C3D|172,893,#6CDCFC")
             # re1, x, y = imageFind('恶龙-宝箱金币', x1=129, y1=841, x2=213, y2=912)
         # re1 = TomatoOcrFindRange('最高', match_mode='fuzzy')
         if re1:
@@ -1834,9 +1837,10 @@ class ShiLianTask:
                     res = imageFindClick('宝箱-开启')
                     if res:
                         Toast('开启宝箱')
-                        sleep(1.5)
+                        sleep(2.5)
                         tapSleep(340, 930)
                         openStatus = 1
+                        continue
                     tmp = FindColors.find(
                         "557,762,#A6A1AD|535,760,#A6A1AD|563,782,#A6A1AD|525,776,#76727C|421,751,#A6A1AD|423,779,#A6A1AD",
                         rect=[90, 265, 637, 1066], diff=0.95)
@@ -1846,7 +1850,7 @@ class ShiLianTask:
                     res = imageFindClick('宝箱-开启2')
                     if res:
                         Toast('开启宝箱')
-                        sleep(1.5)
+                        sleep(2.5)
                         tapSleep(340, 930)
                         openStatus = 1
 
@@ -2966,7 +2970,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 600 or (
+            if elapsed > 500 or (
                     "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if shou_ye1:

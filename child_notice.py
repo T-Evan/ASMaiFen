@@ -93,6 +93,18 @@ def noticeCancel():
         global checkSkipTime
         currTime = time.time() - checkSkipTime
         if currTime > 20:
+            # 自动拒绝，避免影响日常任务进行
+            if 功能开关["秘境自动接收邀请"] == 0 and 功能开关['梦魇自动接收邀请'] == 0 and 功能开关[
+                '恶龙自动接收邀请'] == 0 and 功能开关['暴走自动接收邀请'] == 0 and 功能开关[
+                '终末战自动接收邀请'] == 0 and \
+                    功能开关['绝境自动接收邀请'] == 0 and 功能开关['调查队自动接收邀请'] == 0:
+                # 匹配拒绝提示
+                res2 = CompareColors.compare(
+                    "514,667,#F4E0AC|468,659,#F4E0AC|521,659,#F4E0AC|478,664,#846D4F|480,667,#D4C193|480,670,#DCC899|487,661,#D8C596|487,661,#D8C596|500,669,#DCC899")
+                if res2:
+                    tapSleep(489, 664)  # 点击拒绝
+                    Toast('日常任务执行中 - 拒绝邀请')
+
             res = TomatoOcrTap(587, 66, 631, 89, "跳过", 10, 10)
             if res:
                 res = TomatoOcrTap(432, 598, 475, 632, "是", 10, 10)
@@ -115,18 +127,6 @@ def noticeCancel():
                 Toast('网络断开，尝试重启游戏')
                 # 结束应用
                 r = system.shell(f"am force-stop {功能开关['游戏包名']}", L())
-
-            # 自动拒绝，避免影响日常任务进行
-            if 功能开关["秘境自动接收邀请"] == 0 and 功能开关['梦魇自动接收邀请'] == 0 and 功能开关[
-                '恶龙自动接收邀请'] == 0 and 功能开关['暴走自动接收邀请'] == 0 and 功能开关[
-                '终末战自动接收邀请'] == 0 and \
-                    功能开关['绝境自动接收邀请'] == 0 and 功能开关['调查队自动接收邀请'] == 0:
-                # 匹配拒绝提示
-                res2 = CompareColors.compare(
-                    "514,667,#F4E0AC|468,659,#F4E0AC|521,659,#F4E0AC|478,664,#846D4F|480,667,#D4C193|480,670,#DCC899|487,661,#D8C596|487,661,#D8C596|500,669,#DCC899")
-                if res2:
-                    tapSleep(489, 664)  # 点击拒绝
-                    Toast('日常任务执行中 - 拒绝邀请')
 
             checkSkipTime = time.time()
         # res = TomatoOcrFindRange('本轮时长', 0.9, 113, 831, 720, 1280, whiteList='本轮时长', timeLock=10)

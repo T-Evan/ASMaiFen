@@ -110,6 +110,12 @@ class StartUp:
                     # 重启游戏
                     return self.start_app()
 
+            # 识别是否在更新中
+            re, _, _ = TomatoOcrFindRange("正在", match_mode='fuzzy', x1=186, y1=1074, x2=268, y2=1101)
+            if re:
+                Toast(f'启动游戏，等待更新中')
+                sleep(15)
+
             Toast(f'启动游戏，等待加载中，{attempt}/{max_attempt}')
 
             sleep(3)  # 等待游戏启动

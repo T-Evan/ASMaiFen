@@ -73,7 +73,7 @@ def returnHome():
 
         # if i > 4:
         #     点击首页-冒险
-        # re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
+        re = TomatoOcrTap(330, 1201, 389, 1238, '冒险')
 
         if 1:
             # 识别是否进入首页

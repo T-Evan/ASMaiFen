@@ -1826,12 +1826,62 @@ class DailyTask:
                 tapSleep(98, 1194)  # 点击返回
             return
 
+    # 仓鼠好货市集
+    def CangShuHaoHuo(self):
+        if 任务记录["仓鼠好货市集"] == 0:
+            Toast('其他签到-仓鼠好货市集-开始')
+            isFind = False
+            for k in range(3):
+                self.homePage()
+                res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
+                # 判断是否在营地页面
+                res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                if not res:
+                    return
+
+                isFind = TomatoOcrFindRangeClick(x1=97, y1=544, x2=180, y2=1051, offsetX=40,
+                                                 offsetY=-40, keywords=[{'keyword': '仓鼠好货', 'match_mode': 'exact'},
+                                                                        {'keyword': '仓鼠', 'match_mode': 'exact'}])
+                if isFind:
+                    break
+            if not isFind:
+                Toast('仓鼠好货市集 - 未找到活动入口')
+                任务记录["仓鼠好货市集-完成"] = 1
+                return
+            Toast('仓鼠好货市集-领取奖励')
+            tapSleep(611, 197, 0.8)  # 点击右上角奖励
+            tapSleep(361, 1210)  # 点击空白处
+            tapSleep(361, 1210)  # 点击空白处
+
+            Toast('仓鼠好货市集-领取骑行兽免费礼包')
+            TomatoOcrTap(468, 434, 527, 462, '免费', sleep1=0.8)
+            tapSleep(323, 1217)  # 点击空白处关闭
+            tapSleep(323, 1217)  # 点击空白处关闭
+            re = CompareColors.compare("421,1085,#F25E41|424,1085,#F15D41")
+            if re:
+                Toast('仓鼠好货市集-领取技能免费礼包')
+                tapSleep(367, 1111, 0.8)
+                TomatoOcrTap(468, 434, 527, 462, '免费', sleep1=0.8)
+                tapSleep(323, 1217)  # 点击空白处关闭
+                tapSleep(323, 1217)  # 点击空白处关闭
+            re = CompareColors.compare("595,1085,#F15D41|600,1085,#F15D41")
+            if re:
+                Toast('仓鼠好货市集-领取秘宝免费礼包')
+                tapSleep(546, 1109, 0.8)
+                TomatoOcrTap(468, 434, 527, 462, '免费', sleep1=0.8)
+                tapSleep(323, 1217)  # 点击空白处关闭
+                tapSleep(323, 1217)  # 点击空白处关闭
+            任务记录["仓鼠好货市集"] = 1
+            tapSleep(93, 1197)  # 返回营地页
+
     # 其他签到活动（简单活动合集）
     def QiTaQianDao(self):
         if 功能开关["其他签到活动"] == 0:
             return
         # 踏青签到簿 - 清明活动
         # self.QiTaQianDaoTaQing()
+        # 仓鼠好货市集
+        self.CangShuHaoHuo()
         # 欢庆连五日
         # if 任务记录["欢庆连五日"] == 0:
         #     Toast('欢庆连五日 - 开始')
@@ -2309,7 +2359,7 @@ class DailyTask:
                     任务记录["拾光奇旅"] = 1
                 else:
                     Toast('拾光奇旅 - 未找到入口')
-                    # 任务记录["拾光奇旅"] = 1
+                    任务记录["拾光奇旅"] = 1
 
         # 黑猫虫游记
         if 任务记录["黑猫虫游记"] == 0:
@@ -2382,7 +2432,7 @@ class DailyTask:
                     任务记录["黑猫虫游记"] = 1
                 else:
                     Toast('黑猫虫游记 - 未找到入口')
-                    # 任务记录["黑猫虫游记"] = 1
+                    任务记录["黑猫虫游记"] = 1
 
         # 岛屿游记
         if 任务记录["岛屿游记"] == 0:
@@ -2456,7 +2506,7 @@ class DailyTask:
                     任务记录["岛屿游记"] = 1
                 else:
                     Toast('岛屿游记 - 未找到入口')
-                    # 任务记录["黑猫虫游记"] = 1
+                    任务记录["岛屿游记"] = 1
 
         # 大玩家
         if 任务记录["大玩家"] == 0:
@@ -2680,7 +2730,7 @@ class DailyTask:
             tapSleep(86, 1202)  # 点击返回
             任务记录["限时特惠-完成"] = 1
 
-        res = imageFindClick("营地-限时礼包", 0.9, 0.9, 94, 880, 187, 1057)
+        res = imageFindClick("营地-限时礼包", 0.9, 0.9, 101, 708, 178, 1060)
         if res:
             Toast('限时特惠 - 限时礼包')
             tapSleep(595, 153)  # 点击特惠宝箱
@@ -3038,20 +3088,26 @@ class DailyTask:
 
         Toast('日常 - 火力全开 - 开始')
 
-        self.homePage()
-        res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
-        # 判断是否在营地页面
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
-        if not res:
-            return
+        isFind = False
+        for k in range(3):
+            self.homePage()
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
+            # 判断是否在营地页面
+            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            if not res:
+                return
 
-        res = TomatoOcrFindRangeClick(x1=97, y1=544, x2=180, y2=1051, offsetX=40,
-                                      offsetY=-40, keywords=[{'keyword': '火力全开', 'match_mode': 'exact'},
-                                                             {'keyword': '火力', 'match_mode': 'exact'},
-                                                             {'keyword': '火', 'match_mode': 'exact'},
-                                                             {'keyword': '全开', 'match_mode': 'exact'}])  # 进入火力全开
-        if not res:
+            isFind = TomatoOcrFindRangeClick(x1=97, y1=544, x2=180, y2=1051, offsetX=40,
+                                             offsetY=-40, keywords=[{'keyword': '火力全开', 'match_mode': 'exact'},
+                                                                    {'keyword': '火力', 'match_mode': 'exact'},
+                                                                    {'keyword': '火', 'match_mode': 'exact'},
+                                                                    {'keyword': '全开',
+                                                                     'match_mode': 'exact'}])  # 进入火力全开
+            if isFind:
+                break
+        if not isFind:
             Toast('火力全开 - 未找到活动入口')
+            任务记录["火力全开-完成"] = 1
             return
 
         # 领取累计奖励
