@@ -685,4 +685,6 @@ class LvTuanTask:
                         tapSleep(510, 1216, 0.3)  # 点击空白处关闭
                         # tapSleep(510,1216,0.3)  # 点击空白处关闭
 
-            res = TomatoOcrTap(173,1186,205,1218, "回")  # 返回旅团首页
+            res = TomatoOcrTap(173, 1186, 205, 1218, "回")  # 返回旅团首页
+            tapSleep(121, 1216)
+            tapSleep(121, 1216)

@@ -39,7 +39,7 @@ class DailyTask:
                     sleep(2)
                 continue
 
-            if tryTimes < 40:
+            if tryTimes < 30:
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                 if "等级" in teamName1:
                     for k in range(3):
@@ -60,7 +60,7 @@ class DailyTask:
                 # 判断战败页面
                 if 功能开关["fighting"] == 0:
                     Toast(f'日常-返回首页-退出组队')
-                    # self.shilianTask.allQuit()
+                    self.shilianTask.allQuit()
                     self.shilianTask.quitTeamFighting()
                 # self.quitTeam()
 
@@ -3533,7 +3533,7 @@ class DailyTask:
 
         Toast('日常 - 兑换码领取 - 开始')
 
-        duihuanmas = []
+        duihuanmas = ["goguyu"]
         for duihuanma in duihuanmas:
             # 判断是否在营地页面
             res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")

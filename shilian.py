@@ -727,7 +727,7 @@ class ShiLianTask:
             Toast("梦魇任务 - 添加佣兵")
             re = imageFindClick('秘境-创建队伍', confidence1=0.85)
             if re:
-                tapSleep(554, 858)  # 点击 创建队伍 - 添加佣兵
+                tapSleep(554,827)  # 点击 创建队伍 - 添加佣兵
                 TomatoOcrFindRangeClick("创建队伍", 0.9, 0.9, 60, 511, 652, 1153)
                 res = TomatoOcrTap(333, 974, 383, 1006, "开始")
                 return self.fighting()
@@ -924,7 +924,7 @@ class ShiLianTask:
             Toast("恶龙任务 - 添加佣兵")
             re = imageFindClick('秘境-创建队伍', confidence1=0.8)
             if re:
-                tapSleep(551, 858)  # 点击 创建队伍 - 添加佣兵
+                tapSleep(558,830)  # 点击 创建队伍 - 添加佣兵
                 res = TomatoOcrTap(311, 915, 407, 950, "创建队伍", 10, 10, sleep1=1.5)  # 创建队伍 - 创建队伍
                 res = TomatoOcrTap(326, 969, 390, 1000, "开始", 10, 10, sleep1=1.5)
                 if not res:
@@ -1184,7 +1184,7 @@ class ShiLianTask:
                         res = TomatoOcrTap(64, 1200, 128, 1234, "返回", 10, 10)
                         self.tili()
 
-                tapSleep(549, 857)  # 点击 创建队伍 - 添加佣兵
+                tapSleep(554,827)  # 点击 创建队伍 - 添加佣兵
                 res = TomatoOcrTap(311, 915, 410, 948, "创建队伍", 5, 5)  # 创建队伍 - 创建队伍
                 sleep(1)
                 res = TomatoOcrTap(333, 974, 383, 1006, "开始", 5, 5)
