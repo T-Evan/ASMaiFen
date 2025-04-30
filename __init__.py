@@ -329,15 +329,12 @@ def main():
                     continue
                 # 获取当前设备运行的APP信息
                 gc.collect()
-                info = Device.memory()
-                print(info)
-                # # 返回单位是字节
-                total_memory_mb = round(info[2] / (1024 ** 3), 2)
-                # used_memory_mb = info[1] / (1024 ** 2)
-                free_memory_mb = round(info[0] / (1024 ** 3), 2)
-                if free_memory_mb < 1:
-                    Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G,建议调整内存>6G")
-                    sleep(0.5)
+                # info = system.memory()
+                # total_memory_mb = round(info.totalMem / (1024 ** 3), 2)
+                # free_memory_mb = round(info.availMem / (1024 ** 3), 2)
+                # if info.lowMemory:
+                #     Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G,建议调整内存>6G")
+                #     sleep(0.5)
                 # else:
                 #     Toast(f"总内存{total_memory_mb}G,剩余内存:{free_memory_mb}G")
                 # counter += 1
