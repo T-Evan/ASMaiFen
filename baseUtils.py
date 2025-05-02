@@ -467,7 +467,7 @@ lastToastTime = 0
 def generate_random_color():
     colors = ["#ffa400", "#ffa631", "#fa8c35", "#00bc12", "#0aa344", "#6b6882", "#ca6924", "#789262",
               "#758a99", "#177cb0", "#4b5cc4", "#8d4bbb", "#4c8dae", "#b0a4e3", "#cca4e3", "#c93756",
-              "#f05654", "#725e82", "#7b68ee"]
+              "#f05654", "#7b68ee"]
     return random.choice(colors)
 
 
@@ -488,8 +488,13 @@ def Toast(content, tim=1000):
     Dialog.toast(content, tim, 3 | 48, 200, 0)
 
 
-def tapSleep(x, y, s=0.4):
-    click(x, y)
+def tapSleep(x, y, s=0.4, dur=200):
+    click(x, y, dur)
+    sleep(s)
+
+
+def tapSleepV2(x, y, s=0.4, dur=200):
+    clickV2(x, y, dur)
     sleep(s)
 
 

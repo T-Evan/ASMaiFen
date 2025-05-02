@@ -20,8 +20,10 @@ def swipe(x1, y1, x2, y2, dur=500):
 
 def click(x, y, dur=200):
     action.click(x, y, dur)
-    # action.Touch.down(x, y, dur)
-    # action.Touch.up(x, y, dur)
+
+def clickV2(x, y, dur=200):
+    action.Touch.down(x, y, dur)
+    action.Touch.up(x, y, dur)
 
 
 def sleep(s):

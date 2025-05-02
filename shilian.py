@@ -2900,7 +2900,7 @@ class ShiLianTask:
                     break
 
     def fighting(self, fightType='秘境'):
-        totalWait = 500  # 30000 毫秒 = 30 秒
+        totalWait = 400  # 30000 毫秒 = 30 秒
         elapsed = 0
         teamShoutDone = 0
 
@@ -2970,7 +2970,7 @@ class ShiLianTask:
             # 判断是否战斗失败（战斗4分钟后）
             res, teamName1 = TomatoOcrText(7, 148, 52, 163, "队友名称")
             res, teamName2 = TomatoOcrText(7, 198, 52, 213, "队友名称")
-            if elapsed > 500 or (
+            if elapsed > 400 or (
                     "等级" not in teamName1 and "等级" not in teamName2 and "Lv" not in teamName1 and "Lv" not in teamName2):
                 shou_ye1, _ = TomatoOcrText(626, 379, 711, 405, "冒险手册")
                 if shou_ye1:

@@ -192,8 +192,9 @@ def waitInvite():
 
                 needReject = True
                 if needReject == True and 功能开关["仅接收旅团成员邀请"] == 1:
-                    if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != "" and 任务记录[
-                        "玩家-当前旅团"] != 任务记录["战斗-房主旅团"]:
+                    if 任务记录["战斗-房主旅团"] != "" and 任务记录[
+                        "玩家-当前旅团"] != "" and not has_common_chars(任务记录["玩家-当前旅团"],
+                                                                        任务记录["战斗-房主旅团"], 2):
                         Toast(f'非旅团成员，拒绝组队邀请 - {任务记录["战斗-房主旅团"]}/{任务记录["玩家-当前旅团"]}')
                         sleep(0.5)
                     else:
@@ -492,7 +493,7 @@ def waitInvite():
         if fight_type == '恶龙带队' and not findDoneStatus:
             # 判断是否为当前等级地图
             re, levelName1 = TomatoOcrText(365, 283, 440, 307, '建议职业')
-            re, levelName2 = TomatoOcrText(128,601,264,621, '当前职业')
+            re, levelName2 = TomatoOcrText(128, 601, 264, 621, '当前职业')
             if levelName1 in levelName2:
                 # 判断是否未开宝箱
                 re1 = CompareColors.compare(

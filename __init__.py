@@ -219,7 +219,6 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 #     sleep(0.5)
 # tapSleep(574, 1051,0.1)  # 点击奖励
 # tapSleep(570, 1062,0.1)  # 点击奖励
-# tapSleep(104,1218,0.1)  # 点击奖励
 # system.exit()
 
 
