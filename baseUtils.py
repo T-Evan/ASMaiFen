@@ -431,7 +431,7 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
         return False, ''
 
 
-def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
+def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3,match_mode='exact'):
     try:
         try:
             with TimeoutLock():
@@ -446,10 +446,16 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3):
             ocrReJson = json.loads(ocrText)
             lineWords = ''
             lineWords = ocrReJson.get('words', '')
-            if lineWords != "" and lineWords == keyword:
-                tapSleep(x1 + offsetX, y1 + offsetY, sleep1)
+            if match_mode == 'fuzzy':
+                if lineWords != "" and keyword in lineWords:
+                    tapSleep(x1 + offsetX, y1 + offsetY, sleep1)
                 print(f"oTap识别成功-{keyword}|{lineWords}|{x1}|{y1}")
                 return True
+            if match_mode == 'exact':
+                if lineWords != "" and lineWords == keyword:
+                    tapSleep(x1 + offsetX, y1 + offsetY, sleep1)
+                    print(f"oTap识别成功-{keyword}|{lineWords}|{x1}|{y1}")
+                    return True
             print(f"oTap识别失败-不匹配-{keyword}|{lineWords}")
             return False
         else:

@@ -490,14 +490,18 @@ class AutoMove:
 
                 if '眠域' not in 任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
                         任务记录['战斗-上一次移动'] > 7:
-                    re = imageFindClick('战斗-向左移动', x1=11, y1=565, x2=206, y2=778)
+                    re = CompareColors.compare(
+                        "71,667,#C5BFB1|63,677,#384558|67,681,#384558|69,689,#C5BFB1|77,683,#384558")
                     if re:
+                        tapSleep(69, 680)
                         Toast('自动走位')
                     任务记录['战斗-上一次移动'] = time.time()
 
                 if '眠域' not in 任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
                         任务记录['战斗-上一次移动'] > 15:
-                    re = imageFindClick('战斗-向右移动', x1=11, y1=565, x2=206, y2=778)
+                    re = CompareColors.compare(
+                        "150,670,#C5BFB1|148,677,#384558|156,677,#C5BFB1|153,689,#384558|156,692,#384558")
                     if re:
+                        tapSleep(148, 677)
                         Toast('自动走位')
                     任务记录['战斗-上一次移动'] = time.time()

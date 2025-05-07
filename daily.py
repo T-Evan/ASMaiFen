@@ -41,13 +41,13 @@ class DailyTask:
 
             if tryTimes < 20:
                 # res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
-                res, teamName4 = TomatoOcrText(56, 220, 138, 249, "队友名称")
+                res, teamName4 = TomatoOcrText(4, 247, 56, 265, "队友名称")
                 if "等级" in teamName4:
-                    for k in range(3):
-                        res, teamName4 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+                    for k in range(2):
+                        res, teamName4 = TomatoOcrText(4, 247, 56, 265, "队友名称")
                         if "等级" in teamName4:
                             # Toast(f'返回首页-等待战斗{k * 2 * tryTimes}/60')
-                            sleep(2)
+                            sleep(3)
                         else:
                             break
                     continue
@@ -2677,7 +2677,7 @@ class DailyTask:
             tapSleep(516, 1240)  # 点击空白处
 
         # 累积奖励领取
-        re = CompareColors.compare("682,355,#F05E40|682,356,#EE5C40|685,353,#F45E42")
+        re = CompareColors.compare("678,167,#EF5C40|683,168,#F45842", diff=0.8)
         if re:
             Toast('箱庭苗圃 - 累积奖励领取')
             tapSleep(658, 375, 1)  # 点击百科
@@ -2708,10 +2708,10 @@ class DailyTask:
 
         # 提交订单
         if 功能开关["箱庭苗圃自动提交任务"] == 1:
-            re = CompareColors.compare("683,167,#EF5C40|680,164,#F45F42|683,167,#EF5C40")
+            re = CompareColors.compare("674,160,#F86142|675,167,#F45D42", diff=0.85)
             if re:
                 Toast('箱庭苗圃 - 提交任务')
-                tapSleep(660, 192, 1)
+                tapSleep(655, 187, 2)
                 for m in range(13):
                     re = FindColors.find("576,922,#EF5D40|580,918,#F56042|579,922,#EF5D40|569,919,#6584B9",
                                          rect=[86, 164, 656, 1084], diff=0.95)
@@ -2719,8 +2719,8 @@ class DailyTask:
                         re = CompareColors.compare("682,154,#F86345|685,159,#FEE2DC|682,165,#F26141|688,168,#F36A53")
                     if re:
                         tapSleep(re.x - 30, re.y + 30, 1)
-                        for k in range(20):
-                            tapSleep(131, 279)  # 点击植物
+                        for k in range(30):
+                            tapSleep(131, 279, 0.2)  # 点击植物
                         tapSleep(359, 1027)  # 点击提交
                         tapSleep(281, 1106)  # 点击空白处
 
@@ -2747,8 +2747,13 @@ class DailyTask:
                 if res1:
                     sleep(1)
                     name = 功能开关['作物1']
-                    Toast(f'种植{name}')
-                    res, x, y = imageFind('箱庭-' + name, 0.87, 78, 1002, 634, 1128)
+                    if name != '默认':
+                        Toast(f'种植{name}')
+                        res, x, y = imageFind('箱庭-' + name, 0.87, 78, 1002, 634, 1128)
+                    else:
+                        Toast(f'随机种植')
+                        radomName = ['睡眠豌豆', '狐果', '豚薯', '香菇小松', '巨型茄子']
+                        res, x, y = imageFind('箱庭-' + random.choice(radomName), 0.87, 78, 1002, 634, 1128)
                     if not res:
                         Toast(f'未找到{name}，种植默认作物')
                         x, y = 129, 1046  # 默认前两个
@@ -2756,7 +2761,7 @@ class DailyTask:
                     # 移动初始点
                     line1.moveTo(x, y)
                     # 使用二次贝塞尔曲线 从点(500,800) 到 (250,900)
-                    line1.quadTo(129, 1046, 236, 882)
+                    line1.quadTo(x, y, 236, 882)
                     line1.quadTo(236, 882, 222, 707)
                     line1.quadTo(222, 707, 246, 553)
                     line1.quadTo(246, 553, 214, 880)
@@ -2770,8 +2775,13 @@ class DailyTask:
                 if res2:
                     sleep(1)
                     name = 功能开关['作物2']
-                    Toast(f'种植{name}')
-                    res, x, y = imageFind('箱庭-' + name, 0.9, 78, 1002, 634, 1128)
+                    if name != '默认':
+                        Toast(f'种植{name}')
+                        res, x, y = imageFind('箱庭-' + name, 0.87, 78, 1002, 634, 1128)
+                    else:
+                        Toast(f'随机种植')
+                        radomName = ['睡眠豌豆', '狐果', '豚薯', '香菇小松', '巨型茄子']
+                        res, x, y = imageFind('箱庭-' + random.choice(radomName), 0.87, 78, 1002, 634, 1128)
                     if not res:
                         Toast(f'未找到{name}，种植默认作物')
                         x, y = 219, 1040  # 默认前两个
@@ -2779,7 +2789,7 @@ class DailyTask:
                     # 移动初始点
                     line2.moveTo(x, y)
                     # 拖动种子拖动到对应位置
-                    line2.quadTo(219, 1040, 353, 890)
+                    line2.quadTo(x, y, 353, 890)
                     line2.quadTo(353, 890, 322, 691)
                     line2.quadTo(322, 691, 508, 700)
                     line2.quadTo(508, 700, 336, 703)
@@ -3771,7 +3781,7 @@ class DailyTask:
 
         Toast('日常 - 兑换码领取 - 开始')
 
-        duihuanmas = ["goguyu"]
+        duihuanmas = []
         for duihuanma in duihuanmas:
             # 判断是否在营地页面
             res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
@@ -4096,6 +4106,8 @@ class DailyTask:
         re1, _ = TomatoOcrText(282, 400, 434, 459, '购买道具')
         if not re1:
             re1, _ = TomatoOcrText(330, 836, 388, 858, '购买')
+        if not re1:
+            re1, _ = TomatoOcrText(334, 890, 385, 912, '购买')
         re2 = False
         if re1:
             re = TomatoOcrTap(475, 785, 513, 811, '最大', offsetX=5, offsetY=5)
