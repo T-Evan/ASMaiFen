@@ -219,6 +219,8 @@ if display.widthPixels != 720 or display.heightPixels != 1280:
 #     sleep(0.5)
 # tapSleep(574, 1051,0.1)  # 点击奖励
 # tapSleep(570, 1062,0.1)  # 点击奖励
+# action.Touch.down(127,1000, 1500)  # 长按
+# action.Touch.up(127,1000, 1500)
 # system.exit()
 
 
@@ -316,9 +318,9 @@ def main():
                     Toast('已开启-进入战斗后启动！等待进入战斗')
                     # 识别是否战斗中
                     res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
-                    res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
+                    # res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                     # res1, _ = TomatoOcrText(642, 461, 702, 483, "麦克风")
-                    if "等级" in teamName1 or "等级" in teamName2 or "Lv" in teamName1 or "Lv" in teamName2:
+                    if "等级" in teamName1 or "Lv" in teamName1:
                         # 大暴走战斗中
                         if 功能开关["大暴走开关"] == 1 and 功能开关["暴走进入战斗后启动"] == 1:
                             Toast("进入暴走战斗成功 - 开始战斗")
@@ -377,7 +379,7 @@ def main():
                     res = dailyTask.newMap(forceCheck=True)
 
                 # 检查背包是否已满
-                lvrenTask.deleteEquip()
+                lvrenTask.deleteEquip(needDelete=True)
 
                 # 试炼
                 shilianTask.shilian()

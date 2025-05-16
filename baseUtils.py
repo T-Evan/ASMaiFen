@@ -401,7 +401,7 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
 
 
 # 速度慢、精度高、适合极小区域（单个字/数字）识别精准匹配
-def TomatoOcrText(x1, y1, x2, y2, keyword):
+def TomatoOcrText(x1, y1, x2, y2, keyword,match_mode='exact'):
     try:
         # 传入图片路径或者Bitmap
         # res = ocr.ocrFile(R.img("logo.png"))
@@ -418,9 +418,14 @@ def TomatoOcrText(x1, y1, x2, y2, keyword):
             ocrReJson = json.loads(ocrText)
             lineWords = ''
             lineWords = ocrReJson.get('words', '')
-            if lineWords != "" and lineWords == keyword:
-                print(f"oText识别成功-{keyword}|{lineWords}")
-                return True, lineWords
+            if match_mode == 'fuzzy':
+                if lineWords != "" and keyword in lineWords:
+                    print(f"oText识别成功-{keyword}|{lineWords}")
+                    return True, lineWords
+            if match_mode == 'exact':
+                if lineWords != "" and lineWords == keyword:
+                    print(f"oText识别成功-{keyword}|{lineWords}")
+                    return True, lineWords
             print(f"oText识别失败-不匹配-{keyword}|{lineWords}")
             return False, lineWords
         else:
@@ -449,8 +454,8 @@ def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3,match
             if match_mode == 'fuzzy':
                 if lineWords != "" and keyword in lineWords:
                     tapSleep(x1 + offsetX, y1 + offsetY, sleep1)
-                print(f"oTap识别成功-{keyword}|{lineWords}|{x1}|{y1}")
-                return True
+                    print(f"oTap识别成功-{keyword}|{lineWords}|{x1}|{y1}")
+                    return True
             if match_mode == 'exact':
                 if lineWords != "" and lineWords == keyword:
                     tapSleep(x1 + offsetX, y1 + offsetY, sleep1)

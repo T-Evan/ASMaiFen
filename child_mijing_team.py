@@ -82,7 +82,9 @@ def main():
                         功能开关["fighting"] = 1
                         功能开关["needHome"] = 0
                         # 功能开关["noHomeMust"] = 1
-                        res = TomatoOcrTap(650, 522, 688, 544, "试炼", sleep1=0.8)
+                        res = TomatoOcrTap(645,505,691,527, "试炼", sleep1=0.8)
+                        if not res:
+                            res = TomatoOcrTap(650, 522, 688, 544, "试炼", sleep1=0.8)
                         if res:
                             re = imageFindClick('秘境之间', x1=85, y1=53, x2=636, y2=700)
                             if re:
@@ -192,9 +194,8 @@ def waitInvite():
 
                 needReject = True
                 if needReject == True and 功能开关["仅接收旅团成员邀请"] == 1:
-                    if 任务记录["战斗-房主旅团"] != "" and 任务记录[
-                        "玩家-当前旅团"] != "" and not has_common_chars(任务记录["玩家-当前旅团"],
-                                                                        任务记录["战斗-房主旅团"], 2):
+                    if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != "" and not has_common_chars(
+                            任务记录["玩家-当前旅团"], 任务记录["战斗-房主旅团"], 2):
                         Toast(f'非旅团成员，拒绝组队邀请 - {任务记录["战斗-房主旅团"]}/{任务记录["玩家-当前旅团"]}')
                         sleep(0.5)
                     else:
@@ -441,11 +442,11 @@ def waitInvite():
             if res2 or res3:
                 break
 
-            res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
+            res1 = TomatoOcrTap(616,613,688,633, "组队",match_mode='fuzzy')
             if not res1:
-                res1 = TomatoOcrTap(602, 557, 693, 580, "正在组队")
+                res1 = TomatoOcrTap(617,613,690,637, "组队",match_mode='fuzzy')
             if not res1:
-                res1 = TomatoOcrTap(625, 572, 678, 596, "匹配中")
+                res1 = TomatoOcrTap(620,625,682,650, "匹配中")
             # 兜底入队失败
             res2, _ = TomatoOcrText(584, 651, 636, 678, "同意")
             if res2:
@@ -717,6 +718,9 @@ def checkFightType():
 
 
 def has_common_chars(A, B, min_length=4):
+    if A == B:
+        return True
+
     # 将字符串转换为集合以获取唯一字符
     set_A = set(A)
     set_B = set(B)

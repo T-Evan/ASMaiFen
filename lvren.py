@@ -174,8 +174,13 @@ class LvRenTask:
                 if re:
                     Toast('旅人 - 星墟文物 - 切换文物')
                     tapSleep(582, 1207, 1)  # 点击文物
-                    tapSleep(281, 1119)
+                    tmp = FindColors.find("560,814,#F15D40|553,816,#F1745D|557,813,#F25E41", rect=[105, 173, 637, 1161],
+                                          diff=0.95)
+                    if tmp:
+                        tapSleep(tmp.x, tmp.y, 1)  # 点击文物
                     re = CompareColors.compare("498,763,#F45F42|500,765,#F05E40")  # 激活阶段红点
+                    if not re:
+                        re = CompareColors.compare("341,1100,#F56042|342,1103,#F05E40")  # 激活阶段红点
                     if re:
                         tapSleep(281, 1115)  # 点击激活阶段
                         re = TomatoOcrTap(554, 689, 636, 710, '充能任务', sleep1=0.8, offsetX=10, offsetY=-20)
@@ -688,7 +693,9 @@ class LvRenTask:
         equipNum = equipNum.replace("/200", "")
         equipNum = safe_int(equipNum)
         任务记录["装备数量"] = equipNum
+        print(f'装备数量-{equipNum}')
         if equipNum == "":
+            print(f'装备数量计算失败')
             return
 
         # 超过140件时分解
@@ -698,7 +705,7 @@ class LvRenTask:
             if re:
                 # 用户未配置自动熔炼，仅删除一件
                 # 未勾选史诗+
-                re = CompareColors.compare("121,869,#4EAE3C|359,1183,#F8F7FB")
+                re = CompareColors.compare("124,869,#4EB03A", diff=0.8)
                 if not re:
                     tapSleep(123, 864)
                 # 未勾选常见

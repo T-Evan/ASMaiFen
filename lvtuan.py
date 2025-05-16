@@ -70,7 +70,9 @@ class LvTuanTask:
                     res = TomatoOcrFindRangeClick("调查队", x1=634, y1=602, x2=701, y2=1033, offsetX=20,
                                                   offsetY=-20, sleep1=0.7)
                     if not res:
-                        res = TomatoOcrTap(647, 592, 689, 614, "旅团", sleep1=2)
+                        res = TomatoOcrTap(647,576,689,597, "旅团", sleep1=2)
+                        if not res:
+                            res = TomatoOcrTap(647, 592, 689, 614, "旅团", sleep1=2)
                         if not res:
                             # 返回首页
                             self.dailyTask.homePage()
@@ -232,7 +234,7 @@ class LvTuanTask:
             if not res:
                 # 返回首页
                 self.dailyTask.homePage()
-                res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+                res = TomatoOcrTap(647,576,689,597, "旅团")
                 # 判断是否在旅团页面
                 res = TomatoOcrFindRangeClick("服务区", x1=626, y1=648, x2=709, y2=986, offsetX=25, offsetY=-15)
                 if res:
@@ -443,7 +445,7 @@ class LvTuanTask:
             if not res:
                 # 返回首页
                 self.dailyTask.homePage()
-                res = TomatoOcrTap(647, 592, 689, 614, "旅团", sleep1=1.5)
+                res = TomatoOcrTap(647,576,689,597, "旅团", sleep1=1.5)
                 # 判断是否在旅团页面
                 res = TomatoOcrFindRangeClick("大采购", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
                 if res:
@@ -456,37 +458,43 @@ class LvTuanTask:
             Toast("旅团 - 旅团大采购 - 未找到任务入口")
             return
 
+        # 2025.5.8 游戏已支持一键领取。翻页领取下线
+        re = FindColors.find("615,138,#F56042|619,135,#F86247|621,139,#F45E42|618,141,#F05E40",rect=[479,85,649,214],diff=0.95)
+        if re:
+            Toast("旅团 - 旅团大采购 - 领取奖励")
+            tapSleep(588,168)
         # 滑到最左
-        swipe(281, 1191, 656, 1194)
-        sleep(0.8)
-        swipe(281, 1191, 656, 1194)
-        sleep(0.8)
-        swipe(281, 1191, 656, 1194)
-        sleep(0.8)
-        swipe(281, 1191, 656, 1194)
-        sleep(0.8)
-        for k in range(35):
-            re = FindColors.find("448,1164,#F35E41|450,1161,#F76143|450,1164,#F35E41", diff=0.97,
-                                 rect=[153, 1141, 717, 1246])
-            if re:
-                Toast('领取采购单')
-                print(re)
-                tapSleep(re.x - 10, re.y + 10)  # 点击待领取
-                re2 = CompareColors.compare("562,314,#F3A84B|558,303,#F3A84B|571,315,#F6B35E")  # 判断可领取
-                if re2:
-                    tapSleep(522, 310, 1)  # 点击领取
-                    tapSleep(344, 1251)  # 点击空白
-                    tapSleep(344, 1251)  # 点击空白
-                    tapSleep(344, 1251)  # 点击空白
-            else:
-                Toast('寻找待领取采购单')
-                swipe(656, 1194, 450, 1191)  # 右滑
-                sleep(1)
-                re = FindColors.find_all(
-                    "203,1165,#A3A0AA|194,1217,#A4A1AB|216,1227,#A6A1AE|274,1222,#A6A1AD|279,1207,#8D8297|280,1167,#A6A1AD|279,1184,#A6A1AD",
-                    rect=[153, 1133, 699, 1243], diff=0.96)
-                if re:
-                    break
+        # swipe(281, 1191, 656, 1194)
+        # sleep(0.8)
+        # swipe(281, 1191, 656, 1194)
+        # sleep(0.8)
+        # swipe(281, 1191, 656, 1194)
+        # sleep(0.8)
+        # swipe(281, 1191, 656, 1194)
+        # sleep(0.8)
+
+        # for k in range(35):
+        #     re = FindColors.find("448,1164,#F35E41|450,1161,#F76143|450,1164,#F35E41", diff=0.97,
+        #                          rect=[153, 1141, 717, 1246])
+        #     if re:
+        #         Toast('领取采购单')
+        #         print(re)
+        #         tapSleep(re.x - 10, re.y + 10)  # 点击待领取
+        #         re2 = CompareColors.compare("562,314,#F3A84B|558,303,#F3A84B|571,315,#F6B35E")  # 判断可领取
+        #         if re2:
+        #             tapSleep(522, 310, 1)  # 点击领取
+        #             tapSleep(344, 1251)  # 点击空白
+        #             tapSleep(344, 1251)  # 点击空白
+        #             tapSleep(344, 1251)  # 点击空白
+        #     else:
+        #         Toast('寻找待领取采购单')
+        #         swipe(656, 1194, 450, 1191)  # 右滑
+        #         sleep(1)
+        #         re = FindColors.find_all(
+        #             "203,1165,#A3A0AA|194,1217,#A4A1AB|216,1227,#A6A1AE|274,1222,#A6A1AD|279,1207,#8D8297|280,1167,#A6A1AD|279,1184,#A6A1AD",
+        #             rect=[153, 1133, 699, 1243], diff=0.96)
+        #         if re:
+        #             break
 
     # 旅团任务
     def lvTuanRenWu(self):

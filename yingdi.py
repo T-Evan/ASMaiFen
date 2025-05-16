@@ -93,7 +93,7 @@ class YingDiTask:
             if re:
                 open = CompareColors.compare("293,1049,#4AAD39|298,1052,#4CAE39|300,1049,#4AAD39")
                 if (needOpen and not open) or (not needOpen and open):
-                    tapSleep(300, 1046)  # 点击隐身
+                    tapSleep(300, 1046, 0.8)  # 点击隐身
             re, _ = TomatoOcrText(315, 1030, 366, 1062, '隐身')
             if re:
                 open = CompareColors.compare("293,1049,#4AAD39|298,1052,#4CAE39|300,1049,#4AAD39")
@@ -755,7 +755,7 @@ class YingDiTask:
                 Toast("返回下半屏")
                 swipe(380, 918, 361, 547, 800)
                 sleep(1)
-                tapSleep(67, 33)
+                tapSleep(688, 277)
 
         # 先找右侧
         if left == 0 and 0 < right < 4:
@@ -767,7 +767,7 @@ class YingDiTask:
                     Toast("返回下半屏")
                     swipe(380, 918, 361, 547, 800)
                     sleep(1)
-                    tapSleep(67, 33)
+                    tapSleep(688, 277)
             else:
                 swipe(420, 200, 420, 600, 800)
                 sleep(2)
@@ -784,7 +784,7 @@ class YingDiTask:
                     Toast("返回下半屏")
                     swipe(380, 918, 361, 547, 800)
                     sleep(1)
-                    tapSleep(67, 33)
+                    tapSleep(688, 277)
             else:
                 swipe(420, 200, 420, 600, 800)
                 sleep(2)
@@ -819,7 +819,7 @@ class YingDiTask:
             re = TomatoOcrFindRangeClick(keywords=[{'keyword': selectMap, 'match_mode': 'fuzzy'},
                                                    {'keyword': selectMap[:2], 'match_mode': 'fuzzy'},
                                                    {'keyword': selectMap[-2:], 'match_mode': 'fuzzy'}], sleep1=2,
-                                         whiteList=selectMap)
+                                         whiteList=selectMap, offsetX=20, offsetY=-30)
             if re:
                 findMap = True
 
