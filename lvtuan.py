@@ -70,7 +70,7 @@ class LvTuanTask:
                     res = TomatoOcrFindRangeClick("调查队", x1=634, y1=602, x2=701, y2=1033, offsetX=20,
                                                   offsetY=-20, sleep1=0.7)
                     if not res:
-                        res = TomatoOcrTap(647,576,689,597, "旅团", sleep1=2)
+                        res = TomatoOcrTap(647, 576, 689, 597, "旅团", sleep1=2)
                         if not res:
                             res = TomatoOcrTap(647, 592, 689, 614, "旅团", sleep1=2)
                         if not res:
@@ -234,7 +234,7 @@ class LvTuanTask:
             if not res:
                 # 返回首页
                 self.dailyTask.homePage()
-                res = TomatoOcrTap(647,576,689,597, "旅团")
+                res = TomatoOcrTap(647, 576, 689, 597, "旅团")
                 # 判断是否在旅团页面
                 res = TomatoOcrFindRangeClick("服务区", x1=626, y1=648, x2=709, y2=986, offsetX=25, offsetY=-15)
                 if res:
@@ -445,7 +445,7 @@ class LvTuanTask:
             if not res:
                 # 返回首页
                 self.dailyTask.homePage()
-                res = TomatoOcrTap(647,576,689,597, "旅团", sleep1=1.5)
+                res = TomatoOcrTap(647, 576, 689, 597, "旅团", sleep1=1.5)
                 # 判断是否在旅团页面
                 res = TomatoOcrFindRangeClick("大采购", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-20)
                 if res:
@@ -459,10 +459,11 @@ class LvTuanTask:
             return
 
         # 2025.5.8 游戏已支持一键领取。翻页领取下线
-        re = FindColors.find("615,138,#F56042|619,135,#F86247|621,139,#F45E42|618,141,#F05E40",rect=[479,85,649,214],diff=0.95)
+        re = FindColors.find("615,138,#F56042|619,135,#F86247|621,139,#F45E42|618,141,#F05E40",
+                             rect=[479, 85, 649, 214], diff=0.95)
         if re:
             Toast("旅团 - 旅团大采购 - 领取奖励")
-            tapSleep(588,168)
+            tapSleep(588, 168)
         # 滑到最左
         # swipe(281, 1191, 656, 1194)
         # sleep(0.8)
@@ -642,9 +643,12 @@ class LvTuanTask:
 
         self.dailyTask.homePage()
 
-        res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+        res = TomatoOcrTap(641, 572, 691, 599, "旅团")
         if not res:
-            return
+            self.dailyTask.homePage()
+            res = TomatoOcrTap(641, 572, 691, 599, "旅团")
+            if not res:
+                return
         sleep(3)
 
         # 判断浇树已完成

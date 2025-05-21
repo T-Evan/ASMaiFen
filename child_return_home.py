@@ -52,7 +52,8 @@ def returnHome():
                     return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
                                                       offsetX=20, offsetY=20,
                                                       keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
-                                                                {'keyword': '营地', 'match_mode': 'fuzzy'}])
+                                                                {'keyword': '营地', 'match_mode': 'fuzzy'},
+                                                                {'keyword': '退出', 'match_mode': 'fuzzy'}])
                     re = CompareColors.compare("650,58,#FFFFFF|663,58,#373737|667,58,#333333|675,61,#FFFFFF")
                     if re:
                         tapSleep(666, 58)  # tap社区页面退出
@@ -122,7 +123,7 @@ def openTreasure(noNeedOpen=0):
     tmp4 = False
     # 房间页 - 宝箱UI
     res1 = FindColors.find("174,1013,#F3A84B|192,1019,#F3A84B|270,1012,#F3A84B|204,1037,#F2DA70",
-                           rect=[60,102,641,1180], diff=0.95)
+                           rect=[60, 102, 641, 1180], diff=0.95)
     if res1:
         isTreasure = 1
         # 加锁兜底
@@ -186,8 +187,9 @@ def openTreasure(noNeedOpen=0):
 
     openStatus = 0
     if isTreasure == 1:
-        re = FindColors.find("174,1013,#F3A84B|192,1019,#F3A84B|270,1012,#F3A84B|204,1037,#F2DA70",
-                             rect=[60,102,641,1180], diff=0.95)
+        re = FindColors.find(
+            "292,1065,#A6A1AD|306,1068,#A6A1AD|314,1065,#A6A1AD|306,1079,#A6A1AD|314,1077,#A6A1AD|290,1093,#A6A1AD",
+            rect=[101, 623, 618, 1087], diff=0.93)
         if not re:
             re, _ = TomatoOcrText(453, 1006, 528, 1029, '体力不足')
         if re:
@@ -220,7 +222,7 @@ def openTreasure(noNeedOpen=0):
                 attempts = attempts + 1
                 # 先快速图色匹配一次宝箱图标
                 res1 = FindColors.find("174,1013,#F3A84B|192,1019,#F3A84B|270,1012,#F3A84B|204,1037,#F2DA70",
-                                       rect=[60,102,641,1180], diff=0.95)
+                                       rect=[60, 102, 641, 1180], diff=0.95)
                 if res1:
                     # 图色识别兜底
                     res = imageFindClick('宝箱-开启')
@@ -229,8 +231,9 @@ def openTreasure(noNeedOpen=0):
                         sleep(1.5)
                         tapSleep(340, 930)
                         openStatus = 1
-                    tmp = FindColors.find("174,1013,#F3A84B|192,1019,#F3A84B|270,1012,#F3A84B|204,1037,#F2DA70",
-                                          rect=[60,102,641,1180], diff=0.95)
+                    tmp = FindColors.find(
+                        "292,1065,#A6A1AD|306,1068,#A6A1AD|314,1065,#A6A1AD|306,1079,#A6A1AD|314,1077,#A6A1AD|290,1093,#A6A1AD",
+                        rect=[101, 623, 618, 1087], diff=0.93)
                     if tmp:
                         Toast('体力不足 - 跳过宝箱')
                         break

@@ -730,16 +730,17 @@ class LvRenTask:
                                      rect=[91, 232, 612, 808], diff=0.9)
                 if not re:
                     # 选中低等级装备
-                    swipe(358, 722, 360, 574)
-                    swipe(358, 722, 360, 574)
-                    swipe(358, 722, 360, 574)
-                    swipe(358, 722, 360, 574)
-                    sleep(1)
+                    # swipe(358, 722, 360, 574)
+                    # swipe(358, 722, 360, 574)
+                    # swipe(358, 722, 360, 574)
+                    # swipe(358, 722, 360, 574)
+                    # sleep(1)
                     tapSleep(551, 710)
                     tapSleep(472, 713)
                     tapSleep(404, 718)
                     tapSleep(312, 710)
                     tapSleep(238, 705)
+                tapSleep(353, 926)  # 点击转化
                 tapSleep(353, 926)  # 点击转化
                 tapSleep(356, 1208)  # 点击空白
                 tapSleep(356, 1208)  # 点击空白
@@ -851,6 +852,8 @@ class LvRenTask:
                     _, newLevel1 = TomatoOcrText(232, 661, 330, 697, '新装备1等级')
                 if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
                     _, newLevel1 = TomatoOcrText(233, 669, 328, 697, '新装备1等级')
+                if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
+                    _, newLevel1 = TomatoOcrText(236, 779, 326, 808, '新装备1等级')
                 newLevel1 = safe_int_v2(newLevel1.replace('等级', ''))
                 if newLevel1 > nowLevel:
                     TomatoOcrFindRangeClick(keyword='装备', x1=457, y1=525, x2=598, y2=804)
@@ -978,17 +981,6 @@ class LvRenTask:
             if needUpdate:
                 for p in needUpdate:
                     tapSleep(p.x, p.y, 0.8)
-                    # 识别可打造标识
-                    re = FindColors.find("587,967,#F25E41|587,967,#F25E41|587,967,#F25E41", diff=0.95)
-                    if re:
-                        Toast('旅人 - 装备进阶 - 准备打造装备')
-                        tmp = TomatoOcrTap(525, 965, 574, 988, '打造', sleep1=4)
-                        if tmp:
-                            Toast('旅人 - 装备进阶 - 开始打造装备')
-                            TomatoOcrTap(326, 991, 391, 1021, '打造', sleep1=3)
-                            tapSleep(167, 1090, 0.8)  # 点击空白处
-                            TomatoOcrTap(330, 825, 385, 855, '装备')  # 装备
-
                     # 识别可进阶标识
                     for i in range(4):
                         re = CompareColors.compare("604,1065,#EC5D44|609,1063,#F05C3F|607,1060,#F46043", diff=0.7)
@@ -1008,6 +1000,17 @@ class LvRenTask:
                                 TomatoOcrTap(442, 760, 516, 797, '确认')
                                 tapSleep(129, 1023, 0.3)
                                 tapSleep(129, 1023, 0.3)
+
+                    # 识别可打造标识
+                    re = FindColors.find("587,967,#F25E41|587,967,#F25E41|587,967,#F25E41", diff=0.95)
+                    if re:
+                        Toast('旅人 - 装备进阶 - 准备打造装备')
+                        tmp = TomatoOcrTap(525, 965, 574, 988, '打造', sleep1=4)
+                        if tmp:
+                            Toast('旅人 - 装备进阶 - 开始打造装备')
+                            TomatoOcrTap(326, 991, 391, 1021, '打造', sleep1=3)
+                            tapSleep(167, 1090, 0.8)  # 点击空白处
+                            TomatoOcrTap(330, 825, 385, 855, '装备')  # 装备
                     tapSleep(652, 1234, 0.2)
                     tapSleep(652, 1234, 0.2)
 

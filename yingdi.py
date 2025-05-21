@@ -1164,6 +1164,21 @@ class YingDiTask:
                         else:
                             Toast('星星经验 - 已购买')
 
+        # 友情商店
+        if 1:
+            re = TomatoOcrTap(483, 1208, 573, 1239, "友情商店", sleep1=0.8, offsetX=30, offsetY=-30)
+            if not re:
+                TomatoOcrTap(483, 1208, 573, 1239, "友情商店", sleep1=0.8, offsetX=30, offsetY=-30)
+
+            if re:
+                # 周年庆-明灯还年，限时小妖寻找
+                re = CompareColors.compare("393,359,#F6F3E9|484,359,#F7F3E9")
+                if re:
+                    Toast('周年庆典 - 明灯还年 - 灯笼布')
+                    tapSleep(366, 424, 2)
+                    for k in range(10):
+                        tapSleep(86, 1218)  # 点击空白
+
         # 返回营地
         TomatoOcrTap(67, 1182, 121, 1221, "返回")
         sleep(2)

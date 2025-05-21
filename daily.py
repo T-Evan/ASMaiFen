@@ -522,6 +522,14 @@ class DailyTask:
         contents = random.choice(contentArr).split('|')
         print(contents)
         for content in contents:
+            if content == "打工":
+                colors = generate_random_color()
+                content = f"<color={colors}>{content}</COLOR>"
+
+            if 功能开关['世界发言随机字体颜色'] and "color" not in content:
+                colors = generate_random_color()
+                content = f"<color={colors}>{content}</COLOR>"
+
             # print(content)
             res1 = TomatoOcrTap(18, 1098, 97, 1134, "点击输入", 10, 10)
             res2 = False
@@ -3192,7 +3200,10 @@ class DailyTask:
         res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
         if not res:
             return
-        res = TomatoOcrFindRangeClick('宝藏湖', 0.9, 14, 11, 778, 197, 1057, offsetX=30, offsetY=-20)
+        res = TomatoOcrFindRangeClick(
+            keywords=[{'keyword': '宝', 'match_mode': 'fuzzy'}, {'keyword': '藏', 'match_mode': 'fuzzy'},
+                      {'keyword': '湖', 'match_mode': 'fuzzy'}], sleep1=0.9, x1=15, y1=672, x2=93, y2=1149, offsetX=30,
+            offsetY=-20)
         if not res:
             return
 
@@ -3559,6 +3570,7 @@ class DailyTask:
             if re:
                 tapSleep(72, 385, 0.8)
                 TomatoOcrTap(495, 303, 547, 334, '领取')
+                tapSleep(503, 1043)
                 re = CompareColors.compare("595,1077,#F55F42|598,1079,#EF5C40")  # 活动任务红点
                 if re:
                     tapSleep(541, 1090, 0.8)  # 点击活动任务
@@ -3579,9 +3591,12 @@ class DailyTask:
                         sleep(1.5)
                         tapSleep(558, 1073, 4)  # 确认出杆
                     for p in range(30):
-                        re = CompareColors.compare("251,448,#37536B|268,452,#37536B|284,451,#F1F1F1")  # 长按出杆
-                        if not re:
-                            break
+                        if p > 10:
+                            re = CompareColors.compare("251,448,#37536B|268,452,#37536B|284,451,#F1F1F1")  # 长按出杆
+                            if not re:
+                                re = CompareColors.compare("450,408,#48618E|456,408,#48618E")
+                                if not re:
+                                    break
                         action.Touch.down(558, 1044, 1500)  # 长按
                         action.Touch.up(558, 1044, 1500)
                         sleep(0.8)
@@ -3594,6 +3609,8 @@ class DailyTask:
                     if availableCount == 0:
                         Toast(f'钓鱼王 - 剩余鱼饵数量为0')
                         break
+        任务记录["钓鱼王"] = 1
+        TomatoOcrTap(77, 1191, 126, 1215, '返回')
 
     # 活动 - 摸鱼
     def huoDongMoYu(self):
@@ -3784,6 +3801,11 @@ class DailyTask:
 
             res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
             if res2:
+                # 处理上周结算确认弹窗
+                tapSleep(195, 1123)
+                tapSleep(195, 1123)
+                tapSleep(195, 1123)
+
                 point = FindColors.find(
                     "480,266,#384458|480,273,#384458|475,273,#FDFDFD|468,273,#384458|480,282,#384458",
                     rect=[61, 72, 565, 484], diff=0.95)  # 已领取门票，灰色状态
@@ -4027,11 +4049,13 @@ class DailyTask:
                         action.input(duihuanma)
                         sleep(1)
                         tapSleep(571, 517, 0.5)  # 点击空白处确认输入
+                        tapSleep(571, 517, 0.5)  # 点击空白处确认输入
                     if not notInput:
                         TomatoOcrTap(331, 760, 386, 787, "确定", 5, 5, sleep1=0.7)
                         break
 
             任务记录["兑换码领取-完成"] = 1
+            tapSleep(571, 517, 0.5)  # 点击空白处确认输入
             tapSleep(361, 1205)  # 点击空白处
             tapSleep(361, 1205)  # 点击返回
             tapSleep(361, 1205)  # 点击冒险
@@ -4109,14 +4133,16 @@ class DailyTask:
         res4 = False
         res1 = TomatoOcrTap(651, 559, 682, 577, "组队")
         if not res1:
-            res2 = TomatoOcrFindRangeClick('组队', whiteList='正在组队', x1=544, y1=528, x2=699, y2=672, sleep1=0.8,
-                                           match_mode='fuzzy')
-            # res2 = TomatoOcrTap(631, 558, 699, 581, "正在组队")
-            if not res2:
-                # res3 = TomatoOcrFindRangeClick('匹配中', whiteList='匹配中')
-                res3 = TomatoOcrTap(620, 625, 682, 650, "匹配中")
-                if not res3:
-                    res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
+            res2 = TomatoOcrFindRangeClick(
+                keywords=[{'keyword': '正', 'match_mode': 'fuzzy'},
+                          {'keyword': '组', 'match_mode': 'fuzzy'}, {'keyword': '队', 'match_mode': 'fuzzy'},
+                          {'keyword': '匹', 'match_mode': 'fuzzy'}], whiteList='正在组队', x1=544, y1=528, x2=699,
+                y2=672, sleep1=2,
+                match_mode='fuzzy')
+            # if not res2:
+            #     res3 = TomatoOcrTap(620, 625, 682, 650, "匹配中")
+            #     if not res3:
+            #         res4 = TomatoOcrTap(311, 1156, 407, 1182, "匹配中")  # 大暴走匹配中
         res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
         if res1 or res2 or res3 or res4 or res5 or res6:
             if 功能开关["fighting"] == 1:
@@ -4126,7 +4152,10 @@ class DailyTask:
 
             teamExist = TomatoOcrTap(500, 184, 579, 214, "离开队伍", 20, 20, sleep1=0.8)
             if not teamExist:
-                teamExist = TomatoOcrFindRangeClick('离开队伍', whiteList='离开队伍', x1=416, y1=126, x2=628, y2=284)
+                teamExist = TomatoOcrFindRangeClick(
+                    keywords=[{'keyword': '离', 'match_mode': 'fuzzy'}, {'keyword': '开', 'match_mode': 'fuzzy'},
+                              {'keyword': '队', 'match_mode': 'fuzzy'}, {'keyword': '伍', 'match_mode': 'fuzzy'}],
+                    whiteList='离开队伍', x1=416, y1=126, x2=628, y2=284)
             if teamExist:
                 teamExist = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=105, y1=304, x2=631, y2=953)
                 if teamExist:
