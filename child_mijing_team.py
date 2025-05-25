@@ -82,7 +82,7 @@ def main():
                         功能开关["fighting"] = 1
                         功能开关["needHome"] = 0
                         # 功能开关["noHomeMust"] = 1
-                        res = TomatoOcrTap(645,505,691,527, "试炼", sleep1=0.8)
+                        res = TomatoOcrTap(645, 505, 691, 527, "试炼", sleep1=0.8)
                         if not res:
                             res = TomatoOcrTap(650, 522, 688, 544, "试炼", sleep1=0.8)
                         if res:
@@ -442,11 +442,11 @@ def waitInvite():
             if res2 or res3:
                 break
 
-            res1 = TomatoOcrTap(616,613,688,633, "组队",match_mode='fuzzy')
+            res1 = TomatoOcrTap(616, 613, 688, 633, "组队", match_mode='fuzzy')
             if not res1:
-                res1 = TomatoOcrTap(617,613,690,637, "组队",match_mode='fuzzy')
+                res1 = TomatoOcrTap(617, 613, 690, 637, "组队", match_mode='fuzzy')
             if not res1:
-                res1 = TomatoOcrTap(620,625,682,650, "匹配中")
+                res1 = TomatoOcrTap(620, 625, 682, 650, "匹配中")
             # 兜底入队失败
             res2, _ = TomatoOcrText(584, 651, 636, 678, "同意")
             if res2:
@@ -633,6 +633,8 @@ def checkFightType():
         fight_type = "桎梏之形带队"
     if fight_type == '' and has_common_chars("三打三守三魔头", fightName, 2):
         fight_type = "三魔头带队"
+    if fight_type == '' and has_common_chars("调查队", fightName, 2):
+        fight_type = "调查队带队"
 
     if fight_type == '':
         for k in range(2):
@@ -670,14 +672,11 @@ def checkFightType():
                 if resZhongMo1:
                     fight_type = "终末战带队"
                     break
-                # if fight_type == '':
-                #     bitmap = screen.capture(380, 583, 510, 615)
-                #     for i in range(2):
-                #         resDiaoCha1 = TomatoOcrFindRange("调查队", 0.9, 380, 583, 510, 615, match_mode='fuzzy',
-                #                                          bitmap=bitmap)  # 调查队邀请
-                #         if resDiaoCha1:
-                #             fight_type = "调查队带队"
-                #             break
+                if fight_type == '':
+                    resDiaoCha1 = TomatoOcrFindRange("调查队", 0.9, 380, 583, 510, 615, match_mode='fuzzy')  # 调查队邀请
+                    if resDiaoCha1:
+                        fight_type = "调查队带队"
+                        break
             if fight_type == '':
                 res1, _ = TomatoOcrText(404, 587, 480, 611, "忆战回环")  # 忆战回环邀请
                 res2, _ = TomatoOcrText(442, 588, 480, 609, "回环")  # 忆战回环邀请

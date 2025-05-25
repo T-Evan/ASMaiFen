@@ -572,7 +572,9 @@ class LvTuanTask:
             if not res:
                 # 返回首页
                 self.dailyTask.homePage()
-                res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+                res = TomatoOcrTap(641, 572, 691, 599, "旅团")
+                if not res:
+                    res = TomatoOcrTap(647, 592, 689, 614, "旅团")
                 # 判断是否在旅团页面
                 res = TomatoOcrFindRangeClick("许愿墙", x1=626, y1=648, x2=709, y2=986, offsetX=20, offsetY=-30)
                 if res:
@@ -603,13 +605,21 @@ class LvTuanTask:
             re = CompareColors.compare("143,336,#9D7D51|140,337,#9D7D51|142,339,#9D7D51")  # 判断能否许愿
             if re:
                 tapSleep(140, 331, 1)  # 点击许愿
-                re = TomatoOcrFindRangeClick(f'{chongWuName}拼图', x1=127, y1=190, x2=611, y2=973)
-                if re:
-                    tapSleep(359, 1024)  # 确认选择
+                for k in range(2):
+                    re = TomatoOcrFindRangeClick(f'{chongWuName}拼图', x1=127, y1=190, x2=611, y2=973)
+                    if re:
+                        tapSleep(359, 1024)  # 确认选择
+                        break
+                    if not re:
+                        swipe(274, 866, 277, 653)
+                        sleep(2)
 
         for i in range(4):
             Toast(f'旅团 - 许愿墙 - 捐献中{i}/5')
-            TomatoOcrTap(116, 402, 164, 424, '领取', offsetX=10, offsetY=10)
+            re = TomatoOcrTap(116, 402, 164, 424, '领取', offsetX=10, offsetY=10)
+            if not re:
+                re = TomatoOcrFindRangeClick('领取', x1=75, y1=222, x2=645, y2=440)
+
             re = TomatoOcrFindRangeClick('捐献', whiteList='捐献')
             if re:
                 # # 点击最大
@@ -619,6 +629,7 @@ class LvTuanTask:
                 # 点击捐赠
                 res = TomatoOcrTap(328, 822, 389, 854, "捐献")
                 # res = TomatoOcrTap(97, 1200, 129, 1231, "回")  # 返回许愿墙首页
+                tapSleep(365, 1214)  # 点击空白处
                 tapSleep(365, 1214)  # 点击空白处
             else:
                 if 功能开关['旅团许愿墙不捐公共'] == 0:
@@ -648,8 +659,18 @@ class LvTuanTask:
             self.dailyTask.homePage()
             res = TomatoOcrTap(641, 572, 691, 599, "旅团")
             if not res:
-                return
+                res = TomatoOcrTap(647, 592, 689, 614, "旅团")
+                if not res:
+                    return
         sleep(3)
+
+        # 明灯还年 - 寻找敖丙
+        re = CompareColors.compare("623,995,#F8F3E9|617,984,#DCD5C9")
+        if re:
+            Toast('明灯还年 - 寻找敖丙')
+            tapSleep(557, 1055, 2)
+            for k in range(10):
+                tapSleep(328, 1221)  # 点击空白
 
         # 判断浇树已完成
         re, x, y = imageFind('旅团-浇水-已领取', x1=307, y1=172, x2=462, y2=329)
