@@ -1722,14 +1722,18 @@ class ShiLianTask:
         tmp4 = False
         bitmap = screen.capture(x=108, y=462, x1=618, y1=1120)
         # 房间页 - 宝箱UI
-        res1 = FindColors.find("174,1013,#F3A84B|192,1019,#F3A84B|270,1012,#F3A84B|204,1037,#F2DA70",
-                               rect=[60, 102, 641, 1180], diff=0.95)
+        res1 = FindColors.find(
+            "174,1019,#F3A84B|207,1039,#F4D96F|225,1037,#C27717|281,1020,#F3A84B|301,1035,#F3A84B|298,1012,#F3A84B",
+            rect=[77, 83, 641, 1160], diff=0.95)
         if not res1:
-            res1, tmp1 = TomatoOcrText(514, 607, 592, 634, "战斗", match_mode='fuzzy')  # 战斗结束页。宝箱提示
-            if not res1:
-                res1, tmp2 = TomatoOcrText(510, 547, 592, 572, "一键", match_mode='fuzzy')  # 战斗结束页。宝箱提示
-                if not res1:
-                    res1, tmp2 = TomatoOcrText(511, 458, 595, 484, "一键", match_mode='fuzzy')  # 战斗结束页。宝箱提示
+            res1 = FindColors.find(
+                "292,1065,#A6A1AD|306,1068,#A6A1AD|314,1065,#A6A1AD|306,1079,#A6A1AD|314,1077,#A6A1AD|290,1093,#A6A1AD",
+                rect=[77, 83, 641, 1160], diff=0.93)
+            # res1, tmp1 = TomatoOcrText(514, 607, 592, 634, "战斗", match_mode='fuzzy')  # 战斗结束页。宝箱提示
+            # if not res1:
+            #     res1, tmp2 = TomatoOcrText(510, 547, 592, 572, "一键", match_mode='fuzzy')  # 战斗结束页。宝箱提示
+            #     if not res1:
+            #         res1, tmp2 = TomatoOcrText(511, 458, 595, 484, "一键", match_mode='fuzzy')  # 战斗结束页。宝箱提示
                 #     if not res1:
                 #         res1, tmp3 = TomatoOcrText(311, 449, 356, 486, "宝箱")  # 房间页。宝箱提示
         # if not res1:

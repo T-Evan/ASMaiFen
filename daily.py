@@ -1134,8 +1134,8 @@ class DailyTask:
             self.quitTeam()
             res = TomatoOcrFindRangeClick(keywords=[{'keyword': '幻境', 'match_mode': 'fuzzy'},
                                                     {'keyword': '斗', 'match_mode': 'fuzzy'},
-                                                    {'keyword': '歌会', 'match_mode': 'fuzzy'}], x1=544, y1=334, x2=631,
-                                          y2=623, offsetX=30, offsetY=-20,
+                                                    {'keyword': '歌会', 'match_mode': 'fuzzy'}], x1=475, y1=323, x2=634,
+                                          y2=683, offsetX=30, offsetY=-20,
                                           sleep1=2.5, match_mode='fuzzy')
             # res = TomatoOcrFindRangeClick('斗歌会', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
             #                               sleep1=2.5, match_mode='fuzzy')
@@ -2049,6 +2049,13 @@ class DailyTask:
                                           sleep1=1.5, match_mode='fuzzy')
             if res:
                 Toast('周年庆典 - 任务开始')
+                re = CompareColors.compare("382,1137,#AA9D8D|394,1134,#CCC3B6|413,1144,#FBF7EC", diff=0.8)
+                if re:
+                    Toast('周年庆典 - 明灯还年 - 寻找哪吒和敖丙')
+                    tapSleep(325, 1204, 2)
+                    for k in range(10):
+                        tapSleep(650, 1259)  # 点击空白
+
                 re = TomatoOcrTap(198, 382, 289, 406, '明灯还年', sleep1=1.5)
                 if re:
                     for o in range(4):
@@ -2089,7 +2096,7 @@ class DailyTask:
                         tapSleep(394, 969, 2)
                         for k in range(10):
                             tapSleep(353, 1210)  # 点击空白
-
+        任务记录["明灯还年"] = 1
         tapSleep(78, 1183, 0.8)  # 返回
 
     # 其他签到活动（简单活动合集）
@@ -3711,16 +3718,19 @@ class DailyTask:
 
         for i in range(needCount):
             # res = TomatoOcrTap(566, 379, 609, 404, "摸鱼")
-            res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
-            res2 = TomatoOcrTap(551, 462, 622, 488, "摸鱼", 15, -20)
-            res3 = TomatoOcrTap(553, 546, 620, 570, "摸鱼", 15, -20)
+            res = TomatoOcrFindRangeClick(keywords=[{'keyword': '摸鱼', 'match_mode': 'fuzzy'},
+                                                    {'keyword': '鱼', 'match_mode': 'fuzzy'}, ], x1=475, y1=323, x2=634,
+                                          y2=683, offsetX=30, offsetY=-20,
+                                          sleep1=2.5, match_mode='fuzzy')
             res4, _ = TomatoOcrText(325, 1095, 427, 1128, "开始匹配")
-            if not res1 and not res2 and not res3 and not res4:
+            if not res and not res4:
                 self.homePage()
-                res1 = TomatoOcrTap(566, 379, 609, 404, "摸鱼", 15, -20)
-                res2 = TomatoOcrTap(551, 462, 622, 488, "摸鱼", 15, -20)
-                res3 = TomatoOcrTap(553, 546, 620, 570, "摸鱼", 15, -20)
-                if not res1 and not res2 and not res3:
+                res = TomatoOcrFindRangeClick(keywords=[{'keyword': '摸鱼', 'match_mode': 'fuzzy'},
+                                                        {'keyword': '鱼', 'match_mode': 'fuzzy'}, ], x1=475, y1=323,
+                                              x2=634,
+                                              y2=683, offsetX=30, offsetY=-20,
+                                              sleep1=2.5, match_mode='fuzzy')
+                if not res:
                     return
 
             # 检查是否已完成每日

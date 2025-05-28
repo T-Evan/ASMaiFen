@@ -558,6 +558,14 @@ class LvRenTask:
         if not res:
             return
 
+        # 明灯还年 - 点燃的花灯
+        re = CompareColors.compare("540,875,#E06B3D|540,879,#E06B3D", diff=0.8)
+        if re:
+            Toast('周年庆典 - 明灯还年 - 寻找点燃的花灯')
+            tapSleep(535, 863, 2)
+            for k in range(10):
+                tapSleep(650, 1259)  # 点击空白
+
         # 装备技能
         for i in range(5):
             res, x, y = imageFind('旅人-装备技能', confidence1=0.85, x1=82, y1=628, x2=653, y2=1070)
