@@ -127,8 +127,8 @@ def openTreasure(noNeedOpen=0):
         rect=[77, 83, 641, 1160], diff=0.95)
     if not res1:
         res1 = FindColors.find(
-            "292,1065,#A6A1AD|306,1068,#A6A1AD|314,1065,#A6A1AD|306,1079,#A6A1AD|314,1077,#A6A1AD|290,1093,#A6A1AD",
-            rect=[77, 83, 641, 1160], diff=0.93)
+            "297,1031,#A6A1AD|294,1060,#A6A1AD|339,1058,#F2D569|409,1037,#A6A1AD|433,1036,#A6A1AD|425,1057,#A6A1AD",
+            rect=[77, 83, 641, 1160], diff=0.96)
 
     if res1:
         isTreasure = 1

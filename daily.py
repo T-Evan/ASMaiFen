@@ -59,7 +59,7 @@ class DailyTask:
                 system.open(f"{功能开关['游戏包名']}")
                 # 暂不处理战败页启动，提高执行效率
                 # 判断战败页面
-                if 功能开关["fighting"] == 0:
+                if tryTimes > 15 or 功能开关["fighting"] == 0:
                     Toast(f'日常-返回首页-退出组队')
                     self.shilianTask.allQuit()
                     self.shilianTask.quitTeamFighting()

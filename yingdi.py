@@ -87,7 +87,7 @@ class YingDiTask:
             Toast('好友隐身 - 未找到活动入口')
             return
 
-        re = TomatoOcrTap(28, 276, 74, 301, '好友', offsetX=10, offsetY=-20, sleep1=0.8)
+        re = TomatoOcrTap(26, 119, 74, 143, '好友', offsetX=10, offsetY=-20, sleep1=0.8)
         if re:
             re, _ = TomatoOcrText(315, 1030, 366, 1062, '隐身')
             if re:
