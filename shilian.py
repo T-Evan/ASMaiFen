@@ -982,6 +982,8 @@ class ShiLianTask:
             if not allQuit:
                 allQuit = CompareColors.compare(
                     "186,405,#F2C173|189,405,#F2C173|192,405,#FFF5B4|194,405,#F4C376|192,399,#FCF1B3")  # 判断是否成为房主
+                if not allQuit:
+                    allQuit = CompareColors.compare("192,406,#FFF6B5|192,403,#FFF4B3|192,400,#FFFFB6")
             if allQuit:
                 Toast("恶龙任务 - 队友全部离队")
                 teamStatus1 = TomatoOcrFindRangeClick('匹配中', whiteList='匹配中', x1=85, y1=288, x2=647, y2=1120)

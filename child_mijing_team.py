@@ -550,7 +550,8 @@ def waitInvite():
                     "217,280,#FDF3B6|221,279,#F2C274|224,280,#FFF6B5|221,276,#FFF7B6|230,287,#EBE3A7")  # 判断是否成为房主
                 team5 = CompareColors.compare(
                     "187,404,#F2C174|189,404,#F3C379|191,400,#FFF7B6|192,405,#FFF5B4|198,400,#E9DAA2")  # 终末战 - 判断是否成为房主
-                if team4 or team5:
+                team6 = CompareColors.compare("192,406,#FFF6B5|192,403,#FFF4B3|192,400,#FFFFB6")
+                if team4 or team5 or team6:
                     allQuit = True
 
         if allQuit:

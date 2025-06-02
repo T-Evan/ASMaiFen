@@ -185,13 +185,6 @@ print('卡密联网激活开始')
 kamiActive()
 print('卡密联网激活完成')
 
-display = Device.display()
-# 屏幕宽度
-if display.widthPixels != 720 or display.heightPixels != 1280:
-    Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
-    Dialog.confirm("屏幕分辨率不为 720 * 1280，请重新设置", "分辨率错误")
-
-
 # debug
 # res = Ocr.mlkitocr_v2()
 # if res:
