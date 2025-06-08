@@ -420,9 +420,10 @@ def waitInvite():
             Toast('行李页-返回首页')
             tapSleep(355, 1202)
         Toast(f'{fight_type}-等待队长开始{elapsed}/{totalWait}s')
-        if time.time() - checkYaoQingTime > 3:
+        if time.time() - checkYaoQingTime > 5:
             shilianTask.openTreasure(noNeedOpen=1)
             checkTreasure = time.time()
+            res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
 
         # 兜底，已在队伍中时，停止返回操作
         功能开关["fighting"] = 1
@@ -431,9 +432,9 @@ def waitInvite():
         # 返回房间
         failTeam = 0
         for j in range(5):
-            res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+            res6, _ = TomatoOcrText(501, 191, 581, 217, "离开", match_mode='fuzzy')  # 已在队伍页面，直接退出
             if not res6:
-                res6, _ = TomatoOcrText(503, 186, 582, 213, "开队伍")  # 已在队伍页面，直接退出
+                res6, _ = TomatoOcrText(503, 186, 582, 213, "队伍", match_mode='fuzzy')  # 已在队伍页面，直接退出
             if res6:
                 break
 
@@ -455,14 +456,15 @@ def waitInvite():
                 fight_type = checkFightType()
                 res2 = TomatoOcrTap(584, 651, 636, 678, "同意", sleep1=0.8)
                 # 判断体力用尽提示
-                res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
+                res = TomatoOcrTap(333, 744, 385, 771, "确定", sleep1=0.8)
+                # res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 
             if not res1 and not res2:
-                Toast(f'未进入房间{j}/ 5')
+                Toast(f'未进入房间{j}/ 4')
                 tapSleep(134, 1060, 0.1)
                 failTeam = failTeam + 1
             sleep(0.3)
-        if failTeam >= 4:
+        if failTeam >= 3:
             break
 
         # 房间 - 关闭邀请玩家
@@ -538,21 +540,24 @@ def waitInvite():
         #     tapSleep(364, 738, 0.8)
 
         # 判断队友全部离队，退出房间
+        allQuit = False
         if fight_type == '恶龙带队' or fight_type == '恶龙挑战':
             allQuit, _ = TomatoOcrText(325, 558, 393, 585, "等待加入")
             if not allQuit:
                 allQuit = CompareColors.compare(
                     "186,405,#F2C173|189,405,#F2C173|192,405,#FFF5B4|194,405,#F4C376|192,399,#FCF1B3")  # 判断是否成为房主
         else:
-            allQuit, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
-            if not allQuit:
-                team4 = CompareColors.compare(
-                    "217,280,#FDF3B6|221,279,#F2C274|224,280,#FFF6B5|221,276,#FFF7B6|230,287,#EBE3A7")  # 判断是否成为房主
-                team5 = CompareColors.compare(
-                    "187,404,#F2C174|189,404,#F3C379|191,400,#FFF7B6|192,405,#FFF5B4|198,400,#E9DAA2")  # 终末战 - 判断是否成为房主
-                team6 = CompareColors.compare("192,406,#FFF6B5|192,403,#FFF4B3|192,400,#FFFFB6")
-                if team4 or team5 or team6:
-                    allQuit = True
+            hasTeam, _ = TomatoOcrText(291,973,427,1008, "队长",match_mode='fuzzy')
+            if not hasTeam:
+                allQuit, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
+                if not allQuit:
+                    team4 = CompareColors.compare(
+                        "217,280,#FDF3B6|221,279,#F2C274|224,280,#FFF6B5|221,276,#FFF7B6|230,287,#EBE3A7")  # 判断是否成为房主
+                    team5 = CompareColors.compare(
+                        "187,404,#F2C174|189,404,#F3C379|191,400,#FFF7B6|192,405,#FFF5B4|198,400,#E9DAA2")  # 终末战 - 判断是否成为房主
+                    team6 = CompareColors.compare("192,406,#FFF6B5|192,403,#FFF4B3|192,400,#FFFFB6")
+                    if team4 or team5 or team6:
+                        allQuit = True
 
         if allQuit:
             Toast('队友全部离队')
@@ -560,9 +565,9 @@ def waitInvite():
             sleep(1)
             break
 
-        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开队伍")  # 已在队伍页面，直接退出
+        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开",match_mode='fuzzy')  # 已在队伍页面，直接退出
         if not res6:
-            res6, _ = TomatoOcrText(503, 186, 582, 213, "离开队伍")  # 已在队伍页面，直接退出
+            res6, _ = TomatoOcrText(503, 186, 582, 213, "离开",match_mode='fuzzy')  # 已在队伍页面，直接退出
         if res6:
             if not teamShout:
                 count, last_time = shilianTask.daiDuiCount()
@@ -588,7 +593,7 @@ def waitInvite():
             start_time = int(time.time())
             teamShout = False
             # 恶龙/绝境/终末，仅挑战1次，可直接退队
-            if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '绝境带队' or fight_type == '终末战带队' or fight_type == '桎梏之形带队' or fight_type == '桎梏之形挑战' or fight_type == '三魔头带队':
+            if fight_type == '恶龙带队' or fight_type == '恶龙挑战' or fight_type == '终末战带队' or fight_type == '桎梏之形带队' or fight_type == '桎梏之形挑战' or fight_type == '三魔头带队':
                 Toast('退出组队')
                 for z in range(2):
                     quitRes = shilianTask.quitTeam()

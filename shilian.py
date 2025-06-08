@@ -257,6 +257,11 @@ class ShiLianTask:
         res = TomatoOcrTap(334, 771, 386, 801, "开启")  # 领取宝箱
         if not res:
             res = TomatoOcrTap(334, 771, 386, 801, "开户")  # 领取宝箱
+        if not res:
+            res = TomatoOcrFindRangeClick(keywords=[{'keyword': '开启', 'match_mode': 'fuzzy'},
+                                                    {'keyword': '开户', 'match_mode': 'fuzzy'}], x1=75,
+                                          y1=419, x2=610, y2=887,
+                                          match_mode='fuzzy')
         if res:
             Toast("桎梏之形 - 开启前一次宝箱")
             sleep(2)
@@ -2250,23 +2255,17 @@ class ShiLianTask:
                 elapsed = current_time - start_time
                 if elapsed >= totalWait:
                     Toast("战斗结束 - 暴走超时退出组队")
-                    res1 = TomatoOcrTap(333, 716, 384, 744, "开启")  # 领取宝箱
+                    res1 = TomatoOcrTap(325, 1059, 391, 1089, "开", match_mode='fuzzy')
                     if not res1:
-                        res1 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
+                        res1 = TomatoOcrTap(333, 716, 384, 744, "开", match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(333, 1052, 385, 1081, "开启")  # 领取宝箱
+                        res1 = TomatoOcrTap(334, 1090, 385, 1117, "开", match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(331, 749, 386, 778, '开启')  # 领取宝箱
+                        res1 = TomatoOcrTap(333, 1052, 385, 1081, "开", match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(333, 716, 384, 744, "开户")  # 领取宝箱
+                        res1 = TomatoOcrTap(331, 749, 386, 778, '开', match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(334, 1090, 385, 1117, "开户")  # 领取宝箱
-                    if not res1:
-                        res1 = TomatoOcrTap(323, 1106, 391, 1137, "开户")  # 领取宝箱
-                    if not res1:
-                        res1 = TomatoOcrTap(333, 1052, 385, 1081, "开户")  # 领取宝箱
-                    if not res1:
-                        res1 = TomatoOcrTap(331, 749, 386, 778, '开户')  # 领取宝箱
+                        res1 = TomatoOcrTap(323, 1106, 391, 1137, "开", match_mode='fuzzy')  # 领取宝箱
                     # self.teamShoutAI(f'大暴走-即将离队-期待下次相遇', shoutType="fight")
                     self.quitTeamFighting()  # 退出队伍
                     break
@@ -2304,23 +2303,17 @@ class ShiLianTask:
                     sleep(0.5)
                 else:
                     # 战斗结束
-                    res1 = TomatoOcrTap(333, 716, 384, 744, "开启")  # 领取宝箱
+                    res1 = TomatoOcrTap(325, 1059, 391, 1089, "开", match_mode='fuzzy')
                     if not res1:
-                        res1 = TomatoOcrTap(334, 1090, 385, 1117, "开启")  # 领取宝箱
+                        res1 = TomatoOcrTap(333, 716, 384, 744, "开", match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(333, 1052, 385, 1081, "开启")  # 领取宝箱
+                        res1 = TomatoOcrTap(334, 1090, 385, 1117, "开", match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(331, 749, 386, 778, '开启')  # 领取宝箱
+                        res1 = TomatoOcrTap(333, 1052, 385, 1081, "开", match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(333, 716, 384, 744, "开户")  # 领取宝箱
+                        res1 = TomatoOcrTap(331, 749, 386, 778, '开', match_mode='fuzzy')  # 领取宝箱
                     if not res1:
-                        res1 = TomatoOcrTap(334, 1090, 385, 1117, "开户")  # 领取宝箱
-                    if not res1:
-                        res1 = TomatoOcrTap(323, 1106, 391, 1137, "开户")  # 领取宝箱
-                    if not res1:
-                        res1 = TomatoOcrTap(333, 1052, 385, 1081, "开户")  # 领取宝箱
-                    if not res1:
-                        res1 = TomatoOcrTap(331, 749, 386, 778, '开户')  # 领取宝箱
+                        res1 = TomatoOcrTap(323, 1106, 391, 1137, "开", match_mode='fuzzy')  # 领取宝箱
                     if res1:
                         Toast("暴走战斗结束 - 战斗胜利")
                         功能开关["fighting"] = 0
@@ -2613,14 +2606,17 @@ class ShiLianTask:
                 if res:
                     if 功能开关['秘境点赞队友'] == 1:
                         Toast('点赞队友')
-                        res = TomatoOcrTap(508, 784, 592, 804, "一键", 5, 5, match_mode='fuzzy')  # 一键点赞
+                        res = TomatoOcrTap(508, 784, 592, 804, "一键", 10, 10, match_mode='fuzzy')  # 一键点赞
                         if not res:
                             res = TomatoOcrFindRangeClick("一键", x1=480, y1=490, x2=615, y2=768,
                                                           match_mode='fuzzy')  # 一键点赞
 
-                    res = TomatoOcrTap(334, 1073, 383, 1098, "开启")
-                    if not res:
-                        res = TomatoOcrTap(334, 1073, 383, 1098, "开户")
+                    res = TomatoOcrTap(322, 1064, 395, 1100, "开", match_mode='fuzzy')
+                    if not re:
+                        res = TomatoOcrFindRangeClick(keywords=[{'keyword': '开启', 'match_mode': 'fuzzy'},
+                                                                {'keyword': '开户', 'match_mode': 'fuzzy'}], x1=104,
+                                                      y1=801, x2=617, y2=1122,
+                                                      match_mode='fuzzy')
                     if res:
                         tapSleep(363, 1191, 0.3)
                         tapSleep(363, 1191, 0.3)
@@ -2668,9 +2664,7 @@ class ShiLianTask:
                 # 战斗结束
                 res, _ = TomatoOcrText(514, 853, 593, 880, "战斗统计")
                 if res:
-                    res = TomatoOcrTap(334, 1073, 383, 1098, "开启")
-                    if not res:
-                        res = TomatoOcrTap(334, 1073, 383, 1098, "开户")
+                    res = TomatoOcrTap(322, 1064, 395, 1100, "开", match_mode='fuzzy')
                     if res:
                         tapSleep(363, 1191, 0.3)
                         tapSleep(363, 1191, 0.3)
@@ -3248,6 +3242,7 @@ class ShiLianTask:
                     tapSleep(55, 1140)  # 领取后，点击空白
                     tapSleep(60, 1100)  # 领取后，点击空白
                     tapSleep(50, 1234)  # 领取后，点击空白
+                    quitStatus = self.quitTeam()
                     break
                 res3, _ = TomatoOcrText(499, 191, 581, 215, "离开队伍")  # 已返回队伍
                 if res3:
@@ -3576,7 +3571,7 @@ class ShiLianTask:
 
     # 大暴走（烈焰大王）
     def daBaoZouLieYan(self):
-        for i in range(5):
+        for i in range(3):
             def 往左():
                 tapSleep(63, 680, 4)
 
@@ -3652,6 +3647,9 @@ class ShiLianTask:
                     if not re1:
                         re1 = FindColors.find("196,675,#85C9D2|196,677,#8CCFD6|194,670,#74B6C5",
                                               rect=[20, 501, 306, 705], diff=0.95)
+                    if not re1:
+                        re1 = FindColors.find("189,684,#39A0B5|189,682,#3499AF|190,686,#3CA7BA",
+                                              rect=[90, 574, 240, 760])
                     re2 = FindColors.find("570,645,#7ECCD3|571,639,#61B0C2|573,634,#529EB2",
                                           rect=[390, 552, 641, 711], diff=0.97)
                     if not re2:
@@ -3667,8 +3665,10 @@ class ShiLianTask:
                         notBlue = notBlue + 1
                     sleep(0.2)
                 if notBlue > 3:
-                    re = CompareColors.compare("75,673,#384558|77,669,#384558|80,675,#384558")
-                    if re:
+                    # re = CompareColors.compare("75,673,#384558|77,669,#384558|80,675,#384558")
+                    # if re:
+                    战斗胜利 = CompareColors.compare("221,464,#F4D58C|322,476,#F6CD7D")
+                    if not 战斗胜利:
                         Toast('复位蓝色')
                         if re1:
                             tapSleep(72, 677)
@@ -3930,7 +3930,8 @@ class ShiLianTask:
     def quitTeamFighting(self):
         功能开关["fighting"] = 1
         任务记录["喊话-并发锁"] = 1  # 中断只能施法
-        for i in range(2):
+        hasQuit = False
+        for i in range(4):
             # sleep(0.5)
             self.fight_fail_alert()
             # res = TomatoOcrTap(326, 745, 393, 778, "确认")  # 点击确认
@@ -3940,6 +3941,10 @@ class ShiLianTask:
             #     res = TomatoOcrTap(329, 726, 391, 761, "确定", sleep1=0.8)
             res = TomatoOcrTap(501, 191, 581, 217, "离开队伍", sleep1=0.8)
             res = TomatoOcrTap(329, 726, 391, 761, "确定", sleep1=0.8)
+            if res:
+                hasQuit = True
+            if i > 2 and hasQuit:
+                break
         quitRes = self.quitTeam()
         # sleep(0.5)
         功能开关["fighting"] = 0
@@ -4092,9 +4097,10 @@ class ShiLianTask:
             # sleep(0.5)
 
             teamExitTap = False
-            teamExitTap = TomatoOcrTap(337, 730, 382, 759, "确定", offsetX=10, offsetY=20)
-            if not teamExitTap:
-                teamExitTap = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=105, y1=304, x2=631, y2=953)
+            if not res1 and not res2:
+                teamExitTap = TomatoOcrTap(337, 730, 382, 759, "确定", offsetX=10, offsetY=20)
+                if not teamExitTap:
+                    teamExitTap = TomatoOcrFindRangeClick('确定', whiteList='确定', x1=105, y1=304, x2=631, y2=953)
             if not teamExitTap:
                 teamExist = TomatoOcrFindRangeClick('离开队伍', whiteList='离开队伍', x1=416, y1=126, x2=628,
                                                     y2=284)

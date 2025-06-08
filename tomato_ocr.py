@@ -3,7 +3,7 @@ from ascript.android import plug
 from ascript.android.ui import Dialog
 from ascript.android import system
 
-plug.load("TomatoOcr:1.1.1")
+plug.load("TomatoOcr:1.1.2")
 try:
     from TomatoOcr import TomatoOcr
 except Exception as e:
@@ -16,7 +16,7 @@ def init_tomatoOcr():
     ocr = TomatoOcr()
     ocr.setContext(rec_type="ch-3.0")
 
-    # ocr.setLicense("DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO","挂机吧麦芬")
+    ocr.setLicense("DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO","挂机吧麦芬")
 
     ocr.setRecType("ch-3.0")
     ocr.setDetBoxType("rect")
@@ -32,7 +32,7 @@ def init_tomatoOcrJson():
     ocr = TomatoOcr()
     ocr.setContext(rec_type="ch-3.0")
 
-    # ocr.setLicense("DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO","挂机吧麦芬")
+    ocr.setLicense("DMR1H6IXOPL1RVESWHBDZT1MHBZEBFXX|4QCPZJ2CMS75C99YB0LGQANO","挂机吧麦芬")
 
     ocr.setRecType("ch-3.0")
     ocr.setDetBoxType("rect")

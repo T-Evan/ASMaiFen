@@ -18,6 +18,7 @@ from ascript.android.action import Path
 from ascript.android import system
 import sys
 import traceback
+import datetime
 
 
 class DailyTask:
@@ -59,10 +60,12 @@ class DailyTask:
                 system.open(f"{功能开关['游戏包名']}")
                 # 暂不处理战败页启动，提高执行效率
                 # 判断战败页面
-                if tryTimes > 15 or 功能开关["fighting"] == 0:
-                    Toast(f'日常-返回首页-退出组队')
-                    self.shilianTask.allQuit()
-                    self.shilianTask.quitTeamFighting()
+                res, teamName4 = TomatoOcrText(4, 247, 56, 265, "队友名称")
+                if "等级" not in teamName4:
+                    if tryTimes > 15 or 功能开关["fighting"] == 0:
+                        Toast(f'日常-返回首页-退出组队')
+                        self.shilianTask.allQuit()
+                        self.shilianTask.quitTeamFighting()
                 # self.quitTeam()
 
             # resConnErr, _ = TomatoOcrText(292, 691, 427, 722, "尝试重新连接")
@@ -351,6 +354,9 @@ class DailyTask:
                 if '旅团' in player:
                     continue
                 colors = generate_random_color()
+                now = datetime.datetime.now()
+                if now.weekday() in [5, 6]:  # 5 表示星期六，6 表示星期日
+                    holidayContent = "周末快乐"
                 # zanList3 = ['狐巡司', '第一只']
                 # contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 # if contains_zan:
@@ -417,8 +423,8 @@ class DailyTask:
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
                     if zhiye == '奶':
-                        content = [f"<color={colors}>{player}~来了~端午安康~{extraContent}</COLOR>",
-                                   f"<color={colors}>{player}~来啦~端午安康~{extraContent}</COLOR>"]
+                        content = [f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
+                                   f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
                         return self.shijieShout(random.choice(content))
                     else:
                         return
@@ -427,8 +433,8 @@ class DailyTask:
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
                     if zhiye == '战':
-                        content = [f"<color={colors}>{player}~来了~端午安康~{extraContent}</COLOR>",
-                                   f"<color={colors}>{player}~来啦~端午安康~{extraContent}</COLOR>"]
+                        content = [f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
+                                   f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
                         return self.shijieShout(random.choice(content))
                     else:
                         return
@@ -436,23 +442,23 @@ class DailyTask:
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
                     if zhiye == '刺' or zhiye == '法' or zhiye == '弓':
-                        content = [f"<color={colors}>{player}~来了~端午安康~{extraContent}</COLOR>",
-                                   f"<color={colors}>{player}~来啦~端午安康~{extraContent}</COLOR>"]
+                        content = [f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
+                                   f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
                         return self.shijieShout(random.choice(content))
                     else:
                         return
                 zanList = ['来个ai', '来个AI', '召唤ai', '召唤AI', 'ai打工', '打工ai']
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 if contains_zan:
-                    content = [f"<color={colors}>{player}~来了~端午安康~(*^▽^*)~</COLOR>",
+                    content = [f"<color={colors}>{player}~来了~{holidayContent}~(*^▽^*)~</COLOR>",
                                f"<color={colors}>{player}~在呢~辛苦啦~(*^▽^*)~</COLOR>"]
                     return self.shijieShout(random.choice(content))
                 zanList3 = ['在哪里', '来一个', '来人', '求个', '来个', '来打工', '来黑工', '来打工', '求大佬']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
-                    content = [f"<color={colors}>{player}~来了来了~端午安康~{extraContent}</COLOR>",
-                               f"<color={colors}>{player}~来了~端午安康~{extraContent}</COLOR>",
-                               f"<color={colors}>{player}~来啦~端午安康~{extraContent}</COLOR>"]
+                    content = [f"<color={colors}>{player}~来了来了~{holidayContent}~{extraContent}</COLOR>",
+                               f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
+                               f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
 
                     return self.shijieShout(random.choice(content))
                 zanList3 = ['有没有', '有人', '有打工', '帮帮', '有佬', '有帮忙', '可以帮忙', '还有', '有吗', '求佬']
@@ -467,7 +473,7 @@ class DailyTask:
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 if contains_zan:
                     content = [f"<color={colors}>{player}~拉我拉我~{extraContent}</COLOR>",
-                               f"<color={colors}>{player}~拉我~端午安康~{extraContent}</COLOR>",
+                               f"<color={colors}>{player}~拉我~{holidayContent}~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~打工打工~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~打工~{extraContent}</COLOR>"]
                     return self.shijieShout(random.choice(content))
@@ -3994,7 +4000,7 @@ class DailyTask:
                 Toast('日常 - 招式创造 - 检查是否完成')
             # 判断是否在营地页面
             isYingDi = False
-            for i in range(1, 3):
+            for i in range(3):
                 res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
                 if not res:
                     # 返回首页
@@ -4012,7 +4018,7 @@ class DailyTask:
             if not isYingDi:
                 return
 
-            tapSleep(200, 545, 2.5)  # 芙芙小铺
+            tapSleep(200, 545, 3)  # 芙芙小铺
             res = TomatoOcrTap(389, 1133, 489, 1163, "招式创造")
             if res:
                 re, x, y = imageFind('招式创造能量', 0.8)
@@ -4066,7 +4072,9 @@ class DailyTask:
                         tapSleep(185, 1024)  # 点击空白处关闭
                         任务记录["日常-招式创造-完成"] = 1
             # 讲述故事
-            if 功能开关["自动讲述领取绮想妙成真"] == 0:
+            res, availableCount = TomatoOcrText(91, 254, 205, 285, " 可领取次数")
+            if 功能开关["自动讲述领取绮想妙成真"] == 0 or (
+                    功能开关["自动讲述领取绮想妙成真"] == 1 and "次" not in availableCount):
                 needCount = safe_int(功能开关["讲述故事次数"])
                 if needCount == '':
                     needCount = 0
@@ -4075,12 +4083,12 @@ class DailyTask:
                 if needCount > 0:
                     attempt = 0
                     # 关闭批量讲述
-                    res, _ = TomatoOcrText(317, 1054, 401, 1082, "讲述故事")
+                    res, _ = TomatoOcrText(318, 1055, 404, 1084, "故事", match_mode='fuzzy')
                     if not res:
-                        tapSleep(515, 1088)
+                        tapSleep(516, 1079)
                     while attempt < needCount:
                         Toast(f'开始讲述故事{attempt}/{needCount}次')
-                        res = TomatoOcrTap(319, 1062, 398, 1083, "讲述故事")
+                        res = TomatoOcrTap(318, 1055, 404, 1084, "故事", match_mode='fuzzy', offsetX=5, offsetY=5)
                         res = TomatoOcrTap(319, 1062, 398, 1083, "结局揭秘")
                         sleep(2)
                         res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
@@ -4088,11 +4096,11 @@ class DailyTask:
                         tapSleep(170, 1090)  # 点击空白处
                         attempt = attempt + 1
 
-            if 功能开关["自动讲述领取绮想妙成真"] == 1:
+            if 功能开关["自动讲述领取绮想妙成真"] == 1 and "次" in availableCount:
                 # 开启批量讲述
-                res, _ = TomatoOcrText(317, 1054, 401, 1082, "讲述故事")
+                res, _ = TomatoOcrText(318, 1055, 404, 1084, "故事", match_mode='fuzzy')
                 if res:
-                    tapSleep(515, 1088)
+                    tapSleep(516, 1079)
                 for k in range(10):
                     # 识别剩余可领取次数
                     res, availableCount = TomatoOcrText(91, 254, 205, 285, " 可领取次数")
@@ -4103,6 +4111,8 @@ class DailyTask:
                         sleep(2)
                         res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
                         res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
+                    else:
+                        break
 
             任务记录["日常-招式创造-完成"] = 1
 

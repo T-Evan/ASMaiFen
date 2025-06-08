@@ -11,10 +11,6 @@ from ascript.android.screen import FindImages
 # 导入上下文环境包,方便导入图片地址
 from ascript.android.system import R
 from ascript.android.screen import FindColors
-from ascript.android.screen import YoLov5
-
-yolo = ''
-
 
 # 实例方法
 def main():
@@ -33,36 +29,17 @@ def main():
     功能开关['bossLastNumber1'] = ''
     功能开关['bossLastNumber2'] = ''
     # 功能开关['当前职业'] = ''
+    if 功能开关["大暴走开关"] == 1 or 功能开关['暴走自动接收邀请'] == 1:
+        from ascript.android import plug
+        plug.load("yolov5:1.6")
+        import yolov5
+        yolov5.load("麦芬-火焰大暴走:0.4")
     while True:
         if 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走烈焰大王":
-            global yolo
-            # print(R.res("/yolo_baozou_lieyan/"))
-            # yolo = YoLov5(path=R.res("/yolo_baozou_lieyan/"))
-
-            # while 1:
-            #     ts = yolo.find_all()
-            #     for r in ts:
-            #         print(r)
-            #     sleep(0.5)
-
             # 检测战斗状态
             if 功能开关["fighting"] == 1:
-                # 异步识别boss状态
-                re = CompareColors.compare(
-                    "388,230,#FFFFFF|396,239,#FBFBFB|412,227,#EFF0F0|415,239,#FFFFFF|421,241,#F6F6F6",
-                    diff=0.95)  # 匹配boss名称包含大王
-                if re:
-                    daBaoZouLieYanBoss()
-                else:
-                    sleep(3)
+                daBaoZouLieYanBoss()
         elif 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走水波大王":
-            # yolo = YoLov5("麦芬-水波大暴走:0.1")
-            # while 1:
-            #     ts = yolo.find_all()
-            #     for r in ts:
-            #         print(r)
-            #     sleep(0.5)
-
             if 功能开关["fighting"] == 1:
                 # 检测战斗状态
                 # 异步识别boss状态
@@ -374,8 +351,6 @@ def daBaoZouLeiDianBoss():
 
 
 def daBaoZouLieYanBoss():
-    yolo = YoLov5("麦芬-火焰大暴走:0.4")
-
     # 判断是否为史莱姆战斗中
     res, _ = TomatoOcrText(380, 217, 429, 247, '大王')
     if not res:
@@ -412,32 +387,32 @@ def daBaoZouLieYanBoss():
         左1数字 = ''
         右1数字 = ''
 
-        ts = yolo.find_all()
+        ts = yolov5.find_all(screen.capture(93, 127, 642, 920))
         for r in ts:
             print(r)
-            if r.prob > prob:
-                if '紫' in r.label:
+            if r['prob'] > prob:
+                if '紫' in r['label']:
                     bossColor = "紫"
-                if '黄' in r.label:
+                if '黄' in r['label']:
                     if bossColor != '':
                         bossColor = ''
                         bossColor2 = "橙"
                     else:
                         bossColor = "橙"
 
-                if any(c in r.label for c in "123456789"):
+                if any(c in r['label'] for c in "123456789"):
                     if 中间数字 != '':
                         中间数字 = ''
-                        if '黄' in r.label:
-                            左1数字 = r.label[1]
-                        if '紫' in r.label:
-                            右1数字 = r.label[1]
+                        if '黄' in r['label']:
+                            左1数字 = r['label'][1]
+                        if '紫' in r['label']:
+                            右1数字 = r['label'][1]
                     else:
-                        中间数字 = r.label[1]
-                        if '黄' in r.label:
-                            左1数字 = r.label[1]
-                        if '紫' in r.label:
-                            右1数字 = r.label[1]
+                        中间数字 = r['label'][1]
+                        if '黄' in r['label']:
+                            左1数字 = r['label'][1]
+                        if '紫' in r['label']:
+                            右1数字 = r['label'][1]
 
         if 中间数字 != '' or 左1数字 != '' or 右1数字 != '':
             results2.append((中间数字, 左1数字, 右1数字))

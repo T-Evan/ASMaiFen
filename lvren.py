@@ -1010,7 +1010,9 @@ class LvRenTask:
                                 tapSleep(129, 1023, 0.3)
 
                     # 识别可打造标识
-                    re = FindColors.find("587,967,#F25E41|587,967,#F25E41|587,967,#F25E41", diff=0.95)
+                    re = FindColors.find(
+                        "556,252,#FF0000|562,253,#FDCBC2|569,253,#FF4F4C|581,252,#FE837D|599,252,#FCEBE2|603,252,#FF0000",
+                        rect=[77, 93, 639, 563], diff=0.8)
                     if re:
                         Toast('旅人 - 装备进阶 - 准备打造装备')
                         tmp = TomatoOcrTap(525, 965, 574, 988, '打造', sleep1=4)

@@ -98,6 +98,8 @@ class AutoMove:
                         任务记录['战斗-恶龙名称'] != "" and time.time() - 任务记录['战斗-恶龙名称-识别倒计时'] > 15):
                     re, 任务记录['战斗-恶龙名称'] = TomatoOcrText(288, 222, 408, 246, '恶龙名称')
                     if 任务记录['战斗-恶龙名称'] == "":
+                        re, 任务记录['战斗-恶龙名称'] = TomatoOcrText(284, 217, 434, 249, '暴走名称')
+                    if 任务记录['战斗-恶龙名称'] == "":
                         # 识别右上角关卡名称
                         re, 任务记录['战斗-恶龙名称'] = TomatoOcrText(440, 138, 600, 160, '关卡名称')
                     if 任务记录['战斗-恶龙名称'] == "":
@@ -487,20 +489,22 @@ class AutoMove:
                     sleep(0.5)
                     continue
 
-                if '眠域' not in 任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
+                if len(任务记录['战斗-关卡名称']) > 2 and '大王' not in 任务记录['战斗-关卡名称'] and '眠域' not in \
+                        任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
                         任务记录['战斗-上一次移动'] > 7:
                     re = CompareColors.compare(
                         "71,667,#C5BFB1|63,677,#384558|67,681,#384558|69,689,#C5BFB1|77,683,#384558")
                     if re:
                         tapSleep(69, 680)
-                        Toast('自动走位')
+                        Toast('ai-自动走位')
                     任务记录['战斗-上一次移动'] = time.time()
 
-                if '眠域' not in 任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
+                if len(任务记录['战斗-关卡名称']) > 2 and '大王' not in 任务记录['战斗-关卡名称'] and '眠域' not in \
+                        任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
                         任务记录['战斗-上一次移动'] > 15:
                     re = CompareColors.compare(
                         "150,670,#C5BFB1|148,677,#384558|156,677,#C5BFB1|153,689,#384558|156,692,#384558")
                     if re:
                         tapSleep(148, 677)
-                        Toast('自动走位')
+                        Toast('ai-自动走位')
                     任务记录['战斗-上一次移动'] = time.time()
