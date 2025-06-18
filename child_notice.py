@@ -11,12 +11,15 @@ from ascript.android.system import ShellListener
 
 checkSkipTime = 0
 checkLoginTime = 0
+checkLevelTime = 0
 
 
 # 实例方法
 def main():
     global checkSkipTime
+    global checkLevelTime
     checkSkipTime = time.time()
+    checkLevelTime = time.time()
     checkLoginTime = time.time()
     while True:
         if 功能开关["fighting"] == 0:
@@ -61,9 +64,9 @@ def noticeCancel():
         res = FindColors.find(
             "345,1209,#8A858F|344,1217,#A6A1AD|346,1219,#9994A0|356,1213,#9E99A5|365,1215,#A6A1AD|361,1220,#5B585D",
             rect=[112, 613, 603, 1213], diff=0.97)
-        # if not res:
-        #     res = CompareColors.compare(
-        #         "317,1232,#87838F|321,1232,#888490|320,1242,#A19CA8|335,1232,#9D98A4|336,1237,#A09BA7|336,1243,#615D69")
+        if not res:
+            res = CompareColors.compare(
+                "286,180,#D66347|297,228,#D66347|358,250,#FFC66D|409,250,#FEC56C|440,220,#D66347")
         # if not res:
         #     res = CompareColors.compare(
         #         "342,1122,#97939E|342,1129,#96929D|338,1134,#97929D|345,1134,#97929D|359,1123,#8B8791|361,1135,#6B6770")
@@ -86,9 +89,13 @@ def noticeCancel():
             if res:
                 Toast('前往下一关')
 
-        res = TomatoOcrTap(214, 1071, 274, 1098, "确定", 10, 10)
-        if res:
-            Toast('战斗结算弹窗确认')
+        global checkLevelTime
+        currTime = time.time() - checkLevelTime
+        if currTime > 20:
+            res = TomatoOcrTap(214, 1071, 274, 1098, "确定", 10, 10)
+            if res:
+                Toast('战斗结算弹窗确认')
+            checkLevelTime = time.time()
 
         global checkSkipTime
         currTime = time.time() - checkSkipTime

@@ -36,27 +36,43 @@ def returnHome():
             res = TomatoOcrTap(454, 727, 508, 758, "确定")
 
         if 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
-            return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
-            if not return1:
-                return2 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
-            if not return2:
-                return2 = TomatoOcrTap(102, 1202, 132, 1229, '回', 10, 10)
-            if return1 or return2:
+            # return1 = TomatoOcrTap(67, 1182, 121, 1221, '返回', 10, 10)
+            # if not return1:
+            #     return2 = TomatoOcrTap(91, 1185, 127, 1221, '回', 10, 10)
+            # if not return2:
+            #     return2 = TomatoOcrTap(102, 1202, 132, 1229, '回', 10, 10)
+            # if return1 or return2:
+            #     Toast('线程-返回首页1')
+            return1 = FindColors.find("106,1195,#FFFFFF|110,1195,#FFFFFF|119,1195,#FFFFFF|119,1209,#FDFDFE|113,1210,#FFFFFF|125,1202,#6483B9",rect=[13,1091,168,1274])
+            if return1:
+                tapSleep(return1.x, return1.y)
                 Toast('线程-返回首页1')
 
         if i > 3 and not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
-            return3 = TomatoOcrTap(76, 1161, 126, 1190, '返回', 10, 10)
-            if not return3:
-                return3 = TomatoOcrTap(93, 1190, 143, 1220, '返回', 10, 10)
-                if not return3:
-                    return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
-                                                      offsetX=20, offsetY=20,
-                                                      keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
-                                                                {'keyword': '营地', 'match_mode': 'fuzzy'},
-                                                                {'keyword': '退出', 'match_mode': 'fuzzy'}])
-                    re = CompareColors.compare("650,58,#FFFFFF|663,58,#373737|667,58,#333333|675,61,#FFFFFF")
-                    if re:
-                        tapSleep(666, 58)  # tap社区页面退出
+            return1 = FindColors.find("106,1195,#FFFFFF|110,1195,#FFFFFF|119,1195,#FFFFFF|119,1209,#FDFDFE|113,1210,#FFFFFF|125,1202,#6483B9",rect=[13,1091,168,1274])
+            if return1:
+                tapSleep(return1.x, return1.y)
+            if not return1:
+                return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
+                                                  offsetX=20, offsetY=20,
+                                                  keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
+                                                            {'keyword': '营地', 'match_mode': 'fuzzy'},
+                                                            {'keyword': '退出', 'match_mode': 'fuzzy'}])
+                re = CompareColors.compare("650,58,#FFFFFF|663,58,#373737|667,58,#333333|675,61,#FFFFFF")
+                if re:
+                    tapSleep(666, 58)  # tap社区页面退出
+            # return3 = TomatoOcrTap(76, 1161, 126, 1190, '返回', 10, 10)
+            # if not return3:
+            #     return3 = TomatoOcrTap(93, 1190, 143, 1220, '返回', 10, 10)
+            #     if not return3:
+            #         return3 = TomatoOcrFindRangeClick('', 0.9, 0.9, 6, 1084, 127, 1267, timeLock=5,
+            #                                           offsetX=20, offsetY=20,
+            #                                           keywords=[{'keyword': '返回', 'match_mode': 'fuzzy'},
+            #                                                     {'keyword': '营地', 'match_mode': 'fuzzy'},
+            #                                                     {'keyword': '退出', 'match_mode': 'fuzzy'}])
+            #         re = CompareColors.compare("650,58,#FFFFFF|663,58,#373737|667,58,#333333|675,61,#FFFFFF")
+            #         if re:
+            #             tapSleep(666, 58)  # tap社区页面退出
             # return3 = TomatoOcrTap(89, 1197, 136, 1220, '返回', 10, 10)
             # if not return3:
             #     return3 = TomatoOcrTap(77, 1161, 127, 1191, '营地', 10, 10)

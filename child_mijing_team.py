@@ -30,7 +30,7 @@ def main():
             '恶龙自动接收邀请'] == 1 or \
                 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
                 功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1 or 功能开关[
-            '斗歌会自动接收邀请'] == 1 or 功能开关['三魔头自动接收邀请'] == 1 or 功能开关['桎梏之形自动接收邀请'] == 1:
+            '斗歌会自动接收邀请'] == 1 or 功能开关['三魔头自动接收邀请'] == 1 or 功能开关['桎梏之形自动接收邀请'] == 1 or 功能开关['使徒来袭自动接收邀请'] == 1:
             # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
@@ -120,7 +120,7 @@ def main():
 
                             # 补充体力
                             # 识别剩余体力不足40时，尝试补充
-                            res2, availableTiLi = TomatoOcrText(605, 81, 630, 100, "剩余体力")  # 20/60
+                            res2, availableTiLi = TomatoOcrText(599,81,632,101, "剩余体力")  # 20/60
                             availableTiLi = safe_int(availableTiLi)
                             if 功能开关["秘境不开宝箱"] == 0 and (
                                     availableTiLi == "" or availableTiLi < 40):  # 识别剩余体力不足40时，尝试补充
@@ -360,6 +360,16 @@ def waitInvite():
             else:
                 Toast('同意斗歌会组队邀请')
 
+        if fight_type == '使徒来袭带队':
+            if 功能开关['使徒来袭自动接收邀请'] == 0:
+                Toast('使徒来袭带队未开启，拒绝使徒来袭组队邀请')
+                sleep(0.5)
+                res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                功能开关["fighting"] = 0
+                return
+            else:
+                Toast('同意使徒来袭组队邀请')
+
         if fight_type == '桎梏之形带队':
             if 功能开关['桎梏之形自动接收邀请'] == 0:
                 Toast('桎梏之形带队未开启，拒绝桎梏之形组队邀请')
@@ -423,7 +433,6 @@ def waitInvite():
         if time.time() - checkYaoQingTime > 5:
             shilianTask.openTreasure(noNeedOpen=1)
             checkTreasure = time.time()
-            res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
 
         # 兜底，已在队伍中时，停止返回操作
         功能开关["fighting"] = 1
@@ -460,11 +469,15 @@ def waitInvite():
                 # res = TomatoOcrFindRangeClick("确定", sleep1=0.3, whiteList='确定', x1=105, y1=290, x2=625, y2=1013)
 
             if not res1 and not res2:
-                Toast(f'未进入房间{j}/ 4')
+                Toast(f'未进入房间{j}/ 5')
                 tapSleep(134, 1060, 0.1)
-                failTeam = failTeam + 1
+                shou_ye1, _ = TomatoOcrText(625, 363, 709, 388, "冒险手册")
+                if shou_ye1:
+                    failTeam = failTeam + 3
+                else:
+                    failTeam = failTeam + 1
             sleep(0.3)
-        if failTeam >= 3:
+        if failTeam >= 5:
             break
 
         # 房间 - 关闭邀请玩家
@@ -547,7 +560,7 @@ def waitInvite():
                 allQuit = CompareColors.compare(
                     "186,405,#F2C173|189,405,#F2C173|192,405,#FFF5B4|194,405,#F4C376|192,399,#FCF1B3")  # 判断是否成为房主
         else:
-            hasTeam, _ = TomatoOcrText(291,973,427,1008, "队长",match_mode='fuzzy')
+            hasTeam, _ = TomatoOcrText(291, 973, 427, 1008, "队长", match_mode='fuzzy')
             if not hasTeam:
                 allQuit, _ = TomatoOcrText(168, 804, 233, 831, "等待加入")
                 if not allQuit:
@@ -565,9 +578,9 @@ def waitInvite():
             sleep(1)
             break
 
-        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开",match_mode='fuzzy')  # 已在队伍页面，直接退出
+        res6, _ = TomatoOcrText(501, 191, 581, 217, "离开", match_mode='fuzzy')  # 已在队伍页面，直接退出
         if not res6:
-            res6, _ = TomatoOcrText(503, 186, 582, 213, "离开",match_mode='fuzzy')  # 已在队伍页面，直接退出
+            res6, _ = TomatoOcrText(503, 186, 582, 213, "离开", match_mode='fuzzy')  # 已在队伍页面，直接退出
         if res6:
             if not teamShout:
                 count, last_time = shilianTask.daiDuiCount()
@@ -633,6 +646,8 @@ def checkFightType():
         fight_type = "暴走带队"
     if fight_type == '' and has_common_chars("斗歌会", fightName, 2):
         fight_type = "斗歌会带队"
+    if fight_type == '' and has_common_chars("使徒来袭", fightName, 2):
+        fight_type = "使徒来袭带队"
     if fight_type == '' and has_common_chars("莱茵幻境", fightName, 2):
         fight_type = "斗歌会带队"
     if fight_type == '' and has_common_chars("桎梏之形", fightName, 2):
@@ -691,8 +706,8 @@ def checkFightType():
                     break
 
             if fight_type == '':
-                res1, _ = TomatoOcrText(405, 587, 462, 611, "大暴走")  # 斗歌金元花
-                res2, _ = TomatoOcrText(460, 614, 498, 637, "大王")  # 斗歌会
+                res1, _ = TomatoOcrText(405, 587, 462, 611, "大暴走")  # 大暴走
+                res2, _ = TomatoOcrText(460, 614, 498, 637, "大王")  # 大暴走
                 if res1 or res2:
                     fight_type = "暴走带队"
                     break

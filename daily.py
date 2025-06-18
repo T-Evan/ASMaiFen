@@ -35,9 +35,14 @@ class DailyTask:
                 for k in range(100):
                     if 功能开关["fighting"] == 0:
                         break
+                    if k > 20:
+                        res2 = CompareColors.compare(
+                            "615,224,#5D78A6|617,257,#5D78A6|636,257,#5D78A6|667,260,#5D78A6|667,224,#5D78A6")
+                        if res2:
+                            break
                     if k > 80:
-                        Toast(f'返回首页-等待任务{k * 2}/200')
-                    sleep(2)
+                        Toast(f'返回首页-等待任务{k * 3}/300')
+                    sleep(3)
                 continue
 
             if tryTimes < 20:
@@ -104,9 +109,8 @@ class DailyTask:
             # 判断是否已在首页
             # 判断底部冒险图标
             res2 = False
-            # res2 = FindColors.find(
-            #     "323,1210,#FCF8EE|333,1210,#FCF8ED|336,1212,#F9ECCB|336,1234,#FEF8E9|347,1231,#FCF8EE|363,1231,#FEF7EB|377,1229,#F4EFE1|372,1218,#88684E|353,1216,#9E8776",
-            #     rect=[301, 1130, 421, 1273])
+            res2 = CompareColors.compare(
+                "615,224,#5D78A6|617,257,#5D78A6|636,257,#5D78A6|667,260,#5D78A6|667,224,#5D78A6")
             shou_ye1 = False
             shou_ye2 = False
             if not res2:
@@ -798,6 +802,10 @@ class DailyTask:
         # 斗歌会
         if 功能开关['斗歌会'] == 1 and 功能开关['斗歌会自动接收邀请'] == 0:
             self.DouGeHui()
+
+        # 使徒来袭
+        if 功能开关['使徒来袭'] == 1 and 功能开关['使徒来袭自动接收邀请'] == 0:
+            self.ShiTuLaiXi()
         # 箱庭苗圃
         self.XiangTingMiaoPu()
         # 其他签到
@@ -955,6 +963,10 @@ class DailyTask:
     # 前往新地图
     def newMap(self, forceCheck=False):
         if 功能开关["自动挑战首领"] == 1 and 功能开关["fighting"] == 0:
+            re, _ = TomatoOcrText(626, 763, 702, 797, "自动", match_mode='fuzzy')
+            if re:
+                Toast("日常-挑战首领-等待Boss")
+                return
             Toast("日常 - 挑战首领 - 开始")
             self.homePage()
             sleep(1)
@@ -1129,6 +1141,198 @@ class DailyTask:
                             任务记录["寻找结伴-完成"] = 1
         功能开关["fighting"] = 0
         功能开关["noHomeMust"] = 0
+
+    # 使徒来袭
+    def ShiTuLaiXi(self):
+        for p in range(3):
+            if 功能开关["使徒来袭"] == 0:
+                return
+
+            if 任务记录["使徒来袭"] == 1:
+                return
+
+            Toast('日常 - 使徒来袭 - 开始')
+
+            self.homePage()
+            self.quitTeam()
+            res = TomatoOcrFindRangeClick(keywords=[{'keyword': '使徒', 'match_mode': 'fuzzy'},
+                                                    {'keyword': '来袭', 'match_mode': 'fuzzy'}], x1=475, y1=323, x2=634,
+                                          y2=683, offsetX=30, offsetY=-20,
+                                          sleep1=2.5, match_mode='fuzzy')
+            if not res:
+                Toast('日常 - 使徒来袭 - 未找到入口')
+                return
+
+            # 领取上把奖励
+            re = TomatoOcrTap(331, 718, 386, 744, '开启', offsetX=10, offsetY=10, sleep1=1.5)
+            if re:
+                Toast('使徒来袭 - 开启上一把宝箱')
+                tapSleep(348, 1235)  # 空白
+                tapSleep(348, 1235)  # 空白
+                tapSleep(348, 1235)  # 空白
+
+            # 领取全服榜奖励
+            re = CompareColors.compare("176,205,#ED5B3E|173,205,#EE5C3E")
+            if re:
+                Toast('使徒来袭-领取共享战利品')
+                tapSleep(157, 219, 0.8)
+                for j in range(6):
+                    re = FindColors.find("580,266,#F05C40|583,268,#F15A41|585,265,#F35E41", rect=[481, 239, 622, 1076],
+                                         diff=0.9)
+                    if re:
+                        tapSleep(re.x, re.y)
+                        tapSleep(427, 217)
+                        tapSleep(427, 217)
+                swipe(345, 935, 339, 337)
+                sleep(2)
+                for k in range(6):
+                    re = FindColors.find("580,266,#F05C40|583,268,#F15A41|585,265,#F35E41", rect=[481, 239, 622, 1076],
+                                         diff=0.9)
+                    if re:
+                        tapSleep(re.x, re.y)
+                        tapSleep(427, 217)
+                        tapSleep(427, 217)
+                swipe(345, 935, 339, 337)
+                sleep(2)
+                for k in range(6):
+                    re = FindColors.find("580,266,#F05C40|583,268,#F15A41|585,265,#F35E41", rect=[481, 239, 622, 1076],
+                                         diff=0.9)
+                    if re:
+                        tapSleep(re.x, re.y)
+                        tapSleep(427, 217)
+                        tapSleep(427, 217)
+                tapSleep(93, 1213)  # 返回
+
+            # 领取累积奖励
+            re = CompareColors.compare("622,703,#F25E41|622,700,#F46042")
+            if re:
+                Toast("使徒来袭 - 领取累积奖励")
+                tapSleep(611, 732)
+                for i in range(4):
+                    res = TomatoOcrFindRangeClick("领取", sleep1=0.5, whiteList='领取', x1=108, y1=342, x2=603, y2=983)
+                    if res:
+                        tapSleep(350, 1010)  # 点击空白处
+                    else:
+                        break
+                res = TomatoOcrTap(71, 1202, 124, 1231, "返回")
+
+            # 识别目标阶段
+            toLevel = safe_int_v2(功能开关['使徒来袭目标阶段'])
+            if toLevel == 0:
+                toLevel = 1700
+            if toLevel > 0:
+                re, level = TomatoOcrText(132, 1013, 191, 1035, "阶段")
+                level = level.replace("阶", "")
+                level = safe_int_v2(level)
+                if level >= toLevel:
+                    Toast("使徒来袭 - 已达到目标等阶")
+                    sleep(1.5)
+                    任务记录["使徒来袭-完成"] = 1
+                    return
+
+            self.startFightShiTuLaiXi()
+
+    def startFightShiTuLaiXi(self):
+        # 直接开始匹配
+        res = TomatoOcrTap(309, 1150, 410, 1178, "开始匹配", 40, -40, sleep1=1)
+        if not res:
+            Toast("使徒来袭 - 开始匹配失败 - 重试")
+        Toast("使徒来袭 - 开始匹配")
+
+        # 判断职业选择
+        res, _ = TomatoOcrText(317, 486, 402, 519, "选择职业")
+        if res:
+            Toast("使徒来袭 - 选择职业")
+            if 功能开关["使徒来袭职能优先输出"] == 1:
+                tapSleep(280, 665, 0.8)  # 职能输出
+            elif 功能开关["使徒来袭职能优先坦克"] == 1:
+                tapSleep(435, 665, 0.8)  # 坦克
+            else:
+                tapSleep(280, 665, 0.8)  # 职能输出
+            res = TomatoOcrTap(332, 754, 387, 789, "确定")
+
+        # 判断正在匹配中 - 循环等待300s
+        totalWait = 150  # 30000 毫秒 = 30 秒
+        elapsed = 0
+        start_time = int(time.time())
+        while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
+            if elapsed > totalWait:
+                # 超时取消匹配
+                res = TomatoOcrTap(323, 1147, 394, 1172, "匹配中", 40, -40)
+                if not res:
+                    Toast("使徒来袭 - 匹配状态识别失败")
+                    break
+
+            Toast(f"使徒来袭 - 匹配中 - 等待{elapsed}/150s")
+            # 判断无合适队伍，重新开始匹配
+            res = TomatoOcrTap(306, 1156, 413, 1186, "开始匹配", 40, -40)
+            res, _ = TomatoOcrText(224, 617, 307, 650, "匹配超时")
+            if res:
+                Toast("使徒来袭 - 匹配超时 - 无合适队伍 - 重新匹配")
+                res = TomatoOcrTap(454, 729, 510, 7598, "确定")
+
+            waitStatus3, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
+            if 20 < elapsed and not waitStatus3:
+                Toast("使徒来袭 - 尝试寻找房间")
+                re = TomatoOcrFindRangeClick('更多队伍', x1=454, y1=1098, x2=551, y2=1126)
+                if re:
+                    findTeam = False
+                    for k in range(1):
+                        re = TomatoOcrFindRangeClick(keywords=[{'keyword': '加', 'match_mode': 'fuzzy'}], x1=470,
+                                                     y1=249,
+                                                     x2=601, y2=988, sleep1=1)
+                        if not re:
+                            re = TomatoOcrFindRangeClick(keywords=[{'keyword': '申请', 'match_mode': 'fuzzy'}], x1=470,
+                                                         y1=249,
+                                                         x2=601, y2=988, sleep1=1)
+                        re1, _ = TomatoOcrText(502, 190, 581, 211, '离开队伍')
+                        if re1:
+                            findTeam = True
+                            # elapsed = 0
+                            break
+                    if not findTeam:
+                        Toast("使徒来袭 - 无可进入房间")
+            re2, _ = TomatoOcrText(307, 1019, 407, 1046, '创建队伍')
+            if re2:
+                TomatoOcrTap(210, 727, 262, 758, "取消")
+                TomatoOcrTap(74, 1202, 129, 1229, '返回', sleep1=0.8)  # 点击返回匹配页
+
+            res = TomatoOcrTap(312, 1147, 408, 1175, "开始匹配", 40, -40, sleep1=1)
+            if res:
+                Toast("使徒来袭 - 开始匹配")
+                # 判断职业选择
+                res, _ = TomatoOcrText(317, 486, 402, 519, "选择职业")
+                if res:
+                    Toast("使徒来袭 - 选择职业")
+                    if 功能开关["使徒来袭职能优先输出"] == 1:
+                        tapSleep(280, 665, 0.8)  # 职能输出
+                    elif 功能开关["使徒来袭职能优先坦克"] == 1:
+                        tapSleep(435, 665, 0.8)  # 坦克
+                    else:
+                        tapSleep(280, 665, 0.8)  # 职能输出
+                    res = TomatoOcrTap(332, 754, 387, 789, "确定")
+
+            waitStatus, _ = TomatoOcrText(322, 1152, 394, 1178, "匹配中")
+            if not waitStatus:
+                waitStatus, _ = TomatoOcrText(325, 1156, 390, 1182, "匹配中")
+                if not waitStatus:
+                    res, waitTime = TomatoOcrText(334, 1184, 383, 1201, "等待时间")
+                    if waitTime != "":
+                        waitStatus = True
+
+            res1 = self.shilianTask.WaitFight(fightType="使徒来袭")
+            if res1 == True or (waitStatus == False):  # 成功准备战斗 或 未匹配到
+                # 超时取消匹配
+                res = TomatoOcrTap(320, 1166, 393, 1190, "匹配中", 40, -40)
+                if not res:
+                    res = TomatoOcrTap(325, 1156, 390, 1182, "匹配中", 40, -40)
+                    if not res:
+                        res = TomatoOcrTap(321, 1151, 393, 1185, "匹配中", 40, -40)
+                break
+
+            sleep(0.5)
 
     # 斗歌会
     def DouGeHui(self):
@@ -1339,23 +1543,17 @@ class DailyTask:
             self.homePage(needQuitTeam=True)
             self.quitTeam()
             # 开始派对大师
-            res1 = TomatoOcrTap(556, 380, 618, 404, "派对大师", 30, -10)
-            res2 = TomatoOcrTap(556, 380, 618, 404, "舞会在即", 30, -10)
+            res1 = TomatoOcrTap(545, 363, 627, 387, "派", 30, -10, match_mode='fuzzy')
+            res2 = TomatoOcrTap(545, 363, 627, 387, "舞", 30, -10, match_mode='fuzzy')
             if not res1 and not res2:
-                res1 = TomatoOcrTap(554, 464, 622, 487, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-                res2 = TomatoOcrTap(554, 464, 622, 487, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
-                if not res1 and not res2:
-                    res1 = TomatoOcrTap(548, 548, 626, 568, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-                    res2 = TomatoOcrTap(548, 548, 626, 568, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
-                    if not res1 and not res2:
-                        res1 = TomatoOcrTap(546, 628, 630, 653, "派对大师", 30, -10)  # 适配新手试炼 - 下方入口
-                        res2 = TomatoOcrTap(546, 628, 630, 653, "舞会在即", 30, -10)  # 适配新手试炼 - 下方入口
-                        if not res1 and not res2:
-                            res1 = TomatoOcrTap(550, 713, 569, 734, "派", 30, -20)  # 适配新手试炼 - 下方入口
-                            res2 = TomatoOcrTap(550, 713, 569, 734, "舞", 30, -20)  # 适配新手试炼 - 下方入口
-                            if not res1 and not res2:
-                                Toast('日常 - 派对大师 - 未找到入口')
-                                return
+                res1 = TomatoOcrFindRangeClick(keywords=[{'keyword': '派', 'match_mode': 'fuzzy'},
+                                                         {'keyword': '舞', 'match_mode': 'fuzzy'}], x1=475, y1=323,
+                                               x2=634,
+                                               y2=683, offsetX=30, offsetY=-20,
+                                               sleep1=1.5, match_mode='fuzzy')
+                if not res1:
+                    Toast('日常 - 派对大师 - 未找到入口')
+                    return
             sleep(1)
 
             # 领取累积奖励
@@ -1810,7 +2008,7 @@ class DailyTask:
         if 任务记录["踏青签到簿"] == 0:
             Toast('其他签到-踏青签到簿-开始')
             # 判断是否在营地页面
-            res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
             if not res1:
                 hd1 = False
                 hd2 = False
@@ -1819,7 +2017,7 @@ class DailyTask:
                     self.homePage()
                     res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
                     # 判断是否在营地页面
-                    hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+                    hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
                     hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
                     if hd1 or hd2:
                         break
@@ -1861,7 +2059,7 @@ class DailyTask:
         if 任务记录["立夏签到簿"] == 0:
             Toast('其他签到-立夏签到簿-开始')
             # 判断是否在营地页面
-            res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
             if not res1:
                 hd1 = False
                 hd2 = False
@@ -1870,7 +2068,7 @@ class DailyTask:
                     self.homePage()
                     res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
                     # 判断是否在营地页面
-                    hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+                    hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
                     hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
                     if hd1 or hd2:
                         break
@@ -1912,7 +2110,7 @@ class DailyTask:
         if 任务记录["火热的聚会"] == 0:
             Toast('其他签到-火热的聚会-开始')
             # 判断是否在营地页面
-            res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
             if not res1:
                 hd1 = False
                 hd2 = False
@@ -1921,7 +2119,7 @@ class DailyTask:
                     self.homePage()
                     res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
                     # 判断是否在营地页面
-                    hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+                    hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
                     hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
                     if hd1 or hd2:
                         break
@@ -1988,11 +2186,11 @@ class DailyTask:
                 self.homePage()
                 res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
                 # 判断是否在营地页面
-                res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
                 if not res:
                     return
 
-                isFind = TomatoOcrFindRangeClick(x1=97, y1=544, x2=180, y2=1051, offsetX=40,
+                isFind = TomatoOcrFindRangeClick(x1=88, y1=583, x2=187, y2=1152, offsetX=40,
                                                  offsetY=-40, keywords=[{'keyword': '仓鼠好货', 'match_mode': 'exact'},
                                                                         {'keyword': '仓鼠', 'match_mode': 'exact'}])
                 if isFind:
@@ -2043,6 +2241,27 @@ class DailyTask:
                     tapSleep(647, 1245)  # 点击空白处
                     tapSleep(647, 1245)  # 点击空白处
             任务记录["免费时装"] = 1
+
+    # 高能预警
+    def GaoNengYuJing(self):
+        if 任务记录["高能预警"] == 1:
+            return
+        self.homePage()
+
+        res = TomatoOcrFindRangeClick('EVA', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
+                                      sleep1=1.5, match_mode='fuzzy')
+        if res:
+            Toast('EVA-高能预警-任务开始')
+            re = TomatoOcrTap(206,421,301,449, '高能预警', sleep1=1.5)
+            if re:
+                for o in range(4):
+                    re = FindColors.find("304,474,#F55F42|305,478,#F15B41|308,476,#F15D40",
+                                         rect=[115, 440, 617, 572],
+                                         diff=0.8)  # 累积奖励
+                    if re:
+                        tapSleep(re.x - 20, re.y + 20)
+                        tapSleep(348, 1188)  # 点击空白
+        任务记录["高能预警"] = 1
 
     # 明灯还年
     def QiTaQianDaoMingDeng(self):
@@ -2119,11 +2338,11 @@ class DailyTask:
         # 立夏签到簿 - 51活动
         # self.QiTaQianDaoLiXia()
         # 火热的聚会 - 周年活动
-        self.QiTaQianDaoHuoReJuHui()
+        # self.QiTaQianDaoHuoReJuHui()
         # 仓鼠好货市集
         self.CangShuHaoHuo()
         # 明灯还年
-        self.QiTaQianDaoMingDeng()
+        # self.QiTaQianDaoMingDeng()
         # 免费时装
         self.QiTaQianDaoMianFeiShiZhuang()
         # 欢庆连五日
@@ -2133,7 +2352,7 @@ class DailyTask:
         #     self.homePage()
         #     res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1)
         #     # 判断是否在营地页面
-        #     hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        #     hd1 = TomatoOcrTap(11,1116,91,1140, "旅行活动", 40, -20)
         #     hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         #     if hd1 == False and hd2 == False:
         #         return
@@ -2586,7 +2805,7 @@ class DailyTask:
             self.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
             # 判断是否在营地页面
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if res:
                 res = TomatoOcrFindRangeClick('奇旅', match_mode='fuzzy', x1=96, y1=550, x2=181, y2=1060, offsetX=30,
                                               offsetY=-20,
@@ -2612,7 +2831,7 @@ class DailyTask:
             self.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
             # 判断是否在营地页面
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if res:
                 res = TomatoOcrFindRangeClick('黑猫', match_mode='fuzzy', x1=99, y1=656, x2=180, y2=1062, offsetX=30,
                                               offsetY=-20,
@@ -2685,7 +2904,7 @@ class DailyTask:
             self.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
             # 判断是否在营地页面
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if res:
                 res = TomatoOcrFindRangeClick(
                     keywords=[{'keyword': '岛屿', 'match_mode': 'fuzzy'}, {'keyword': '游记', 'match_mode': 'fuzzy'}],
@@ -2805,7 +3024,7 @@ class DailyTask:
     def fengShangLingQu(self, taskName='', searchName=''):
         if taskName == '':
             return False
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             self.homePage()
             TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
@@ -2844,7 +3063,7 @@ class DailyTask:
     def fuZhuangLingQu(self, taskName='', searchName=''):
         if taskName == '':
             return False
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             self.homePage()
             TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
@@ -2898,7 +3117,7 @@ class DailyTask:
         self.homePage()
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
         # 判断是否在营地页面
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             return
 
@@ -3068,7 +3287,7 @@ class DailyTask:
 
                     re, x, y = TomatoOcrFindRange('肥料', x1=88, y1=541, x2=636, y2=1155, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -3081,7 +3300,7 @@ class DailyTask:
                     if coin >= 150:
                         re, x, y = TomatoOcrFindRange('唤兽', x1=88, y1=541, x2=636, y2=1155, match_mode='fuzzy')
                         if re:
-                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已售罄")
+                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已", match_mode='fuzzy')
                             if '已售' in tmpText:  # 兜底售罄->售馨
                                 res = True
                             if not res:
@@ -3096,7 +3315,7 @@ class DailyTask:
                     if coin >= 100:
                         re, x, y = TomatoOcrFindRange('星钻', x1=88, y1=541, x2=636, y2=1155, match_mode='fuzzy')
                         if re:
-                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已售罄")
+                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已", match_mode='fuzzy')
                             if '已售' in tmpText:  # 兜底售罄->售馨
                                 res = True
                             if not res:
@@ -3111,7 +3330,7 @@ class DailyTask:
                     if coin >= 100:
                         re, x, y = TomatoOcrFindRange('果木', x1=88, y1=541, x2=636, y2=1155, match_mode='fuzzy')
                         if re:
-                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已售罄")
+                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已", match_mode='fuzzy')
                             if '已售' in tmpText:  # 兜底售罄->售馨
                                 res = True
                             if not res:
@@ -3124,7 +3343,7 @@ class DailyTask:
                     if coin >= 150:
                         re, x, y = TomatoOcrFindRange('能源', x1=88, y1=541, x2=636, y2=1155, match_mode='fuzzy')
                         if re:
-                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已售罄")
+                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已", match_mode='fuzzy')
                             if '已售' in tmpText:  # 兜底售罄->售馨
                                 res = True
                             if not res:
@@ -3137,7 +3356,7 @@ class DailyTask:
                     if coin >= 50:
                         re, x, y = TomatoOcrFindRange('卢恩', x1=88, y1=541, x2=636, y2=1155, match_mode='fuzzy')
                         if re:
-                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已售罄")
+                            res, tmpText = TomatoOcrText(x - 20, y + 130, x + 60, y + 150, "已", match_mode='fuzzy')
                             if '已售' in tmpText:  # 兜底售罄->售馨
                                 res = True
                             if not res:
@@ -3187,7 +3406,7 @@ class DailyTask:
         self.homePage()
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
         # 判断是否在营地页面
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             return
 
@@ -3249,7 +3468,7 @@ class DailyTask:
 
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
         # 判断是否在营地页面
-        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         if hd1 == False and hd2 == False:
             return
@@ -3289,9 +3508,15 @@ class DailyTask:
         self.homePage()
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
         # 判断是否在营地页面
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             return
+
+        # 展开更多
+        re = CompareColors.compare("53,678,#FFFFFF|71,677,#F15E41")
+        if re:
+            tapSleep(52, 683, 1.2)
+
         res = TomatoOcrFindRangeClick(
             keywords=[{'keyword': '宝', 'match_mode': 'fuzzy'}, {'keyword': '藏', 'match_mode': 'fuzzy'},
                       {'keyword': '湖', 'match_mode': 'fuzzy'}], sleep1=0.9, x1=15, y1=672, x2=93, y2=1149, offsetX=30,
@@ -3345,7 +3570,7 @@ class DailyTask:
         self.homePage()
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
         # 判断是否在营地页面
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             return
 
@@ -3388,7 +3613,7 @@ class DailyTask:
         self.homePage()
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
         # 判断是否在营地页面
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             Toast('进入营地失败')
             return
@@ -3549,7 +3774,7 @@ class DailyTask:
             if coin >= 100:
                 re, x, y = TomatoOcrFindRange('星钻', x1=99, y1=312, x2=630, y2=1106, match_mode='fuzzy')
                 if re:
-                    res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                    res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                     if '已售' in tmpText:  # 兜底售罄->售馨
                         res = True
                     if not res:
@@ -3561,7 +3786,7 @@ class DailyTask:
             if coin >= 150:
                 re, x, y = TomatoOcrFindRange('唤兽', x1=99, y1=312, x2=630, y2=1106, match_mode='fuzzy')
                 if re:
-                    res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                    res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                     if '已售' in tmpText:  # 兜底售罄->售馨
                         res = True
                     if not res:
@@ -3572,7 +3797,7 @@ class DailyTask:
 
             re, x, y = TomatoOcrFindRange('门票', x1=99, y1=312, x2=630, y2=1106, match_mode='fuzzy')
             if re:
-                res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                 if '已售' in tmpText:  # 兜底售罄->售馨
                     res = True
                 if not res:
@@ -3583,7 +3808,7 @@ class DailyTask:
 
             re, x, y = TomatoOcrFindRange('传说经验', x1=99, y1=312, x2=630, y2=1106, match_mode='fuzzy')
             if re:
-                res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                 if '已售' in tmpText:  # 兜底售罄->售馨
                     res = True
                 if not res:
@@ -3610,11 +3835,11 @@ class DailyTask:
             self.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
             # 判断是否在营地页面
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if not res:
                 return
 
-            isFind = TomatoOcrFindRangeClick(x1=97, y1=544, x2=180, y2=1051, offsetX=40,
+            isFind = TomatoOcrFindRangeClick(x1=88, y1=583, x2=187, y2=1152, offsetX=40,
                                              offsetY=-40, keywords=[{'keyword': '火力全开', 'match_mode': 'exact'},
                                                                     {'keyword': '火力', 'match_mode': 'exact'},
                                                                     {'keyword': '火', 'match_mode': 'exact'},
@@ -3656,7 +3881,7 @@ class DailyTask:
             return
 
         Toast('日常 - 钓鱼王 - 开始')
-        res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+        res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
         if not res:
             self.homePage()
             TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
@@ -3883,14 +4108,14 @@ class DailyTask:
                 Toast('日常 - 骑兽乐园 - 检查是否完成')
             isYingDi = False
             for i in range(1, 3):
-                res1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                res1, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
                 res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
                 if not res1 and not res2:
                     # 返回首页
                     self.homePage()
                     res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
                     # 判断是否在营地页面
-                    hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                    hd1, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
                     hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
                     if hd1 or hd2:
                         isYingDi = True
@@ -4001,13 +4226,13 @@ class DailyTask:
             # 判断是否在营地页面
             isYingDi = False
             for i in range(3):
-                res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
                 if not res:
                     # 返回首页
                     self.homePage()
                     res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
                     # 判断是否在营地页面
-                    hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                    hd1, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
                     hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
                     if hd1 or hd2:
                         isYingDi = True
@@ -4126,16 +4351,16 @@ class DailyTask:
 
         Toast('日常 - 兑换码领取 - 开始')
 
-        duihuanmas = ["gozongzi", "goertongjie"]
+        duihuanmas = ["fuqinjie"]
         for duihuanma in duihuanmas:
             # 判断是否在营地页面
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if not res:
                 # 返回首页
                 self.homePage()
                 res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
                 # 判断是否在营地页面
-                hd1, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+                hd1, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
                 hd2, _ = TomatoOcrText(11, 1111, 92, 1134, "旅行活动")
                 if not hd1 and not hd2:
                     return
@@ -4182,7 +4407,7 @@ class DailyTask:
         # 判断是否在营地页面
         res = False
         for k in range(3):
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if not res:
                 # 返回首页
                 Toast('营地任务 - 邮件领取 - 重新寻找活动入口')
@@ -4345,7 +4570,7 @@ class DailyTask:
 
             diffTime = time.time() - 任务记录["首页卡死检测-倒计时"]
             if not needForceCheck and diffTime < 4 * 60:
-                print(f'游戏卡死检测 - 倒计时{round((4 * 60 - diffTime) / 60, 2)}min')
+                # print(f'游戏卡死检测 - 倒计时{round((4 * 60 - diffTime) / 60, 2)}min')
                 return True
 
             # 战斗中6分钟，强制检查是否卡死

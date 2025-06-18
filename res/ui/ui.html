@@ -1667,10 +1667,10 @@
                                     <input id="露营打卡点" name="vehicle" type="checkbox" value="Bike">露营打卡点<br>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input id="舞会签到簿" name="vehicle" type="checkbox" value="Bike">舞会签到簿<br>
+                                    <input id="派对大师" name="vehicle" type="checkbox" value="Bike">派对大师<br>
                                 </div>
                                 <div class="checkbox-item">
-                                    <input id="派对大师" name="vehicle" type="checkbox" value="Bike">派对大师<br>
+                                    <input id="舞会签到簿" name="vehicle" type="checkbox" value="Bike">舞会签到簿<br>
                                 </div>
                             </div>
                         </div>
@@ -1682,7 +1682,7 @@
                                 </div>
                             </div>
                         </div>
-                        <label class="gray-text">(5.15："周年庆典")</label><br>
+                        <label class="gray-text">(6.18："EVA联动活动")</label><br>
                         <label for="高级配置">高级:</label>
                         <div class="flex-container">
                             <div class="checkbox-group">
@@ -1943,6 +1943,37 @@
                         </div>
                         <div class="checkbox-item">
                             <input id="斗歌会职能优先坦克" name="vehicle" type="checkbox"
+                                   value="Bike">职能优先坦克/治疗<br>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>使徒来袭</legend>
+                    <input id="使徒来袭" name="vehicle" type="checkbox" value="Bike">使徒来袭开关<br>
+                    <div class="flex-container">
+                        <label for="使徒来袭目标阶段">目标阶段:</label>
+                        <input type="text" id="使徒来袭目标阶段" name="使徒来袭目标阶段" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="多少阶后停止(留空默认1700阶停止)" class="layui-input" style="width:70%;">
+                    </div>
+                    <legend>自动入队设置<label class="gray-text">(！挂日常时勿开启自动入队！)</label></legend>
+                    <input id="使徒来袭自动接收邀请" name="vehicle" type="checkbox" value="Bike"
+                           onclick="toggleInviteToast()">自动接收邀请<label
+                        class="gray-text">(等待邀请，不会自动匹配)</label><br>
+                    <div class="flex-container">
+                        <label for="使徒来袭离队等待时间">使徒来袭离队等待时间:</label>
+                        <input type="text" id="使徒来袭自动离队时间" name="使徒来袭自动离队时间" lay-verify="title"
+                               autocomplete="off"
+                               placeholder="默认进入战斗后220s离队" class="layui-input">
+                    </div>
+                    <legend>职能相关</legend>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input id="使徒来袭职能优先输出" name="vehicle" type="checkbox"
+                                   value="Bike">职能优先输出<br>
+                        </div>
+                        <div class="checkbox-item">
+                            <input id="使徒来袭职能优先坦克" name="vehicle" type="checkbox"
                                    value="Bike">职能优先坦克/治疗<br>
                         </div>
                     </div>
@@ -2656,6 +2687,15 @@
         var 斗歌会自动离队时间 = localStorage.getItem("斗歌会自动离队时间");
         document.getElementById("斗歌会自动离队时间").value = 斗歌会自动离队时间;
 
+        setSwitchStatus("使徒来袭");
+        setSwitchStatus("使徒来袭自动接收邀请");
+        var 使徒来袭目标阶段 = localStorage.getItem("使徒来袭目标阶段");
+        document.getElementById("使徒来袭目标阶段").value = 使徒来袭目标阶段;
+        setSwitchStatus("使徒来袭职能优先输出");
+        setSwitchStatus("使徒来袭职能优先坦克");
+        var 使徒来袭自动离队时间 = localStorage.getItem("使徒来袭自动离队时间");
+        document.getElementById("使徒来袭自动离队时间").value = 使徒来袭自动离队时间;
+
         var defaultValue = localStorage.getItem('选择启动账号');
         var selectElement = document.getElementById('选择启动账号');
         for (var i = 0; i < selectElement.options.length; i++) {
@@ -3268,6 +3308,15 @@
         var 斗歌会自动离队时间 = document.getElementById("斗歌会自动离队时间").value;
         localStorage.setItem("斗歌会自动离队时间", 斗歌会自动离队时间);
 
+        使徒来袭 = saveSwitchStatus("使徒来袭");
+        使徒来袭自动接收邀请 = saveSwitchStatus("使徒来袭自动接收邀请");
+        var 使徒来袭目标阶段 = document.getElementById("使徒来袭目标阶段").value;
+        localStorage.setItem("使徒来袭目标阶段", 使徒来袭目标阶段);
+        使徒来袭职能优先输出 = saveSwitchStatus("使徒来袭职能优先输出");
+        使徒来袭职能优先坦克 = saveSwitchStatus("使徒来袭职能优先坦克");
+        var 使徒来袭自动离队时间 = document.getElementById("使徒来袭自动离队时间").value;
+        localStorage.setItem("使徒来袭自动离队时间", 使徒来袭自动离队时间);
+
         var 队伍喊话 = document.getElementById("队伍喊话").value;
         localStorage.setItem("队伍喊话", 队伍喊话);
         var 队伍喊话间隔 = document.getElementById("队伍喊话间隔").value;
@@ -3595,6 +3644,15 @@
             斗歌会职能优先坦克: 斗歌会职能优先坦克,
             斗歌会职能优先治疗: 斗歌会职能优先坦克,
             斗歌会自动离队时间: 斗歌会自动离队时间,
+
+            使徒来袭: 使徒来袭,
+            使徒来袭自动接收邀请: 使徒来袭自动接收邀请,
+            使徒来袭目标阶段: 使徒来袭目标阶段,
+            使徒来袭职能优先输出: 使徒来袭职能优先输出,
+            使徒来袭职能优先坦克: 使徒来袭职能优先坦克,
+            使徒来袭职能优先治疗: 使徒来袭职能优先坦克,
+            使徒来袭自动离队时间: 使徒来袭自动离队时间,
+
             史莱姆选择: 史莱姆选择,
             队伍喊话: 队伍喊话,
             队伍喊话间隔: 队伍喊话间隔,

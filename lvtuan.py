@@ -274,7 +274,7 @@ class LvTuanTask:
                     re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '唤兽', 'match_mode': 'fuzzy'}], x1=93, y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -290,7 +290,7 @@ class LvTuanTask:
                                                   y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -306,7 +306,7 @@ class LvTuanTask:
                                                   y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -323,7 +323,7 @@ class LvTuanTask:
                                                   y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -339,7 +339,7 @@ class LvTuanTask:
                                                   y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -355,7 +355,7 @@ class LvTuanTask:
                                                   y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -371,7 +371,7 @@ class LvTuanTask:
                                                   y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -386,7 +386,7 @@ class LvTuanTask:
                     re, x, y = TomatoOcrFindRange(keywords=[{'keyword': '金币', 'match_mode': 'fuzzy'}], x1=93, y1=561,
                                                   x2=630, y2=1084)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -665,12 +665,12 @@ class LvTuanTask:
         sleep(3)
 
         # 明灯还年 - 寻找敖丙
-        re = CompareColors.compare("623,995,#F8F3E9|617,984,#DCD5C9")
-        if re:
-            Toast('明灯还年 - 寻找敖丙')
-            tapSleep(557, 1055, 2)
-            for k in range(10):
-                tapSleep(328, 1221)  # 点击空白
+        # re = CompareColors.compare("623,995,#F8F3E9|617,984,#DCD5C9")
+        # if re:
+        #     Toast('明灯还年 - 寻找敖丙')
+        #     tapSleep(557, 1055, 2)
+        #     for k in range(10):
+        #         tapSleep(328, 1221)  # 点击空白
 
         # 判断浇树已完成
         re, x, y = imageFind('旅团-浇水-已领取', x1=307, y1=172, x2=462, y2=329)

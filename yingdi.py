@@ -34,7 +34,7 @@ class YingDiTask:
         self.luYingDaKa()
 
         # 舞会签到簿
-        self.wuHuiQianDaoBu()
+        # self.wuHuiQianDaoBu()
 
         if 功能开关["营地总开关"] == 0:
             return
@@ -76,7 +76,7 @@ class YingDiTask:
         # 判断是否在营地页面
         res = False
         for k in range(3):
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if not res:
                 # 返回首页
                 res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
@@ -87,7 +87,15 @@ class YingDiTask:
             Toast('好友隐身 - 未找到活动入口')
             return
 
-        re = TomatoOcrTap(26, 119, 74, 143, '好友', offsetX=10, offsetY=-20, sleep1=0.8)
+        # EVA活动-高能预警
+        re = CompareColors.compare("401,509,#F8F4EC|415,509,#F6F3EA")
+        if re:
+            Toast('高能预警-真嗣')
+            tapSleep(356, 544, 2)
+            for k in range(10):
+                tapSleep(86, 1218)  # 点击空白
+
+        re = TomatoOcrTap(28, 273, 72, 303, '好友', offsetX=10, offsetY=-20, sleep1=0.8)
         if re:
             re, _ = TomatoOcrText(315, 1030, 366, 1062, '隐身')
             if re:
@@ -114,14 +122,14 @@ class YingDiTask:
 
         Toast('营地任务 - 星辰同行 - 开始')
         # 判断是否在营地页面
-        res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         res2 = TomatoOcrTap(500, 1201, 545, 1228, "同行")
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
@@ -177,13 +185,13 @@ class YingDiTask:
         Toast('营地任务 - 纸飞机 - 开始')
 
         # 判断是否在营地页面
-        res = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         if not res:
             # 返回首页
             self.dailyTask.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
             # 判断是否在营地页面
-            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 Toast('营地任务 - 纸飞机 - 未找到活动入口')
@@ -269,7 +277,7 @@ class YingDiTask:
         Toast('营地任务 - 月卡 - 开始')
 
         # 判断是否在营地页面
-        res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         res2 = TomatoOcrTap(366, 1196, 442, 1232, "月月卡")
         if not res1 and not res2:
             # 返回首页
@@ -277,7 +285,7 @@ class YingDiTask:
 
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
@@ -305,14 +313,14 @@ class YingDiTask:
             return
         Toast('营地任务 - 日礼包 - 开始')
         # 判断是否在营地页面
-        res1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         res2 = TomatoOcrTap(286, 1202, 340, 1229, "礼包", sleep1=0.8)
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
             # 判断是否在营地页面
-            hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+            hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
@@ -351,7 +359,7 @@ class YingDiTask:
 
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1)
         # 判断是否在营地页面
-        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         if hd1 == False and hd2 == False:
             return
@@ -392,7 +400,7 @@ class YingDiTask:
 
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
         # 判断是否在营地页面
-        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         if hd1 == False and hd2 == False:
             return
@@ -414,8 +422,8 @@ class YingDiTask:
                 res = TomatoOcrFindRangeClick('领取', x1=457, y1=538, x2=618, y2=875, sleep1=0.7)
                 if res:
                     tapSleep(342, 1145)  # 点击空白处关闭
-            任务记录["舞会签到簿-完成"] = 1
             TomatoOcrTap(94, 1186, 126, 1220, '回')
+        任务记录["舞会签到簿-完成"] = 1
 
     # 露营打卡点
     def luYingDaKa(self):
@@ -431,7 +439,7 @@ class YingDiTask:
 
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地")
         # 判断是否在营地页面
-        hd1 = TomatoOcrTap(12, 1110, 91, 1135, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
         hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
         if hd1 == False and hd2 == False:
             return
@@ -457,8 +465,8 @@ class YingDiTask:
         if isFind:
             # todo: 点击露营打卡点
             # todo: 点击领取按钮
-            任务记录["露营打卡点-完成"] = 1
             tapSleep(35, 1054)  # 点击空白处关闭
+        任务记录["露营打卡点-完成"] = 1
         return
 
     # 秘宝收集
@@ -474,7 +482,7 @@ class YingDiTask:
         # 判断是否在营地页面
         res = False
         for k in range(3):
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if not res:
                 # 返回首页
                 Toast('营地任务 - 秘宝收集 - 重新寻找活动入口')
@@ -848,7 +856,7 @@ class YingDiTask:
         # 判断是否在营地页面
         res = False
         for k in range(3):
-            res, _ = TomatoOcrText(12, 1110, 91, 1135, "旅行活动")
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if not res:
                 # 返回首页
                 Toast('营地任务 - 仓鼠百货 - 重新寻找活动入口')
@@ -891,7 +899,7 @@ class YingDiTask:
         if 1:
             for i in range(2):
                 # 免费金币箱
-                res, _ = TomatoOcrText(122, 694, 184, 718, "已售罄")
+                res, _ = TomatoOcrText(122, 694, 184, 718, "已", match_mode='fuzzy')
                 if not res:
                     tapSleep(145, 630)  # 金币箱
                     tapSleep(360, 825, 0.6)  # 购买
@@ -901,7 +909,7 @@ class YingDiTask:
                 if 功能开关['商店原材料'] == 1:
                     re, x, y = TomatoOcrFindRange('原材料', x1=94, y1=560, x2=628, y2=950)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -915,7 +923,7 @@ class YingDiTask:
                 if 功能开关['商店星星经验'] == 1:
                     re, x, y = TomatoOcrFindRange('星星经验', x1=94, y1=560, x2=628, y2=950)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -928,7 +936,7 @@ class YingDiTask:
                 if 功能开关['商店全价兽粮'] == 1:
                     re, x, y = TomatoOcrFindRange('全价兽粮', x1=94, y1=560, x2=628, y2=950)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -941,7 +949,7 @@ class YingDiTask:
                 if 功能开关['商店超级成长零食三折'] == 1:
                     re, x, y = TomatoOcrFindRange('超级成长零食', x1=94, y1=560, x2=628, y2=950)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -954,7 +962,7 @@ class YingDiTask:
                 if 功能开关['商店黑烬突破石五折'] == 1:
                     re, x, y = TomatoOcrFindRange('黑烬突破石', x1=94, y1=560, x2=628, y2=950)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -967,7 +975,7 @@ class YingDiTask:
                 if 功能开关['商店经验补剂五折'] == 1:
                     re, x, y = TomatoOcrFindRange('经验补剂', x1=94, y1=560, x2=628, y2=950)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -980,7 +988,7 @@ class YingDiTask:
                 if 功能开关['商店无限棱镜五折'] == 1:
                     re, x, y = TomatoOcrFindRange('无限棱镜', x1=94, y1=560, x2=628, y2=950)
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -993,7 +1001,7 @@ class YingDiTask:
                 if 功能开关['商店金币箱五折'] == 1:
                     re, x, y = TomatoOcrFindRange('金币箱', x1=94, y1=560, x2=628, y2=950, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1017,7 +1025,7 @@ class YingDiTask:
                 if 功能开关['秘境补给星钻'] == 1:
                     re, x, y = TomatoOcrFindRange('星钻', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1029,7 +1037,7 @@ class YingDiTask:
                 if 功能开关['秘境补给无限棱镜'] == 1:
                     re, x, y = TomatoOcrFindRange('无限棱镜', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1041,7 +1049,7 @@ class YingDiTask:
                 if 功能开关['秘境补给善意野兽积点卡'] == 1:
                     re, x, y = TomatoOcrFindRange('野兽积点', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1053,7 +1061,7 @@ class YingDiTask:
                 if 功能开关['秘境补给焕新刷具'] == 1:
                     re, x, y = TomatoOcrFindRange('焕新刷具', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1065,7 +1073,7 @@ class YingDiTask:
                 if 功能开关['秘境补给骑行兽基础晶石'] == 1:
                     re, x, y = TomatoOcrFindRange('基础晶石', x1=72, y1=542, x2=363, y2=959, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1076,7 +1084,7 @@ class YingDiTask:
 
                     re, x, y = TomatoOcrFindRange('基础晶石', x1=358, y1=550, x2=633, y2=959, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1088,7 +1096,7 @@ class YingDiTask:
                 if 功能开关['秘境补给群星自选包'] == 1:
                     re, x, y = TomatoOcrFindRange('群星自选', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1103,7 +1111,7 @@ class YingDiTask:
                 if 功能开关['秘境补给史诗经验'] == 1:
                     re, x, y = TomatoOcrFindRange('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1119,7 +1127,7 @@ class YingDiTask:
                 if 功能开关['秘境补给史诗经验'] == 1:
                     re, x, y = TomatoOcrFindRange('史诗经验', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1131,7 +1139,7 @@ class YingDiTask:
                 if 功能开关['秘境补给绮想妙成真'] == 1:
                     re, x, y = TomatoOcrFindRange('妙成真', x1=77, y1=542, x2=639, y2=1100, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1143,7 +1151,7 @@ class YingDiTask:
                 if 功能开关['秘境补给黑烬突破石'] == 1:
                     re, x, y = TomatoOcrFindRange('突破石', x1=94, y1=560, x2=628, y2=950, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1155,7 +1163,7 @@ class YingDiTask:
                 if 功能开关['秘境补给星星经验'] == 1:
                     re, x, y = TomatoOcrFindRange('星星经验', x1=94, y1=560, x2=628, y2=950, match_mode='fuzzy')
                     if re:
-                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已售罄")
+                        res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
@@ -1170,14 +1178,14 @@ class YingDiTask:
             if not re:
                 TomatoOcrTap(483, 1208, 573, 1239, "友情商店", sleep1=0.8, offsetX=30, offsetY=-30)
 
-            if re:
-                # 周年庆-明灯还年，限时小妖寻找
-                re = CompareColors.compare("393,359,#F6F3E9|484,359,#F7F3E9")
-                if re:
-                    Toast('周年庆典 - 明灯还年 - 灯笼布')
-                    tapSleep(366, 424, 2)
-                    for k in range(10):
-                        tapSleep(86, 1218)  # 点击空白
+            # if re:
+            #     # 周年庆-明灯还年，限时小妖寻找
+            #     re = CompareColors.compare("393,359,#F6F3E9|484,359,#F7F3E9")
+            #     if re:
+            #         Toast('周年庆典 - 明灯还年 - 灯笼布')
+            #         tapSleep(366, 424, 2)
+            #         for k in range(10):
+            #             tapSleep(86, 1218)  # 点击空白
 
         # 返回营地
         TomatoOcrTap(67, 1182, 121, 1221, "返回")

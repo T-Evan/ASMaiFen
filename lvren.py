@@ -358,14 +358,14 @@ class LvRenTask:
 
         Toast('旅人 - 秘宝升星 - 开始')
         self.dailyTask.homePage()
-        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=0.8)
-        re = CompareColors.compare("620,375,#F05C3F|615,374,#F15D40|622,375,#FF5544")  # 秘宝红点
-        if not re:
-            Toast('旅人 - 秘宝升星 - 已完成')
-            任务记录['旅人-秘宝升星-完成'] = 1
-            return
-        res = TomatoOcrTap(575, 413, 618, 434, "秘宝", sleep1=0.8)
-        if not re:
+        res = TomatoOcrTap(434, 1205, 484, 1234, "旅人", sleep1=1.3)
+        # re = CompareColors.compare("620,377,#F45842")  # 秘宝红点
+        # if not re:
+        #     Toast('旅人 - 秘宝升星 - 已完成')
+        #     任务记录['旅人-秘宝升星-完成'] = 1
+        #     return
+        res = TomatoOcrTap(575, 413, 618, 434, "秘宝", sleep1=1.3)
+        if not res:
             Toast('旅人 - 秘宝升星 - 未找到秘宝入口')
             return
 
@@ -559,12 +559,12 @@ class LvRenTask:
             return
 
         # 明灯还年 - 点燃的花灯
-        re = CompareColors.compare("540,875,#E06B3D|540,879,#E06B3D", diff=0.8)
-        if re:
-            Toast('周年庆典 - 明灯还年 - 寻找点燃的花灯')
-            tapSleep(535, 863, 2)
-            for k in range(10):
-                tapSleep(650, 1259)  # 点击空白
+        # re = CompareColors.compare("540,875,#E06B3D|540,879,#E06B3D", diff=0.8)
+        # if re:
+        #     Toast('周年庆典 - 明灯还年 - 寻找点燃的花灯')
+        #     tapSleep(535, 863, 2)
+        #     for k in range(10):
+        #         tapSleep(650, 1259)  # 点击空白
 
         # 装备技能
         for i in range(5):
