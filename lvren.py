@@ -381,7 +381,7 @@ class LvRenTask:
                 res = TomatoOcrTap(322, 1024, 391, 1054, "升星")
                 tapSleep(153, 1071)  # 点击空白处
                 tapSleep(153, 1071)  # 点击空白处
-                tapSleep(210, 1185)  # 点击返回
+
         任务记录['旅人-秘宝升星-完成'] = 1
 
     # 猫猫包
@@ -590,6 +590,22 @@ class LvRenTask:
                 tapSleep(361, 797)  # 点击继承装备
                 tapSleep(53, 1238)
                 tapSleep(53, 1238)
+
+        # 技能风格
+        re = CompareColors.compare("611,705,#EE5B40|612,707,#F56957")
+        if re:
+            Toast('旅人 - 技能风格 - 开始')
+            tapSleep(579, 721, 2)
+            for i in range(8):
+                # 匹配技能右上角小红点
+                point = FindColors.find("194,342,#F15F43|196,336,#F86349", rect=[67, 213, 655, 1174], diff=0.95)
+                if point:
+                    Toast('技能风格 - 升级')
+                    tapSleep(point.x, point.y, 0.8)
+                    TomatoOcrTap(335, 1091, 386, 1120, '领悟', sleep1=1.5)
+                    tapSleep(341, 104)
+                    tapSleep(341, 104)
+            tapSleep(94, 1201)  # 返回
 
         # 技能升星
         for i in range(8):
@@ -851,30 +867,30 @@ class LvRenTask:
             re, nowLevel = TomatoOcrText(210, 337, 339, 380, '当前等级')
             nowLevel = safe_int_v2(nowLevel.replace('等级', ''))
             if nowLevel > 0:
-                _, newLevel1 = TomatoOcrText(232, 754, 328, 784, '新装备1等级')
+                _, newLevel1 = TomatoOcrText(228, 754, 334, 784, '新装备1等级')
                 if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
-                    _, newLevel1 = TomatoOcrText(240, 722, 317, 757, '新装备1等级')
+                    _, newLevel1 = TomatoOcrText(236, 722, 323, 757, '新装备1等级')
                 if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
-                    _, newLevel1 = TomatoOcrText(236, 626, 330, 664, '新装备1等级')
+                    _, newLevel1 = TomatoOcrText(230, 626, 335, 664, '新装备1等级')
                 if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
-                    _, newLevel1 = TomatoOcrText(232, 661, 330, 697, '新装备1等级')
+                    _, newLevel1 = TomatoOcrText(225, 661, 335, 697, '新装备1等级')
                 if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
-                    _, newLevel1 = TomatoOcrText(233, 669, 328, 697, '新装备1等级')
+                    _, newLevel1 = TomatoOcrText(225, 669, 335, 697, '新装备1等级')
                 if newLevel1 == "" or '等级' not in newLevel1 or len(newLevel1) == 3:
-                    _, newLevel1 = TomatoOcrText(236, 779, 326, 808, '新装备1等级')
+                    _, newLevel1 = TomatoOcrText(230, 779, 330, 808, '新装备1等级')
                 newLevel1 = safe_int_v2(newLevel1.replace('等级', ''))
                 if newLevel1 > nowLevel:
                     TomatoOcrFindRangeClick(keyword='装备', x1=457, y1=525, x2=598, y2=804)
                     return
-                _, newLevel2 = TomatoOcrText(236, 991, 322, 1022, '新装备2等级')
+                _, newLevel2 = TomatoOcrText(230, 991, 327, 1022, '新装备2等级')
                 if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
-                    _, newLevel2 = TomatoOcrText(238, 962, 320, 994, '新装备2等级')
+                    _, newLevel2 = TomatoOcrText(230, 962, 326, 994, '新装备2等级')
                 if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
-                    _, newLevel2 = TomatoOcrText(232, 995, 326, 1022, '新装备2等级')
+                    _, newLevel2 = TomatoOcrText(225, 995, 332, 1022, '新装备2等级')
                 if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
-                    _, newLevel2 = TomatoOcrText(228, 945, 326, 973, '新装备2等级')
+                    _, newLevel2 = TomatoOcrText(220, 945, 332, 973, '新装备2等级')
                 if newLevel2 == "" or '等级' not in newLevel2 or len(newLevel2) == 3:
-                    _, newLevel2 = TomatoOcrText(227, 940, 325, 975, '新装备2等级')
+                    _, newLevel2 = TomatoOcrText(220, 940, 332, 975, '新装备2等级')
                 newLevel2 = safe_int_v2(newLevel2.replace('等级', ''))
                 if newLevel2 > nowLevel:
                     TomatoOcrFindRangeClick(keyword='装备', x1=462, y1=817, x2=604, y2=1041)
@@ -984,8 +1000,10 @@ class LvRenTask:
                 needUpdate = FindColors.find_all(
                     "554,357,#FF0000|561,357,#FDC1BA|573,359,#FF100F|578,361,#FF4542|584,364,#FF6863|602,359,#FF5754",
                     rect=[91, 118, 631, 566], diff=0.9)
-                if not needUpdate:
-                    Toast('旅人 - 装备进阶 - 无可进阶装备')
+            if not needUpdate:
+                needUpdate = FindColors.find("134,134,#FF0000|167,136,#FF0000", rect=[66, 102, 640, 574], diff=0.95)
+            if not needUpdate:
+                Toast('旅人 - 装备进阶 - 无可进阶装备')
             if needUpdate:
                 for p in needUpdate:
                     tapSleep(p.x, p.y, 0.8)
@@ -1008,18 +1026,19 @@ class LvRenTask:
                                 TomatoOcrTap(442, 760, 516, 797, '确认')
                                 tapSleep(129, 1023, 0.3)
                                 tapSleep(129, 1023, 0.3)
-
+                    tapSleep(367, 121, 0.3)
+                    tapSleep(367, 121, 0.3)
                     # 识别可打造标识
-                    re = FindColors.find(
-                        "556,252,#FF0000|562,253,#FDCBC2|569,253,#FF4F4C|581,252,#FE837D|599,252,#FCEBE2|603,252,#FF0000",
-                        rect=[77, 93, 639, 563], diff=0.8)
+                    re = FindColors.find("134,134,#FF0000|167,136,#FF0000", rect=[66, 102, 640, 574], diff=0.95)
                     if re:
                         Toast('旅人 - 装备进阶 - 准备打造装备')
+                        tapSleep(re.x, re.y+5, 1)
                         tmp = TomatoOcrTap(525, 965, 574, 988, '打造', sleep1=4)
                         if tmp:
                             Toast('旅人 - 装备进阶 - 开始打造装备')
                             TomatoOcrTap(326, 991, 391, 1021, '打造', sleep1=3)
                             tapSleep(167, 1090, 0.8)  # 点击空白处
+                            TomatoOcrTap(330, 825, 385, 855, '装备')  # 装备
                             TomatoOcrTap(330, 825, 385, 855, '装备')  # 装备
                     tapSleep(652, 1234, 0.2)
                     tapSleep(652, 1234, 0.2)

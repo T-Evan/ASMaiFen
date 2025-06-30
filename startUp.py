@@ -492,10 +492,12 @@ class StartUp:
             if fightNum != "":
                 if "万" in fightNum:
                     任务记录["玩家战力"] = float(fightNum.replace("万", "")) * 10000
+                elif "亿" in fightNum:
+                    任务记录["玩家战力"] = float(fightNum.replace("亿", "")) * 100000000
                 else:
-                    任务记录["玩家战力"] = float(fightNum.replace("万", ""))
-            if 任务记录["玩家战力"] != "" and 任务记录["玩家战力"] > 100000 * 10000:
-                任务记录["玩家战力"] = 任务记录["玩家战力"] - 100000 * 10000  # 兜底多识别了一位
+                    任务记录["玩家战力"] = float(fightNum.replace("万", "").replace("亿", ""))
+            # if 任务记录["玩家战力"] != "" and 任务记录["玩家战力"] > 100000 * 10000:
+            #     任务记录["玩家战力"] = 任务记录["玩家战力"] - 100000 * 10000  # 兜底多识别了一位
         # 识别当前职业
         if 任务记录['玩家-当前职业'] == '':
             re = CompareColors.compare(

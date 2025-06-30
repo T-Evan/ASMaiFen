@@ -359,6 +359,7 @@ class DailyTask:
                     continue
                 colors = generate_random_color()
                 now = datetime.datetime.now()
+                holidayContent = ''
                 if now.weekday() in [5, 6]:  # 5 表示星期六，6 表示星期日
                     holidayContent = "周末快乐"
                 # zanList3 = ['狐巡司', '第一只']
@@ -511,7 +512,7 @@ class DailyTask:
             功能开关.get("世界喊话间隔", 0).replace("分钟", "").replace("分", "").replace("秒", "").replace("s",
                                                                                                             ""))  # 分钟
         if need_dur_minute == '':
-            need_dur_minute = 1  # 默认1分钟
+            need_dur_minute = 5  # 默认5分钟
         if contentAI == "" and need_dur_minute > 0 and 任务记录["世界喊话-倒计时"] > 0:
             diffTime = time.time() - 任务记录["世界喊话-倒计时"]
             if diffTime < need_dur_minute * 60:
@@ -519,7 +520,7 @@ class DailyTask:
                 return
         if contentAI != "" and 任务记录["世界喊话AI-倒计时"] > 0:
             diffTime = time.time() - 任务记录["世界喊话AI-倒计时"]
-            dur_time = random.randint(60, 80)
+            dur_time = random.randint(30, 60)
             if diffTime < dur_time:
                 Toast(f'日常 - 世界AI喊话 - 倒计时{round((dur_time - diffTime) / dur_time, 2)}min')
                 return
@@ -533,6 +534,7 @@ class DailyTask:
         print(contents)
         for content in contents:
             if content == "打工":
+                content = f'{任务记录["玩家名称"]}~在线打工~'
                 colors = generate_random_color()
                 content = f"<color={colors}>{content}</COLOR>"
 
@@ -2252,7 +2254,7 @@ class DailyTask:
                                       sleep1=1.5, match_mode='fuzzy')
         if res:
             Toast('EVA-高能预警-任务开始')
-            re = TomatoOcrTap(206,421,301,449, '高能预警', sleep1=1.5)
+            re = TomatoOcrTap(206, 421, 301, 449, '高能预警', sleep1=1.5)
             if re:
                 for o in range(4):
                     re = FindColors.find("304,474,#F55F42|305,478,#F15B41|308,476,#F15D40",
@@ -3618,24 +3620,24 @@ class DailyTask:
             Toast('进入营地失败')
             return
 
-        res = TomatoOcrFindRangeClick("紧急委托", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
-                                      sleep1=1.5)  # 进入紧急委托
+        res = TomatoOcrFindRangeClick(
+            keywords=[{'keyword': '紧急', 'match_mode': 'fuzzy'}, {'keyword': '掘', 'match_mode': 'fuzzy'},
+                      {'keyword': '墟', 'match_mode': 'fuzzy'},
+                      {'keyword': '探', 'match_mode': 'fuzzy'}, {'keyword': '物', 'match_mode': 'fuzzy'}],
+            x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
+            sleep1=1.5)  # 进入紧急委托
         if not res:
-            res = TomatoOcrFindRangeClick(
-                keywords=[{'keyword': '掘', 'match_mode': 'fuzzy'}, {'keyword': '墟', 'match_mode': 'fuzzy'},
-                          {'keyword': '探', 'match_mode': 'fuzzy'}, {'keyword': '物', 'match_mode': 'fuzzy'}],
-                x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
-                sleep1=1.5)  # 进入紧急委托
-            if not res:
-                res = TomatoOcrFindRangeClick("瑶池盛会", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
-                                              sleep1=1.5)  # 进入紧急委托
-            if not res:
-                Toast('紧急委托 - 未找到活动入口')
-                return
+            res = TomatoOcrFindRangeClick("瑶池盛会", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
+                                          sleep1=1.5)  # 进入紧急委托
+        if not res:
+            Toast('紧急委托 - 未找到活动入口')
+            return
 
         # 领取每日礼包
-        tapSleep(595, 162)  # 点击塔莎特惠
+        tapSleep(595, 162, 2)  # 点击塔莎特惠
         re = TomatoOcrTap(145, 643, 200, 675, '免费')
+        if not re:
+            re = TomatoOcrTap(140, 664, 203, 697, '免费')
         if re:
             tapSleep(358, 744)  # 点击购买
 
@@ -3681,6 +3683,10 @@ class DailyTask:
                 re4 = FindColors.find(
                     "300,1010,#8C7657|312,1013,#D0B56D|303,1040,#F1D1AB|337,1065,#BA8C6D|292,1071,#AF8666",
                     rect=[78, 514, 639, 1084], diff=0.9)
+            if not re4:
+                re4 = FindColors.find(
+                    "481,926,#AF5458|474,913,#F6BECA|476,934,#EEBFC2|474,961,#B2969F|522,947,#BEA9B0|525,910,#AEB8C5",
+                    rect=[75, 505, 641, 1087], diff=0.8)
             if re4:
                 tapSleep(re4.x, re4.y)
             # re4 = FindColors.find("440,1024,#94665A|440,1018,#9A6D5B|442,1021,#95675A", rect=[83, 514, 634, 1084],
@@ -3763,13 +3769,13 @@ class DailyTask:
         tapSleep(330, 1166)  # 点击空白处
 
         # 兑换商店
-        re, coin = TomatoOcrText(105, 287, 161, 303, "金币")
-        coin = safe_float_v2(coin)
+        re, coin = TomatoOcrText(107, 280, 166, 302, "金币")
+        coin = safe_float_v2(coin.replace('）', '').replace(')', ''))
         if coin > 50:
             Toast('兑换商店')
             tapSleep(330, 1166)  # 点击空白处
             tapSleep(330, 1166)  # 点击空白处
-            tapSleep(116, 247, 3)
+            tapSleep(115, 236, 3)
 
             if coin >= 100:
                 re, x, y = TomatoOcrFindRange('星钻', x1=99, y1=312, x2=630, y2=1106, match_mode='fuzzy')

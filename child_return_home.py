@@ -43,13 +43,13 @@ def returnHome():
             #     return2 = TomatoOcrTap(102, 1202, 132, 1229, '回', 10, 10)
             # if return1 or return2:
             #     Toast('线程-返回首页1')
-            return1 = FindColors.find("106,1195,#FFFFFF|110,1195,#FFFFFF|119,1195,#FFFFFF|119,1209,#FDFDFE|113,1210,#FFFFFF|125,1202,#6483B9",rect=[13,1091,168,1274])
+            return1 = FindColors.find("106,1195,#FFFFFF|110,1195,#FFFFFF|119,1195,#FFFFFF|119,1209,#FDFDFE|113,1210,#FFFFFF|125,1202,#6483B9",rect=[9,1139,175,1264])
             if return1:
                 tapSleep(return1.x, return1.y)
                 Toast('线程-返回首页1')
 
         if i > 3 and not return1 and not return2 and 功能开关["needHome"] == 1 and 功能开关["noHomeMust"] == 0:
-            return1 = FindColors.find("106,1195,#FFFFFF|110,1195,#FFFFFF|119,1195,#FFFFFF|119,1209,#FDFDFE|113,1210,#FFFFFF|125,1202,#6483B9",rect=[13,1091,168,1274])
+            return1 = FindColors.find("106,1195,#FFFFFF|110,1195,#FFFFFF|119,1195,#FFFFFF|119,1209,#FDFDFE|113,1210,#FFFFFF|125,1202,#6483B9",rect=[9,1139,175,1264])
             if return1:
                 tapSleep(return1.x, return1.y)
             if not return1:

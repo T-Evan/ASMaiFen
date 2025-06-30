@@ -1172,13 +1172,13 @@ class ShiLianTask:
     # 开始匹配
     def startFight(self):
         # 识别剩余体力不足40时，尝试补充
-        res2, availableTiLi = TomatoOcrText(599,81,632,101, "剩余体力")  # 20/60
+        res2, availableTiLi = TomatoOcrText(599, 81, 632, 101, "剩余体力")  # 20/60
         availableTiLi = safe_int(availableTiLi)
         if 功能开关["秘境不开宝箱"] == 0 and (availableTiLi == "" or availableTiLi < 40):  # 识别剩余体力不足40时，尝试补充
             self.tili()
 
         # 判断体力不足，退出挑战
-        res2, availableTiLi = TomatoOcrText(599,81,632,101, "剩余体力")  # 20/60
+        res2, availableTiLi = TomatoOcrText(599, 81, 632, 101, "剩余体力")  # 20/60
         availableTiLi = safe_int(availableTiLi)
         if availableTiLi == "" or availableTiLi < 20:  # 识别剩余体力不足20时
             # 体力消耗完成
@@ -2082,7 +2082,6 @@ class ShiLianTask:
         #     Toast('识别当前职业-刺客')
         #     任务记录['玩家-当前职业'] = '刺客'
 
-
     # 使徒来袭带队
     def fightingShiTuLaiXiTeam(self):
         totalWait = 250
@@ -2122,9 +2121,9 @@ class ShiLianTask:
                 self.AIContent()
             else:
                 # 战斗结束
-                res1 = TomatoOcrTap(331,1092,390,1119, "开启", offsetX=10, offsetY=10)  # 领取宝箱
-                res2 = TomatoOcrTap(331,1092,390,1119, "开户", offsetX=10, offsetY=10)  # 领取宝箱
-                res5 = TomatoOcrText(506,833,584,857, '战斗统计')
+                res1 = TomatoOcrTap(331, 1092, 390, 1119, "开启", offsetX=10, offsetY=10)  # 领取宝箱
+                res2 = TomatoOcrTap(331, 1092, 390, 1119, "开户", offsetX=10, offsetY=10)  # 领取宝箱
+                res5 = TomatoOcrText(506, 833, 584, 857, '战斗统计')
                 if res5:
                     tapSleep(358, 1098)  # 点击开启
                 if res1 or res2 or res5:
@@ -3152,9 +3151,9 @@ class ShiLianTask:
             if not res1 and (teamName1 == "" and teamName2 == ""):
                 功能开关["fighting"] = 0
                 # 战斗结束
-                res1 = TomatoOcrTap(331,1092,390,1119, "开启", offsetX=10, offsetY=10)  # 领取宝箱
-                res2 = TomatoOcrTap(331,1092,390,1119, "开户", offsetX=10, offsetY=10)  # 领取宝箱
-                res5 = TomatoOcrText(506,833,584,857, '战斗统计')
+                res1 = TomatoOcrTap(331, 1092, 390, 1119, "开启", offsetX=10, offsetY=10)  # 领取宝箱
+                res2 = TomatoOcrTap(331, 1092, 390, 1119, "开户", offsetX=10, offsetY=10)  # 领取宝箱
+                res5 = TomatoOcrText(506, 833, 584, 857, '战斗统计')
                 if res5:
                     tapSleep(358, 1098)  # 点击开启
                 if res1 or res2 or res5:
@@ -3175,7 +3174,6 @@ class ShiLianTask:
             self.fight_fail_alert()
             sleep(0.5)
         功能开关["fighting"] = 0
-
 
     def fightingDouGeHui(self):
         totalWait = 380  # 30000 毫秒 = 30 秒
@@ -4072,6 +4070,7 @@ class ShiLianTask:
         功能开关["fighting"] = 1
         任务记录["喊话-并发锁"] = 1  # 中断只能施法
         hasQuit = False
+        self.closeLiaoTian()
         for i in range(4):
             # sleep(0.5)
             self.fight_fail_alert()
@@ -4277,6 +4276,20 @@ class ShiLianTask:
         功能开关["fighting"] = 0
         功能开关["noHomeMust"] = 0
         return False
+
+    def closeLiaoTian(self):
+        point = FindColors.find(
+            "95,88,#6483B8|104,87,#F6EFDC|109,88,#F0EBDC|112,91,#6582B8|112,94,#F9ECE0|106,100,#F4EEDE",
+            rect=[61, 34, 322, 623], diff=0.95)
+        if point:
+            Toast('收起喊话窗口')
+            tapSleep(point.x, point.y)
+
+        point = CompareColors.compare(
+            "108,94,#6884BA|102,86,#6584B9|121,89,#6584B9|107,101,#F4EEDE|105,97,#6989B9")
+        if point:
+            Toast('收起喊话窗口')
+            tapSleep(107, 93)
 
     def AIContent(self):
         try:

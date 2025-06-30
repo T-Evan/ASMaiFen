@@ -60,17 +60,15 @@ def main():
                     Toast('开始识别所在旅团')
                     功能开关["fighting"] = 1
                     功能开关["needHome"] = 0
-                    re = CompareColors.compare(
-                        "252,104,#FFFFFF|247,101,#FFFFFF|254,105,#FFFFFF|255,105,#FFFFFF")  # 玩家右侧效果加成图标
+                    re = CompareColors.compare("250,99,#EDF2FB|253,101,#FFFFFF|261,104,#7CA3E0")  # 玩家右侧效果加成图标
                     if re:
-                        tapSleep(47, 97, 0.8)  # 点击玩家头像
-                        re = CompareColors.compare(
-                            "603,1068,#77A0E6|603,1073,#78A1E7|603,1079,#78A1E7|601,1085,#78A1E7|609,1076,#78A1E7")
+                        tapSleep(49,93, 1.3)  # 点击玩家头像
+                        re = CompareColors.compare("257,574,#F4E0AC|260,580,#F4E0AC|466,577,#F3DEA9")
                         if re:
-                            res, 任务记录["玩家-当前旅团"] = TomatoOcrText(415, 830, 584, 857, "旅团名称")
+                            res, 任务记录["玩家-当前旅团"] = TomatoOcrText(409,839,570,873, "旅团名称")
                             Toast(f'识别所在旅团-{任务记录["玩家-当前旅团"]}')
                             任务记录["玩家-当前旅团-倒计时"] = time.time()
-                        tapSleep(69, 1216)  # 关闭玩家信息
+                        tapSleep(355,1209)  # 关闭玩家信息
                     功能开关["fighting"] = 0
 
                 # 识别玩家当前关卡，做特殊逻辑
@@ -182,11 +180,11 @@ def waitInvite():
                 isEachLike = False
                 tmp = ''
                 for o in range(3):
-                    tapSleep(415, 544, 0.8)  # 点击右侧邀请玩家头像
-                    re = CompareColors.compare("590,995,#7DA2E2|593,999,#7DA2E2|581,997,#7DA2E2|585,1018,#7DA2E2")
+                    tapSleep(415, 544, 1.2)  # 点击右侧邀请玩家头像
+                    re = CompareColors.compare("167,1030,#E5DDC8|176,1030,#E6DEC9|538,1030,#F0EAD8")
                     if re:
                         # 判断点进了头像
-                        res, 任务记录["战斗-房主旅团"] = TomatoOcrText(410, 828, 587, 862, "旅团名称")
+                        res, 任务记录["战斗-房主旅团"] = TomatoOcrText(413,839,576,871, "旅团名称")
                         isEachLike, tmp = TomatoOcrText(221, 981, 312, 1014, "互相关注")
                         if not isEachLike and tmp != "":
                             isEachLike, _ = TomatoOcrText(221, 981, 312, 1014, "互相关注")
@@ -199,15 +197,17 @@ def waitInvite():
                         Toast(f'非旅团成员，拒绝组队邀请 - {任务记录["战斗-房主旅团"]}/{任务记录["玩家-当前旅团"]}')
                         sleep(0.5)
                     else:
-                        if 任务记录["玩家-当前旅团"] == "" or 任务记录["战斗-房主旅团"] == "":
+                        if 任务记录["玩家-当前旅团"] == "" :
                             Toast('未识别到玩家所在旅团，默认接受邀请')
+                        elif 任务记录["战斗-房主旅团"] == "":
+                            Toast('未识别到房主所在旅团，默认接受邀请')
                         else:
                             Toast('接受旅团成员组队邀请')
                         needReject = False
 
                 if needReject == True and 功能开关["仅接收关注粉丝邀请"] == 1:
-                    res, tmp = TomatoOcrText(276, 983, 353, 1014, "未关注")
-                    if res and tmp != "":
+                    res, tmp = TomatoOcrText(206,991,259,1016, "回关")
+                    if not res and tmp != "":
                         Toast('非关注粉丝，拒绝组队邀请')
                         sleep(0.5)
                     else:

@@ -308,7 +308,7 @@ def main():
                     continue
                 if 功能开关['技能进入战斗后启动'] == 1 or 功能开关['AI进入战斗后启动'] == 1 or 功能开关[
                     '暴走进入战斗后启动'] == 1:
-                    Toast('已开启-进入战斗后启动！等待进入战斗')
+                    Toast('注意！开启了进入战斗后启动！等待进入战斗')
                     # 识别是否战斗中
                     res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
                     # res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")

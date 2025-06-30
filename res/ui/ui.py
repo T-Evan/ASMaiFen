@@ -68,6 +68,8 @@ class TimeoutLock:
         self.timeout = timeLock
 
     def acquire_lock(self):
+        return True
+
         start_time = time.time()
         while (time.time() - start_time) < self.timeout:
             if self.lock.acquire(False):
@@ -77,6 +79,8 @@ class TimeoutLock:
         return False
 
     def release_lock(self):
+        return True
+
         if self.lock.locked():
             self.lock.release()
 

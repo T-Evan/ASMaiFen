@@ -20,7 +20,7 @@ def init_tomatoOcr():
 
     ocr.setRecType("ch-3.0")
     ocr.setDetBoxType("rect")
-    ocr.setDetUnclipRatio(1.9)
+    ocr.setDetUnclipRatio(2.0)
     ocr.setRecScoreThreshold(0.3)
     ocr.setReturnType("text")
     ocr.setRunMode("fast")

@@ -495,7 +495,7 @@ class AutoMove:
                     re = CompareColors.compare(
                         "71,667,#C5BFB1|63,677,#384558|67,681,#384558|69,689,#C5BFB1|77,683,#384558")
                     if re:
-                        tapSleep(69, 680)
+                        tapSleep(67,800)
                         Toast('ai-自动走位')
                     任务记录['战斗-上一次移动'] = time.time()
 
@@ -505,6 +505,6 @@ class AutoMove:
                     re = CompareColors.compare(
                         "150,670,#C5BFB1|148,677,#384558|156,677,#C5BFB1|153,689,#384558|156,692,#384558")
                     if re:
-                        tapSleep(148, 677)
+                        tapSleep(146,801)
                         Toast('ai-自动走位')
                     任务记录['战斗-上一次移动'] = time.time()
