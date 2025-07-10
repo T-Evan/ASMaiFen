@@ -30,10 +30,11 @@ def main():
     功能开关['bossLastNumber2'] = ''
     # 功能开关['当前职业'] = ''
     if 功能开关["大暴走开关"] == 1 or 功能开关['暴走自动接收邀请'] == 1:
-        from ascript.android import plug
-        plug.load("yolov5:1.6")
-        import yolov5
-        yolov5.load("麦芬-火焰大暴走:0.4")
+        if 功能开关["史莱姆选择"] == "暴走烈焰大王":
+            from ascript.android import plug
+            plug.load("yolov5:1.6")
+            import yolov5
+            yolov5.load("麦芬-火焰大暴走:0.4")
     while True:
         if 功能开关["大暴走开关"] == 1 and 功能开关["史莱姆选择"] == "暴走烈焰大王":
             # 检测战斗状态

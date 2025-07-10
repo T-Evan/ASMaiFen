@@ -30,7 +30,8 @@ def main():
             '恶龙自动接收邀请'] == 1 or \
                 功能开关['暴走自动接收邀请'] == 1 or 功能开关['终末战自动接收邀请'] == 1 or \
                 功能开关['绝境自动接收邀请'] == 1 or 功能开关['调查队自动接收邀请'] == 1 or 功能开关[
-            '斗歌会自动接收邀请'] == 1 or 功能开关['三魔头自动接收邀请'] == 1 or 功能开关['桎梏之形自动接收邀请'] == 1 or 功能开关['使徒来袭自动接收邀请'] == 1:
+            '斗歌会自动接收邀请'] == 1 or 功能开关['三魔头自动接收邀请'] == 1 or 功能开关[
+            '桎梏之形自动接收邀请'] == 1 or 功能开关['使徒来袭自动接收邀请'] == 1:
             # res1, _ = TomatoOcrText(498,184,585,214, "离开队伍")
             # if res1:
             #     Toast('已在房间中，跳过组队邀请识别')
@@ -64,11 +65,13 @@ def main():
                     if re:
                         tapSleep(49,93, 1.3)  # 点击玩家头像
                         re = CompareColors.compare("257,574,#F4E0AC|260,580,#F4E0AC|466,577,#F3DEA9")
+                        if not re:
+                            re = CompareColors.compare("581,660,#B3C9EE|586,660,#B0C6EE|594,662,#7EA2E2|583,664,#789FE0|581,662,#EFF3FB")
                         if re:
-                            res, 任务记录["玩家-当前旅团"] = TomatoOcrText(409,839,570,873, "旅团名称")
+                            res, 任务记录["玩家-当前旅团"] = TomatoOcrText(409, 839, 570, 873, "旅团名称")
                             Toast(f'识别所在旅团-{任务记录["玩家-当前旅团"]}')
                             任务记录["玩家-当前旅团-倒计时"] = time.time()
-                        tapSleep(355,1209)  # 关闭玩家信息
+                        tapSleep(355, 1209)  # 关闭玩家信息
                     功能开关["fighting"] = 0
 
                 # 识别玩家当前关卡，做特殊逻辑
@@ -118,7 +121,7 @@ def main():
 
                             # 补充体力
                             # 识别剩余体力不足40时，尝试补充
-                            res2, availableTiLi = TomatoOcrText(599,81,632,101, "剩余体力")  # 20/60
+                            res2, availableTiLi = TomatoOcrText(599, 81, 632, 101, "剩余体力")  # 20/60
                             availableTiLi = safe_int(availableTiLi)
                             if 功能开关["秘境不开宝箱"] == 0 and (
                                     availableTiLi == "" or availableTiLi < 40):  # 识别剩余体力不足40时，尝试补充
@@ -130,7 +133,7 @@ def main():
                     功能开关["fighting"] = 0
                     # 功能开关["noHomeMust"] = 0
 
-            if 功能开关["fighting"] == 0:
+            if 功能开关["fighting"] == 0 and 功能开关["home_fighting"] == 0:
                 Toast('等待组队邀请')
                 waitInvite()
                 dailyTask.checkGameStatus()
@@ -179,56 +182,69 @@ def waitInvite():
             for p in range(3):
                 isEachLike = False
                 tmp = ''
-                for o in range(3):
+                isFindInvite = False
+                for o in range(4):
+                    功能开关["fighting"] = 1
+                    功能开关["needHome"] = 0
                     tapSleep(415, 544, 1.2)  # 点击右侧邀请玩家头像
                     re = CompareColors.compare("167,1030,#E5DDC8|176,1030,#E6DEC9|538,1030,#F0EAD8")
+                    if not re:
+                        re = CompareColors.compare("120,972,#E4DCC7|112,1006,#E4DDC8|577,973,#E8E1CD", diff=0.8)
+                    if not re:
+                        re = CompareColors.compare("581,660,#B3C9EE|586,660,#B0C6EE|594,662,#7EA2E2|583,664,#789FE0|581,662,#EFF3FB")
                     if re:
                         # 判断点进了头像
-                        res, 任务记录["战斗-房主旅团"] = TomatoOcrText(413,839,576,871, "旅团名称")
-                        isEachLike, tmp = TomatoOcrText(221, 981, 312, 1014, "互相关注")
-                        if not isEachLike and tmp != "":
-                            isEachLike, _ = TomatoOcrText(221, 981, 312, 1014, "互相关注")
+                        isFindInvite = True
+                        res, 任务记录["战斗-房主旅团"] = TomatoOcrText(413, 839, 576, 871, "旅团名称")
+                        isEachLike, tmp = TomatoOcrText(147, 991, 231, 1016, "互相关注")
                         break
 
-                needReject = True
-                if needReject == True and 功能开关["仅接收旅团成员邀请"] == 1:
-                    if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != "" and not has_common_chars(
-                            任务记录["玩家-当前旅团"], 任务记录["战斗-房主旅团"], 2):
-                        Toast(f'非旅团成员，拒绝组队邀请 - {任务记录["战斗-房主旅团"]}/{任务记录["玩家-当前旅团"]}')
-                        sleep(0.5)
-                    else:
-                        if 任务记录["玩家-当前旅团"] == "" :
-                            Toast('未识别到玩家所在旅团，默认接受邀请')
-                        elif 任务记录["战斗-房主旅团"] == "":
-                            Toast('未识别到房主所在旅团，默认接受邀请')
+                if not isFindInvite:
+                    Toast(f'未识别到邀请玩家信息，默认接收邀请')
+                else:
+                    needReject = True
+                    if needReject == True and 功能开关["仅接收旅团成员邀请"] == 1:
+                        if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != "" and not has_common_chars(
+                                任务记录["玩家-当前旅团"], 任务记录["战斗-房主旅团"], 2):
+                            Toast(f'非旅团成员，拒绝组队邀请 - {任务记录["战斗-房主旅团"]}/{任务记录["玩家-当前旅团"]}')
+                            sleep(0.5)
                         else:
-                            Toast('接受旅团成员组队邀请')
-                        needReject = False
+                            if 任务记录["玩家-当前旅团"] == "":
+                                Toast('未识别到玩家所在旅团，默认接受邀请')
+                                sleep(1)
+                            elif 任务记录["战斗-房主旅团"] == "":
+                                Toast('未识别到房主所在旅团，默认接受邀请')
+                                sleep(1)
+                            else:
+                                Toast('接受旅团成员组队邀请')
+                            needReject = False
 
-                if needReject == True and 功能开关["仅接收关注粉丝邀请"] == 1:
-                    res, tmp = TomatoOcrText(206,991,259,1016, "回关")
-                    if not res and tmp != "":
-                        Toast('非关注粉丝，拒绝组队邀请')
-                        sleep(0.5)
-                    else:
-                        Toast('接受关注粉丝组队邀请')
-                        needReject = False
+                    if needReject == True and 功能开关["仅接收关注粉丝邀请"] == 1:
+                        res, tmp = TomatoOcrText(206, 991, 259, 1016, "回关")
+                        if not res:
+                            res, tmp = TomatoOcrText(206, 991, 259, 1016, "已关注")
+                        if not res and tmp != "":
+                            Toast('非关注粉丝，拒绝组队邀请')
+                            sleep(0.5)
+                        else:
+                            Toast('接受关注粉丝组队邀请')
+                            needReject = False
 
-                if needReject == True and 功能开关["仅接收互关好友邀请"] == 1:
-                    if not isEachLike:
-                        Toast('非互关好友，拒绝组队邀请')
-                        sleep(0.5)
-                    else:
-                        Toast('接受互关好友组队邀请')
-                        needReject = False
+                    if needReject == True and 功能开关["仅接收互关好友邀请"] == 1:
+                        if not isEachLike:
+                            Toast('非互关好友，拒绝组队邀请')
+                            sleep(0.5)
+                        else:
+                            Toast('接受互关好友组队邀请')
+                            needReject = False
 
-                if needReject:
-                    res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
-                    tapSleep(71, 1216)  # 点击返回
-                    功能开关["秘境不开宝箱"] = tmpBx
-                    return
-                if tmp != "" or 任务记录["战斗-房主旅团"] != "":
-                    break
+                    if needReject:
+                        res1 = TomatoOcrTap(471, 654, 509, 674, "拒绝")
+                        tapSleep(71, 1216)  # 点击返回
+                        功能开关["秘境不开宝箱"] = tmpBx
+                        return
+                    if tmp != "" or 任务记录["战斗-房主旅团"] != "":
+                        break
 
         功能开关["fighting"] = 1
         功能开关["needHome"] = 0
@@ -410,7 +426,7 @@ def waitInvite():
     checkTreasure = time.time()  # 兜底房间宝箱检查页面
     checkYaoQingTime = time.time()  # 兜底检查邀请玩家页面
     if 功能开关["自动离房等待时间"] != "":
-        totalWait = safe_int_v2(功能开关["自动离房等待时间"])
+        totalWait = safe_int_v2(功能开关["自动离房等待时间"].replace('s', '').replace('S', ''))
     start_time = int(time.time())
     for i in range(100):
         current_time = int(time.time())

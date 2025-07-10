@@ -319,6 +319,7 @@ class DailyTask:
     def shijieShout(self, contentAI=""):
         if 功能开关['世界喊话'] == "" and 功能开关['世界喊话2'] == "" and 功能开关['世界喊话3'] == "" and 功能开关[
             '世界喊话4'] == "" and contentAI == "" and 功能开关['世界AI发言'] == 0:
+            Toast('世界喊话 - 开关关闭')
             return 1
 
         if 功能开关['世界喊话开关'] == "" or 功能开关['世界喊话开关'] == 0:
@@ -400,18 +401,22 @@ class DailyTask:
                 zanList3 = ['早安', '早上好']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(f"<color={colors}>{player}~早安~</COLOR>")
                 zanList3 = ['晚安', '晚上好']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(f"<color={colors}>{player}~晚安~</COLOR>")
                 zanList3 = ['午安', '中午好']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(f"<color={colors}>{player}~午安~</COLOR>")
                 zanList3 = ['生日']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
                 if contains_zan:
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(f"<color={colors}>{player}~生日快乐~</COLOR>")
                 zhanLi = int(safe_int_v2(任务记录["玩家战力"]) / 10000)
                 职业映射 = {
@@ -430,6 +435,7 @@ class DailyTask:
                     if zhiye == '奶':
                         content = [f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
                                    f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
+                        Toast("世界AI喊话 - 开始")
                         return self.shijieShout(random.choice(content))
                     else:
                         return
@@ -440,6 +446,7 @@ class DailyTask:
                     if zhiye == '战':
                         content = [f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
                                    f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
+                        Toast("世界AI喊话 - 开始")
                         return self.shijieShout(random.choice(content))
                     else:
                         return
@@ -449,14 +456,16 @@ class DailyTask:
                     if zhiye == '刺' or zhiye == '法' or zhiye == '弓':
                         content = [f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
                                    f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
+                        Toast("世界AI喊话 - 开始")
                         return self.shijieShout(random.choice(content))
                     else:
                         return
-                zanList = ['来个ai', '来个AI', '召唤ai', '召唤AI', 'ai打工', '打工ai']
+                zanList = ['来个ai', '来个AI', '来个Ai', '召唤ai', '召唤AI', '召唤Ai', 'ai打工', '打工ai']
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
                 if contains_zan:
                     content = [f"<color={colors}>{player}~来了~{holidayContent}~(*^▽^*)~</COLOR>",
                                f"<color={colors}>{player}~在呢~辛苦啦~(*^▽^*)~</COLOR>"]
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(random.choice(content))
                 zanList3 = ['在哪里', '来一个', '来人', '求个', '来个', '来打工', '来黑工', '来打工', '求大佬']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
@@ -464,7 +473,7 @@ class DailyTask:
                     content = [f"<color={colors}>{player}~来了来了~{holidayContent}~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~来了~{holidayContent}~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~来啦~{holidayContent}~{extraContent}</COLOR>"]
-
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(random.choice(content))
                 zanList3 = ['有没有', '有人', '有打工', '帮帮', '有佬', '有帮忙', '可以帮忙', '还有', '有吗', '求佬']
                 contains_zan = any(any(zan in text for zan in zanList3) for text in team_texts)
@@ -473,6 +482,7 @@ class DailyTask:
                                f"<color={colors}>{player}~打工~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~有的~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~来啦~{extraContent}</COLOR>"]
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(random.choice(content))
                 zanList = ['影子', '求带', '带个', '带带', '差个', '有大哥', '求个']
                 contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
@@ -481,6 +491,7 @@ class DailyTask:
                                f"<color={colors}>{player}~拉我~{holidayContent}~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~打工打工~{extraContent}</COLOR>",
                                f"<color={colors}>{player}~打工~{extraContent}</COLOR>"]
+                    Toast("世界AI喊话 - 开始")
                     return self.shijieShout(random.choice(content))
                 # zanList = ['*']
                 # contains_zan = any(any(zan in text for zan in zanList) for text in team_texts)
@@ -508,9 +519,7 @@ class DailyTask:
 
         Toast("世界喊话 - 开始")
 
-        need_dur_minute = safe_int(
-            功能开关.get("世界喊话间隔", 0).replace("分钟", "").replace("分", "").replace("秒", "").replace("s",
-                                                                                                            ""))  # 分钟
+        need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0).replace("分钟", "").replace("分", "").replace("秒", "").replace("s",""))  # 分钟
         if need_dur_minute == '':
             need_dur_minute = 5  # 默认5分钟
         if contentAI == "" and need_dur_minute > 0 and 任务记录["世界喊话-倒计时"] > 0:
@@ -526,6 +535,7 @@ class DailyTask:
                 return
 
         if not contentArr:
+            Toast(f'日常 - 世界喊话 - 未配置喊话内容')
             return
 
         self.homePage()
@@ -538,7 +548,7 @@ class DailyTask:
                 colors = generate_random_color()
                 content = f"<color={colors}>{content}</COLOR>"
 
-            if 功能开关['世界发言随机字体颜色'] and "color" not in content:
+            if 功能开关['世界发言随机字体颜色'] == 1 and "color" not in content:
                 colors = generate_random_color()
                 content = f"<color={colors}>{content}</COLOR>"
 
@@ -995,6 +1005,7 @@ class DailyTask:
                 for i in range(15):
                     res1, _ = TomatoOcrText(636, 781, 691, 802, "等待中")
                     if res1:
+                        功能开关["home_fighting"] = 1
                         Toast('挑战首领 - 等待中')
                         sleep(3)
                     res2, _ = TomatoOcrText(636, 781, 691, 802, "挑战中")
@@ -1175,6 +1186,8 @@ class DailyTask:
 
             # 领取全服榜奖励
             re = CompareColors.compare("176,205,#ED5B3E|173,205,#EE5C3E")
+            if not re:
+                re = CompareColors.compare("176,276,#ED5E42|178,274,#EE5C3E", diff=0.8)
             if re:
                 Toast('使徒来袭-领取共享战利品')
                 tapSleep(157, 219, 0.8)
@@ -1218,6 +1231,13 @@ class DailyTask:
                         break
                 res = TomatoOcrTap(71, 1202, 124, 1231, "返回")
 
+            re = CompareColors.compare("622,692,#F35F42|612,696,#EF5C3F", diff=0.8)
+            if re:
+                Toast("使徒来袭 - 领取累积奖励")
+                tapSleep(544, 738)
+                tapSleep(342, 1235)
+                tapSleep(342, 1235)
+
             # 识别目标阶段
             toLevel = safe_int_v2(功能开关['使徒来袭目标阶段'])
             if toLevel == 0:
@@ -1229,7 +1249,7 @@ class DailyTask:
                 if level >= toLevel:
                     Toast("使徒来袭 - 已达到目标等阶")
                     sleep(1.5)
-                    任务记录["使徒来袭-完成"] = 1
+                    任务记录["使徒来袭"] = 1
                     return
 
             self.startFightShiTuLaiXi()
@@ -2729,6 +2749,8 @@ class DailyTask:
             if res:
                 任务记录["忆战回环签到"] = 1
                 res = CompareColors.compare("620,110,#F66042|620,115,#F05E41|620,118,#EF5435")  # 匹配红点
+                if not res:
+                    res = CompareColors.compare("628,110,#F45F42|625,113,#F05D40")
                 if res:
                     Toast('忆战回环签到 - 任务开始')
                     tapSleep(593, 127, 3)  # 点击排行榜
@@ -2752,7 +2774,7 @@ class DailyTask:
                     tapSleep(92, 1218)  # 返回
                     tapSleep(92, 1218)
             else:
-                任务记录["半周年庆典签到"] = 1
+                任务记录["忆战回环签到"] = 1
         #
         # # 半周年庆典签到
         # if 任务记录["半周年庆典签到"] == 0:
@@ -2809,7 +2831,9 @@ class DailyTask:
             # 判断是否在营地页面
             res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
             if res:
-                res = TomatoOcrFindRangeClick('奇旅', match_mode='fuzzy', x1=96, y1=550, x2=181, y2=1060, offsetX=30,
+                res = TomatoOcrFindRangeClick(keywords=[{'keyword': '拾光', 'match_mode': 'fuzzy'},
+                                                        {'keyword': '奇旅', 'match_mode': 'fuzzy'}], match_mode='fuzzy',
+                                              x1=96, y1=550, x2=181, y2=1060, offsetX=30,
                                               offsetY=-20,
                                               sleep1=0.8)
                 if res:
@@ -2827,6 +2851,34 @@ class DailyTask:
                 else:
                     Toast('拾光奇旅 - 未找到入口')
                     任务记录["拾光奇旅"] = 1
+
+        # 夜空流星
+        if 任务记录["夜空流星"] == 0:
+            self.homePage()
+            res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.5)
+            # 判断是否在营地页面
+            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
+            if res:
+                res = TomatoOcrFindRangeClick(keywords=[{'keyword': '夜空', 'match_mode': 'fuzzy'},
+                                                        {'keyword': '流星', 'match_mode': 'fuzzy'}], match_mode='fuzzy',
+                                              x1=96, y1=550, x2=181, y2=1060, offsetX=30,
+                                              offsetY=-20,
+                                              sleep1=0.8)
+                if res:
+                    Toast('夜空流星 - 任务开始')
+                    res = tapSleep(606, 296)  # 每日奖励
+                    tapSleep(361, 1238)  # 空白
+                    tapSleep(361, 1238)  # 空白
+                    tapSleep(361, 1238)  # 空白
+                    tapSleep(356, 1134)  # 一键领取
+                    tapSleep(255, 1130)  # 一键领取
+                    tapSleep(361, 1238)  # 空白
+                    tapSleep(90, 1204)  # 返回
+                    tapSleep(90, 1204)
+                    任务记录["夜空流星"] = 1
+                else:
+                    Toast('夜空流星 - 未找到入口')
+                    任务记录["夜空流星"] = 1
 
         # 黑猫虫游记
         if 任务记录["黑猫虫游记"] == 0:
@@ -4164,7 +4216,7 @@ class DailyTask:
                     needCount = 0
                 if needCount > 0:
                     for i in range(5):
-                        res = TomatoOcrTap(570, 261, 645, 285, "兑换门票", 10, 10, sleep1=0.5)
+                        res = TomatoOcrTap(541, 262, 619, 288, "兑换门票", 15, -15, sleep1=0.5)
                         # res, _ = TomatoOcrText(320, 372, 401, 399, "兑换门票")
                         if not res:
                             TomatoOcrFindRangeClick("兑换门票", x1=554, y1=208, x2=661, y2=296, sleep1=0.7)
@@ -4275,7 +4327,7 @@ class DailyTask:
                 needCount = 0
             if needCount > 0:
                 for i in range(1, 5):
-                    res = TomatoOcrTap(571, 261, 645, 287, "兑换卢恩", 10, 10, sleep1=0.8)
+                    res = TomatoOcrTap(541, 262, 619, 288, "兑换卢恩", 15, -15, sleep1=0.8)
                     buyCount = ""
                     for p in range(1, 5):
                         # res, buyCount = TomatoOcrText(375, 944, 387, 960, "已购买次数")  # 1/9
@@ -4357,7 +4409,7 @@ class DailyTask:
 
         Toast('日常 - 兑换码领取 - 开始')
 
-        duihuanmas = ["fuqinjie"]
+        duihuanmas = ["goxiaoshu"]
         for duihuanma in duihuanmas:
             # 判断是否在营地页面
             res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")

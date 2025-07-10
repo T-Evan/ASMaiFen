@@ -492,19 +492,34 @@ class AutoMove:
                 if len(任务记录['战斗-关卡名称']) > 2 and '大王' not in 任务记录['战斗-关卡名称'] and '眠域' not in \
                         任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
                         任务记录['战斗-上一次移动'] > 7:
+                    re = CompareColors.compare("66,672,#9D9894|61,675,#C5BFB2|66,689,#C2BFB4")
+                    if re:
+                        tapSleep(61, 673)
+                        Toast('ai-自动走位')
                     re = CompareColors.compare(
                         "71,667,#C5BFB1|63,677,#384558|67,681,#384558|69,689,#C5BFB1|77,683,#384558")
                     if re:
-                        tapSleep(67,800)
+                        tapSleep(67, 800)
                         Toast('ai-自动走位')
                     任务记录['战斗-上一次移动'] = time.time()
-
+                if len(任务记录['战斗-关卡名称']) > 2 and '大王' not in 任务记录['战斗-关卡名称'] and '眠域' not in \
+                        任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
+                        任务记录['战斗-上一次移动'] > 12:
+                    re = CompareColors.compare("97,762,#384558|93,759,#384558|123,746,#384558")
+                    if re:
+                        tapSleep(107, 748)
+                        Toast('ai-自动走位')
+                    任务记录['战斗-上一次移动'] = time.time()
                 if len(任务记录['战斗-关卡名称']) > 2 and '大王' not in 任务记录['战斗-关卡名称'] and '眠域' not in \
                         任务记录['战斗-关卡名称'] and '梦境' not in 任务记录['战斗-关卡名称'] and time.time() - \
                         任务记录['战斗-上一次移动'] > 15:
+                    re = CompareColors.compare("148,672,#C8BEB3|154,680,#C5BFB2|146,688,#C6BEB1")
+                    if re:
+                        tapSleep(149, 680)
+                        Toast('ai-自动走位')
                     re = CompareColors.compare(
                         "150,670,#C5BFB1|148,677,#384558|156,677,#C5BFB1|153,689,#384558|156,692,#384558")
                     if re:
-                        tapSleep(146,801)
+                        tapSleep(146, 801)
                         Toast('ai-自动走位')
                     任务记录['战斗-上一次移动'] = time.time()

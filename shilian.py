@@ -2088,7 +2088,7 @@ class ShiLianTask:
         elapsed = 0
         teamShoutDone = 0
         if 功能开关["使徒来袭自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["使徒来袭自动离队时间"])
+            totalWait = safe_int_v2(功能开关["使徒来袭自动离队时间"].replace('s', '').replace('S', ''))
             if totalWait == 0:
                 totalWait = 220
         Toast("战斗开始 - 使徒来袭组队邀请")
@@ -2167,7 +2167,7 @@ class ShiLianTask:
         elapsed = 0
         teamShoutDone = 0
         if 功能开关["斗歌会自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["斗歌会自动离队时间"])
+            totalWait = safe_int_v2(功能开关["斗歌会自动离队时间"].replace('s', '').replace('S', ''))
             if totalWait == 0:
                 totalWait = 220
         Toast("战斗开始 - 莱茵幻境组队邀请")
@@ -2245,7 +2245,7 @@ class ShiLianTask:
         elapsed = 0
         teamShoutDone = 0
         if 功能开关["三魔头自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["三魔头自动离队时间"])
+            totalWait = safe_int_v2(功能开关["三魔头自动离队时间"].replace('s', '').replace('S', ''))
             if totalWait == 0:
                 totalWait = 360
         Toast("战斗开始 - 三魔头组队邀请")
@@ -2327,7 +2327,7 @@ class ShiLianTask:
             elapsed = 0
             teamShoutDone = 0
             if 功能开关["暴走自动离队时间"] != "":
-                totalWait = safe_int_v2(功能开关["暴走自动离队时间"])
+                totalWait = safe_int_v2(功能开关["暴走自动离队时间"].replace('s', '').replace('S', ''))
                 if totalWait == 0:
                     totalWait = 30
             Toast("战斗开始 - 暴走组队邀请")
@@ -2581,7 +2581,7 @@ class ShiLianTask:
         elapsed = 0
         teamShoutDone = 0
         if 功能开关["终末自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["终末自动离队时间"])
+            totalWait = safe_int_v2(功能开关["终末自动离队时间"].replace('s', '').replace('S', ''))
             if totalWait == 0:
                 totalWait = 240
 
@@ -2668,7 +2668,7 @@ class ShiLianTask:
         if fightType == '桎梏之形挑战':
             totalWait = 260
         if 功能开关["桎梏之形自动离队时间"] != "":
-            totalWait = safe_int_v2(功能开关["桎梏之形自动离队时间"])
+            totalWait = safe_int_v2(功能开关["桎梏之形自动离队时间"].replace('s', '').replace('S', ''))
 
         teamShoutDone = 0
 
@@ -2917,13 +2917,13 @@ class ShiLianTask:
     def fightingMengYanTeam(self, fightType='梦魇带队'):
         totalWait = 28  # 30000 毫秒 = 30 秒
         if fightType == '梦魇挑战':
-            totalWait = 450
+            totalWait = 850
         if 功能开关["梦魇自动离队时间"] != "":
             totalWait = safe_int_v2(功能开关["梦魇自动离队时间"].replace('s', '').replace('S', ''))
             if totalWait == 0:
                 totalWait = 30
                 if fightType == '梦魇挑战':
-                    totalWait = 450
+                    totalWait = 850
         elapsed = 0
         teamShoutDone = 0
 
