@@ -13,6 +13,7 @@ from .yingdi import YingDiTask
 from ascript.android.screen import FindColors
 import pymysql
 import threading
+from ascript.android.system import KeyValue
 
 shilianTask = ShiLianTask()
 dailyTask = DailyTask()
@@ -63,12 +64,13 @@ def main():
                     功能开关["needHome"] = 0
                     re = CompareColors.compare("250,99,#EDF2FB|253,101,#FFFFFF|261,104,#7CA3E0")  # 玩家右侧效果加成图标
                     if re:
-                        tapSleep(49,93, 1.3)  # 点击玩家头像
-                        re = CompareColors.compare("257,574,#F4E0AC|260,580,#F4E0AC|466,577,#F3DEA9")
-                        if not re:
-                            re = CompareColors.compare("581,660,#B3C9EE|586,660,#B0C6EE|594,662,#7EA2E2|583,664,#789FE0|581,662,#EFF3FB")
+                        tapSleep(49, 93, 1.3)  # 点击玩家头像
+                        re = FindColors.find(
+                            "442,956,#7DA2E2|453,956,#7DA2E2|445,969,#FFFFFF|437,978,#7DA2E2|448,978,#7DA2E2",
+                            rect=[99, 929, 630, 1035], diff=0.95)
                         if re:
                             res, 任务记录["玩家-当前旅团"] = TomatoOcrText(409, 839, 570, 873, "旅团名称")
+                            KeyValue.save('玩家-当前旅团', 任务记录["玩家-当前旅团"])
                             Toast(f'识别所在旅团-{任务记录["玩家-当前旅团"]}')
                             任务记录["玩家-当前旅团-倒计时"] = time.time()
                         tapSleep(355, 1209)  # 关闭玩家信息
@@ -187,11 +189,9 @@ def waitInvite():
                     功能开关["fighting"] = 1
                     功能开关["needHome"] = 0
                     tapSleep(415, 544, 1.2)  # 点击右侧邀请玩家头像
-                    re = CompareColors.compare("167,1030,#E5DDC8|176,1030,#E6DEC9|538,1030,#F0EAD8")
-                    if not re:
-                        re = CompareColors.compare("120,972,#E4DCC7|112,1006,#E4DDC8|577,973,#E8E1CD", diff=0.8)
-                    if not re:
-                        re = CompareColors.compare("581,660,#B3C9EE|586,660,#B0C6EE|594,662,#7EA2E2|583,664,#789FE0|581,662,#EFF3FB")
+                    re = FindColors.find(
+                        "442,956,#7DA2E2|453,956,#7DA2E2|445,969,#FFFFFF|437,978,#7DA2E2|448,978,#7DA2E2",
+                        rect=[99, 929, 630, 1035], diff=0.95)
                     if re:
                         # 判断点进了头像
                         isFindInvite = True
@@ -204,6 +204,8 @@ def waitInvite():
                 else:
                     needReject = True
                     if needReject == True and 功能开关["仅接收旅团成员邀请"] == 1:
+                        if 任务记录["玩家-当前旅团"] == "":
+                            任务记录["玩家-当前旅团"] = KeyValue.get('玩家-当前旅团', '')
                         if 任务记录["战斗-房主旅团"] != "" and 任务记录["玩家-当前旅团"] != "" and not has_common_chars(
                                 任务记录["玩家-当前旅团"], 任务记录["战斗-房主旅团"], 2):
                             Toast(f'非旅团成员，拒绝组队邀请 - {任务记录["战斗-房主旅团"]}/{任务记录["玩家-当前旅团"]}')

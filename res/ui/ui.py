@@ -68,7 +68,7 @@ class TimeoutLock:
         self.timeout = timeLock
 
     def acquire_lock(self):
-        # return True
+        return True
 
         start_time = time.time()
         while (time.time() - start_time) < self.timeout:
@@ -79,7 +79,7 @@ class TimeoutLock:
         return False
 
     def release_lock(self):
-        # return True
+        return True
 
         if self.lock.locked():
             self.lock.release()
@@ -216,6 +216,7 @@ def 初始化任务记录(initAll=True):
 
         "高能预警": 0,
         "使徒来袭": 0,
+        "改造计划": 0,
 
         "大玩家": 0,
         "繁星使者": 0,

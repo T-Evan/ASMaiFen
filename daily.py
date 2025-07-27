@@ -519,7 +519,9 @@ class DailyTask:
 
         Toast("世界喊话 - 开始")
 
-        need_dur_minute = safe_int(功能开关.get("世界喊话间隔", 0).replace("分钟", "").replace("分", "").replace("秒", "").replace("s",""))  # 分钟
+        need_dur_minute = safe_int(
+            功能开关.get("世界喊话间隔", 0).replace("分钟", "").replace("分", "").replace("秒", "").replace("s",
+                                                                                                            ""))  # 分钟
         if need_dur_minute == '':
             need_dur_minute = 5  # 默认5分钟
         if contentAI == "" and need_dur_minute > 0 and 任务记录["世界喊话-倒计时"] > 0:
@@ -2264,6 +2266,37 @@ class DailyTask:
                     tapSleep(647, 1245)  # 点击空白处
             任务记录["免费时装"] = 1
 
+    # 改造计划
+    def EVAGaiZaoJiHua(self):
+        if 任务记录["改造计划"] == 1:
+            return
+        self.homePage()
+
+        res = TomatoOcrFindRangeClick('EVA', x1=539, y1=348, x2=627, y2=770, offsetX=30, offsetY=-20,
+                                      sleep1=1.5, match_mode='fuzzy')
+        if res:
+            Toast('EVA-改造计划-任务开始')
+            re = TomatoOcrTap(206, 421, 301, 449, '改造计划', sleep1=1.5)
+            if re:
+                for k in range(5):
+                    Toast('改造计划-领取累积奖励')
+                    re = FindColors.find("583,266,#F7583B|582,263,#F45F42|585,264,#F4593E", rect=[212, 236, 610, 337])
+                    if re:
+                        tapSleepV2(re.x, re.y, 1)
+                        tapSleep(387, 1246)  # 空白
+                        tapSleep(387, 1246)  # 空白
+                Toast('改造计划-开始连接')
+                for k in range(50):
+                    re, count = TomatoOcrText(607, 82, 665, 106, '剩余次数')
+                    count = safe_int_v2(count)
+                    if count == 0:
+                        break
+                    Toast(f'改造计划-开始连接-剩余{count}次')
+                    tapSleep(531, 1069, 5)
+                    tapSleep(387, 1246)  # 空白
+                    tapSleep(387, 1246)  # 空白
+        任务记录["改造计划"] = 1
+
     # 高能预警
     def GaoNengYuJing(self):
         if 任务记录["高能预警"] == 1:
@@ -2361,6 +2394,7 @@ class DailyTask:
         # self.QiTaQianDaoLiXia()
         # 火热的聚会 - 周年活动
         # self.QiTaQianDaoHuoReJuHui()
+        self.EVAGaiZaoJiHua()
         # 仓鼠好货市集
         self.CangShuHaoHuo()
         # 明灯还年
@@ -4409,7 +4443,7 @@ class DailyTask:
 
         Toast('日常 - 兑换码领取 - 开始')
 
-        duihuanmas = ["goxiaoshu"]
+        duihuanmas = ["godashu"]
         for duihuanma in duihuanmas:
             # 判断是否在营地页面
             res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")

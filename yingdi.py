@@ -197,7 +197,8 @@ class YingDiTask:
                 Toast('营地任务 - 纸飞机 - 未找到活动入口')
                 return
 
-        isFind = TomatoOcrFindRangeClick('纸翼大作战', sleep1=1)
+        isFind = TomatoOcrFindRangeClick(keywords=[{'keyword': '纸翼', 'match_mode': 'fuzzy'},
+                                                   {'keyword': '作战', 'match_mode': 'fuzzy'}], sleep1=1)
         if not isFind:
             # -- 返回活动最后一屏
             self.huoDongSwipeDown()
@@ -206,7 +207,8 @@ class YingDiTask:
                 # 上翻第二屏，继续识别
                 swipe(680, 451, 680, 804)
                 sleep(3)
-                isFind = TomatoOcrFindRangeClick('纸翼大作战', sleep1=1)
+                isFind = TomatoOcrFindRangeClick(keywords=[{'keyword': '纸翼', 'match_mode': 'fuzzy'},
+                                                           {'keyword': '作战', 'match_mode': 'fuzzy'}], sleep1=1)
                 if isFind:
                     break
         if isFind:
@@ -216,7 +218,7 @@ class YingDiTask:
                 Toast('领取免费特卖礼包')
                 TomatoOcrTap(584, 1115, 677, 1145, "限时特卖", sleep1=0.8)
                 TomatoOcrTap(145, 587, 200, 620, "免费", sleep1=0.8)
-                TomatoOcrTap(339, 744, 381, 762, "免费", sleep1=0.8)
+                TomatoOcrTap(337, 754, 380, 774, "免费", sleep1=0.8)
                 tapSleep(394, 1133)  # 关闭弹窗
                 tapSleep(394, 1133)  # 返回积分奖励页
                 tapSleep(394, 1133, 0.8)
@@ -226,11 +228,13 @@ class YingDiTask:
                 Toast('购买钻石自选礼包')
                 for k in range(3):
                     TomatoOcrTap(584, 1115, 677, 1145, "限时特卖", sleep1=0.8)
-                    re = TomatoOcrFindRangeClick('星钻自选礼包', x1=85, y1=351, x2=636, y2=642, sleep1=0.8)
+                    re = TomatoOcrFindRangeClick(keywords=[{'keyword': '星钻自选', 'match_mode': 'fuzzy'},
+                                                           {'keyword': '自选礼包', 'match_mode': 'fuzzy'}], x1=95,
+                                                 y1=361, x2=626, y2=636, sleep1=0.8)
                     if not re:
                         re = TomatoOcrTap(101, 478, 226, 508, '星钻自选礼包', sleep1=0.8)
                     if re:
-                        TomatoOcrTap(337, 719, 382, 741, "购买", sleep1=0.8)
+                        TomatoOcrTap(333, 727, 386, 752, "购买", sleep1=0.8)
                     tapSleep(394, 1133)  # 关闭弹窗
                     tapSleep(394, 1133)  # 返回积分奖励页
                     tapSleep(394, 1133, 0.8)
@@ -241,7 +245,8 @@ class YingDiTask:
             if 功能开关['纸飞机信物兑换'] == 1:
                 Toast('信物兑换')
                 TomatoOcrTap(461, 1115, 560, 1149, "信物兑换", sleep1=0.8)
-                tapSleep(358, 991, 0.8)
+                tapSleep(358, 991, 1.1)
+                re = TomatoOcrTap(336, 804, 383, 827, "购买", sleep1=0.8)
                 re = TomatoOcrTap(336, 804, 383, 827, "购买", sleep1=0.8)
                 tapSleep(394, 1133)  # 关闭弹窗
                 tapSleep(394, 1133, 0.8)  # 返回积分奖励页
@@ -886,9 +891,12 @@ class YingDiTask:
 
         # 开始购买
         # 返回第一屏
-        swipe(360, 805, 360, 1165)
-        sleep(1)
-
+        for k in range(3):
+            re = TomatoOcrText(105, 572, 208, 602, '金币', match_mode='fuzzy')
+            if re:
+                break
+            swipe(360, 805, 360, 1165)
+            sleep(1)
         # 判断是否已购买完成
         # re = CompareColors.compare(
         #     "145,714,#E1DBD1|420,718,#E6E1D8|557,718,#E6E1D8|146,916,#E6E1D8|282,913,#E6E1D8|420,915,#E6E1D8")
@@ -899,10 +907,10 @@ class YingDiTask:
         if 1:
             for i in range(2):
                 # 免费金币箱
-                res, _ = TomatoOcrText(122, 694, 184, 718, "已", match_mode='fuzzy')
+                res, _ = TomatoOcrText(108, 708, 197, 741, "已", match_mode='fuzzy')
                 if not res:
-                    tapSleep(145, 630)  # 金币箱
-                    tapSleep(360, 825, 0.6)  # 购买
+                    tapSleep(159, 719, 1.2)  # 金币箱
+                    tapSleep(353, 868, 0.8)  # 购买
                     tapSleep(360, 1100, 1)  # 点击空白处关闭
 
                 # 原材料
@@ -1194,11 +1202,9 @@ class YingDiTask:
         return
 
     def shopBuy(self):
-        re1, _ = TomatoOcrText(282, 400, 434, 459, '购买道具')
-        if not re1:
-            re1, _ = TomatoOcrText(330, 836, 388, 858, '购买')
-        if not re1:
-            re1, _ = TomatoOcrText(331, 888, 385, 912, '购买')
+        re1, _, _ = TomatoOcrFindRange(keywords=[{'keyword': '购', 'match_mode': 'fuzzy'},
+                                                 {'keyword': '买', 'match_mode': 'fuzzy'}], x1=246, y1=756, x2=473,
+                                       y2=983, match_mode='fuzzy')
         re2 = False
         if re1:
             re = TomatoOcrTap(475, 785, 513, 811, '最大', offsetX=5, offsetY=5)
@@ -1213,15 +1219,9 @@ class YingDiTask:
             if not re:
                 re, x, y = imageFind('商店购买', x1=52, y1=478, x2=634, y2=1149)
             if re:
-                re = TomatoOcrTap(334, 842, 385, 867, '购买', offsetX=5, offsetY=5)
-                if not re:
-                    re = TomatoOcrTap(334, 828, 388, 852, '购买', offsetX=5, offsetY=5)
-                if not re:
-                    re = TomatoOcrTap(336, 817, 383, 841, '购买', offsetX=5, offsetY=5)
-                if not re:
-                    re = TomatoOcrTap(331, 888, 385, 912, '购买', offsetX=5, offsetY=5)
-                if not re:
-                    re = TomatoOcrFindRangeClick('购买', whiteList='购买', x1=93, y1=643, x2=618, y2=1004)
+                re = TomatoOcrFindRangeClick(keywords=[{'keyword': '购', 'match_mode': 'fuzzy'},
+                                                       {'keyword': '买', 'match_mode': 'fuzzy'}], x1=246, y1=756,
+                                             x2=473, y2=983)
                 # tapSleep(360, 855, 0.6)  # 购买
                 if re:
                     tapSleep(360, 1100, 1)  # 点击空白处关闭

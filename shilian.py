@@ -121,30 +121,16 @@ class ShiLianTask:
         Toast('三打三守三魔头 - 开始')
         self.homePage()
         self.quitTeam()
-        # res = TomatoOcrFindRangeClick('西行记', x1=544, y1=334, x2=631, y2=623, offsetX=30, offsetY=-20,
-        #                               sleep1=1.5, match_mode='fuzzy')
-        #
-        # if not res:
-        #     Toast('三打三守三魔头 - 未找到活动入口')
-        #     return
 
-        # 开始暴走
-        res = False
-        for k in range(3):
-            res = FindColors.find(
-                "585,356,#927A6D|579,362,#E9CD78|578,365,#947D64|582,369,#FBEECE|587,366,#927969|592,370,#917761",
-                diff=0.95)
-            if res:
-                tapSleep(res.x, res.y, 1)
-                break
+        res = TomatoOcrFindRangeClick(keywords=[{'keyword': '三打', 'match_mode': 'fuzzy'},
+                                                {'keyword': '三守', 'match_mode': 'fuzzy'},
+                                                {'keyword': '魔头', 'match_mode': 'fuzzy'}], x1=543, y1=336, x2=634,
+                                      y2=626, offsetX=30, offsetY=-20,
+                                      sleep1=1.5, match_mode='fuzzy')
+
         if not res:
-            Toast('三打三守三魔头 - 未找到入口')
+            Toast('三打三守三魔头 - 未找到活动入口')
             return
-
-        # res = TomatoOcrTap(521, 604, 585, 632, '三魔头', sleep1=1.5)
-        # if not res:
-        #     Toast('三打三守三魔头 - 未找到活动入口')
-        #     return
 
         Toast('三打三守三魔头 - 任务开始')
         # 领取全服榜奖励
