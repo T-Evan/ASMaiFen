@@ -398,7 +398,10 @@ class LvRenTask:
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
         res = tapSleep(551, 915)  # 点击猫包
         sleep(1)
-
+        res = TomatoOcrTap(618, 1033, 694, 1056, "猫猫烤箱", sleep1=0.8)
+        if not res:
+            Toast('旅人 - 猫猫包 - 未找到猫猫包入口')
+            return
         if 功能开关['领取猫猫包果木']:
             # 点击果木
             re = imageFindClick('猫猫果木')
@@ -414,7 +417,7 @@ class LvRenTask:
             tapSleep(216, 1224)  # 点击空白处可领取奖励
 
             # 快捷兑换
-            res = TomatoOcrTap(557, 188, 639, 214, "快速兑换", 30, -30)
+            res = TomatoOcrTap(552, 190, 634, 216, "快速兑换", 30, -30)
             needCount = safe_int(功能开关["钻石兑换果木次数"])
             if needCount == '':
                 needCount = 0
@@ -1032,7 +1035,7 @@ class LvRenTask:
                     re = FindColors.find("134,134,#FF0000|167,136,#FF0000", rect=[66, 102, 640, 574], diff=0.95)
                     if re:
                         Toast('旅人 - 装备进阶 - 准备打造装备')
-                        tapSleep(re.x, re.y+5, 1)
+                        tapSleep(re.x, re.y + 5, 1)
                         tmp = TomatoOcrTap(525, 965, 574, 988, '打造', sleep1=4)
                         if tmp:
                             Toast('旅人 - 装备进阶 - 开始打造装备')

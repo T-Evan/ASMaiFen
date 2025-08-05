@@ -123,7 +123,7 @@ class YingDiTask:
         Toast('营地任务 - 星辰同行 - 开始')
         # 判断是否在营地页面
         res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
-        res2 = TomatoOcrTap(500, 1201, 545, 1228, "同行")
+        res2 = TomatoOcrTap(522, 1201, 612, 1229, "同行", match_mode='fuzzy', offsetX=20, offsetY=-20, sleep1=0.8)
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
@@ -133,7 +133,7 @@ class YingDiTask:
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
-        res = TomatoOcrTap(500, 1201, 545, 1228, "同行", sleep1=0.8)
+        res = TomatoOcrTap(522, 1201, 612, 1229, "同行", match_mode='fuzzy', offsetX=20, offsetY=-20, sleep1=0.8)
 
         if res:
             # 开启新生星辰
@@ -185,32 +185,35 @@ class YingDiTask:
         Toast('营地任务 - 纸飞机 - 开始')
 
         # 判断是否在营地页面
-        res = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
-        if not res:
+        isFind = TomatoOcrTap(500, 1065, 641, 1111, "作战", 40, 20, match_mode='fuzzy')
+        if not isFind:
             # 返回首页
             self.dailyTask.homePage()
             res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=0.8)
             # 判断是否在营地页面
-            hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
-            hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
-            if not hd1 and not hd2:
-                Toast('营地任务 - 纸飞机 - 未找到活动入口')
-                return
+            isFind = TomatoOcrTap(500, 1065, 641, 1111, "作战", 40, 20, match_mode='fuzzy')
+            if not isFind:
+                swipe(508, 1095, 696, 1092, 800)
+                sleep(1)
+                isFind = TomatoOcrTap(500, 1065, 641, 1111, "作战", 40, 20, match_mode='fuzzy')
+                if not isFind:
+                    Toast('营地任务 - 纸飞机 - 未找到活动入口')
+                    return
 
-        isFind = TomatoOcrFindRangeClick(keywords=[{'keyword': '纸翼', 'match_mode': 'fuzzy'},
-                                                   {'keyword': '作战', 'match_mode': 'fuzzy'}], sleep1=1)
-        if not isFind:
-            # -- 返回活动最后一屏
-            self.huoDongSwipeDown()
-
-            for i in range(1, 5):
-                # 上翻第二屏，继续识别
-                swipe(680, 451, 680, 804)
-                sleep(3)
-                isFind = TomatoOcrFindRangeClick(keywords=[{'keyword': '纸翼', 'match_mode': 'fuzzy'},
-                                                           {'keyword': '作战', 'match_mode': 'fuzzy'}], sleep1=1)
-                if isFind:
-                    break
+        # isFind = TomatoOcrFindRangeClick(keywords=[{'keyword': '纸翼', 'match_mode': 'fuzzy'},
+        #                                            {'keyword': '作战', 'match_mode': 'fuzzy'}], sleep1=1)
+        # if not isFind:
+        #     # -- 返回活动最后一屏
+        #     self.huoDongSwipeDown()
+        #
+        #     for i in range(1, 5):
+        #         # 上翻第二屏，继续识别
+        #         swipe(680, 451, 680, 804)
+        #         sleep(3)
+        #         isFind = TomatoOcrFindRangeClick(keywords=[{'keyword': '纸翼', 'match_mode': 'fuzzy'},
+        #                                                    {'keyword': '作战', 'match_mode': 'fuzzy'}], sleep1=1)
+        #         if isFind:
+        #             break
         if isFind:
             # 判断限时特卖是否领取
             re = CompareColors.compare("680,1122,#EE5C3F|683,1122,#F05C3F|680,1117,#F56043")
@@ -283,7 +286,7 @@ class YingDiTask:
 
         # 判断是否在营地页面
         res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
-        res2 = TomatoOcrTap(366, 1196, 442, 1232, "月月卡")
+        res2 = TomatoOcrTap(432, 1199, 511, 1231, "月月卡", 20, -20)
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
@@ -294,7 +297,7 @@ class YingDiTask:
             hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
             if not hd1 and not hd2:
                 return
-        res = TomatoOcrTap(366, 1196, 442, 1232, "月月卡")
+        res = TomatoOcrTap(432, 1199, 511, 1231, "月月卡", 20, -20)
         sleep(1)
         if res:
             res = TomatoOcrTap(315, 1044, 410, 1090, "领取", 10, 10)
@@ -319,7 +322,7 @@ class YingDiTask:
         Toast('营地任务 - 日礼包 - 开始')
         # 判断是否在营地页面
         res1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
-        res2 = TomatoOcrTap(286, 1202, 340, 1229, "礼包", sleep1=0.8)
+        res2 = TomatoOcrTap(353, 1201, 408, 1229, "礼包", sleep1=0.8)
         if not res1 and not res2:
             # 返回首页
             self.dailyTask.homePage()
@@ -330,7 +333,7 @@ class YingDiTask:
             if not hd1 and not hd2:
                 return
 
-        res = TomatoOcrTap(286, 1202, 340, 1229, "礼包", sleep1=0.8)
+        res = TomatoOcrTap(353, 1201, 408, 1229, "礼包", sleep1=0.8)
         sleep(1)
         if res:
             res = TomatoOcrTap(148, 671, 198, 700, "免费", sleep1=0.8)
@@ -364,23 +367,25 @@ class YingDiTask:
 
         res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1)
         # 判断是否在营地页面
-        hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20)
-        hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20)
+        hd1 = TomatoOcrTap(11, 1116, 91, 1140, "旅行活动", 40, -20, sleep1=1.2)
+        hd2 = TomatoOcrTap(11, 1111, 92, 1134, "旅行活动", 40, -20, sleep1=1.2)
         if hd1 == False and hd2 == False:
             return
 
-        isFind = TomatoOcrFindRangeClick('月签到', x1=82, y1=61, x2=653, y2=1153)
+        isFind = TomatoOcrFindRangeClick('月签到', x1=61, y1=47, x2=663, y2=181)
         if not isFind:
-            # -- 返回活动最后一屏
-            self.huoDongSwipeDown()
+            isFind = TomatoOcrFindRangeClick('月签到', x1=82, y1=61, x2=653, y2=1153)
+            if not isFind:
+                # -- 返回活动最后一屏
+                self.huoDongSwipeDown()
 
-            for i in range(1, 5):
-                # 上翻第二屏，继续识别
-                swipe(680, 451, 680, 804)
-                sleep(3)
-                isFind = TomatoOcrFindRangeClick('月签到', x1=82, y1=61, x2=653, y2=1153)
-                if isFind:
-                    break
+                for i in range(1, 5):
+                    # 上翻第二屏，继续识别
+                    swipe(680, 451, 680, 804)
+                    sleep(3)
+                    isFind = TomatoOcrFindRangeClick('月签到', x1=82, y1=61, x2=653, y2=1153)
+                    if isFind:
+                        break
         if isFind:
             sleep(1.5)
             TomatoOcrTap(315, 980, 407, 1010, "点击签到")
@@ -484,35 +489,53 @@ class YingDiTask:
             Toast('营地任务 - 秘宝领取 - 任务已执行 - 跳过')
             return
 
-        # 判断是否在营地页面
-        res = False
-        for k in range(3):
-            res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
-            if not res:
-                # 返回首页
-                Toast('营地任务 - 秘宝收集 - 重新寻找活动入口')
-                self.dailyTask.homePage()
-                res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.6)
-            else:
-                break
-        if not res:
-            Toast('营地任务 - 秘宝收集 - 未找到活动入口')
+        # 返回首页
+        self.dailyTask.homePage()
+        re = FindColors.find("23,476,#FFFFFF|36,464,#FFFFFF|50,475,#FFFFFF|36,494,#FFFFFF", rect=[3, 323, 91, 610])
+        if re:
+            Toast('营地任务 - 打开麦芬助手')
+            tapSleep(re.x, re.y, 2.5)
+            re = CompareColors.compare("304,1027,#838383|306,1041,#838383|415,1032,#838383|412,1051,#838383")  # 领取按钮为灰色
+            if not re:
+                Toast('营地任务 - 一键领取')
+                re = TomatoOcrTap(311, 1022, 410, 1053, '收取', match_mode='fuzzy', sleep1=1.5)
+                tapSleep(241, 1243)  # 点击空白
+        tapSleep(241, 1243)  # 点击空白
 
-        # 判断秘宝已完成
-        isDone = CompareColors.compare(
-            "235,162,#334654|246,173,#A5A9AC|241,181,#FFFFFF|247,181,#9FA2A6|257,178,#8C9296|262,175,#384153")
-        if not isDone:
+        isQuickFind = TomatoOcrFindRangeClick(keyword='寻宝', x1=170, y1=1199, x2=704, y2=1253)
+        if isQuickFind:
+            isDone = True  # 已领取能量
+
+        if not isQuickFind:
+            # 判断是否在营地页面
+            res = False
+            for k in range(3):
+                res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
+                if not res:
+                    # 返回首页
+                    Toast('营地任务 - 秘宝收集 - 重新寻找活动入口')
+                    self.dailyTask.homePage()
+                    res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.6)
+                else:
+                    break
+            if not res:
+                Toast('营地任务 - 秘宝收集 - 未找到活动入口')
+
+            # 判断秘宝已完成
             isDone = CompareColors.compare(
-                "266,162,#425D7A|249,179,#FFFFFF|255,173,#FFFFFF|247,162,#FEFEFE|258,170,#FFFFFF|262,187,#FFFFFF|271,165,#3D5775")
-        if not isDone:
-            isDone = CompareColors.compare(
-                "247,176,#E9EAEA|251,181,#F4F5F5|241,184,#FFFFFF|252,183,#F2F3F3|262,190,#E4E6E6|257,168,#FFFFFF")
-        # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=10)
-        if isDone:
-            Toast('营地任务 - 秘宝领取 - 识别已完成')
-            任务记录["秘宝领取-完成"] = 1
-            # sleep(1)
-            # return
+                "235,162,#334654|246,173,#A5A9AC|241,181,#FFFFFF|247,181,#9FA2A6|257,178,#8C9296|262,175,#384153")
+            if not isDone:
+                isDone = CompareColors.compare(
+                    "266,162,#425D7A|249,179,#FFFFFF|255,173,#FFFFFF|247,162,#FEFEFE|258,170,#FFFFFF|262,187,#FFFFFF|271,165,#3D5775")
+            if not isDone:
+                isDone = CompareColors.compare(
+                    "247,176,#E9EAEA|251,181,#F4F5F5|241,184,#FFFFFF|252,183,#F2F3F3|262,190,#E4E6E6|257,168,#FFFFFF")
+            # re, x, y = imageFind('营地-秘宝-已领取', x1=194, y1=123, x2=315, y2=232, timeLock=10)
+            if isDone:
+                Toast('营地任务 - 秘宝领取 - 识别已完成')
+                任务记录["秘宝领取-完成"] = 1
+                # sleep(1)
+                # return
 
         # 点击秘宝
         re = False
@@ -526,27 +549,28 @@ class YingDiTask:
                 tapSleep(67, 33)  # 兜底点击太快，错误进入寻宝页
                 break
 
-        if not re:
-            tapSleep(194, 178, 2.5)  # 秘宝
-            re, _ = TomatoOcrText(630, 1210, 680, 1237, '秘宝')
+        if not isQuickFind:
             if not re:
-                tapSleep(282, 178, 2.5)  # 秘宝
-                re, _ = TomatoOcrText(527, 1212, 609, 1237, '秘宝产出')
+                tapSleep(194, 178, 2.5)  # 秘宝
+                re, _ = TomatoOcrText(630, 1210, 680, 1237, '秘宝')
                 if not re:
-                    Toast('营地任务 - 秘宝领取 - 识别未开启')
-                    任务记录["秘宝领取-完成"] = 1
-                    sleep(1)
-                    return
+                    tapSleep(282, 178, 2.5)  # 秘宝
+                    re, _ = TomatoOcrText(527, 1212, 609, 1237, '秘宝产出')
+                    if not re:
+                        Toast('营地任务 - 秘宝领取 - 识别未开启')
+                        任务记录["秘宝领取-完成"] = 1
+                        sleep(1)
+                        return
 
-        # 识别最新地图
-        if 功能开关["秘宝地图"] == "最新地图":
-            res = TomatoOcrTap(527, 1212, 609, 1237, "秘宝产出", sleep1=2.5)
-            if res:
-                res, 功能开关["秘宝地图"] = TomatoOcrText(465, 1014, 581, 1046, '秘宝地图')
-                if 功能开关["秘宝地图"] == "":
-                    res, 功能开关["秘宝地图"] = TomatoOcrText(270, 1008, 475, 1055, '秘宝地图')
-                tapSleep(373, 1166)  # 返回
-                Toast(f'识别最新地图 - {功能开关["秘宝地图"]}')
+            # 识别最新地图
+            if 功能开关["秘宝地图"] == "最新地图":
+                res = TomatoOcrTap(527, 1212, 609, 1237, "秘宝产出", sleep1=2.5)
+                if res:
+                    res, 功能开关["秘宝地图"] = TomatoOcrText(465, 1014, 581, 1046, '秘宝地图')
+                    if 功能开关["秘宝地图"] == "":
+                        res, 功能开关["秘宝地图"] = TomatoOcrText(270, 1008, 475, 1055, '秘宝地图')
+                    tapSleep(373, 1166)  # 返回
+                    Toast(f'识别最新地图 - {功能开关["秘宝地图"]}')
 
         # 判断能量是否已满；能量已满暂不领取能源
         res, availableNengLiang = TomatoOcrText(607, 80, 661, 102, "剩余能量")  # 右上角剩余嫩俩
@@ -669,8 +693,10 @@ class YingDiTask:
                         tapSleep(533, 565)  # 点击+1
                     re = TomatoOcrTap(445, 642, 511, 669, "购买", 10, 10, sleep1=0.8)
 
-        tapSleep(326, 1216)  # 点击空白处
-        tapSleep(326, 1216)
+        tapSleep(214, 1250)  # 点击空白处
+        tapSleep(214, 1250)
+
+        needXunBao = True
         res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
         availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
         if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足50时，退出寻宝循环
@@ -680,67 +706,118 @@ class YingDiTask:
             sleep(2)
             TomatoOcrTap(94, 1183, 125, 1220, "回")
             sleep(3)
-            return
+            任务记录["秘宝领取-完成"] = 1
+            needXunBao = False
 
-        findMap = self.miBaoChangeMap(0, 0)
-        if findMap:
-            for i in range(3):
-                res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
-                availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
-                if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
-                    # 购买秘宝能量
-                    tapSleep(690, 90, 1.5)
-                    needCount = safe_int(功能开关["秘宝钻石兑换次数"])
-                    if needCount == '':
-                        needCount = 0
-                    for k in range(1, 5):
-                        buyCount = ""
-                        for j in range(1, 5):
-                            res, buyCount = TomatoOcrText(398, 595, 559, 628, "已购买次数")  # 1 / 9
-                            buyCount = (buyCount.replace("每日限购", "").replace("/15", "").
-                                        replace("(", "").replace(")", "").replace("（", "").
-                                        replace("）", "").replace("/", "").replace("15", "").replace(" ", ""))
-                            buyCount = safe_int(buyCount)
-                            if buyCount != "":
-                                break
-                        if buyCount == "" or buyCount >= needCount:
-                            TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.8)  # 返回芙
-                            break
-                        if buyCount != "":
-                            re, ct = TomatoOcrText(454, 550, 503, 585, '准备购买次数')
-                            Toast(f'准备购买{ct}次')
-                            ct = safe_int(ct)
-                            if ct < needCount:
-                                tapSleep(527, 571)  # 点击+1
-                            re = TomatoOcrTap(445, 642, 511, 669, "购买", 10, 10, sleep1=0.8)
+        if needXunBao:
+            if not isQuickFind:
+                findMap = self.miBaoChangeMap(0, 0)
+            else:
+                findMap = True
+            if findMap:
+                for i in range(3):
                     res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
                     availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
                     if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
-                        break
-                    # 返回秘宝首页，避免寻宝页卡死
-
-                if availableNengLiang != '' and availableNengLiang >= 100:
-                    tapSleep(580, 880)  # 拉满10次
-                res1 = TomatoOcrTap(420, 1117, 470, 1145, "寻宝")  # 能力足够多次10连时，右侧寻宝多次按钮
-                res2 = TomatoOcrTap(228, 1118, 280, 1145, "寻宝")  # 能力足够多次10连时，左侧单次寻宝按钮
-                res3 = TomatoOcrTap(331, 1119, 386, 1147, "寻宝")  # 能量不足10次时，只展示单次寻宝按钮
-                if res1 or res2 or res3:
-                    # 判断能源是否用尽
-                    res, _ = TomatoOcrText(316, 343, 404, 370, "补充能源")
-                    if res:
-                        return
-
-                    sleep(0.5)
-                    while True:
-                        res, _ = TomatoOcrText(93, 1184, 127, 1220, "回")  # 寻宝页，返回按钮
-                        if res:  # 识别到返回按钮，确认寻宝结束，退出
-                            tapSleep(65, 1120, 1)  # 点击空白处关闭
-                            tapSleep(65, 1120, 1)  # 点击空白处关闭
+                        # 购买秘宝能量
+                        tapSleep(690, 90, 1.5)
+                        needCount = safe_int(功能开关["秘宝钻石兑换次数"])
+                        if needCount == '':
+                            needCount = 0
+                        for k in range(1, 5):
+                            buyCount = ""
+                            for j in range(1, 5):
+                                res, buyCount = TomatoOcrText(398, 595, 559, 628, "已购买次数")  # 1 / 9
+                                buyCount = (buyCount.replace("每日限购", "").replace("/15", "").
+                                            replace("(", "").replace(")", "").replace("（", "").
+                                            replace("）", "").replace("/", "").replace("15", "").replace(" ", ""))
+                                buyCount = safe_int(buyCount)
+                                if buyCount != "":
+                                    break
+                            if buyCount == "" or buyCount >= needCount:
+                                TomatoOcrTap(93, 1185, 127, 1220, "回", 10, 10, sleep1=0.8)  # 返回芙
+                                break
+                            if buyCount != "":
+                                re, ct = TomatoOcrText(454, 550, 503, 585, '准备购买次数')
+                                Toast(f'准备购买{ct}次')
+                                ct = safe_int(ct)
+                                if ct < needCount:
+                                    tapSleep(527, 571)  # 点击+1
+                                re = TomatoOcrTap(445, 642, 511, 669, "购买", 10, 10, sleep1=0.8)
+                        res, availableNengLiang = TomatoOcrText(593, 82, 672, 104, "剩余能量")  # 210
+                        availableNengLiang = safe_int(availableNengLiang.replace("x", ""))
+                        if availableNengLiang != '' and availableNengLiang < 50:  # 识别剩余体力不足100时，退出寻宝循环
                             break
-                        TomatoOcrTap(584, 58, 633, 83, "跳过")
-                        tapSleep(65, 1120, 1)  # 点击空白处关闭
-                        tapSleep(65, 1120, 1)  # 点击空白处关闭
+                        # 返回秘宝首页，避免寻宝页卡死
+
+                    if availableNengLiang != '' and availableNengLiang >= 100:
+                        tapSleep(580, 880)  # 拉满10次
+                    res1 = TomatoOcrTap(420, 1117, 470, 1145, "寻宝")  # 能力足够多次10连时，右侧寻宝多次按钮
+                    res2 = TomatoOcrTap(228, 1118, 280, 1145, "寻宝")  # 能力足够多次10连时，左侧单次寻宝按钮
+                    res3 = TomatoOcrTap(331, 1119, 386, 1147, "寻宝")  # 能量不足10次时，只展示单次寻宝按钮
+                    res4 = TomatoOcrTap(410, 1101, 514, 1134, "寻", match_mode='fuzzy')  # 能量不足10次时，只展示单次寻宝按钮
+                    res4 = TomatoOcrTap(333, 1103, 385, 1133, "寻", match_mode='fuzzy')  # 能量不足10次时，只展示单次寻宝按钮
+                    if res1 or res2 or res3 or res4:
+                        # 判断能源是否用尽
+                        res, _ = TomatoOcrText(316, 343, 404, 370, "补充能源")
+                        if res:
+                            return
+
+                        sleep(0.5)
+                        while True:
+                            res, _ = TomatoOcrText(93, 1184, 127, 1220, "回")  # 寻宝页，返回按钮
+                            if res:  # 识别到返回按钮，确认寻宝结束，退出
+                                tapSleep(65, 1120, 1)  # 点击空白处关闭
+                                tapSleep(65, 1120, 1)  # 点击空白处关闭
+                                break
+                            TomatoOcrTap(584, 58, 633, 83, "跳过")
+                            tapSleep(65, 1120, 1)  # 点击空白处关闭
+                            tapSleep(65, 1120, 1)  # 点击空白处关闭
+
+        if isQuickFind:
+            Toast('秘宝收集 - 准备领取秘宝秘闻')
+
+            # 判断是否在营地页面
+            res = False
+            for k in range(3):
+                res, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
+                if not res:
+                    # 返回首页
+                    Toast('营地任务 - 秘宝收集 - 重新寻找活动入口')
+                    self.dailyTask.homePage()
+                    res = TomatoOcrTap(125, 1202, 187, 1234, "营地", sleep1=1.6)
+                else:
+                    break
+            if not res:
+                Toast('营地任务 - 秘宝收集 - 未找到活动入口')
+
+            # 点击秘宝
+            re = False
+            for i in range(5):
+                re, _ = TomatoOcrText(613, 172, 695, 191, '补充能源')
+                if not re:
+                    Toast('营地任务 - 秘宝收集 - 识别活动入口')
+                    tapSleep(241, 192, 0.5)  # 秘宝
+                    tapSleep(67, 33)  # 兜底点击太快，错误进入寻宝页
+                else:
+                    tapSleep(67, 33)  # 兜底点击太快，错误进入寻宝页
+                    break
+
+            # 领取秘闻
+            re = CompareColors.compare("97,901,#F25E41|105,901,#F35E41")
+            if re:
+                Toast('领取秘宝秘闻')
+                tapSleep(69, 942, 1.2)  # 点击秘宝
+                tapSleep(405, 1024, 1.2)  # 点击鉴定
+                for k in range(2):
+                    TomatoOcrTap(587, 59, 629, 82, '跳过')
+                    tapSleep(315, 1226)  # 点击空白处
+            else:
+                Toast('秘宝收集 - 已领取秘宝秘闻')
+                sleep(1.5)
+
         # 返回营地
+        任务记录["秘宝领取-完成"] = 1
         TomatoOcrTap(94, 1183, 125, 1220, "回")
         sleep(1)
 
@@ -994,14 +1071,14 @@ class YingDiTask:
                             Toast('经验补剂五折 - 已购买')
 
                 if 功能开关['商店无限棱镜五折'] == 1:
-                    re, x, y = TomatoOcrFindRange('无限棱镜', x1=94, y1=560, x2=628, y2=950)
+                    re, x, y = TomatoOcrFindRange('无限棱镜', x1=97, y1=760, x2=628, y2=808, match_mode='fuzzy')
                     if re:
                         res, tmpText = TomatoOcrText(x - 20, y + 110, x + 60, y + 150, "已", match_mode='fuzzy')
                         if '已售' in tmpText:  # 兜底售罄->售馨
                             res = True
                         if not res:
                             Toast('营地任务 - 仓鼠百货 - 无限棱镜五折')
-                            TomatoOcrFindRangeClick('无限棱镜', x1=94, y1=560, x2=628, y2=950)
+                            TomatoOcrFindRangeClick('无限棱镜', x1=97, y1=760, x2=628, y2=808, match_mode='fuzzy')
                             self.shopBuy()
                         else:
                             Toast('无限棱镜五折 - 已购买')

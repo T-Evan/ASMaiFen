@@ -3662,8 +3662,10 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrFindRangeClick("BBQ派对", x1=97, y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
-                                      sleep1=1.5)  # 进入BBQ派对
+        res = TomatoOcrFindRangeClick(
+            keywords=[{'keyword': 'BBQ', 'match_mode': 'fuzzy'}, {'keyword': '派对', 'match_mode': 'fuzzy'}], x1=97,
+            y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
+            sleep1=1.5)  # 进入BBQ派对
         if not res:
             return
 
@@ -4201,7 +4203,7 @@ class DailyTask:
             isYingDi = False
             for i in range(1, 3):
                 res1, _ = TomatoOcrText(11, 1116, 91, 1140, "旅行活动")
-                res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
+                res2 = TomatoOcrTap(510, 1115, 611, 1147, "骑兽乐园")
                 if not res1 and not res2:
                     # 返回首页
                     self.homePage()
@@ -4212,7 +4214,7 @@ class DailyTask:
                     if hd1 or hd2:
                         isYingDi = True
                         tapSleep(200, 545, 3)  # 芙芙小铺
-                        res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
+                        res2 = TomatoOcrTap(510, 1115, 611, 1147, "骑兽乐园")
                         break
                 else:
                     tapSleep(200, 545, 3)  # 芙芙小铺
@@ -4221,7 +4223,8 @@ class DailyTask:
             if not isYingDi:
                 return
 
-            res2 = TomatoOcrTap(510, 1134, 611, 1164, "骑兽乐园")
+            res2 = TomatoOcrTap(510, 1115, 611, 1147, "骑兽乐园")
+            res2 = TomatoOcrTap(510, 1115, 611, 1147, "骑兽乐园")
             if res2:
                 # 处理上周结算确认弹窗
                 tapSleep(195, 1123)
@@ -4293,7 +4296,7 @@ class DailyTask:
             if needCount > 0:
                 attempt = 0
                 while attempt < needCount:
-                    TomatoOcrTap(204, 917, 245, 940, "探索")
+                    TomatoOcrTap(198, 899, 284, 924, "探索", match_mode='fuzzy')
                     sleep(1.5)
                     TomatoOcrTap(597, 28, 642, 53, "跳过")  # 跳过动画
                     sleep(1.5)
@@ -4336,7 +4339,7 @@ class DailyTask:
                 return
 
             tapSleep(200, 545, 3)  # 芙芙小铺
-            res = TomatoOcrTap(389, 1133, 489, 1163, "招式创造")
+            res = TomatoOcrTap(390, 1115, 492, 1147, "招式创造")
             if res:
                 re, x, y = imageFind('招式创造能量', 0.8)
                 if re:
@@ -4402,20 +4405,22 @@ class DailyTask:
                     # 关闭批量讲述
                     res, _ = TomatoOcrText(318, 1055, 404, 1084, "故事", match_mode='fuzzy')
                     if not res:
-                        tapSleep(516, 1079)
+                        tapSleep(514, 1062)
                     while attempt < needCount:
                         Toast(f'开始讲述故事{attempt}/{needCount}次')
                         res = TomatoOcrTap(318, 1055, 404, 1084, "故事", match_mode='fuzzy', offsetX=5, offsetY=5)
+                        res = TomatoOcrTap(311, 1040, 407, 1062, "故事", match_mode='fuzzy', offsetX=5, offsetY=5)
                         res = TomatoOcrTap(319, 1062, 398, 1083, "结局揭秘")
                         sleep(2)
-                        res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
-                        res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
+                        res = TomatoOcrTap(320, 948, 397, 975, "收取", match_mode='fuzzy')  # 一键收取
+                        res = TomatoOcrTap(320, 948, 397, 975, "收取", match_mode='fuzzy')  # 一键收取
                         tapSleep(170, 1090)  # 点击空白处
                         attempt = attempt + 1
 
             if 功能开关["自动讲述领取绮想妙成真"] == 1 and "次" in availableCount:
                 # 开启批量讲述
                 res, _ = TomatoOcrText(318, 1055, 404, 1084, "故事", match_mode='fuzzy')
+                res, _ = TomatoOcrText(311, 1040, 407, 1062, "故事", match_mode='fuzzy')
                 if res:
                     tapSleep(516, 1079)
                 for k in range(10):
@@ -4424,10 +4429,10 @@ class DailyTask:
                     availableCount = safe_int_v2(availableCount.replace("可领取", "").replace("次", ""))
                     if availableCount > 0:
                         Toast(f'开始讲述故事,待领取红色招式/{availableCount}次')
-                        tapSleep(360, 1081, 0.8)  # 讲述故事
+                        tapSleep(366, 1070, 0.8)  # 讲述故事
                         sleep(2)
-                        res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
-                        res = TomatoOcrTap(359, 969, 399, 992, "收取")  # 一键收取
+                        res = TomatoOcrTap(320, 948, 397, 975, "收取", match_mode='fuzzy')  # 一键收取
+                        res = TomatoOcrTap(320, 948, 397, 975, "收取", match_mode='fuzzy')  # 一键收取
                     else:
                         break
 

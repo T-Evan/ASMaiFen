@@ -401,7 +401,7 @@ def TomatoOcrFindRangeClick(keyword='T^&*', sleep1=0.7, confidence1=0.9, x1=0, y
 
 
 # 速度慢、精度高、适合极小区域（单个字/数字）识别精准匹配
-def TomatoOcrText(x1, y1, x2, y2, keyword,match_mode='exact'):
+def TomatoOcrText(x1, y1, x2, y2, keyword, match_mode='exact'):
     try:
         # 传入图片路径或者Bitmap
         # res = ocr.ocrFile(R.img("logo.png"))
@@ -436,7 +436,7 @@ def TomatoOcrText(x1, y1, x2, y2, keyword,match_mode='exact'):
         return False, ''
 
 
-def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3,match_mode='exact'):
+def TomatoOcrTap(x1, y1, x2, y2, keyword, offsetX=0, offsetY=0, sleep1=0.3, match_mode='exact'):
     try:
         try:
             with TimeoutLock():
@@ -505,6 +505,7 @@ def tapSleep(x, y, s=0.4, dur=200):
 
 
 def tapSleepV2(x, y, s=0.4, dur=200):
+    return tapSleep(x, y, s, dur)
     clickV2(x, y, dur)
     sleep(s)
 

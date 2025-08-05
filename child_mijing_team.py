@@ -465,6 +465,11 @@ def waitInvite():
             if res6:
                 break
 
+            res5, _, _ = TomatoOcrFindRange('跳过', confidence1=0.9, x1=522, y1=17, x2=685, y2=110)
+            res6, _ = TomatoOcrText(644, 782, 691, 806, '喊话')
+            if res5 or res6:
+                break
+
             res2, _ = TomatoOcrText(457, 607, 502, 631, "准备")  # 秘境准备
             res3, _ = TomatoOcrText(450, 651, 506, 683, "准备")  # 恶龙准备
             if res2 or res3:
