@@ -901,7 +901,7 @@ class DailyTask:
             if CompareColors.compare("476,1098,#F96244|476,1100,#F46042|476,1104,#F15A41|475,1104,#F15A41"):
                 res = TomatoOcrTap(394, 1099, 448, 1132, "主线", sleep1=0.9)
         if res:
-            while 1:
+            for k in range(5):
                 # 识别黄色领取按钮
                 re, x, y = imageFind('手册-领取')
                 if re:
@@ -2384,6 +2384,54 @@ class DailyTask:
         任务记录["明灯还年"] = 1
         tapSleep(78, 1183, 0.8)  # 返回
 
+    def DiPanWoZuiDa(self):
+        Toast('地盘我最大 - 开始')
+
+        for k in range(3):
+            if 任务记录["地盘我最大-完成"] == 1:
+                return
+
+            self.homePage()
+            self.quitTeam()
+
+            res = TomatoOcrFindRangeClick(
+                keywords=[{'keyword': '地', 'match_mode': 'fuzzy'}, {'keyword': '盘', 'match_mode': 'fuzzy'},
+                          {'keyword': '最大', 'match_mode': 'fuzzy'}], x1=543, y1=336, x2=634,
+                y2=626, offsetX=30, offsetY=-20,
+                sleep1=1.5, match_mode='fuzzy')
+
+            if not res:
+                Toast('地盘我最大 - 未找到活动入口')
+                return
+
+            Toast('地盘我最大 - 任务开始')
+
+            # 领取每日奖励
+            re = FindColors.find("578,926,#F15B41|582,922,#FB6444|579,927,#F15C3F", rect=[115, 894, 609, 1044],
+                                 diff=0.95, ori=5)
+            if re:
+                tapSleep(re.x - 5, re.y + 10)
+                tapSleep(349, 1218)  # 点击空白处返回
+                tapSleep(349, 1218)
+
+            # 领取总奖励
+            re = FindColors.find("576,927,#F15B41|579,927,#F15C3F|576,918,#F6684D", rect=[98, 236, 611, 359], diff=0.95,
+                                 ori=5)
+            if re:
+                tapSleep(re.x - 5, re.y + 10)
+                tapSleep(349, 1218)  # 点击空白处返回
+                tapSleep(349, 1218)
+
+            # 识别目标阶段
+            re, _ = TomatoOcrText(390, 249, 446, 268, '40/40')
+            if re:
+                Toast("地盘我最大 - 已完成每日40/40")
+                sleep(1.5)
+                任务记录["地盘我最大-完成"] = 1
+                return
+
+            self.shilianTask.startFightWoZuiDa()
+
     # 其他签到活动（简单活动合集）
     def QiTaQianDao(self):
         if 功能开关["其他签到活动"] == 0:
@@ -2394,7 +2442,10 @@ class DailyTask:
         # self.QiTaQianDaoLiXia()
         # 火热的聚会 - 周年活动
         # self.QiTaQianDaoHuoReJuHui()
-        self.EVAGaiZaoJiHua()
+        # self.EVAGaiZaoJiHua()
+
+        self.DiPanWoZuiDa()
+
         # 仓鼠好货市集
         self.CangShuHaoHuo()
         # 明灯还年
@@ -3108,6 +3159,11 @@ class DailyTask:
             self.fengShangLingQu(taskName='龙吟', searchName='龙吟')
             任务记录["龙吟风尚"] = 1
 
+        # 轻纱胧月
+        if 任务记录["轻纱胧月"] == 0:
+            self.fengShangLingQu(taskName='轻纱', searchName='轻纱')
+            任务记录["轻纱胧月"] = 1
+
     # 风尚签到通用方法
     def fengShangLingQu(self, taskName='', searchName=''):
         if taskName == '':
@@ -3212,6 +3268,7 @@ class DailyTask:
         # res = TomatoOcrFindRangeClick('箱庭苗圃', 0.9, 14, 98,1025,180,1051, offsetX=30, offsetY=-20)
         res1 = TomatoOcrTap(98, 1025, 180, 1051, '箱庭苗圃', offsetX=30, offsetY=-20)
         res2 = TomatoOcrTap(96, 939, 178, 962, '箱庭苗圃', offsetX=30, offsetY=-20)
+        res2 = TomatoOcrTap(97,1115,178,1142, '箱庭苗圃', offsetX=30, offsetY=-20)
         if not res1 and not res2:
             return
 
@@ -3662,10 +3719,12 @@ class DailyTask:
         if not res:
             return
 
-        res = TomatoOcrFindRangeClick(
-            keywords=[{'keyword': 'BBQ', 'match_mode': 'fuzzy'}, {'keyword': '派对', 'match_mode': 'fuzzy'}], x1=97,
-            y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
-            sleep1=1.5)  # 进入BBQ派对
+        res = TomatoOcrTap(98, 1025, 180, 1051, 'BBQ', offsetX=30, offsetY=-20,match_mode='fuzzy')
+        if not res:
+            res = TomatoOcrFindRangeClick(
+                keywords=[{'keyword': 'BBQ', 'match_mode': 'fuzzy'}, {'keyword': '派对', 'match_mode': 'fuzzy'}], x1=97,
+                y1=544, x2=180, y2=1051, offsetX=40, offsetY=-40,
+                sleep1=1.5)  # 进入BBQ派对
         if not res:
             return
 

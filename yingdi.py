@@ -88,23 +88,26 @@ class YingDiTask:
             return
 
         # EVA活动-高能预警
-        re = CompareColors.compare("401,509,#F8F4EC|415,509,#F6F3EA")
-        if re:
-            Toast('高能预警-真嗣')
-            tapSleep(356, 544, 2)
-            for k in range(10):
-                tapSleep(86, 1218)  # 点击空白
+        # re = CompareColors.compare("401,509,#F8F4EC|415,509,#F6F3EA")
+        # if re:
+        #     Toast('高能预警-真嗣')
+        #     tapSleep(356, 544, 2)
+        #     for k in range(10):
+        #         tapSleep(86, 1218)  # 点击空白
 
-        re = TomatoOcrTap(28, 273, 72, 303, '好友', offsetX=10, offsetY=-20, sleep1=0.8)
+        # re = TomatoOcrTap(28, 273, 72, 303, '好', offsetX=10, offsetY=-20, sleep1=0.8, match_mode='fuzzy')
+        # if not re:
+        tapSleep(69, 266)
+        re = True
         if re:
             re, _ = TomatoOcrText(315, 1030, 366, 1062, '隐身')
             if re:
-                open = CompareColors.compare("293,1049,#4AAD39|298,1052,#4CAE39|300,1049,#4AAD39")
+                open = CompareColors.compare("293,1051,#6FB458|298,1051,#4CAD39|301,1047,#4DAE3A")
                 if (needOpen and not open) or (not needOpen and open):
-                    tapSleep(300, 1046, 0.8)  # 点击隐身
+                    tapSleep(301, 1049, 0.8)  # 点击隐身
             re, _ = TomatoOcrText(315, 1030, 366, 1062, '隐身')
             if re:
-                open = CompareColors.compare("293,1049,#4AAD39|298,1052,#4CAE39|300,1049,#4AAD39")
+                open = CompareColors.compare("293,1051,#6FB458|298,1051,#4CAD39|301,1047,#4DAE3A")
                 if (needOpen and open) or (not needOpen and not open):
                     任务记录['隐身任务-完成'] = 1
             tapSleep(653, 1242)  # 返回
@@ -216,7 +219,7 @@ class YingDiTask:
         #             break
         if isFind:
             # 判断限时特卖是否领取
-            re = CompareColors.compare("680,1122,#EE5C3F|683,1122,#F05C3F|680,1117,#F56043")
+            re = CompareColors.compare("682,1119,#F35D41|682,1120,#F25D41|683,1117,#F55F42")
             if re:
                 Toast('领取免费特卖礼包')
                 TomatoOcrTap(584, 1115, 677, 1145, "限时特卖", sleep1=0.8)
@@ -491,7 +494,9 @@ class YingDiTask:
 
         # 返回首页
         self.dailyTask.homePage()
-        re = FindColors.find("23,476,#FFFFFF|36,464,#FFFFFF|50,475,#FFFFFF|36,494,#FFFFFF", rect=[3, 323, 91, 610])
+        re = FindColors.find(
+            "25,264,#FFFFFF|37,259,#FFFFFF|52,268,#FFFFFF|33,276,#FFFFFF|45,276,#FFFFFF|36,286,#FFFFFF",
+            rect=[0, 3, 262, 1145], diff=0.95)
         if re:
             Toast('营地任务 - 打开麦芬助手')
             tapSleep(re.x, re.y, 2.5)
@@ -504,6 +509,11 @@ class YingDiTask:
 
         isQuickFind = TomatoOcrFindRangeClick(keyword='寻宝', x1=170, y1=1199, x2=704, y2=1253)
         if isQuickFind:
+            for k in range(3):
+                re = CompareColors.compare("547,684,#F6EFDF|557,696,#F4EEDF|547,708,#F5EFDF|565,700,#6583B8")
+                if re:
+                    Toast('寻宝 - 切换最新地图')
+                    tapSleep(549, 700)
             isDone = True  # 已领取能量
 
         if not isQuickFind:
@@ -806,12 +816,22 @@ class YingDiTask:
             # 领取秘闻
             re = CompareColors.compare("97,901,#F25E41|105,901,#F35E41")
             if re:
+                tapSleep(97, 901)
+                tapSleep(97, 901)
+            if not re:
+                re = CompareColors.compare("99,175,#F25E41|102,175,#F25E41|105,170,#F76144")
+                if re:
+                    tapSleep(99, 175)
+                    tapSleep(99, 175)
+            if re:
                 Toast('领取秘宝秘闻')
                 tapSleep(69, 942, 1.2)  # 点击秘宝
                 tapSleep(405, 1024, 1.2)  # 点击鉴定
-                for k in range(2):
+                for k in range(4):
                     TomatoOcrTap(587, 59, 629, 82, '跳过')
                     tapSleep(315, 1226)  # 点击空白处
+                    tapSleep(315, 1226)  # 点击空白处
+                    sleep(0.5)
             else:
                 Toast('秘宝收集 - 已领取秘宝秘闻')
                 sleep(1.5)

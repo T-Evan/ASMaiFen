@@ -409,6 +409,63 @@ class ShiLianTask:
 
         self.startFightBaoZou()
 
+    def startFightWoZuiDa(self):
+        # 直接开始匹配
+        res = TomatoOcrTap(328, 1079, 431, 1112, "开始匹配", 10, 5)
+        Toast("地盘我最大 - 开始匹配")
+
+        # 判断托管选择
+        res = TomatoOcrTap(457, 732, 506, 759, "确定", 20, 10)
+        if res:
+            Toast("地盘我最大 - 取消托管")
+
+        # 判断正在匹配中 - 循环等待300s
+        totalWait = 240  # 30000 毫秒 = 30 秒
+        start_time = int(time.time())
+        failTimes = 0
+        while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
+            if elapsed > totalWait:
+                # 超时取消匹配
+                res = TomatoOcrTap(339, 1070, 415, 1098, "匹配中", 10, 5)
+                if not res:
+                    res = TomatoOcrTap(345, 1073, 412, 1095, "匹配中", 10, 5)
+                break
+
+            Toast(f"地盘我最大 - 匹配中 - 等待{elapsed}/150s")
+
+            # 判断无合适队伍，重新开始匹配
+            res = TomatoOcrTap(304, 1153, 412, 1185, "开始匹配", 10, 5)
+            res, _ = TomatoOcrText(230, 625, 306, 648, "匹配超时")
+            if res:
+                Toast("地盘我最大 - 匹配超时 - 无合适队伍 - 重新匹配")
+                res = TomatoOcrTap(455, 729, 512, 758, "确定")
+
+            waitStatus, _ = TomatoOcrText(339, 1070, 415, 1098, "匹配中")
+            if not waitStatus:
+                waitStatus, _ = TomatoOcrText(345, 1073, 412, 1095, "匹配中")
+
+            res1 = self.WaitFight("地盘我最大")
+
+            shou_ye1, _ = TomatoOcrText(625, 363, 709, 388, "冒险手册")
+            if shou_ye1:
+                Toast("地盘我最大 - 已取消匹配")
+                break
+
+            if res1 == True:  # 成功准备战斗 或 未匹配到
+                # 超时取消匹配
+                res = TomatoOcrTap(339, 1070, 415, 1098, "匹配中", 10, 5)
+                if not res:
+                    res = TomatoOcrTap(345, 1073, 412, 1095, "匹配中", 10, 5)
+                break
+            if not waitStatus:  # 成功准备战斗 或 未匹配到
+                # 超时取消匹配
+                waitStatus1, _, _ = TomatoOcrFindRange('匹配中', x1=230, y1=1040, x2=483, y2=1141)
+                if failTimes > 3:
+                    break
+                failTimes = failTimes + 1
+
     def startFightMoTou(self):
         # 直接开始匹配
         res = TomatoOcrTap(304, 1153, 412, 1185, "开始匹配", 40, -40)
@@ -2010,9 +2067,11 @@ class ShiLianTask:
                 TomatoOcrFindRangeClick('跳过', sleep1=1, confidence1=0.9, x1=522, y1=17, x2=685, y2=110, offsetX=10,
                                         offsetY=10)
                 res, teamName1 = TomatoOcrText(8, 148, 51, 163, "队友名称")
+                res2, _ = TomatoOcrText(525, 93, 595, 115, '回合', match_mode='fuzzy')
                 # res, teamName2 = TomatoOcrText(8, 146, 52, 166, "队友名称")
                 Toast(f"等待进入战斗 {elapsed}/{totalWait}")
-                if "等级" in teamName1 or "Lv" in teamName1:
+                if "等级" in teamName1 or "Lv" in teamName1 or res2:
+                    Toast("进入战斗成功 - 开始战斗")
                     Toast("进入战斗成功 - 开始战斗")
                     if fightType == "秘境" or fightType == "秘境带队":
                         self.fighting(fightType)
@@ -2044,6 +2103,8 @@ class ShiLianTask:
                         self.fightingDiaoChaTeam()
                     elif fightType == "暴走带队":
                         self.fightingBaoZouTeam()
+                    elif fightType == "地盘我最大":
+                        self.fightingDiPanWoZuiDa()
                     else:
                         self.fighting()
                     return True
@@ -3281,6 +3342,54 @@ class ShiLianTask:
                     break
                 功能开关["fighting"] = 0
             self.fight_fail_alert()
+            sleep(0.5)
+        功能开关["fighting"] = 0
+
+    def fightingDiPanWoZuiDa(self):
+        totalWait = 380  # 30000 毫秒 = 30 秒
+
+        teamShoutDone = 0
+        start_time = int(time.time())
+        while 1:
+            current_time = int(time.time())
+            elapsed = current_time - start_time
+            if elapsed >= totalWait:
+                Toast("战斗结束 - 超时退出组队")
+                tapSleep(349, 1224)  # 领取后，点击空白
+                self.quitTeamFighting()  # 退出队伍
+                break
+
+            # 识别战斗中状态
+            res1, _ = TomatoOcrText(525, 93, 595, 115, '回合', match_mode='fuzzy')
+            res2, _ = TomatoOcrText(314, 1106, 412, 1136, "领取奖励")  # 领取宝箱
+            # 判断是否战斗失败（战斗5分钟后）
+            if not res1 or res2:
+                功能开关["fighting"] = 0
+                # 战斗结束
+                res1 = TomatoOcrTap(314, 1106, 412, 1136, "领取奖励")  # 领取宝箱
+                if res1:
+                    Toast("地盘我最大 - 战斗结束")
+                    tapSleep(349, 1224)  # 领取后，点击空白
+                    sleep(2)
+                    break
+                tapSleep(349, 1224)  # 领取后，点击空白
+                res3, _ = TomatoOcrText(499, 191, 581, 215, "离开队伍")  # 已返回队伍
+                if res3:
+                    Toast("地盘我最大 - 战斗结束")
+                    break
+                quitStatus = self.quitTeam()
+                if quitStatus:
+                    break
+                功能开关["fighting"] = 0
+
+            # 选择地盘
+            for m in range(2):
+                re = FindColors.find("372,730,#A0A0A0|377,730,#A0A0A0|366,736,#A0A0A0|374,736,#A0A0A0",
+                                     rect=[213, 358, 505, 770], diff=0.95)
+                if re:
+                    tapSleep(re.x + 2, re.y + 2)
+                    tapSleep(574, 1051)
+                    Toast('选择地盘')
             sleep(0.5)
         功能开关["fighting"] = 0
 

@@ -460,16 +460,12 @@ class LvRenTask:
                     tapSleep(136, 1051)  # 点击空白处
                     if re:
                         break
-                res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动烘焙")
+                res = CompareColors.compare("511,1035,#4DAD39|513,1036,#4CAD39")
                 if not res:
-                    res, _ = TomatoOcrText(320, 1006, 399, 1033, "自动升温")
-                    if not res:
-                        # 开启自动升温
-                        tapSleep(515, 1030)
-                res = TomatoOcrTap(320, 1006, 399, 1033, "自动烘焙")
-                if not res:
-                    res = TomatoOcrTap(320, 1006, 399, 1033, "自动升温")
+                    # 开启自动升温
+                    tapSleep(515, 1030)
                 if res:
+                    tapSleep(364,1033)
                     for k in range(1, 5):
                         res = TomatoOcrTap(326, 1017, 389, 1047, "出炉")
                         if res:
